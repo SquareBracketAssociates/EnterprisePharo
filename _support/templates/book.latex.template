@@ -68,8 +68,8 @@
 \author{
         Damien Cassou\quad \\
         St\'ephane Ducasse\quad \\
-        ... and Many More :)}
-\title{\Huge\bf Pharo for the Enterprise}
+     	Sven Van Caekenberghe}
+\title{\Huge\bf Enterprise Pharo}
 \isodate
 \date{\emph{Version of \today}}
 \maketitle
