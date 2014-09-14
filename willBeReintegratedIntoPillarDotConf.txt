@@ -1,0 +1,49 @@
+{
+    "title" : "{Pharo For the Entreprise}",
+    "newLine" : #unix,
+    "headingLevelOffset" : 1,
+    "defaultScriptLanguage" : "smalltalk",
+    "configurations" : {
+        "LaTeX by chapter" : {
+            "outputType" : #latex,
+            "template" : "_support/templates/chapter.latex.template",
+            "separateOutputFiles" : true
+        },
+        "LaTeX whole book" : {
+            "outputType" : #latex,
+            "template" : "_support/templates/book.latex.template",
+            "outputFile" : "EnterprisePharo.tex"
+        },
+        "HTML by chapter" : {
+            "outputType" : #html,
+            "template" : "_support/templates/chapter.html.template",
+            "separateOutputFiles" : true
+        },
+        "Markdown by chapter" : {
+            "outputType" : #githubmarkdown,
+            "separateOutputFiles" : true
+        }
+    },
+    "inputFiles" : [
+		"Copyright/License.pier",
+    	"Athens/Athens.pier",	
+        "Artefact/artefact-fr.pier",
+        "BabyMock/BabyMock.pier",		
+        "Fuel/Fuel.pier",
+		"Localization/Localization.pier",
+        "NativeBoost/NativeBoost.pier",
+        "NeoCSV/NeoCSV.pier",
+		"NeoJSON/NeoJSON.pier",
+   	 	"STON/STON.pier",	  
+        "Spec/Spec.pier",
+        "DynamicSpec/DynamicSpec.pier",
+        "CalculatorTutorial/CalculatorTutorial.pier", 
+        "Smacc/Smacc.pier",
+        "Voyage/Voyage.pier",
+ 		"Mustache/Mustache.pier",
+        "RenoirST/RenoirST.pier",
+        "Zinc/Zinc.pier",
+        "WebSockets/WebSockets.pier",
+        "GitAndPharo/GitAndPharo.pier"
+    ]
+}
