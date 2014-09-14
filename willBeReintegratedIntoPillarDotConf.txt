@@ -26,7 +26,6 @@
     },
     "inputFiles" : [
 		"Copyright/License.pier",
-    	"Athens/Athens.pier",	
         "Artefact/artefact-fr.pier",
         "BabyMock/BabyMock.pier",		
         "Fuel/Fuel.pier",
