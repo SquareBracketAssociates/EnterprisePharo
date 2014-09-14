@@ -1,0 +1,76 @@
+%=================================================================
+\ifx\wholebook\relax\else
+% --------------------------------------------
+% Lulu:
+	\documentclass[a4paper,10pt,twoside]{book}
+	\usepackage[
+		papersize={6.13in,9.21in},
+		hmargin={.75in,.75in},
+		vmargin={.75in,1in},
+		ignoreheadfoot
+	]{geometry}
+	\input{../common.tex}
+	\setboolean{lulu}{true}
+% --------------------------------------------
+% A4:
+%	\documentclass[a4paper,11pt,twoside]{book}
+%	\input{../common.tex}
+%	\usepackage{a4wide}
+% --------------------------------------------
+    \graphicspath{{figures/} {../figures/}}
+	\begin{document}
+\fi
+%=================================================================
+%\renewcommand{\nnbb}[2]{} % Disable editorial comments
+\sloppy
+%=================================================================
+~ % force the vfill
+\vfill
+\begin{footnotesize}
+\setlength{\parindent}{0pt}
+This book is available as a free download from:\\
+
+\begin{center}
+{\large   \textbf{\url{http://deepintopharo.com}}\\[1cm]}
+\end{center}
+
+
+Copyright \copyright~2013 by Alexandre Bergel, Damien Cassou, St\'ephane Ducasse and Jannik Laval.\\[1cm]
+
+The contents of this book are protected under Creative Commons Attribution-ShareAlike 3.0 Unported license.
+
+\emph{You are free:}
+\begin{description}
+  \item[to Share] \,---\, to copy, distribute and transmit the work
+  \item[to Remix] \,---\, to adapt the work
+\end{description}
+\emph{Under the following conditions:}
+\begin{description}
+  \item[Attribution.] You must attribute the work in the manner specified by the author or licensor (but not in any way that suggests that they endorse you or your use of the work).
+  \item[Share Alike.] If you alter, transform, or build upon this work, you may distribute the resulting work only under the same, similar or a compatible license.
+\end{description}
+\begin{itemize}
+  \item For any reuse or distribution, you must make clear to others the license terms of this work. The best way to do this is with a link to this web page:
+  \url{creativecommons.org/licenses/by-sa/3.0/}
+  \item Any of the above conditions can be waived if you get permission from the copyright holder.
+  \item Nothing in this license impairs or restricts the author's moral rights.
+\end{itemize}
+\raisebox{-0.25cm}{\includegraphics[width=2cm]{CreativeCommons-BY-SA}}\quad
+\parbox{\textwidth-2cm-1em}{
+	Your fair dealing and other rights are in no way affected by the above.
+	This is a human-readable summary of the Legal Code (the full license):\\
+	\url{creativecommons.org/licenses/by-sa/3.0/legalcode}}\\[1cm]
+Published by Square Bracket Associates, Switzerland. \sba \\
+ISBN 978-3-9523341-6-4\\
+First Edition, August, 2013.
+Cover art by J\'er\^ome Bergel (jeromebergel@gmail.com).
+\end{footnotesize}
+\vfill
+
+%=============================================================
+\ifx\wholebook\relax\else
+   \bibliographystyle{jurabib}
+   \nobibliography{scg}
+   \end{document}
+\fi
+%=============================================================
