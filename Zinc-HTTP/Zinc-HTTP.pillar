@@ -1,8 +1,8 @@
-! Zinc: a Robust, Fast and Elegant HTTP client/server
+! HTTP
 
 HTTP is arguably the most important application level network protocol for what we consider to be the internet. It is the protocol that allows web browsers and web servers to communicate. It is also becoming the most popular protocol for implementing web services.
 
-Naturally, Pharo has out of the box support for HTTP with Zinc a new HTTP client server library thank to the continuous efforts of Sven van Caekenberghe.
+Naturally, Pharo has out of the box support for HTTP. Zinc is a robust, fast and elegant HTTP client and server library written and maintained by Sven van Caekenberghe.
 
 - todo: add a conclusion
 
@@ -1134,7 +1134,3 @@ Zn implements two important techniques that are used by HTTP servers when they s
 All this is handled internally and invisibly. The main object dealing with content and transfer encoding is ==ZnEntityReader==. When necessary, the binary socket stream is wrapped with either a ==ZnChunkedReadStream== and/or a ==GZipReadStream==. Zn also makes use of a ==ZnLimitedReadStream== to make sure there is no read beyond the boundaries of one single request's body, provided the content length is set.
 
  Zinc HTTP Components was written with the explicit goal of allowing users to explore the implementation. The tests suite contains many examples that can serve as learning material.
-
-% Local Variables:
-% eval: (flyspell-mode -1)
-% End:

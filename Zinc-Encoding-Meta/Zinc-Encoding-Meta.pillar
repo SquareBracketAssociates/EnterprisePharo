@@ -1,0 +1,90 @@
+! Character Encoding and Resource Meta Description
+
+The rise of the Internet and of Open Standards resulted in the adoption of a number of fundamental mechanisms to enable communication and collaboration between different systems.
+
+One such mechanism is the ability to encode strings or characters to bytes or to decode strings or characters from bytes. Different encoding standards have been developed over the years. Pharo supports many current and legacy encodings.
+
+Another important aspect is the ability to describe resources such as files. Both Mime-Type and URLs or URIs are basic building blocks for this. Pharo has a objects that implement these fundamental aspects.
+
+Character encoding, MIME types and URL/URIs are essential for the correct implementation of HTTP, but they are indepent of it, being used for many other purposes.   
+ 
+
+!! Character encoding
+
+Proper character encoding and decoding is crucial in today's international world. Pharo Smalltalk encodes characters and strings using Unicode. The primary internet encoding is UTF-8, but a couple of others are used as well. To translate between these two, a concrete ==ZnCharacterEncoding== subclass like ==ZnUTF8Encoder== is used.
+
+==ZnCharacterEncoding== is an extension and reimplementation of regular TextConverter. It only works on binary input and generated binary output. It adds the ability to compute the encoded length of a source character, a crucial operation for HTTP. It is more correct and will throw proper exceptions when things go wrong.
+
+Character encoding is mostly invisible. Here are some code snippets using the encoders directly, feel free to substitute any Unicode character to make the test more interesting.
+
+[[[
+| encoder string |
+encoder := ZnUTF8Encoder new.
+string := 'any Unicode'.
+self assert: (encoder decodeBytes: (encoder encodeString: string)) equals: string.
+encoder encodedByteCountForString: string.
+]]]
+
+There are no automatic conversions in Zinc. So Zinc is one of the pieces of software that does not assume stupid defaults. You should specify a proper Content-Type header including the charset information. Otherwise Zinc has no chance of knowing what to use and the default NullEncoder will make your string wrong.
+
+Let us look at one example 
+SD: We should add back the o umlaut whe pillar/latex can handle it.
+
+[[[
+ZnServer startDefaultOn: 1701.
+
+ZnClient new
+ url: 'http://localhost:1701/echo';
+ entity: (ZnEntity with: 'An der schonen blauen Donau'); 
+ post.
+	
+ZnClient new
+ url: 'http://localhost:1701/echo';
+ entity: (ZnEntity 
+           with: 'An der schonen blauen Donau' 
+           type: (ZnMimeType textPlain charSet: #'iso-8859-1'; yourself));
+ post;
+ yourself.
+]]]
+
+In the first case, a UTF-8 encoded string is POST-ed and correctly returned (in a UTF-8 encoded response).
+
+In the second case, an ISO-8859-1 encoded string is POST-ed and correctly returned (in a UTF-8 encoded response).
+
+In both cases the decoding was done correctly, using the specified charset (if that is missing, the ZnNullEncoder is used). Now, o is not a perfect test example because its encoding value in Unicode, 246 decimal, U\+00F6 hex, still fits in 1 byte and hence survives null encoding/decoding. That is why the following still works, although it is wrong to drop the charset.
+
+
+[[[
+ZnClient new
+ url: 'http://localhost:1701/echo';
+ entity: (ZnEntity 
+           with: 'An der schonen blauen Donau' 
+           type: (ZnMimeType textPlain clearCharSet; yourself));
+ post;
+ yourself.
+]]]
+
+
+!! Mime-Types
+
+a mime-type that is an official, cross-platform definition of a file or document type or format. Again, see the Wikepedia article *Internet media type>http://en.wikipedia.org/wiki/Mime-type* for more details.
+
+Zn models mime-types using its ==ZnMimeType== object which has 3 components
+
+- a main type, for example text or image, 
+- a sub type, for example plain or html, or jpeg, png or gif, and 
+- a number of attributes, for example ==charset=utf-8==.
+
+The class side of ==ZnMimeType== has some convenience methods for accessing well known mime-types. Note that for textual (non-binary) types, the encoding defaults to UTF-8, the prevalent internet standard. Creating a ==ZnMimeType== object is as easy as sending ==asZnMimeType== to a ==String==.
+
+% @@why should we invoke ZnMimeType textHtml.@@
+[[[
+ZnMimeType textHtml.
+'text/html;charset=utf-8' asZnMimeType.
+]]]
+
+The subtype can be a wildcard, indicated by a ==*==. This allows for matching.
+
+[[[
+ZnMimeType textHtml matches: ZnMimeType text.
+]]]
