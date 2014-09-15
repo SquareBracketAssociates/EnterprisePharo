@@ -13,44 +13,9 @@
 % Add the path for the figures of each chapter here:
 \graphicspath{
         {figures/}
-        {Mapless/}
-        {Athens/}
-        {Logger/}
-        {BabyMock/}
-        {BioPharo/}
-        {CalculatorTutorial/}
-        {ComparingSolutions/}
-        {ConcurrencyBasics/}
-        {DSL/}
-        {WebSockets/}
-        {Deltawerken/}
-        {Fuel/}
-        {Installation/}
-        {KeyMapping/}
-        {Lint/}
-		{Localization/}
-        {MetacelloIntro/}
-        {NativeBoost/}
-        {NeoCSV/}
-		{NeoJSON/}
-		{Copyright/}
-		{Sound/}
-        {ParseTreeRewriter/}
-        {Reddit/}
-        {NeoCSV/}
-        {ODE/}
-        {STON/}
-        {ST99/}
-        {Spec/}
-        {RenoirST/}
-        {Voyage/}
+        {Copyright/}
         {Zinc/}
-		{Telescope/}
-        {WebApp/}
-        {Smacc/}
-        {GitAndPharo/}
-		{RewriteTool/}
-		{Seamless/}
+        {Pillar/}
 }
 %=================================================================
 \let\wholebook=\relax
