@@ -10,7 +10,7 @@ Naturally, Pharo has out of the box support for HTTP. Zinc is a robust, fast and
 
 HTTP, short for Hypertext Transfer Protocol, functions as a request-response protocol in the client-server computing model. As an application level protocol it is layered on top of a reliable transport such as a TCP socket stream. The most important standard specification document describing HTTP version 1.1 is *RFC 2616>http://tools.ietf.org/html/rfc2616*. As usual another good starting point is the Wikipedia article on *HTTP>http://en.wikipedia.org/wiki/Http*.
 
-+Client/Server interacting via request/answer.>file://figures/clientServer.png|width=50|label=figclientServer+
++Client/Server interacting via request/response.>file://figures/clientServer.png|width=50|label=figclientServer+
 
 
 A client, often called user-agent, submits an HTTP request to a server which will respond with an HTTP response (see Fig. *figclientServer*). The initiative of the communication lies with the client. Requests and responses are quite similar and are often called HTTP messages.
