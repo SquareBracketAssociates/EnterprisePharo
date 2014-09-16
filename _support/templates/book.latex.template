@@ -16,6 +16,9 @@
         {Copyright/}
         {Zinc/}
         {PillarChap/}
+		{Zinc-HTTP/}
+		{Zinc-Encoding-Meta/}
+		{Zinc-REST/}
 }
 %=================================================================
 \let\wholebook=\relax
