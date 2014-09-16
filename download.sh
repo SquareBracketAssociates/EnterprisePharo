@@ -15,6 +15,9 @@ HELP
 }
 
 get_vm() {
+    if [ -d pharo-vm ]; then
+        rm -rf pharo-vm
+    fi
     wget ${CERTCHECK} --output-document - "$VM_INSTALL_URL" | bash
 }
 
