@@ -15,7 +15,7 @@
         {figures/}
         {Copyright/}
         {Zinc/}
-        {Pillar/}
+        {PillarChap/}
 }
 %=================================================================
 \let\wholebook=\relax
