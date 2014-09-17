@@ -6,12 +6,12 @@ One such mechanism is the ability to encode strings or characters to bytes or to
 
 Another important aspect is the ability to describe resources such as files. Both Mime-Type and URLs or URIs are basic building blocks for this. Pharo has objects that implement these fundamental aspects.
 
-Character encoding, MIME types and URL/URIs are essential for the correct implementation of HTTP, but they are indepent of it, being used for many other purposes.   
+Character encoding, MIME types and URL/URIs are essential for the correct implementation of HTTP, but they are indepent of it, as they are used for many other purposes.   
 
 
 !! Character encoding
 
-Proper character encoding and decoding is crucial in today's international world. Internally, Pharo stores characters and strings using Unicode. Unicode is a very large internationally standardized collection of code points, integers, representing all of the world languages' characters.
+Proper character encoding and decoding is crucial in today's international world. Internally, Pharo stores characters and strings using Unicode. *Unicode>http://en.wikipedia.org/wiki/Unicode* is a very large internationally standardized collection of code points, integers, representing all of the world languages' characters.
 
 Let's look at some example strings with their Unicode code points:
 
@@ -29,9 +29,9 @@ Let's look at some example strings with their Unicode code points:
   => #(917 955 955 940 948 945)
 ]]]
 
-For a simple language like English, all characters have code points below 128 (these code points can even fit in 7 bits). These characters are part of ASCII. The very first part of the so called Basic Multilingual Plane of Unicode (the first 128 code points of it) are identical to ASCII.
+For a simple language like English, all characters have code points below 128 (these code points can even fit in 7 bits). These characters are part of *ASCII>http://en.wikipedia.org/wiki/ASCII*. The very first part of the so called Basic Multilingual Plane of Unicode (the first 128 code points of it) are identical to ASCII.
 
-Next come a number of European languages, like French, which have code points below 256 (fitting in 8 bits or one byte). These characters are part of Latin-1 (ISO-8859-1), whose first 256 code points are identical in Unicode.
+Next come a number of European languages, like French, which have code points below 256 (fitting in 8 bits or one byte). These characters are part of *Latin-1 (ISO-8859-1)>http://en.wikipedia.org/wiki/ISO/IEC_8859-1*, whose first 256 code points are identical in Unicode.
 
 And finally, there are hundreds of other languages, like Chinese, Japanse, Cyrillic, Arabic or Greek. You can see from the example (Greece in Greek) that those code points are higher than 256 and thus no longer fit in one byte.
 
@@ -52,7 +52,7 @@ To implement character encoding or decoding, a concrete ==ZnCharacterEncoder== s
 
 Character encoders do proper error handling, throwing ==ZnCharacterEncodingError== when something goes wrong. The strict/lenient setting controls some behavior in this respect.
 
-The primary internet encoding is UTF-8. This is also the recommended encoding. UTF-8 is a variable length encoding that is optimized somewhat for ASCII and to a lesser degree Latin1. 
+The primary internet encoding is *UTF-8>http://en.wikipedia.org/wiki/UTF-8*. This is also the recommended encoding. UTF-8 is a variable length encoding that is optimized somewhat for ASCII and to a lesser degree Latin1 and some other common European encodings. 
 
 You will deal only indirectly with character encoders. String and ByteArray have some convenience methods to do encoding and decoding. Let's have a look.
 
@@ -73,10 +73,49 @@ You will deal only indirectly with character encoders. String and ByteArray have
   => #[206 149 206 187 206 187 206 172 206 180 206 177]
 
 'Ελλάδα' encodeWith: #latin1.
-  => ZnCharacterEncodingError: Character Unicode code point outside encoder range
+  => ZnCharacterEncodingError: 'Character Unicode code point outside encoder range'
 ]]]
 
 Our ASCII string, 'Hello' encodes identically using either UTF-8 or Latin-1. Our French string, 'Les élèves français', encodes differently though. The reason is that UTF-8 uses two bytes for the accented letters like é, è and ç. Our greek string, 'Ελλάδα', even gives an error when we try to encode it using Latin-1. The reason is that the Greek letters are outside of the alphabet of Latin-1. Still, UTF-8 manages to encode them using just two bytes.
+
+The reverse process, decoding, is equally simple.
+
+[[[
+#[72 101 108 108 111] utf8Decoded.
+  => 'Hello'
+
+#[72 101 108 108 111] decodeWith: #latin1.
+  => 'Hello'
+
+#[76 101 115 32 195 169 108 195 168 118 101 115 32 102 114 97 110 195 167 97 105 115] utf8Decoded.
+  => 'Les élèves français'
+
+#[76 101 115 32 195 169 108 195 168 118 101 115 32 102 114 97 110 195 167 97 105 115] decodeWith: #latin1.
+  => 'Les Ã©lÃ¨ves franÃ§ais'
+
+#[76 101 115 32 233 108 232 118 101 115 32 102 114 97 110 231 97 105 115] utf8Decoded.
+  => ZnInvalidUTF8: 'Illegal continuation byte for utf-8 encoding'
+
+#[76 101 115 32 233 108 232 118 101 115 32 102 114 97 110 231 97 105 115] decodeWith: #latin1.
+  => 'Les élèves français'
+
+#[206 149 206 187 206 187 206 172 206 180 206 177] utf8Decoded.
+  => 'Ελλάδα'
+
+#[206 149 206 187 206 187 206 172 206 180 206 177] decodeWith: #latin1.
+  => ZnCharacterEncodingError: 'Character Unicode code point outside encoder range'
+]]]
+
+Our English 'Hello', being pure ASCII, can be decoded using either UTF-8 or Latin-1. Our French 'Les élèves français' is another story: using the wrong encoding gives either gibberish or ==ZnInvalidUTF8== error. The same is true for our Greek 'Ελλάδα'. 
+
+You might wonder why in the first case the #latin1 encoder produced gibberish, while in the second case it gave an error. This is because in the second case, there was a byte with value 149, that is outside its alphabet. So called byte encoders, like Latin-1, take a subset of Unicode characters and compress them in 256 possible byte values. If you are curious, you can inspect the character or byte domains of a ==ZnByteEncoder==.
+
+[[[
+(ZnByteEncoder newForEncoding: 'iso-8859-1') byteDomain.
+(ZnByteEncoder newForEncoding: 'ISO_8859_7') characterDomain.
+]]]
+
+Note that identifiers for encodings are interpreted flexibly (case and punctuation do not matter).
 
 
 
