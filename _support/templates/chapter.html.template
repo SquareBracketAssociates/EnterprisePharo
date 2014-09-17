@@ -40,5 +40,8 @@
     <!-- Syntax highlighting of code blocks -->
     <script>hljs.initHighlightingOnLoad();</script>
 
+    <!-- Prettify annotated paragraphs-->
+    <script src="../_support/html/js/annotated-paragraphs.js"></script>
+
   </body>
 </html>
