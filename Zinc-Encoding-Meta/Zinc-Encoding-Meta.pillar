@@ -4,14 +4,83 @@ The rise of the Internet and of Open Standards resulted in the adoption of a num
 
 One such mechanism is the ability to encode strings or characters to bytes or to decode strings or characters from bytes. Different encoding standards have been developed over the years. Pharo supports many current and legacy encodings.
 
-Another important aspect is the ability to describe resources such as files. Both Mime-Type and URLs or URIs are basic building blocks for this. Pharo has a objects that implement these fundamental aspects.
+Another important aspect is the ability to describe resources such as files. Both Mime-Type and URLs or URIs are basic building blocks for this. Pharo has objects that implement these fundamental aspects.
 
 Character encoding, MIME types and URL/URIs are essential for the correct implementation of HTTP, but they are indepent of it, being used for many other purposes.   
- 
+
 
 !! Character encoding
 
-Proper character encoding and decoding is crucial in today's international world. Pharo Smalltalk encodes characters and strings using Unicode. The primary internet encoding is UTF-8, but a couple of others are used as well. To translate between these two, a concrete ==ZnCharacterEncoding== subclass like ==ZnUTF8Encoder== is used.
+Proper character encoding and decoding is crucial in today's international world. Internally, Pharo stores characters and strings using Unicode. Unicode is a very large internationally standardized collection of code points, integers, representing all of the world languages' characters.
+
+Let's look at some example strings with their Unicode code points:
+
+[[[
+'Hello' collect: #codePoint as: Array. 
+
+  => #(72 101 108 108 111)
+
+'Les élèves français' collect: #codePoint as: Array. 
+
+  => #(76 101 115 32 233 108 232 118 101 115 32 102 114 97 110 231 97 105 115)
+
+'Ελλάδα' collect: #codePoint as: Array. 
+
+  => #(917 955 955 940 948 945)
+]]]
+
+For a simple language like English, all characters have code points below 128 (these code points can even fit in 7 bits). These characters are part of ASCII. The very first part of the so called Basic Multilingual Plane of Unicode (the first 128 code points of it) are identical to ASCII.
+
+Next come a number of European languages, like French, which have code points below 256 (fitting in 8 bits or one byte). These characters are part of Latin-1 (ISO-8859-1), whose first 256 code points are identical in Unicode.
+
+And finally, there are hundreds of other languages, like Chinese, Japanse, Cyrillic, Arabic or Greek. You can see from the example (Greece in Greek) that those code points are higher than 256 and thus no longer fit in one byte.
+
+The good thing is, we can work with text in any language in Pharo. To display everything correctly you have to use a font that is capable of showing all the characters (or glyphs) needed. Arial Unicode MS is such a font.
+
+For communication with the world outside Pharo, the operating system, files, the internet, we have to represent our strings as a collection of bytes.
+
+Character encoding is standard way of converting a native Pharo string, a collection of Unicode code points to series of bytes. Character decoding is the reverse process: interpreting a series of bytes as a collection of Unicode code points, as a Pharo string.
+
+To implement character encoding or decoding, a concrete ==ZnCharacterEncoder== subclass like ==ZnUTF8Encoder== is used. Character encoders do the following:
+
+- encode a character (==#nextPut:toStream:==) or string (==#next:putAll:startingAt:toStream:==) onto a binary stream
+- convert a string (==#encodeString:==) to a byte array
+- decode a binary stream to a character (==#nextFromStream:==) or string (==#readInto:startingAt:count:fromStream:==)
+- convert a byte array to string (==#decodeBytes:==)
+- compute the number of bytes needed to encode a character (==#encodedByteCountFor:==) or string (==#encodedByteCountForString:==)
+- move a binary stream backwards one character (==#backOnStream:==)
+
+Character encoders do proper error handling, throwing ==ZnCharacterEncodingError== when something goes wrong. The strict/lenient setting controls some behavior in this respect.
+
+The primary internet encoding is UTF-8. This is also the recommended encoding. UTF-8 is a variable length encoding that is optimized somewhat for ASCII and to a lesser degree Latin1. 
+
+You will deal only indirectly with character encoders. String and ByteArray have some convenience methods to do encoding and decoding. Let's have a look.
+
+[[[
+'Hello' utf8Encoded. 
+  => #[72 101 108 108 111]
+
+'Hello' encodeWith: #latin1.
+  => #[72 101 108 108 111]
+
+'Les élèves français' utf8Encoded. 
+  => #[76 101 115 32 195 169 108 195 168 118 101 115 32 102 114 97 110 195 167 97 105 115]
+
+'Les élèves français' encodeWith: #latin1. 
+  => #[76 101 115 32 233 108 232 118 101 115 32 102 114 97 110 231 97 105 115]
+
+'Ελλάδα' utf8Encoded. 
+  => #[206 149 206 187 206 187 206 172 206 180 206 177]
+
+'Ελλάδα' encodeWith: #latin1.
+  => ZnCharacterEncodingError: Character Unicode code point outside encoder range
+]]]
+
+Our ASCII string, 'Hello' encodes identically using either UTF-8 or Latin-1. Our French string, 'Les élèves français', encodes differently though. The reason is that UTF-8 uses two bytes for the accented letters like é, è and ç. Our greek string, 'Ελλάδα', even gives an error when we try to encode it using Latin-1. The reason is that the Greek letters are outside of the alphabet of Latin-1. Still, UTF-8 manages to encode them using just two bytes.
+
+
+
+%%%%%%%%%%%%%%%% MARKER %%%%%%%%%%%%%%%
 
 ==ZnCharacterEncoding== is an extension and reimplementation of regular TextConverter. It only works on binary input and generated binary output. It adds the ability to compute the encoded length of a source character, a crucial operation for HTTP. It is more correct and will throw proper exceptions when things go wrong.
 
