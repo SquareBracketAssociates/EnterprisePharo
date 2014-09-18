@@ -86,10 +86,10 @@ if [[ $# -eq 1 ]]; then
   fi
 else
   echo 'Generating files for all chapters'
+  mkdir -p book-result
   pillar_all
   if latex_enabled; then
     compile_chapters
-    mkdir -p book-result
     compile_latex_book
   fi
 fi
