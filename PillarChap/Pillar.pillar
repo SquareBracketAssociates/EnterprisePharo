@@ -266,7 +266,54 @@ generates a todo annotation
 
 @@todo this is a todo annotation
 
-The annotation (e.g., ==todo== and ==note==) can be any word that is meaningful to the author. In HTML, annotated paragraphs triggers the generation of a  paragraph with the annotation as the paragraph class. In LaTeX, an environment with the annotation name is generated.
+The annotation (e.g., ==todo== and ==note==) can be any word that is meaningful to the author. In HTML, annotated paragraphs triggers the generation of a  paragraph with the annotation as the paragraph class. In LaTeX, an environment with the annotation name is generated. In HTML, you can tweak the output to make it look nice, for example with such JavaScript code:
+
+[[[language=javascript
+// Wraps paragraphs with class pClass inside a div and adds an H4 element with pTitle.
+function transformAnnotatedParagraphs(pClass, pTitle) {
+    $("p." + pClass).wrap( "<div class='annotated-paragraph "
+                           + pClass + "' />" ).prepend("<h4>"+ pTitle +"</h4>");
+}
+
+transformAnnotatedParagraphs("note", "Note");
+transformAnnotatedParagraphs("todo", "To do");
+]]]
+
+Above code will prepend the titles "Note" and "To do" to the ==@@note== and ==@@todo== paragraphs. You can make that looks nice using a little bit of CSS:
+
+[[[language=css
+.annotated-paragraph {
+    margin: 20px 0;
+    padding: 15px 30px 15px 15px;
+    border-left: 5px solid #eee;
+}
+
+.annotated-paragraph h4 {
+  margin-top: 0;
+}
+
+.annotated-paragraph p:last-child {
+    margin-bottom: 0;
+}
+
+.note {
+    background-color: #f0f7fd;
+    border-color: #d0e3f0;
+}
+
+.note h4 {
+    color: #3a87ad;
+}
+
+.todo {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.todo h4 {
+    color: #3c763d;
+}
+]]]
 
 !!!Lists
 
