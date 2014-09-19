@@ -12,14 +12,16 @@
 %=============================================================
 %:Packages
 \usepackage{fontspec}
-\setmainfont{FiraSans-Regular}[Path = ../_support/latex/, Extension = .otf]
+
+\setmainfont{Fira Sans OT} % part of texlive
+\setsansfont{Fira Sans OT} % part of texlive
 \setmonofont{FiraMono-Regular}[Path = ../_support/latex/, Extension = .otf]
-\setsansfont{FiraSans-Regular}[Path = ../_support/latex/, Extension = .otf]
 
 \usepackage[protrusion,expansion=false]{microtype}
 \usepackage{graphicx}
 \usepackage{theorem}
-\usepackage[english]{babel}
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
 % ON: pdfsync breaks the use of p{width} for tabular columns!
 \ifdefined\usepdfsync\usepackage{pdfsync}\fi % Requires texlive 2007
 %=============================================================
@@ -429,16 +431,12 @@ Damien Pollet},
 % In-line code (literal)
 % Normally use this for all in-line code:
 % \newcommand{\ct}{\lstinline[mathescape=false,backgroundcolor=\color{white},basicstyle={\sffamily\upshape}]}
-\newcommand{\ct}[1]{{\sffamily\textup{#1}}}
-% apb 2007.8.28 added the \upshape declaration to avoid getting italicized code in \dothis{ } sections.
-% In-line code (latex enabled)
+\newcommand{\ct}[1]{{\texttt{\textup{#1}}}}
+% \upshape declaration to avoid getting italicized code in \dothis{ } sections
 % Use this only in special situations where \ct does not work
-% (within section headings ...):
-\newcommand{\lct}[1]{{\textsf{\textup{#1}}}}
-% Use these for system categories and protocols:
-\newcommand{\scat}[1]{\emph{\textsf{#1}}\xspace}
-\newcommand{\pkg}[1]{\emph{\textsf{#1}}\xspace}
-\newcommand{\prot}[1]{\emph{\textsf{#1}}\xspace}
+% (e.g., within section headings):
+\newcommand{\lct}[1]{{\texttt{\textup{#1}}}}
+
 % Code environments
 % NB: the arg is for tests
 % Only code and example environments may be tests
