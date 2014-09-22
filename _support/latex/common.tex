@@ -13,9 +13,16 @@
 %:Packages
 \usepackage{fontspec}
 
-\setmainfont{Fira Sans OT} % part of texlive
-\setsansfont{Fira Sans OT} % part of texlive
-\setmonofont{FiraMono-Regular}[Path = ../_support/latex/, Extension = .otf]
+\setmainfont{FiraSans}[
+  Path = ../_support/latex/fonts/ ,
+  UprightFont = *-Regular ,
+  BoldFont = *-Bold ,
+  ItalicFont = *-Italic ,
+  BoldItalicFont = *-BoldItalic
+]
+
+\setmonofont{FiraMono-Regular.otf}[Path = ../_support/latex/fonts/]
+\setsansfont{FiraSans-Regular.otf}[Path = ../_support/latex/fonts/]
 
 \usepackage[protrusion,expansion=false]{microtype}
 \usepackage{graphicx}
