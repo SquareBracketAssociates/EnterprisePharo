@@ -1,7 +1,7 @@
 ! Character Encoding and Resource Meta Description
 
 
-"(draft)"
+''This is an unfinished draft''
 
 
 The rise of the Internet and of Open Standards resulted in the adoption of a number of fundamental mechanisms to enable communication and collaboration between different systems.
@@ -11,6 +11,20 @@ One such mechanism is the ability to encode strings or characters to bytes or to
 Another important aspect is the ability to describe resources such as files. Both Mime-Type and URLs or URIs are basic building blocks for creating meta descriptions of resources. Pharo has objects that implement these fundamental aspects.
 
 Character encoding, MIME types and URL/URIs are essential for the correct implementation of HTTP, but they are indepent of it, as they are used for many other purposes.
+
+To get the latest versions of the Zinc-Character-Encoding-Core and Zinc-Resource-Meta-Core packages discussion in this chapter, you should load Zinc HTTP Components using either of the following expressions:
+
+[[[
+Gofer it
+  url: 'http://mc.stfx.eu/ZincHTTPComponents';
+  configurationOf: 'ZincHTTPComponents';
+  loadStable.
+
+Gofer it
+  url: 'http://mc.stfx.eu/ZincHTTPComponents';
+  configurationOf: 'ZincHTTPComponents';
+  loadDevelopment.
+]]]
 
 
 !! Character encoding
@@ -318,19 +332,17 @@ Pharo comes with support for the most important encodings currently used, as wel
 Where ZnByteEncoder groups a large number of encodings. Here is a list of all recognized, canonical names: windows874 windows1255 xcp1254 iso88594 iso885914 windows1256 xcp1255 greek iso88595 iso885915 windows1257 xcp1256 iso88593 iso88596 cp1250 iso885916 windows1258 maccyrillic cp1251 koi8u mac xcp1258 iso88597 cp1252 iso88598 cp874 xcp1257 koi8r cp1253 iso88599 arabic koi8 cp1254 macroman cyrillic cp1255 ibm866 latin1 cp1256 latin2 cp1257 cp866 macintosh latin3 cp1258 latin4 xmaccyrillic latin5 latin6 windows1250 ibm819 windows1251 xcp1250 iso885910 windows1252 xcp1251 iso88591 iso885911 windows1253 xcp1252 hebrew iso88592 windows1254 xcp1253 xmacroman dos874 iso885913. This list is available as ==ZnByteEncoder knownEncodingIdentifiers==.
 
 
-%%%%%%%%%%%%%%%% MARKER %%%%%%%%%%%%%%%
-
-
 !! Mime-Types
 
+''Not at all finished''
 
-A mime-type that is an official, cross-platform definition of a file or document type or format. Again, see the Wikepedia article *Internet media type>http://en.wikipedia.org/wiki/Mime-type* for more details.
+A mime-type is an official, cross-platform definition of a file or document type or format. The official term is an *Internet media type>http://en.wikipedia.org/wiki/Mime-type*.
 
-Zn models mime-types using its ==ZnMimeType== object which has 3 components
+Mmime-types are modeled using the ==ZnMimeType== object which has 3 components:
 
-- a main type, for example text or image, 
-- a sub type, for example plain or html, or jpeg, png or gif, and 
-- a number of attributes, for example ==charset=utf-8==.
+# a main type, for example text or image, 
+# a sub type, for example plain or html, or jpeg, png or gif, and 
+# a number of attributes, for example ==charset=utf-8==.
 
 The class side of ==ZnMimeType== has some convenience methods for accessing well known mime-types. Note that for textual (non-binary) types, the encoding defaults to UTF-8, the prevalent internet standard. Creating a ==ZnMimeType== object is as easy as sending ==asZnMimeType== to a ==String==.
 
@@ -350,5 +362,7 @@ ZnMimeType textHtml matches: ZnMimeType text.
 
 !! URLs
 
+''Not at all finished''
 
-URLs (or URIs) are a way to name something.
+URLs (or URIs) are a way to name or identify something. Often, they also contain information of where you can access the thing they name or identify. The class ==ZnUrl== models URLs (or URIs).
+
