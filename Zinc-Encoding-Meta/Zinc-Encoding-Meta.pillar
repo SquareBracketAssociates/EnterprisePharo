@@ -1,15 +1,37 @@
 ! Character Encoding and Resource Meta Description
 
+
+''This is an unfinished draft''
+
+
 The rise of the Internet and of Open Standards resulted in the adoption of a number of fundamental mechanisms to enable communication and collaboration between different systems.
 
 One such mechanism is the ability to encode strings or characters to bytes or to decode strings or characters from bytes. Different encoding standards have been developed over the years. Pharo supports many current and legacy encodings.
 
-Another important aspect is the ability to describe resources such as files. Both Mime-Type and URLs or URIs are basic building blocks for this. Pharo has objects that implement these fundamental aspects.
+Another important aspect is the ability to describe resources such as files. Both Mime-Type and URLs or URIs are basic building blocks for creating meta descriptions of resources. Pharo has objects that implement these fundamental aspects.
 
-Character encoding, MIME types and URL/URIs are essential for the correct implementation of HTTP, but they are indepent of it, as they are used for many other purposes.   
+Character encoding, MIME types and URL/URIs are essential for the correct implementation of HTTP, but they are indepent of it, as they are used for many other purposes.
+
+To get the latest versions of the Zinc-Character-Encoding-Core and Zinc-Resource-Meta-Core packages discussion in this chapter, you should load Zinc HTTP Components using either of the following expressions:
+
+[[[
+Gofer it
+  url: 'http://mc.stfx.eu/ZincHTTPComponents';
+  configurationOf: 'ZincHTTPComponents';
+  loadStable.
+
+Gofer it
+  url: 'http://mc.stfx.eu/ZincHTTPComponents';
+  configurationOf: 'ZincHTTPComponents';
+  loadDevelopment.
+]]]
 
 
 !! Character encoding
+
+
+!!! Characters and Strings use Unicode internally
+
 
 Proper character encoding and decoding is crucial in today's international world. Internally, Pharo stores characters and strings using Unicode. *Unicode>http://en.wikipedia.org/wiki/Unicode* is a very large internationally standardized collection of code points, integers, representing all of the world languages' characters.
 
@@ -22,7 +44,8 @@ Let's look at some example strings with their Unicode code points:
 
 'Les élèves français' collect: #codePoint as: Array. 
 
-  => #(76 101 115 32 233 108 232 118 101 115 32 102 114 97 110 231 97 105 115)
+  => #(76 101 115 32 233 108 232 118 101 115 
+       32 102 114 97 110 231 97 105 115)
 
 'Ελλάδα' collect: #codePoint as: Array. 
 
@@ -36,6 +59,10 @@ Next come a number of European languages, like French, which have code points be
 And finally, there are hundreds of other languages, like Chinese, Japanse, Cyrillic, Arabic or Greek. You can see from the example (Greece in Greek) that those code points are higher than 256 and thus no longer fit in one byte.
 
 The good thing is, we can work with text in any language in Pharo. To display everything correctly you have to use a font that is capable of showing all the characters (or glyphs) needed. Arial Unicode MS is such a font.
+
+
+!!! Encoding and Decoding
+
 
 For communication with the world outside Pharo, the operating system, files, the internet, we have to represent our strings as a collection of bytes.
 
@@ -54,6 +81,10 @@ Character encoders do proper error handling, throwing ==ZnCharacterEncodingError
 
 The primary internet encoding is *UTF-8>http://en.wikipedia.org/wiki/UTF-8*. This is also the recommended encoding. UTF-8 is a variable length encoding that is optimized somewhat for ASCII and to a lesser degree Latin1 and some other common European encodings. 
 
+
+!!! Converting Strings and ByteArrays
+
+
 You will deal only indirectly with character encoders. String and ByteArray have some convenience methods to do encoding and decoding. Let's have a look.
 
 [[[
@@ -64,10 +95,12 @@ You will deal only indirectly with character encoders. String and ByteArray have
   => #[72 101 108 108 111]
 
 'Les élèves français' utf8Encoded. 
-  => #[76 101 115 32 195 169 108 195 168 118 101 115 32 102 114 97 110 195 167 97 105 115]
+  => #[76 101 115 32 195 169 108 195 168 118 101 115 
+       32 102 114 97 110 195 167 97 105 115]
 
 'Les élèves français' encodeWith: #latin1. 
-  => #[76 101 115 32 233 108 232 118 101 115 32 102 114 97 110 231 97 105 115]
+  => #[76 101 115 32 233 108 232 118 101 115 
+       32 102 114 97 110 231 97 105 115]
 
 'Ελλάδα' utf8Encoded. 
   => #[206 149 206 187 206 187 206 172 206 180 206 177]
@@ -87,16 +120,20 @@ The reverse process, decoding, is equally simple.
 #[72 101 108 108 111] decodeWith: #latin1.
   => 'Hello'
 
-#[76 101 115 32 195 169 108 195 168 118 101 115 32 102 114 97 110 195 167 97 105 115] utf8Decoded.
+#[76 101 115 32 195 169 108 195 168 118 101 115 
+  32 102 114 97 110 195 167 97 105 115] utf8Decoded.
   => 'Les élèves français'
 
-#[76 101 115 32 195 169 108 195 168 118 101 115 32 102 114 97 110 195 167 97 105 115] decodeWith: #latin1.
+#[76 101 115 32 195 169 108 195 168 118 101 115 
+  32 102 114 97 110 195 167 97 105 115] decodeWith: #latin1.
   => 'Les Ã©lÃ¨ves franÃ§ais'
 
-#[76 101 115 32 233 108 232 118 101 115 32 102 114 97 110 231 97 105 115] utf8Decoded.
+#[76 101 115 32 233 108 232 118 101 115 
+  32 102 114 97 110 231 97 105 115] utf8Decoded.
   => ZnInvalidUTF8: 'Illegal continuation byte for utf-8 encoding'
 
-#[76 101 115 32 233 108 232 118 101 115 32 102 114 97 110 231 97 105 115] decodeWith: #latin1.
+#[76 101 115 32 233 108 232 118 101 115 
+  32 102 114 97 110 231 97 105 115] decodeWith: #latin1.
   => 'Les élèves français'
 
 #[206 149 206 187 206 187 206 172 206 180 206 177] utf8Decoded.
@@ -117,75 +154,200 @@ You might wonder why in the first case the #latin1 encoder produced gibberish, w
 
 Note that identifiers for encodings are interpreted flexibly (case and punctuation do not matter).
 
+There exists a special ==ZnNullEncoder== that basically does nothing: it treats bytes are characters and vice versa. This is actually mostly equivalent to Latin-1 or ISO-8859-1. And yes, that is a bit confusing.
 
 
-%%%%%%%%%%%%%%%% MARKER %%%%%%%%%%%%%%%
+!!! Converting Streams
 
-==ZnCharacterEncoding== is an extension and reimplementation of regular TextConverter. It only works on binary input and generated binary output. It adds the ability to compute the encoded length of a source character, a crucial operation for HTTP. It is more correct and will throw proper exceptions when things go wrong.
 
-Character encoding is mostly invisible. Here are some code snippets using the encoders directly, feel free to substitute any Unicode character to make the test more interesting.
+The second primary use of encoders is when dealing with streams. More specifically, when interpreting a binary read or write stream as a character stream. Note that at their lowest level, all streams to and from the operating system or network are binary and thus need the use of an encoder when treating them as character streams.
 
-[[[
-| encoder string |
-encoder := ZnUTF8Encoder new.
-string := 'any Unicode'.
-self assert: (encoder decodeBytes: (encoder encodeString: string)) equals: string.
-encoder encodedByteCountForString: string.
-]]]
-
-There are no automatic conversions in Zinc. So Zinc is one of the pieces of software that does not assume stupid defaults. You should specify a proper Content-Type header including the charset information. Otherwise Zinc has no chance of knowing what to use and the default NullEncoder will make your string wrong.
-
-Let us look at one example 
-SD: We should add back the o umlaut whe pillar/latex can handle it.
+To treat a binary write stream as a character write stream, you wrap is with a ==ZnCharacterWriteStream==. Similary, to treat a binary read stream as a character stream, you wrap it with a ==ZnCharacterReadStream==. Here are some examples.
 
 [[[
-ZnServer startDefaultOn: 1701.
+ByteArray streamContents: [ :out |
+  (ZnCharacterWriteStream on: out encoding: #iso88591)
+     nextPutAll: 'Les élèves français' ].
 
-ZnClient new
- url: 'http://localhost:1701/echo';
- entity: (ZnEntity with: 'An der schonen blauen Donau'); 
- post.
-	
-ZnClient new
- url: 'http://localhost:1701/echo';
- entity: (ZnEntity 
-           with: 'An der schonen blauen Donau' 
-           type: (ZnMimeType textPlain charSet: #'iso-8859-1'; yourself));
- post;
- yourself.
+#[76 101 115 32 233 108 232 118 101 115 
+  32 102 114 97 110 231 97 105 115] readStream in: [ :in |
+    (ZnCharacterReadStream on: in encoding: #iso8859) 
+       upToEnd ].
+
+'encoding-test.txt' asFileReference writeStreamDo: [ :out |
+  (ZnCharacterWriteStream on: out binary encoding: #utf8)
+     nextPutAll: 'Hello'; space; nextPutAll: 'Ελλάδα'; crlf;
+	 nextPutAll: 'Les élèves français'; crlf ].
+
+'encoding-test.txt' asFileReference readStreamDo: [ :in |
+  (ZnCharacterReadStream on: in binary encoding: #utf8)
+     upToEnd ]
 ]]]
 
-In the first case, a UTF-8 encoded string is POST-ed and correctly returned (in a UTF-8 encoded response).
+We used ==#on:encoding:== here, but there is also a plain ==#on:== instance creation method that defaults to UTF-8. Internally, the character streams will use an encoder instance to do the actual work. 
 
-In the second case, an ISO-8859-1 encoded string is POST-ed and correctly returned (in a UTF-8 encoded response).
 
-In both cases the decoding was done correctly, using the specified charset (if that is missing, the ZnNullEncoder is used). Now, o is not a perfect test example because its encoding value in Unicode, 246 decimal, U\+00F6 hex, still fits in 1 byte and hence survives null encoding/decoding. That is why the following still works, although it is wrong to drop the charset.
+!!! ByteStrings and WideStrings are concrete subclasses of String
 
+
+Up until now we spoke about Strings as being a collection of Characters, each of which is represented as a Unicode code point. And this is totally how you should think about them. However, in reality, String is an abstract class with two concrete subclasses. This will show up when you inspect String instances, so it is important to understand what is going on. Let's explore the actual classes of some example strings.
 
 [[[
-ZnClient new
- url: 'http://localhost:1701/echo';
- entity: (ZnEntity 
-           with: 'An der schonen blauen Donau' 
-           type: (ZnMimeType textPlain clearCharSet; yourself));
- post;
- yourself.
+'Hello' class.  => ByteString 
+                                                                                                  
+'Les élèves français' class.  => ByteString                                                                                  
+                                                
+'Ελλάδα' class.  => WideString
 ]]]
+
+Simple ASCII strings are ByteStrings. Strings using special characters are WideStrings. Some non-ASCII strings are still ByteStrings. 
+The explanation is very simple. As we saw in the very first subsection of this chapter, they differ in the Unicode code points used for each character.
+
+In the first case, for ASCII, the code points are always less than 128. Hence they fit in one byte. The second string is using Latin-1 characters, whose code points are less than 256. Latin-1 characters and the first 256 Unicode characters are the same. These still fit in a byte. A ==ByteString== is a String that only stores Unicode code points that fit in a byte. This implementation is very efficient. Note that ByteString is a variable byte subclass of String.
+
+Our last example has code points that no longer fit in a byte. To be able to store these, ==WideString== allocates 32-bit (4 byte) slots for each character. This implementation is necessarily less efficient. Note that WideString is a variable word subclass of String.
+
+In practice, the difference between ByteString and WideString should not matter. Conversions are done automatically when needed.
+
+[[[
+'abc' copy at: 1 put: $α; class.  => WideString  
+]]]
+
+As the above example shows, assigning a Unicode character, $α, to a ByteString, 'abc' converts it to a WideString. This is actually done using a #becomeForward: message. When benchmarking, this conversion might show up as taking significant time. If you know upfront that you will need WideStrings, it can be better to start with the right type.
+
+
+!!! ByteString and ByteArray equivalence is an implementation detail
+
+
+There is another implementation detail worth mentioning. For the Pharo virtual machine, more specifically, for a number of primitives, ByteString and ByteArray are equivalent. Given what we now know, that makes sense. Consider the following code:
+
+[[[
+'abcdef' asByteArray.
+  => #[97 98 99 100 101 102]
+
+'ABC' asByteArray.
+  => #[65 66 67]
+
+'abcdef' copy replaceFrom: 1 to: 3 with: #[65 66 67]. 
+  => 'ABCdef' 
+
+#[97 98 99 100 101 102] copy replaceFrom: 1 to: 3 with: 'ABC'.
+  => #[65 66 67 100 101 102]
+]]]
+
+Pay close attention: in the third expression, we do a ==#replaceFrom:to:with:== on a ByteString, but give a ByteArray as third argument. So we are replacing part of a String with a ByteArray. And it works!
+
+The last example goes the other way around: we replace part of a ByteArray with a ByteString, which works as well. 
+
+What about doing the same mix up with elements ?
+
+[[[
+'abc' copy at: 1 put: 65; yourself.
+  => Error: improper store into indexable object
+
+#[97 98 99] copy at: 1 put: $A; yourself.
+  => Error: improper store into indexable object
+]]]
+
+This is more what we expect: we're not allowed to do this. We are mixing two types that are not equivalent, like Character and Integer. 
+
+So although it is true that some equivalence between ByteString and ByteArray exists, you should not mix up the two. It is an implementation detail that you should not rely upon. 
+
+
+!!! Beware of bogus conversions
+
+
+Given a string, it is tempting to send it ==#asByteArray== to convert it to bytes. Similary, it is tempting to convert a byte array by sending it ==#asString==. These are bogus conversions that you should not use. For some strings it will work, for other not. Basically the conversion is possible for strings for which the following property holds:
+
+[[[
+'Hello' allSatisfy: [ :each | each codePoint < 256 ].  => true 
+                
+'Les élèves français' allSatisfy: [ :each | each codePoint < 256 ].  => true                            
+
+'Ελλάδα' allSatisfy: [ :each | each codePoint < 256 ].  => false
+]]]
+
+Now, even though the first two can be converted, you are not using the same encoding. Here is a way to explicitly express this idea:
+
+[[[
+#(null ascii latin1 utf8) allSatisfy: [ :each | 
+  ('Hello' encodeWith: each) = 'Hello' asByteArray ].
+    => true.
+
+('Les élèves français' encodeWith: #latin1) = 'Les élèves français' asByteArray.
+    => true.
+
+('Les élèves français' encodeWith: #null) = 'Les élèves français' asByteArray.                                                     
+    => true.                                                            
+
+'Les élèves français' utf8Encoded = 'Les élèves français' asByteArray.
+    => false.
+]]]
+
+For pure ASCII strings, with all code points below 128, no encoding (null encoding), ASCII, Latin-1 and UTF-8 are all the same. For other ByteString instances, like 'Les élèves français', only Latin-1 works. In that case it is also equivalent of doing no encoding. 
+
+The lazy conversion for proper Unicode WideStrings will give unexpected results:
+
+[[[
+'Ελλάδα' asByteArray.
+  => #[0 0 3 149 0 0 3 187 0 0 3 187 0 0 3 172 0 0 3 180 0 0 3 177]
+]]]
+
+This 'conversion' does not correspond to any known encoding. It is the result of writing 4-byte Unicode code points as Integers. Needless to say, using this is a bug no matter how you look at it.
+
+In this century you will look silly for not implementing proper support for all languages. When converting from strings to bytes, use a proper, explicit encoding - and vice versa.
+
+
+!!! Strict and lenient encoding
+
+
+When we said earlier that no encoding (or the null encoder) and Latin-1 encoding are the same, we lied. There are actually 'holes' in the table, some byte values are undefined, which a strict encoder won't allow. For example, Unicode code point 150 is, strictly speaking, not in Latin-1. Depending on the 'strict' setting, you will get an error or there will be a silent conversion. Here is some code illustrating this point.
+
+[[[
+ZnByteEncoder latin1 encodeString: 150 asCharacter asString.
+ZnByteEncoder latin1 decodeBytes: #[ 150 ].
+
+ZnByteEncoder latin1 beLenient encodeString: 150 asCharacter asString.
+ZnByteEncoder latin1 beLenient decodeBytes: #[ 150 ].
+
+ZnByteEncoder latin1 characterDomain includes: 150 asCharacter.
+ZnByteEncoder latin1 byteDomain includes: 150.
+]]]
+
+The first two expressions with give a ZnCharacterEncodingError, 'Character Unicode code point outside encoder ranger'. The default encoder is strict. Asking the encoder to ==#beLenient== results in the value going through (if that is possible). You can explicity access both the allowed byte or characters values, the domain of encoder or decoder.
+
+Note that the lower half of a byte encoding, the ASCII part between 0 and 127, is always treated as is.
+
+
+!!! Available Encoders
+
+
+Pharo comes with support for the most important encodings currently used, as well as with some support for some important legacy encodings. Seen as the objects implementing them, the following encoders are available:
+
+- ZnUTF8Encoder
+- ZnUTF16Encoder
+- ZnByteEncoder
+- ZnNullEncoder
+
+Where ZnByteEncoder groups a large number of encodings. Here is a list of all recognized, canonical names: windows874 windows1255 xcp1254 iso88594 iso885914 windows1256 xcp1255 greek iso88595 iso885915 windows1257 xcp1256 iso88593 iso88596 cp1250 iso885916 windows1258 maccyrillic cp1251 koi8u mac xcp1258 iso88597 cp1252 iso88598 cp874 xcp1257 koi8r cp1253 iso88599 arabic koi8 cp1254 macroman cyrillic cp1255 ibm866 latin1 cp1256 latin2 cp1257 cp866 macintosh latin3 cp1258 latin4 xmaccyrillic latin5 latin6 windows1250 ibm819 windows1251 xcp1250 iso885910 windows1252 xcp1251 iso88591 iso885911 windows1253 xcp1252 hebrew iso88592 windows1254 xcp1253 xmacroman dos874 iso885913. This list is available as ==ZnByteEncoder knownEncodingIdentifiers==.
 
 
 !! Mime-Types
 
-a mime-type that is an official, cross-platform definition of a file or document type or format. Again, see the Wikepedia article *Internet media type>http://en.wikipedia.org/wiki/Mime-type* for more details.
+''Not at all finished''
 
-Zn models mime-types using its ==ZnMimeType== object which has 3 components
+A mime-type is an official, cross-platform definition of a file or document type or format. The official term is an *Internet media type>http://en.wikipedia.org/wiki/Mime-type*.
 
-- a main type, for example text or image, 
-- a sub type, for example plain or html, or jpeg, png or gif, and 
-- a number of attributes, for example ==charset=utf-8==.
+Mmime-types are modeled using the ==ZnMimeType== object which has 3 components:
+
+# a main type, for example text or image, 
+# a sub type, for example plain or html, or jpeg, png or gif, and 
+# a number of attributes, for example ==charset=utf-8==.
 
 The class side of ==ZnMimeType== has some convenience methods for accessing well known mime-types. Note that for textual (non-binary) types, the encoding defaults to UTF-8, the prevalent internet standard. Creating a ==ZnMimeType== object is as easy as sending ==asZnMimeType== to a ==String==.
 
 % @@why should we invoke ZnMimeType textHtml.@@
+
 [[[
 ZnMimeType textHtml.
 'text/html;charset=utf-8' asZnMimeType.
@@ -196,3 +358,11 @@ The subtype can be a wildcard, indicated by a ==*==. This allows for matching.
 [[[
 ZnMimeType textHtml matches: ZnMimeType text.
 ]]]
+
+
+!! URLs
+
+''Not at all finished''
+
+URLs (or URIs) are a way to name or identify something. Often, they also contain information of where you can access the thing they name or identify. The class ==ZnUrl== models URLs (or URIs).
+

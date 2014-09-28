@@ -376,14 +376,12 @@ generates
 -Lists can also be nested.
 -#Thus, a line starting with ==-#==
 -#is an element of a bulleted list that is part of an ordered list.
--#;Definition lists
--#:can also be nested
 
 !!!Formatting
 There is some sugar for font formatting:
 
--To make something ""bold"", write ==\""bold""==
--To make something ''italic'', write ==\''italic''==
+-To make something ""bold"", write ==\""bold""== (with 2 double quotes)
+-To make something ''italic'', write ==\''italic''== (with 2 single quotes)
 -To make something ==monospaced==, write ==\==monospaced=\===
 -To make something --strikethrough--, write ==\--strikethrough--==
 -To make something @@subscript@@, write ==\@@subscript@@==
