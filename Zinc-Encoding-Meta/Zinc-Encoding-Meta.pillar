@@ -10,9 +10,9 @@ One such mechanism is the ability to encode strings or characters to bytes or to
 
 Another important aspect is the ability to describe resources such as files. Both Mime-Type and URLs or URIs are basic building blocks for creating meta descriptions of resources. Pharo has objects that implement these fundamental aspects.
 
-Character encoding, MIME types and URL/URIs are essential for the correct implementation of HTTP, but they are indepent of it, as they are used for many other purposes.
+Character encoding, MIME types and URL/URIs are essential for the correct implementation of HTTP, but they are independent from it, as they are used for many other purposes.
 
-To get the latest versions of the Zinc-Character-Encoding-Core and Zinc-Resource-Meta-Core packages discussion in this chapter, you should load Zinc HTTP Components using either of the following expressions:
+To get the latest versions of the Zinc-Character-Encoding-Core and Zinc-Resource-Meta-Core packages discussed in this chapter, you should load Zinc HTTP Components using either of the following expressions:
 
 [[[
 Gofer it
