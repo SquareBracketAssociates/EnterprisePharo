@@ -1,0 +1,81 @@
+Copyright/License.pier
+
+
+Artefact/artefact.pier	
+	>> first english version done:
+	>> to be moved from PFTE to PE
+	
+PillarChap
+	 >> Stef should read it.
+	 
+BabyMock/BabyMock.pier
+	>> Was waiting from author 
+	>> the wiki has more and different material
+	
+Fuel/Fuel.pier
+	>> Stef is working on it.
+	
+
+Localization/Localization.pier
+	>>
+	
+NativeBoost/NativeBoost.pier
+	>> Stef should re read it.
+	
+NeoCSV/NeoCSV.pier
+	>> Stef should re read it.
+	
+NeoJSON/NeoJSON.pier
+	>> Stef should re read it.
+	
+STON/STON.pier
+	>> Stef should re read it.
+
+Zinc/Zinc.pier
+	>> Stef should re read it.
+	
+Zinc-Encoding-Meta
+	>> Stef read and modified it a bit 
+	
+Zinc-HTTP
+	>> Stef should re read it.
+
+Zinc-REST
+	>> Stef should read it and ask crhistophe for feedback.
+	
+Voyage/Voyage.pier",
+	>>
+	
+Mustache/Mustache.pier
+	>> Stef should finish the first version
+	
+RenoirST/RenoirST.pier",
+	>> may be we should contact gabriel
+	
+	
+WebSockets/WebSockets.pier",
+	>>
+	
+
+WebApp using Zinc
+	>> Stef should read it again.
+
+
+LDAP Olivier
+	>> Olivier is not happy about the implementation 
+	>> reevaluating it
+	
+GitAndPharo/GitAndPharo.pier
+	>> will see
+
+
+
+
+
+
+
+       "Spec/Spec.pier",
+       "DynamicSpec/DynamicSpec.pier",
+       "CalculatorTutorial/CalculatorTutorial.pier", 
+
+       "Smacc/Smacc.pier",
