@@ -1,9 +1,9 @@
 Copyright/License.pier
 
-
 Artefact/artefact.pier	
-	>> first english version done:
+	>> first english version done [11 / Oct / 2014]
 	>> to be moved from PFTE to PE
+	
 	
 PillarChap
 	 >> Stef should read it.
@@ -13,8 +13,8 @@ BabyMock/BabyMock.pier
 	>> the wiki has more and different material
 	
 Fuel/Fuel.pier
-	>> Stef is working on it.
-	
+	>> Stef is working on it [11 / Oct / 2014]
+	>> to be moved from PFTE to PE
 
 Localization/Localization.pier
 	>>
