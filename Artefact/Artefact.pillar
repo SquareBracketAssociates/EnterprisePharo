@@ -1,0 +1,941 @@
+! Generate PDF documents with Artefact
+
+The Adobe PDF format is probably one of the most widespread electronic document formats. Used daily, it is the basis for the production of graphical, readable and exchangeable documents. If you receive a bill, follow a purchase on a web site, if you download a report, a book, or an administrative form, these files will likely PDF documents. For programmers, supporting this format has become a must. Generating PDF is part of the toolkit. 
+In Pharo, Artifact is an innovative framework that supports the design and generation of PDF documents. 
+Artifact is developed by O. and G. Auverlot Larcheveque.
+
+
+!!Overview of Artifact 
+
+Artifact is an innovative PDF framework. In Artefact a PDF document is described by objects. All the components of a PDF document are represented as a tree of objects. The document is an object containing other objects corresponding to pages. On each page, printable or non-visible items are also objects. 
+Such elements have then the opportunity to be reused in the same document but also in several documents. These elements can be as simple as a text or an image but also be a complex component with an advanced behavior and a special appearance. Artifact proposes default elements such as paragraphs or tables to quickly generate reports. The strength of these elements is that they are independent of each other. The order in which you position them in the document does not affect their appearance. Unlike many PDF frameworks that exploit the notion of stream in the definition of styles (blue text will be followed by another blue text in the absence of a directive in a different style), Artifact considers every element includes its own sheet style. If an attribute is not defined in the element, Artefact then uses a style sheet by default set at the document level.
+
+
+This autonomy of elements and style management are a strong feature of Artefact. They make it easy to generate a document and quickly customize for a particular operation. Efficiency, productivity and scalability guided the design of the framework. 
+
+!!!Concepts, key aspects and limits
+
+After more than a year of development, the concepts used in Artifact are now stable and Artefact is already used by companies using Pharo. Yet this is still a young frameworks. For this reason, it is important to list its current features and to know its limitations.
+
+- Artifact supportsthe definition of a PDF document and its contents.
+- It can specify meta information such as title or author. 
+- It manages display options when opening a document in a compatible player with this feature.
+- It supports compressed PDF document generation.
+
+Each page of a PDF document can have its own particular format and orientation. By default, Artefact supports a set of common formats (A3, A4, ebook...). It can easily be extended for specific needs. Page location is determined not when it is created but when it is added to a document. Each page is independent and this allows one to generate documents with variable architecture.
+
+On each page, Artefact places simple or complex elements. A complex element is generally defined using simple elements or other complex elements. Each element is independent and is positioned relative to the upper left corner of a page. Artifact provides greyscale management and colors defined by the RGB (each color component is represented by one byte) model. Character fonts are those imposed by the PDF but Artifact does not support true type fonts (TTF) specification. You can insert images into a PDF document but only the JPEG format is currently supported. Artifact does not support the definition of interactive input fields, integrating JavaScript or safety aspects of PDF such as certificates. Of course, these specifications are subject to change as and when changes in the framework. Artifact has a simple architecture that facilitates scalability and new features. 
+
+!!Getting started in 10 minutes
+
+You already program in Pharo and you want to generate PDF documents. This section will show you how to do it
+in less than 10 min. 
+
+First you should load the framework. The good news is that there is no need for native libraries. Artefact is written entirely in Pharo. Whatever your execution platform (Microsoft Windows, Mac OS X, Linux, Android, IOS, etc.), Artefact will be available and usable.
+
+
+
+!!!Installing  Artefact
+
+Artefact is hosted on SmalltalkHub (*http://smalltalkhub.com/#!/~RMoD/Artefact*). To install Artefact, execute the following expressions: 
+
+[[[
+Gofer new
+    smalltalkhubUser: '' project: 'RMoD/Artefact';
+    package: 'ConfigurationOfArtefact';
+    load.
+
+ConfigurationOfArtefact load
+]]]
+
+Loading the configuration automatically load projets such as the Unit framework (which supports the definition of different measure units. By default the configuration loads the stable version that is prodcution ready.
+
+
+
+Once loaded, you can rowse the main packages and classes. 
+- The ==Artifact-Demos== package contains many examples of the use and allows smooth handling of the framework. 
+- The ==Artifact== package contains the main elements such as documents, pages or style sheets but also 
+electronic documentation accessible via the Help Browser. 
+- In ==Elements-Basic Artifact== and ==Artifact-Elements-Composites==, you find the components (text, geometric shapes, images, etc.) offered by the basic framework. 
+- The fonts are defined in the package ==Artifact-Fonts== and document formats (A4, A3, ebook, etc.) in the package ==Artifact-Formats==.
+
+
+!!! Executing the first demoes
+
+The best way to start with Artefact is to look at ==Artefact-Demos== package and to run each ==PDFDemos== class methods.
+
+If you want to run all demos, just execute the following expression: ==PDFDemos runAllDemos==
+
+By default each generation results is written in the default Pharo directory but you can define your own in 
+the ==demoPath== method example:
+
+[[[
+PDFDemos>>demoPath
+   ^ '/Users/pharo/pdf/'
+]]]
+
+
+!!!Finally "Hello World!"
+
+You will now create your first simplest PDF document, which is a text on a page. To do this, you must define an 
+instance of a PDF document containing a page where you will position a text component.
+
+
+[[[
+PDFDocument new 
+   exportTo: 'helloworld.pdf' asFileReference writeStream
+]]]
+
+Once the instance of ==PDFDocument== is created, it is exported using a stream to a file named ==helloworld.pdf==.  By default, the produced PDF document is placed in the directory of Pharo. If you open the file, it is empty. This is  normal since you have not yet defined and added any content to the document.
+
+Let us enrich the previous example and add a page to the document.
+
+[[[
+PDFDocument new 
+    add: PDFPage new; 
+    exportTo: 'helloworld.pdf' asFileReference writeStream
+]]]
+
+Now if you open the file the result is different since the docyment contains an empty white page. 
+
+
+With Artefact you should only define specific parameter. By default Artefact sets parameters to the most
+commonly used ones. For example the format is set to A4, page orientation to portrait, ect. So let us add a first text component to our page. 
+
+[[[
+PDFDocument new add: 
+	(PDFPage new add: 
+		(PDFTextElement new text: 'Hello World!'; from: 10mm @ 10mm)); 
+	exportTo: 'helloworld.pdf' asFileReference writeStream
+]]]
+
+To place the text we create a component of type  ==PDFTextElement==. We add it to the page and 
+define its position using the message ==from:==. Note that we can specify dimensions using several 
+units such as  millimeters (mm), centineters (cm) or inches (inch). Such coordinates are defined 
+from the left superior corner of the page. As we said previously, Artefact uses a set of values by 
+default to get compact code. Text is then by default written in black using Helvetica and with a 
+default size.
+
+This first example introduced some basic concepts and shows how simple it is to produce a
+PDF document with Pharo. 
+
+The following Sections go deeper in Artefact. We will show you how to define more complex documents.
+
+
+!!Document Definition
+
+Artifact represents PDF documents as objects instances of the class ==PDFDocument==. An instance of ==PDFDocument== is a container for receiving pages. 
+This is the order in which these pages are added which defines the organization of data within the object ==PDFDocument== and not the order in which the pages are created. 
+
+This mode of operation allows you to generate documents whose contents can be dynamically generated and organized in a second time. A PDFDocument also supports advanced options such as the document size, management of compression, the opening in the PDF reader and the definition of meta information.
+
+
+!!!!Page Addition 
+
+To add pages in a document, you have a message ==add:==: it adds a page after those already present in the document. The operation is like a FIFO (First In First Out) stack. When generating the document, Artifact traverses the list of pages starting from the earliest added to the last. The following script defines a document from a single blank page.
+
+[[[
+PDFDocument new 
+	add: PDFPage new; 
+	exportTo: 'EmptyPage.pdf' asFileReference writeStream
+]]]
+
+!!!! Document Properties
+
+A PDFDocument can be configured to select the format and compression used. 
+
+!!!!!Format et orientation du document
+
+By default, a document is generated in A4 format but this is not the only one available in Artifact. The Package Artifact-Formats contains a list of predefined formats and it covers many needs. You can produce documents in A3 (==PDFA3Format==), letter size (==PDFLetterFormat==) but also in a format suitable for e-readers (==PDFEbookFormat==). If you need a particular size, you can define it. A format is simply expressed by the returned value of the message ==defaultSize==.
+
+A ==PDFDocument== accepts the message ==format:== to specify the format of all pages of the document. For each page, this value will be the default if not redefined otherwise. Each page can specify a different format. The following example creates a document using A3:
+
+[[[
+PDFDocument new 
+	format: PDFA3Format new; 
+	add: PDFPage new; 
+	exportTo: 'A3.pdf' asFileReference writeStream
+]]]
+
+
+Formats are also responsible of page orientation. There are two alternatives portrait or landscape. Two messages of the class ==PDFFormat== sets the associate orientation ==setPortrait== and ==setLandscape==.
+
+The following example generates a document whose pages are in A# format and landscape orientation.
+
+[[[
+PDFDocument new 
+	format: PDFA3Format new setLandscape; 
+	add: PDFPage new; 
+	exportTo: 'A3landscape.pdf' asFileReference writeStream
+]]]
+
+Note that setting the default landscape mode for a document does not exclude the possibility for a particular page to be oriented in portrait mode. Artifact fully supports pages of different sizes and different orientations within a single document.
+
+
+!!!!!Compression 
+
+The PDF format allows you to compress the data and that's a good thing. A PDF document can contain large amounts of data. To to minimize the weight of generated documents Artifact defaults to a compression algorithm.  If you need to disable this option and analyze data, you should use the ==uncompressed== message that disables compression. 
+
+The following example generates an uncompressed PDF document: 
+
+[[[
+PDFDocument new 
+	uncompressed; 
+	add: PDFPage new; 
+	exportTo: 'uncompressed.pdf' asFileReference writeStream
+]]]
+
+Another message, named ==compressed==, sets the compression. 
+
+!!!!! Controling Document Opening 
+
+
+Adobe Acrobat reader supports various display modes when opening a PDF document. The selected mode is defined directly into the PDF document. 
+Note that if your PDF reader is not compatible with these options, they will be ignored.
+
+Display mode properties are divided in two categories: those determining the size of the pages using messages ==fullPage==, ==fullWidth==, ==real== and ==zoom: == and those related to the page organization on the screen ==singlepage==, ==twoPages== and ==continuousPages==. These messsages should be sent directly to an ==PDFDocument== instance. 
+
+With ==ullPage==, each page of the document occupies the entire display space. With ==fullWidth==, the display is optimized to page width. With ==real==, the display meets the dimensions specified in the PDF document. 
+
+The following example creates a document that will occupy all available display space:
+
+
+[[[
+pdfdoc := PDFDocument new fullPage.
+]]]
+With the message ==zoom:==, you can define a zoming ratio expressed in percentage. The following example defines that the document should be opened with zoom of four times. 
+
+[[[
+pdfdoc := PDFDocument new zoom: 400. 
+]]]
+
+You can also choose to dislay a single page  (==singlePage==), page two by two (==twoPages==) or one after the other (==continousPages==) as in the following example: 
+
+[[[
+pdfdoc := PDFDocument new continousPages. 
+]]]
+
+Theses messages can be combined as shown in the following example:
+
+[[[
+pdfdoc := PDFDocument new zoom: 200; continuousPages.
+]]]
+
+Such options can be handy but do not forget that their behavior depend on the PDF reader the user of your document will use.
+
+
+!!!!Setting meta information
+
+Each PDF document contains a set of information about its origins. 
+These data are not to be overlooked, especially if your document is intended to contribute to an EDM (Electronic Document Management) 
+or is part of an editorial workflow. With this information it is possible to search among a set of PDF documents and select for example, 
+those written by a particular author or those for which certain keywords have been specified.
+
+
+Artifact implements this information by using an instance of class ==PDFMetaData==. 
+To each  instance of ==PDFDocument==, an instance of ==PDFMetaData== is associated. This instance is accessible using the message ==metaData==.
+By default, the producer is set to 'Artifact'. You can specify the document title, subject or a short summary, the name of the author, a list of keywords and the document creator. 
+
+The following example generates a new document and its meta data information:
+
+[[[
+pdfdoc := PDFDocument new.
+	
+pdfdoc metaData 
+	title: 'Document title'; 
+	subject: 'subject of the document'; 
+	author: 'The Pasta Team'; 
+	keywords: 'cool rock best';
+	creator: 'Pharo'.
+]]]
+
+
+!!Pages, formats and models
+
+Pages are the supports for writing and drawing in your PDF documents. 
+A page defines a page size, orientation and position within a PDF document. 
+A page can be built from a model that provides an overlay on which is deposited the page contents.
+
+!!! Page creation 
+A page is represented by an instance of the class ==PDFPage==. 
+Creating is a page is simple done sending the message ==new== to the class.
+
+[[[
+	page := PDFPage new.
+]]]
+
+Sending the message ==add:== to a document with a page, will add the page at the end of the already added pages.
+
+[[[
+	pdfdoc := PDFDocument new.
+	page := PDFPage new.
+	pdfdoc add: page.
+]]]
+
+By default, a page takes the dimensions and orientation of its document. 
+If your PDF document is A4 landscape, all pages added will use these settings. 
+Artifact can assign to each page specific dimensions and orientation. 
+You can mix in one document with pages with different characteristics. 
+
+For this, each instance of ==PDFPage== knows how to answer the message ==format:== with an instance of ==PDFFormat==. 
+The following example creates a two-pages document. The first uses the default format of the document, the second is in A4 landscape.
+
+[[[
+	pdfdoc := PDFDocument new.
+	page1 := PDFPage new.
+	page2 := PDFPage new format: (PDFA3Format new setLandscape).
+	pdfdoc add: page1; add: page2.
+]]]
+
+
+!!! Template
+
+A template (instance of class ==PDFTemplate==) inherits from the class ==PDFPage==. 
+It is a page with a predefined contents and that will act as the background page on which you will draw or add your components.
+It can be composed of head for letter, a footer and header for a report, or a delimited surface
+
+The package ==Artefact-Templates== offers two example of model to create CD or DVD front page.
+
+The following code snippet produces a A4 page on which the outlines of a CD front page are drawn. 
+
+[[[
+	pdfdoc := PDFDocument new.
+	cover := PDFCompactDiscTemplate new.
+]]]
+
+A model is defined using the message  ==drawTemplate== which adds the Artefact elements to the page. This builds the page background.
+
+sd: would be nice to show the DVD or CD drawTemplate method here.
+
++Page and Document Elements>file://figures/PDFPage.png|width=60|label=figElements+
+
+!! Elements
+
+A ==PDFElement== is a reusable component that represents a text, an image, a geometric shape or even a complex graph or table.
+
+There are two kinds of ==PDFElement== (see Figure *figElements*):
+
+- Simple elements inherit from ==PDFBasic== (primitive operation in the pdf specification)
+- Composite elements inherit from ==PDFComposite== (a wrap between multiple ==PDFElements== whether they are basic or composite)
+
+Simple elements:
+- ==PDFBezierCurveElement==
+- ==PDFCircleElement==
+- ==PDFLineElement==
+- ==PDFPolygonElement==
+- ==PDFRectElement==
+- ==PDFJpegElement==
+- ==PDFTextElement==
+
+
++Composite Elements>file://figures/PDFComposite.png|width=60|label=figComposite+
+
+Composite elements (see Figure *figElements*):
+- ==PDFFormattedTextElement==
+- ==PDFParagraphElement==
+- ==PDFArrowElement==
+- ==PDFDoubleArrowElement==
+- ==PDFCellElement==
+- ==PDFDataTableElement==
+- ==PDFDataTableWithColumnsCaptionElement==
+- ==PDFDataTableWithRowsCaptionElement==
+
+Each ==PDFElement== has a set of properties that define its appearance (text color, font, dots,...). 
+These properties are grouped in a stylesheet owned by each element. Every element controls its own appearance and doesn't 
+affect other (in opposition as many PDF framework that use a flow logic). This behavior allow you to move or even use in 
+multiple pages or document the same element.
+
+
+
+!!Composition et agencement du contenu rédactorial
+
+
+
+Le contenu des pages est défini à l'aide de composants graphiques. C'est une idée forte dans Artefact qui est basé sur le concept de composants réutilisables permettant d'écrire et de dessiner sur une page. Artefact dispose de composants elémentaires qui réalisent des opération simples tel que dessiner une ligne, mais également, de composants complexes pouvant, par exemple, afficher des données dans un tableau ou encore générer un code barre. Bien évidemment, il est possible de définir et de diffuser de nouveaux composants. Artefact utilisant le principe de composition, un composant complexe est logiquement un assemblage d'autres composants.
+
+!!!Common and generic behavior
+Artefact's graphical components have a generic behavior to manage their location on a page as well as their dimensions.
+Artefact coordinate system origin is top left of a page. It is used to place component and the values can be expressed in several units such as  mm, cm or inch.
+
+!!!!Positionnement des composants
+Sending the message  ==from:== the class of a graphical element instantiates it and sets its position.
+The following example creates a ==PDFTextElement== and place it at 15 mm from the left border and 30 mm from the top
+
+[[[
+	PDFTextElement from: 15 mm @ 30 mm
+]]]
+
+In addition, Artefact offers other constructors that fix the position and size of the component.
+
+
+!!!! Compoment size
+Artefact offers two ways to set the size of a component: Using the message ==from:to:== or ==from:dimension:==.
+
+Using message ==from:to:==, you give the start and end position.
+The following example draws a rectangle whose origin is 15mm from the left and  30mm from the top and end is at 90 mm from the left border and 80 mm from the top of the page:
+[[[
+	PDFRectElement from: 15 mm @ 30 mm to: 90 mm @ 80 mm
+]]]
+
+With the message ==from:dimension:==, you set the start position and specify its size.
+
+[[[
+	PDFRectElement from: 15mm @ 30 mm dimension: 50mm @ 40mm
+]]]
+
+The messages ==width== et ==height== return the width and height of the component.
+
+!!!Elementary components
+
+The package ==Artefact-Elements-Basic== contains elementary components. There are grouped in three categories: text, geometric form and image insertion. 
+
+To write text on a page, we use instances of ==PDFTextElement==. 
+The method  ==text:== sets the text to be displayed. The class method  ==from:text:== supports positionning and text definition.
+
+[[[
+	PDFTextElement from: 15mm @ 30mm text: 'hello!'
+]]]
+
+
+Artefact has components for main geometrical shape. Class ==PDFLineElement== draws a line using ==from:to:==.
+
+[[[
+	PDFLineElement from: 15mm @ 30mm to: 90mm@170mm
+]]]
+
+The class message ==from:angle:length:== draws a ligne given a start position, an angle and a length.
+
+[[[
+	PDFLineElement from: 10mm @ 20mm angle: 70 length: 50mm
+]]]
+
+Class ==PDFRectElement== represents a rectangle. Two messages are proposed: ==from: aStartPosition dimension: size== and ==from: aStartPosition to: anEndPosition==. The two following examples are equivalent:
+
+[[[
+	PDFRectElement from: 10 mm@10mm dimension: 100 mm @ 30 mm.
+]]]
+
+[[[
+	PDFRectElement from: 10mm@10mm to: 110mm@40mm
+]]]
+
+The class ==PDFPolygonElement== draws polygons. To define a polygon, we set the start point and a series of points using the message ==from:points:==. 
+
+[[[  
+	PDFPolygonElement 
+		from: 10mm@10mm 
+		points: { 30mm@30mm . 15mm@40mm . 5mm@20mm }
+]]]
+
+Circles are defined with the class  ==PDFCircleElement== and the message ==center:radius:==. 
+
+[[[
+	PDFCircleElement center: 100mm@100mm radius: 50mm
+]]]
+
+Bezier curves are represented by the class ==PDFBezierCurveElement== and defined using the message ==from:points==.
+
+[[[
+	PDFBezierCurveElement 
+		from: 10mm@50mm 
+		points:{ 0mm@0mm. 100mm@20mm. 150mm@0mm. 50mm@50mm }
+]]]
+
+
+Images in JPEG format can be inserted in a document. The class  ==PDFJpegElement== can be instantiated using the class messages ==fromStream:== and ==from:dimension:fromStream:==. The messages  ==width== et ==height== sets the size of an image respecting its original ratio. 
+
+The following example generates a PDF document with one page.
+This page contains one image placed at two different locations. In the first case, the image is 80mm width and 30mm height.
+In the second case, the width is 80mm and the height is automatically computed keeping the original image ratio.
+
+[[[
+	| pdf page |
+	pdf := PDFDocument new.
+	page := PDFPage new.
+	page
+		add:
+			(PDFJpegElement
+				from: 10 mm @ 10 mm
+				dimension: 80 mm @ 30 mm
+				fromStream: (FileStream fileNamed: '/home/enterprise/image.jpg')).
+	page
+		add:
+			((PDFJpegElement fromStream: (FileStream fileNamed: '/home/enterprise/image.jpg'))
+				from: 10 mm @ 50 mm;
+				width: 80 mm).
+	pdf add: page.
+	pdf exportTo: (FileStream forceNewFileNamed: '/home/enterprise/image.pdf')
+]]]
+
+The basic components implement extremely simple operations such as placing text on a page or drawing a line. 
+They are the essential building blocks of high-level components that we present now.
+
+!!! High-level components
+
+Artifact comes with a rich set of high-level components, grouped in the package Artifact-Elements-Composites. 
+These components are the result of the assembly of single components and other high-level components. 
+These elements are used to create layouts and complex contents with minimal coding and strong reuse. 
+These components can be used in several different applications and materials. 
+They cover three areas: management of text, drawing arrows and reporting.
+
+
+!!!!Advanced text
+
+So far you have used the class ==PDFTextElement== to place text on a page. 
+This component is limited in terms of functionality since it only handles the position on the page. 
+To help, Artefact offers three high-level components that support advanced features: PDFFormatedTextElement, PDFCellElement
+and PDFParagrapElement.
+
+
+The component ==PDFFormatedTextElement== is similar to ==PDFTextElement== but brings 
+over managing the alignment (left, center, right). A component ==PDFCellElement== is  
+a ==PDFFormatedTextElement== with a border. Finally, a ==PDFParagraphElement== 
+allows the insertion of a paragraph of text and automatically manages the break at the end of the lines.
+
+
+!!!!Drawing arrows
+
+Arrows are very useful for generating sketches and diagrams. 
+The component ==PDFArrowElement== draws an arrow with a tip at its termination. 
+The component ==PDFDoubleArrowElement== draws two arrows at both extremities.
+
+[[[
+	PDFArrowElement from: 10mm@10mm to: 100mm@30mm
+
+	PDFDoubleArrowElement from: 10mm@80mm to: 100mm@150mm
+]]]
+
+!!!!Report creation
+
+Components inheriting from ==PDFDatatable== are the perfect illustration of the power and comfort 
+provided by the composite elements of Artefact. With these data tables, you can quickly generate reports and customize them to your needs.
+
+With class ==PDFDatatableElement== you define a report with specific dimensions on the page and on a data set. 
+These data are organized in a  tabular manner: a report contains a number of other tables, each representing a line of the report.
+
+[[[
+	PDFDataTableElement new
+		data: #(
+				#('Smith' 'Peter' 43) 
+				#('Jones' 'Mickael' 25) 
+				#('washington' 'robert' 30) );
+		from: 10mm @ 20mm;
+		dimension: 150mm @ 60mm
+]]]
+
+The class ==PDFDataTableWithColumnsCaptionElement== extend the table behavior to support captions 
+whose content is an array. The message ==captions== specifies the titles of each column of your report. 
+It is important to note that the number of column headings should be the same as the number of columns and each line must have the same number of columns.
+
+[[[
+	PDFDataTableWithColumnsCaptionElement new
+		captions: #('Name' 'Surname' 'Age');
+		data: #(
+			#('Smith' 'Peter' 43) 
+			#('Jones' 'Mickael' 25) 
+			#('washington' 'robert' 30)
+		);
+		from: 10 mm @ 20 mm;
+		dimension: 150 mm @ 60 mm
+]]]
+
+Finally Artifact also provides the class ==PDFDataTableWithRowsCaptionElement== which is a variant of 
+==PDFDataTableWithColumnsCaptionElement==. Its behavior is different since the caption is used to give a title to each line. 
+In this case, the table in the caption property must have a number of elements equal to the number of table rows.
+
+
+Artifact offers a triggering mechanism defined by the message ==customizationBlock:==. The associated block is activated for the drawing of a cell. 
+This block takes four parameters that are the cell being drawn, the vertical and horizontal position of the cell in the table and the data presented in the cell. 
+Using a block of code, it is then possible to change the appearance of the table or to trigger special treatment.
+
+
+The following example uses the message ==customizationBlock:== to replace the age of a person by the text =='Older than 30'== if the person is older than 
+thirty year old. The executed code only takes into account that the third cell of each line and excluding the title of each column. 
+If the age is greater than thirty, the instance variable ==text== of the cell is amended.
+
+[[[
+	(PDFDataTableWithColumnsCaptionElement new
+		captions: #('Name' 'Surname' 'Age');
+		data: #(
+			#('Smith' 'Peter' 43) 
+			#('Jones' 'Mickael' 25) 
+			#('washington' 'robert' 30)
+		);
+		from: 10 mm @ 20 mm;
+		dimension: 150 mm @ 60 mm;
+		customizationBlock: [ :cell :x :y :data |
+			(x = 3 and: [ y > 1 ]) ifTrue: [
+				(data > 30) ifTrue: [ cell text: 'Older than 30' ] 
+			] 
+		])
+]]]
+
+Composite elements bring a lot of flexibility to PDF document creation. 
+Obviously, the default ones do not cover all needs and you will most likely need to create your own components. We suggest to study 
+the existing ones to see how to proceed.
+
+!!Stylesheet for the newbies
+
+A ==PDFStyleSheet== is a dictionary that maps rendering properties. A default stylesheet is defined at the document level when this one is created. 
+Consequently, you don't have to specify every values if you want a generic rendering. 
+Following the hierarchy logic, a stylesheet defined at a lower level will surcharge properties. 
+For example, if you define a textColor in the document stylesheet, every text will be written in that color except elements where textColor is 
+defined in their stylesheet. Like pages and elements, the same stylesheet can be used with different elements or documents.
+
+Artefact introduces a style context. Every ==PDFElement== can be associated to a specific style:
+
+[[[
+	PDFText from: 10mm@15mm text: 'My title' style: #title
+]]]
+
+Then, at any upper level (document, page, etc), you can express the specific title style context using the message ==>==
+
+[[[
+	myDocument stylesheet > #title at: #font put: PDFCourierFont size: 32 pt
+]]]
+
+The message ==>== gives access to the style attribute of ==PDFStyleSheet==. Here we specify the title attribute of the document. 
+
+!!!Stylesheet elements
+Defining a stylesheet allows one to specify attributes specific presentation for a set of elements.
+
+!!!!Fonts
+	
+Artefact supports integrated PDF fonts (==PDFCourierFont==, ==PDFHelveticaFont==, ==PDFSymbolFont==, ==PDFTimesFont== and ==PDFZapfdingbatsFont==). 
+These fonts are available in any PDF viewer. A ==PDFFont== instance supports the basic styles ==bold== and ==italic==.
+
+[[[
+	PDFText from: 10mm@15mm text: 'My title' font: ((PDFTimesFont size: 24 pt) bold).
+]]]
+
+The class ==PDFFont== offers two extremely useful messages when creating a document: ==getStringWidth:== and ==getIdealFontSizeForTheString:width:==.
+
+With the message ==getStringWidth:== you get the width of a string calculated based on the attributes of the font used. 
+The following example returns the width pof the chain == "hello" == in Courier measuring 20 points:
+ 
+
+[[[
+	(PDFCourierFont size: 20 pt) getStringWidth: 'hello'
+]]]
+
+The message  ==getIdealFontSizeForTheString:width:== returns the optimal size for the used fonte based on the wished width.
+The following example determines the size mandatory for a Courier  font to display the 'Hello' text whose width should be 15 cm:
+
+[[[
+	(PDFCourierFont new) getIdealFontSizeForTheString: 'hello' width: 15 cm
+]]]
+
+
+!!!!Dots
+
+All the geometric shapes can use a dotted style. It is defined by a PDFDotted object that specify the length of each segment and the space between them.
+
+[[[
+	((PDFArrowElement from: 125 mm @ 40 mm to:  100 mm @ 80 mm)
+		dotted:
+			(PDFDotted new
+				length: 2 mm;
+				space: 3 mm)).
+]]]
+
+!!!!Color and shades of gray
+
+
+Colors and shades of gray are represented by the class ==PDFColor==. To define a color, Artifact uses a traditional RGB schema. 
+The proportion of each color is expressed using a value from 0 to 255. A deep black corresponds to the triple (0,0,0), the red color (255,0,0), green color (0,255,0), color 
+blue (0,0,255) and white (255,255,255).
+
+[[[
+	PDFColor r: 255 g: 128 b: 64
+]]]
+
+Grayscales are expressed with a single value ranging from 0 to 255  -- the higher this value is, the higher the gray darkens. 
+A value of 0 corresponds to white, while the value of 255 is equivalent to black.
+
+[[[
+	PDFColor greyLevel: 128
+]]]
+
+To specify the color or grayscale used, you get the messages ==drawcolor==, ==fillColor:==, and ==textColor:== that 
+respectively manage the drawing color, fill color and text color. The following example draws a rectangle 
+whose border will be blue and the red content:
+
+[[[
+	PDFRectElement new
+		from: 10 mm @ 10 mm;
+		dimension: 100 mm @ 30 mm;
+		fillColor: (PDFColor r: 255 g: 0 b: 0);
+		drawColor: (PDFColor r: 0 g: 0 b: 255).
+]]]
+
+This other example produced a text written in blue. 
+
+[[[
+	PDFTextElement new
+		textColor: (PDFColor r: 0 g: 0 b: 255);
+		from: 10 mm @ 50 mm;
+		text: 'A text in blue';
+]]]
+
+!!!!Drawing thichness 
+	
+The thickness of a line, a segment, or a border, is controlled by the message ==thickness:==
+
+[[[
+	(PDFRectElement from: 10 mm @ 10 mm dimension: 50 mm @ 50 mm)
+		thickness:  2 mm
+]]]
+
+!!!!Alignment
+
+Text alignment is managed using the ==PDFAlignment== class. Text can be aligned left, center or right. 
+Messages are ==left==, ==center== and ==right==. The following example creates a right-aligned text:
+[[[
+	(PDFFormattedTextElement from: 0 mm @ 0 mm dimension: 100 mm @ 10 mm)
+		alignment: (PDFAlignment right);
+		text: 'At right!'
+]]]
+
+!!!Abstracting a style 
+
+
+!!!!Default document style 
+
+A document is associated to a default stylesheet whose properties are applied to any element that does not specify its own properties. 
+You can access this stylesheet using the message ==styleSheet==. 
+For example, if you create a ==PDFTextElement== without setting a font and text color, it will be the color of text and 
+the fonts of the document that will be used. 
+
+In addition, this stylesheet is always filled up by Artefact with defaults. That's why you did not have to specify values of style in the previous examples. 
+To change the values of the default style, you simply change the properties of the stylesheet as follows:
+
+[[[
+	myDocument := PDFDocument new.
+	myDocument styleSheet 
+			textColor: (PDFColor r: 0 g: 100 b: 200);
+			font: (PDFHelveticaFont size: 32pt) italic.
+]]]
+
+In fact Artefact styles form a tree of styles. Each sub style points to another one and the root of style is the default one.
+This way properties can be customized and reuse default behavior when needed. 
+
+!!!!Stylesheet application
+Often you want to apply a style to a set of elements but not to all the elements of a document. Artifact allows you to 
+define a style and name it. Then you will be able to define with elements should follow this custom style. 
+
+For example, that you want to use a certain font and style for some text element or quotes, you can define a style named ==#quote== as follows:
+
+
+[[[
+	myDocument := PDFDocument new.
+	myDocument styleSheet > #quote 
+		textColor: (PDFColor r: 0 g: 50 b: 200);
+		font: (PDFCourierFont size: 8pt) italic.
+]]]
+
+Thus, this style is defined here as the sub-document style and it will be applied to all elements of that use the ==#quote==t style. 
+In the following example we assign the ==#quote== style to a text using the message ==style:==.
+
+[[[
+	(PDFTextElement from: 5cm @ 5cm)
+		text: 'my Quote with the quote style';
+		style: #quote
+]]]
+
+
+In the above example, we only have one level of styles. However, Artefact supports as many levels as you like. 
+This behavior is an essential as part of the composite elements in which the nesting of the elements imposes nesting of their styles.
+
+
+In the example below, we create a data table with a title for each column.
+
+[[[
+	(PDFDataTableWithColumnsCaptionElement from: 10 mm @ 20 mm dimension: 190 mm @ 60 mm)
+		captions: #('Name' 'Surname' 'email');
+		data: #(
+			#('Smith' 'Peter' 'peter.smith@mail.org') 
+			#('Jones' 'Mickael' 'mickael.jones@epr.com')
+			#('washington' 'robert' 'robert.washington@blif.com'));
+		style: #dataTableWithColoredCaption;
+		yourself).
+]]]
+
+The appearance of the table follows the specifications of style ==#dataTableWithColoredCaption==.
+
+ ==PDFDataTableWithColumnsCaptionElement==  is a composite element. This element defines the style of its sub-elements 
+using  ==#cell== and =#caption=, respectively associated with captions and cells. By using the style specialisation based 
+on style nesting, it is then possible a style uniquely for the cells in the conecte of the style for their container here ==#dataTableWithColoredCaption==:
+The expression ==pdfdoc styleSheet > #dataTableWithColoredCaption > #caption== access the caption style of the ==#dataTableWithColoredCaption== style
+and the example customize it. 
+
+[[[
+	pdfdoc := PDFDocument new.
+	pdfdoc styleSheet > #dataTableWithColoredCaption > #caption
+		fillColor: (PDFColor r: 158 g: 158 b: 79);
+		drawColor: (PDFColor r: 158 g: 158 b: 79).
+	pdfdoc styleSheet > #dataTableWithColoredCaption margin: 4 pt.
+	pdfdoc styleSheet > #dataTableWithColoredCaption > #cell alignment: PDFAlignment right.
+]]]
+
+Here we see that we can change a nested element attributes: We change the alignment of a cell in the table by a sequence ==>==. 
+Style management brings a lot of flexibility for the production of a document. It separates the presentation appearance from
+the component definition. This distinction between structure and presentation allows users to easily create their own components 
+just as customizable as those provided with Artifact.
+
+!!Create your own PDF composite elements
+
+The spirit of Artefact is to reduce the complexity of pdf generation. When you have to create a document, a good 
+idea is to avoid wasting time to reinvent the wheel. When you create a composite element, if your component is based around a string, inherit 
+from ==PDFCompositeText==. Elsewhere, your component must be a subclass of ==PDFComposite==.
+ 
+In this tutorial, we will create a clock, which is basically a circle and two arrows. This element will be 
+drawn depending on the provided time and properties (size, colors, thickness).
+
+!!!Clock creation
+
+First create the class of your element:
+[[[
+	PDFComposite subclass: #PDFClockElement
+		instanceVariableNames: 'time'
+		classVariableNames: ''
+		poolDictionaries: ''
+		category: 'Artefact-Tutorial'
+]]]
+
+As you can see, we create an instance variable that will contain the time to display. Then, create or generate accessors methods to this variable.
+
+The only two required methods by Artefact are ==getSubElementsWith:styleSheet:== and ==defaultStyle==. The first one must return a collection of 
+==PDFElements== (basics or composites). The second one must return a symbol that associate the composite element with a style definition. 
+However it's not necessary to define this style in your document, Artefact will use the default style instead.
+
+Define the default style:
+[[[
+PDFClockElement>>defaultStyle
+		^ #clock
+]]]
+
+Then define the method that will draw the clock. At the beginning, this method will just return the circle:
+[[[
+PDFClockElement>>getSubElementsWith: aGenerator styleSheet: aStyleSheet
+		^ { PDFCircleElement from: self from to: self to }
+]]]
+
+The circle will be drawn depending on this composite position and size. We are using from: to: for the circle instead of ==center:radius:== because 
+it's easier for us to create a clock using the boundary box of the circle.
+
+Now we will create the clock hands with two ==PDFArrowElement==s and a filled little circle in the middle:
+[[[
+PDFClockElement>>getSubElementsWith: aGenerator styleSheet: aStyleSheet
+		| hourAngle minuteAngle |
+		hourAngle := Float pi / 2 - (time hour12 * 2 * Float pi / 12).
+		minuteAngle := Float pi / 2 - (time minute * 2 * Float pi / 60).
+
+		^ {
+			(PDFCircleElement from: self from to: self to).
+			(PDFCircleElement center: self center radius: self dimension x * 0.05).
+			(PDFArrowElement from: self center angle: hourAngle length: dimension x * 0.25).
+			(PDFArrowElement from: self center angle: minuteAngle length: dimension x * 0.45)
+			}
+]]]
+
+Don't be afraid about the two angle calculus, it's just to convert hours and minutes to radian angles.
+
+At this time, your ==PDFClockElement== is already usable and fully integrated into Artefact. We can insert it into a PDF document and export it:
+[[[
+	PDFDocument new
+		add: (PDFPage new add: ((PDFClockElement from: 2 cm @ 2 cm to: 10 cm @ 10 cm) time: Time current));
+		exportTo: 'clockTutorialStep1.pdf' asFileReference writeStream
+]]]
+
+
+!!! Make the clock personnalizable
+
+Your clock is already personnalizable independently of other elements because you previously define its style as ==#clock==.
+
+[[[
+	| doc |
+	doc := PDFDocument new.
+		doc add: (PDFPage new add: ((PDFClockElement from: 2 cm @ 2 cm to: 10 cm @ 10 cm) time: Time current)).
+		doc styleSheet > #clock drawColor: (PDFColor r:180 g: 24 b:24); fillColor: (PDFColor r:230 g: 230 b:10).
+		doc exportTo: 'clockTutorialStep2.pdf' asFileReference writeStream
+]]]
+
+You can also personnalize the subelements of your clock by their own default style.
+
+[[[
+	| doc |
+	doc := PDFDocument new.
+		doc add: (PDFPage new add: ((PDFClockElement from: 2 cm @ 2 cm to: 10 cm @ 10 cm) time: Time current)).
+		doc styleSheet > #clock drawColor: (PDFColor r:180 g: 24 b:24); fillColor: (PDFColor r:230 g: 230 b:10).
+		doc styleSheet > #clock > #arrow drawColor: (PDFColor r:0 g: 45 b:200).
+		doc exportTo: 'clockTutorialStep3.pdf' asFileReference writeStream
+]]]
+
+At this time, you don't have defined specific styles for sub elements of your clock. Consequently, you will not be able to 
+personnalize each element with different styles (so you cannot have hands of differents colors for example). To increase personnalization 
+possibilities, you should define specific styles for sub elements you reuse.
+
+[[[
+PDFClockElement>>getSubElementsWith: aGenerator styleSheet: aStyleSheet
+		| hourAngle minuteAngle |
+		hourAngle := Float pi / 2 - (time hour12 * 2 * Float pi / 12).
+		minuteAngle := Float pi / 2 - (time minute * 2 * Float pi / 60).
+		^ {
+			(PDFCircleElement from: self from to: self to).
+			(PDFCircleElement center: self center radius: self dimension min * 0.05).
+			((PDFArrowElement from: self center angle: hourAngle length: dimension min * 0.25) style: #hourHand).
+			((PDFArrowElement from: self center angle: minuteAngle length: dimension min * 0.45) style: #minuteHand)
+			}
+]]]
+
+As you can see, we just send the message ==style:== on each subelement that we want to define a specific style.
+
+Now, we can personnalize each hand like that:
+
+[[[
+	| doc |
+	doc := PDFDocument new.
+		doc add: (PDFPage new add: ((PDFClockElement from: 2 cm @ 2 cm to: 10 cm @ 10 cm) time: Time current)).
+		doc styleSheet > #clock drawColor: (PDFColor r:180 g: 24 b:24); fillColor: (PDFColor r:230 g: 230 b:10).
+		doc styleSheet > #clock > #hourHand drawColor: (PDFColor r:0 g: 45 b:200).
+		doc styleSheet > #clock > #minuteHand drawColor: (PDFColor r:0 g: 200 b:45).
+		doc exportTo: 'clockTutorialStep4.pdf' asFileReference writeStream
+]]]
+
+As you can see, the clock hands have different colors. Moreover, like any element in Artefact, you can specify a style on an 
+instance of a ==PDFClockElement== that allow you to reuse and adapt each clock:
+
+[[[
+	| doc |
+	doc := PDFDocument new.
+	doc add:
+		(PDFPage new
+			add: ((PDFClockElement from: 2 cm @ 2 cm to: 10 cm @ 10 cm) time: Time current);
+			add: ((PDFClockElement from: 12 cm @ 2 cm to: 20 cm @ 10 cm)
+					time: Time current;
+					style: #apocalypseClock)).
+	doc styleSheet > #clock
+		drawColor: (PDFColor r: 180 g: 24 b: 24);
+		fillColor: (PDFColor r: 230 g: 230 b: 10).
+	doc styleSheet > #clock > #hourHand drawColor: (PDFColor r: 0 g: 45 b: 200).
+	doc styleSheet > #clock > #minuteHand drawColor: (PDFColor r: 0 g: 200 b: 45).
+	doc styleSheet > #apocalypseClock
+		fillColor: (PDFColor r: 244 g: 221 b: 25);
+		thickness: 2 mm;
+		roundCap: true.
+	doc styleSheet > #apocalypseClock > #minuteHand
+		drawColor: (PDFColor r: 240 g: 6 b: 7);
+		thickness: 1 mm.
+	doc exportTo: 'clockTutorialStep5.pdf' asFileReference writeStream
+]]]
+
+!!Conclusion
+
+We presented the key aspects of Artefact. Artefact is a powerful framework to generate PDF. 
+It is based on innovative design points: its object-oriented design where each element defined its own attributes
+supports a much stronger reuse possibility than traditional stream-based approaches. 
+With Artefact you can be freely compose, customize and reuse your PDF elements.
+
+
+
+
