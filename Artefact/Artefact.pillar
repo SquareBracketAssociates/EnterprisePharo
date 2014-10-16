@@ -193,12 +193,11 @@ Another message, named ==compressed==, sets the compression.
 Adobe Acrobat reader supports various display modes when opening a PDF document. The selected mode is defined directly into the PDF document. 
 Note that if your PDF reader is not compatible with these options, they will be ignored.
 
-Display mode properties are divided in two categories: those determining the size of the pages using messages ==fullPage==, ==fullWidth==, ==real== and ==zoom: == and those related to the page organization on the screen ==singlepage==, ==twoPages== and ==continuousPages==. These messsages should be sent directly to an ==PDFDocument== instance. 
+Display mode properties are divided in two categories: those determining the size of the pages using messages ==fullPage==, ==fullWidth==, ==real== and ==zoom:== and those related to the page organization on the screen ==singlepage==, ==twoPages== and ==continuousPages==. These messsages should be sent directly to an ==PDFDocument== instance. 
 
-With ==ullPage==, each page of the document occupies the entire display space. With ==fullWidth==, the display is optimized to page width. With ==real==, the display meets the dimensions specified in the PDF document. 
+With ==fullPage==, each page of the document occupies the entire display space. With ==fullWidth==, the display is optimized to page width. With ==real==, the display meets the dimensions specified in the PDF document. 
 
 The following example creates a document that will occupy all available display space:
-
 
 [[[
 pdfdoc := PDFDocument new fullPage.
@@ -234,7 +233,7 @@ those written by a particular author or those for which certain keywords have be
 
 Artifact implements this information by using an instance of class ==PDFMetaData==. 
 To each  instance of ==PDFDocument==, an instance of ==PDFMetaData== is associated. This instance is accessible using the message ==metaData==.
-By default, the producer is set to 'Artifact'. You can specify the document title, subject or a short summary, the name of the author, a list of keywords and the document creator. 
+By default, the producer is set to =='Artifact'==. You can specify the document title, subject or a short summary, the name of the author, a list of keywords and the document creator. 
 
 The following example generates a new document and its meta data information:
 
@@ -305,7 +304,7 @@ The following code snippet produces a A4 page on which the outlines of a CD fron
 
 A model is defined using the message  ==drawTemplate== which adds the Artefact elements to the page. This builds the page background.
 
-sd: would be nice to show the DVD or CD drawTemplate method here.
+@@authorToDo sd: would be nice to show the DVD or CD drawTemplate method here.
 
 +Page and Document Elements>file://figures/PDFPage.png|width=60|label=figElements+
 
@@ -340,18 +339,16 @@ Composite elements (see Figure *figElements*):
 - ==PDFDataTableWithColumnsCaptionElement==
 - ==PDFDataTableWithRowsCaptionElement==
 
-Each ==PDFElement== has a set of properties that define its appearance (text color, font, dots,...). 
+Each ==PDFElement== has a set of properties that define its appearance (text color, font, dots, etc). 
 These properties are grouped in a stylesheet owned by each element. Every element controls its own appearance and doesn't 
 affect other (in opposition as many PDF framework that use a flow logic). This behavior allow you to move or even use in 
 multiple pages or document the same element.
 
 
 
-!!Composition et agencement du contenu rédactorial
+!!Composing and placement 
 
-
-
-Le contenu des pages est défini à l'aide de composants graphiques. C'est une idée forte dans Artefact qui est basé sur le concept de composants réutilisables permettant d'écrire et de dessiner sur une page. Artefact dispose de composants elémentaires qui réalisent des opération simples tel que dessiner une ligne, mais également, de composants complexes pouvant, par exemple, afficher des données dans un tableau ou encore générer un code barre. Bien évidemment, il est possible de définir et de diffuser de nouveaux composants. Artefact utilisant le principe de composition, un composant complexe est logiquement un assemblage d'autres composants.
+The contents of pages is defined using reusable components. This is power concept. Artefact has basic components that perform simple operations such as drawing a line, but also of complex components can, for example, to display data in a table or generate a barcode. Of course, it is possible to identify and define new components. 
 
 !!!Common and generic behavior
 Artefact's graphical components have a generic behavior to manage their location on a page as well as their dimensions.
@@ -720,8 +717,7 @@ In fact Artefact styles form a tree of styles. Each sub style points to another 
 This way properties can be customized and reuse default behavior when needed. 
 
 !!!!Stylesheet application
-Often you want to apply a style to a set of elements but not to all the elements of a document. Artifact allows you to 
-define a style and name it. Then you will be able to define with elements should follow this custom style. 
+Often you want to apply a style to a set of elements but not to all the elements of a document. Artifact allows you to define a style and name it. Then you will be able to define with elements should follow this custom style. 
 
 For example, that you want to use a certain font and style for some text element or quotes, you can define a style named ==#quote== as follows:
 
@@ -762,10 +758,9 @@ In the example below, we create a data table with a title for each column.
 
 The appearance of the table follows the specifications of style ==#dataTableWithColoredCaption==.
 
- ==PDFDataTableWithColumnsCaptionElement==  is a composite element. This element defines the style of its sub-elements 
-using  ==#cell== and =#caption=, respectively associated with captions and cells. By using the style specialisation based 
-on style nesting, it is then possible a style uniquely for the cells in the conecte of the style for their container here ==#dataTableWithColoredCaption==:
-The expression ==pdfdoc styleSheet > #dataTableWithColoredCaption > #caption== access the caption style of the ==#dataTableWithColoredCaption== style
+   ==PDFDataTableWithColumnsCaptionElement==  is a composite element. This element defines the style of its sub-elements using  ==cell== and =caption=, respectively associated with captions and cells. By using the style specialisation based on style nesting, it is then possible a style uniquely for the cells in the conecte of the style for their container here ==dataTableWithColoredCaption==:
+
+The expression ==pdfdoc styleSheet > #dataTableWithColoredCaption > #caption== access the caption style of the ==dataTableWithColoredCaption== style
 and the example customize it. 
 
 [[[
@@ -788,8 +783,7 @@ The spirit of Artefact is to reduce the complexity of pdf generation. When you h
 idea is to avoid wasting time to reinvent the wheel. When you create a composite element, if your component is based around a string, inherit 
 from ==PDFCompositeText==. Elsewhere, your component must be a subclass of ==PDFComposite==.
  
-In this tutorial, we will create a clock, which is basically a circle and two arrows. This element will be 
-drawn depending on the provided time and properties (size, colors, thickness).
+In this tutorial, we will create a clock, which is basically a circle and two arrows. This element will be drawn depending on the provided time and properties (size, colors, thickness).
 
 !!!Clock creation
 
@@ -804,8 +798,7 @@ First create the class of your element:
 
 As you can see, we create an instance variable that will contain the time to display. Then, create or generate accessors methods to this variable.
 
-The only two required methods by Artefact are ==getSubElementsWith:styleSheet:== and ==defaultStyle==. The first one must return a collection of 
-==PDFElements== (basics or composites). The second one must return a symbol that associate the composite element with a style definition. 
+The only two required methods by Artefact are ==getSubElementsWith:styleSheet:== and ==defaultStyle==. The first one must return a collection of ==PDFElements== (basics or composites). The second one must return a symbol that associate the composite element with a style definition. 
 However it's not necessary to define this style in your document, Artefact will use the default style instead.
 
 Define the default style:
@@ -820,7 +813,7 @@ PDFClockElement>>getSubElementsWith: aGenerator styleSheet: aStyleSheet
 		^ { PDFCircleElement from: self from to: self to }
 ]]]
 
-The circle will be drawn depending on this composite position and size. We are using from: to: for the circle instead of ==center:radius:== because 
+The circle will be drawn depending on this composite position and size. We are using ==from: to:== for the circle instead of ==center:radius:== because 
 it's easier for us to create a clock using the boundary box of the circle.
 
 Now we will create the clock hands with two ==PDFArrowElement==s and a filled little circle in the middle:
