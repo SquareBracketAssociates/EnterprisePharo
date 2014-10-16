@@ -348,13 +348,13 @@ multiple pages or document the same element.
 
 !!Composing and placement 
 
-The contents of pages is defined using reusable components. This is power concept. Artefact has basic components that perform simple operations such as drawing a line, but also of complex components can, for example, to display data in a table or generate a barcode. Of course, it is possible to identify and define new components. 
+The contents of pages is defined using reusable components. This is powerfull concept. Artefact has basic components that perform simple operations such as drawing a line, but also of complex components can, for example, to display data in a table or generate a barcode. Of course, it is possible to identify and define new components. 
 
 !!!Common and generic behavior
 Artefact's graphical components have a generic behavior to manage their location on a page as well as their dimensions.
 Artefact coordinate system origin is top left of a page. It is used to place component and the values can be expressed in several units such as  mm, cm or inch.
 
-!!!!Positionnement des composants
+!!!!Component positioning
 Sending the message  ==from:== the class of a graphical element instantiates it and sets its position.
 The following example creates a ==PDFTextElement== and place it at 15 mm from the left border and 30 mm from the top
 
@@ -646,7 +646,7 @@ blue (0,0,255) and white (255,255,255).
 	PDFColor r: 255 g: 128 b: 64
 ]]]
 
-Grayscales are expressed with a single value ranging from 0 to 255  -- the higher this value is, the higher the gray darkens. 
+Grayscales are expressed with a single value ranging from 0 to 255: the higher this value is, the higher the gray darkens. 
 A value of 0 corresponds to white, while the value of 255 is equivalent to black.
 
 [[[
@@ -758,7 +758,7 @@ In the example below, we create a data table with a title for each column.
 
 The appearance of the table follows the specifications of style ==#dataTableWithColoredCaption==.
 
-   ==PDFDataTableWithColumnsCaptionElement==  is a composite element. This element defines the style of its sub-elements using  ==cell== and =caption=, respectively associated with captions and cells. By using the style specialisation based on style nesting, it is then possible a style uniquely for the cells in the conecte of the style for their container here ==dataTableWithColoredCaption==:
+   ==PDFDataTableWithColumnsCaptionElement==  is a composite element. This element defines the style of its sub-elements using  ==cell== and ==caption==, respectively associated with captions and cells. By using the style specialisation based on style nesting, it is then possible a style uniquely for the cells in the conecte of the style for their container here ==dataTableWithColoredCaption==:
 
 The expression ==pdfdoc styleSheet > #dataTableWithColoredCaption > #caption== access the caption style of the ==dataTableWithColoredCaption== style
 and the example customize it. 
