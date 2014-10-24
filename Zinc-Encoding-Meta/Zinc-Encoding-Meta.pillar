@@ -531,10 +531,133 @@ ZnMimeType applicationXml matches: ZnMimeType text.
 
 !! URLs
 
-@@note To be finished
-
 URLs (or URIs) are a way to name or identify something. Often, they also contain information of where you can access the thing they name or identify. 
 
-We will be using the terms URL (*Uniform Resource Locator>http://en.wikipedia.org/wiki/Uniform_resource_locator*) and URI (*Uniform Resource Identifier>http://en.wikipedia.org/wiki/Uniform_resource_identifier*) interchangeably as is most commonly done in practice. A URI is just a name or identification, while a URL also contains information on how to find or access a resource. For example, ==/documents/curriculum-vitae.html== identifies and names a document, while ==http://john-doe.com/documents/curriculum-vitae.html== also specifies that we can use HTTP to access this resource on a specic server.
+We will be using the terms URL (*Uniform Resource Locator>http://en.wikipedia.org/wiki/Uniform_resource_locator*) and URI (*Uniform Resource Identifier>http://en.wikipedia.org/wiki/Uniform_resource_identifier*) interchangeably as is most commonly done in practice. A URI is just a name or identification, while a URL also contains information on how to find or access a resource. For example, the URI ==/documents/curriculum-vitae.html== identifies and names a document, while the URL ==http://john-doe.com/documents/curriculum-vitae.html== also specifies that we can use HTTP to access this resource on a specic server. By considering most parts optional, we can use one abstraction to implement both URI and URL using one class.
 
-The class ==ZnUrl== models URLs (or URIs).
+The class ==ZnUrl== models URLs (or URIs) and has the following components:
+
+# scheme - like #http, #https, #ws, #wws, #file or nil
+# host - hostname string or nil
+# port - port integer or nil
+# segments - collection of path segments, ends with #/ for directories
+# query - query dictionary or nil
+# fragment - fragment string or nil
+# username - username string or nil
+# password - password string or nil
+
+The syntax of the external representation of a ZnUrl informally looks like this:
+
+[[[
+scheme://username:password@host:port/segments?query#fragment
+]]]
+
+!!! Creating URLs
+
+ZnUrls are most often created by parsing an external representation using either the ==fromString:== class message or by sending the ==asUrl== or ==asZnUrl== convenience message to a String. Using ==asUrl== or ==asZnUrl== helps in accepting both Strings and ZnUrls arguments.
+
+[[[
+ZnUrl fromString: 'http://www.google.com/search?q=Smalltalk'.
+
+'http://www.google.com/search?q=Smalltalk' asUrl.
+]]]
+
+The same instance can also be constucted programmatically.
+
+[[[
+ZnUrl new
+  scheme: #http;
+  host: 'www.google.com';
+  addPathSegment: 'search';
+  queryAt: 'q' put: 'Smalltalk';
+  yourself.
+]]]
+
+ZnUrl components can be manipulated destructively. Here is an example:
+
+[[[
+'http://www.google.com/?one=1&two=2' asZnUrl
+    queryAt: 'three' put: '3';
+    queryRemoveKey: 'one';
+    yourself.
+  -> http://www.google.com/?two=2&three=3
+]]]
+
+!!! External and Internal Representation of URLs
+
+Some characters of parts of a URL are illegal because they would interfere with the syntax and further processing and thus have to be encoded. The methods in accessing protocols do not do any encoding, those in parsing and printing do. Here is an example:
+
+[[[
+'http://www.google.com' asZnUrl
+    addPathSegment: 'some encoding here';
+    queryAt: 'and some encoding' put: 'here, too';
+    yourself
+  -> http://www.google.com/some%20encoding%20here?and%20some%20encoding=here,%20too
+]]]
+
+The ZnUrl parser is somewhat forgiving and accepts some unencoded URLs as well, like most browsers would.
+
+[[[
+'http://www.example.com:8888/a path?q=a, b, c' asZnUrl.
+  -> http://www.example.com:8888/a%20path?q=a,%20b,%20c
+]]]
+
+!!! Relative URLs
+
+ZnUrl can parse in the context of a default scheme, like a browser would do.
+
+[[[
+ZnUrl fromString: 'www.example.com' defaultScheme: #http
+  -> http://www.example.com/
+]]]
+
+Given a known scheme, ZnUrl knows its default port, try ==portOrDefault==.
+
+A path defaults to what is commonly referred to as slash, test with ==isSlash==. Paths are most often (but don't have to be) interpreted as filesystem paths. To support this, use the ==isFilePath== and ==isDirectoryPath== tests and ==file== and ==directory== accessors.
+
+ZnUrl has some support to handle one URL in the context of another one, this is also known as a relative URL in the context of an absolute URL. Refer to ==isAbsolute==, ==isRelative== and ==inContextOf:==.
+
+[[[
+'/folder/file.txt' asZnUrl inContextOf: 'http://fileserver.example.net:4400' asZnUrl.
+  -> http://fileserver.example.net:4400/folder/file.txt
+]]]
+
+!!! Odd and Ends
+
+Sometimes, the combination of a host and port are referred to as authority, see ==authority==.
+
+There is a convenience method ==retrieveContents== to download the resource a ZnUrl points to:
+
+[[[
+'http://zn.stfx.eu/zn/numbers.txt' asZnUrl retrieveContents.
+
+'http://zn.stfx.eu/zn/numbers.txt' asZnUrl saveContentsToFile: 'numbers.txt'.
+]]]
+
+The first expression retrieves the contents and returns it directly, while the second expression saves the contents directly to a file.
+
+!!! File URLs
+
+ZnUrl can be used to handle file URLs. Use ==isFile== to test for this scheme.
+
+Given a file URL, you can convert it to a regular ==FileReference== using the ==asFileReference== message. In the other direction, you can get a file URL from a ==FileReference== using the ==asUrl== or ==asZnUrl== messages.
+
+Do keep in mind however that there is no such thing as a relative file URL, only absolute file URLs exist.
+
+!!! Operations on URLs
+
+To add operations to URLs you could add an extension method to the ZnUrl class. In many cases though, your operation will not work on all kinds of URLs, just on a couple of them. In other words, you need to dispatch, not just on the scheme but maybe even on other URL elements. That is where you can use ==ZnUrlOperation==.
+
+You start by defining a name for your operation. Using an actual example, the symbol ==#retrieveContents==. Next, you define one or more subclasses of ==ZnUrlOperation==, each defining the class side message ==operation== to return ==#retrieveContents==. All subclasses with the same operation form the group of applicable implementations.
+
+Given a ZnUrl instance, you send it ==performOperation:== or ==performOperation:with:==. This will send ==performOperation:with:on:== to ZnUrlOperation, which will look for an applicable handler subclass, instanciate and invoke it. Your handler subclass will have to overwrite ==performOperation== to do the actual work.
+
+Each subclass will be sent ==handlesOperation:with:on:== to test if it can handle the name operation with an optional argument on a specific URL. You can override this test. However, the default implementation covers the most common case: the operation name has to match and the scheme of the URL has to be part of the collection returned by ==schemes==.
+
+For our example, the message ==retrieveContents== on ZnUrl is implemented as an operation named ==#retrieveContents==. The handler class is either ==ZnHttpRetrieveContents== for the schemes ==http== and ==https== or ==ZnFileRetrieveContents== for the scheme ==file==.
+
+This dispatching mechanism is more powerful than scheme specific ZnUrl subclasses because other elements can be taken into account. Another issue with scheme specific ZnUrl subclasses would be that there are an infinite number of schemes which no hierarchy could cover.
+
+
+
+
