@@ -1,10 +1,14 @@
 Copyright/License.pier
 
+Document 
+
 Artefact/artefact.pier	
 	>> first english version done [11 / Oct / 2014]
 	>> moved from PFTE to PE
 		
+PillarChap
 
+Serialization
 	
 Fuel/Fuel.pier
 	>> Stef did a pass and it should be ready with minor edits [11 / Oct / 2014]
@@ -48,6 +52,7 @@ BabyMock/BabyMock.pier
 	>> the wiki has more and different material
 
 Zinc/Zinc.pier
+	>> may be old and we should read the Zinc* chapter
 	>> Stef should re read it.
 	
 
@@ -70,6 +75,7 @@ RenoirST/RenoirST.pier",
 	
 WebSockets/WebSockets.pier",
 	>>
+	
 	
 
 WebApp using Zinc
