@@ -701,6 +701,31 @@ to Fuel.
 
 
 
+!! Colon syntax for Associations
+
+Colon syntax for Associations. You can write ==#foo:1== which will become ==#foo->1== and vice versa.
+
+This does not change the way maps (either for dictionaries or arbitrary objects) work. In practice, this means that there are now two 
+closely related expressions:
+
+[[[
+STON fromString: '[ #foo:1, #bar:2 ]'.
+	--> { #foo->1. #bar->2 }
+]]]
+
+[[[
+STON fromString: '{ #foo:1, #bar:2 }'.
+ 	--> a Dictionary(#bar->2 #foo->1 )
+]]]
+
+In the first case you get an Array of explicit Associations, in the second case you get a Dictionary which uses Associations internally, but that is an implementation detail. And of course you can send the message ==asDictionary== to the array.
+
+Note that nesting is also possible ==#foo : 1 : 2== means ==#foo->(1->2)==.
+
+
+!! Controlling instance variables 
+STON offers a way to control which instance variables get written and/or the order in which they get written.
+This can be done by overwriting ==Object class>>#stonAllInstVarNames==.
 
 
 
