@@ -1,26 +1,42 @@
 Copyright/License.pier
 
+Document 
+
 Artefact/artefact.pier	
 	>> first english version done [11 / Oct / 2014]
-	>> to be moved from PFTE to PE
-	
-	
+	>> moved from PFTE to PE
+		
 PillarChap
-	 >> Stef should read it.
-	 
-BabyMock/BabyMock.pier
-	>> Was waiting from author 
-	>> the wiki has more and different material
+
+Serialization
 	
 Fuel/Fuel.pier
-	>> Stef is working on it [11 / Oct / 2014]
-	>> to be moved from PFTE to PE
+	>> Stef did a pass and it should be ready with minor edits [11 / Oct / 2014]
+	>> moved from PFTE to PE
+	>> max rad it
+
+STON/STON.pier
+	>> Stef did a pass
+	>> migrated from PFTE to PE
+
+
+NativeBoost/NativeBoost.pier
+	>> Stef read it and improved it
+	>> moved from PFTE to PE
+
+
+Zinc-Encoding-Meta
+	>> Stef read and modified it a bit 
+	>> sven took into account remark
+	>> stef should check that.
+
+
+
+Next on Stef’s list
 
 Localization/Localization.pier
 	>>
 	
-NativeBoost/NativeBoost.pier
-	>> Stef should re read it.
 	
 NeoCSV/NeoCSV.pier
 	>> Stef should re read it.
@@ -28,14 +44,18 @@ NeoCSV/NeoCSV.pier
 NeoJSON/NeoJSON.pier
 	>> Stef should re read it.
 	
-STON/STON.pier
-	>> Stef should re read it.
+PillarChap
+	 >> Stef should read it.
+	 
+BabyMock/BabyMock.pier
+	>> Was waiting from author 
+	>> the wiki has more and different material
 
 Zinc/Zinc.pier
+	>> may be old and we should read the Zinc* chapter
 	>> Stef should re read it.
 	
-Zinc-Encoding-Meta
-	>> Stef read and modified it a bit 
+
 	
 Zinc-HTTP
 	>> Stef should re read it.
@@ -55,6 +75,7 @@ RenoirST/RenoirST.pier",
 	
 WebSockets/WebSockets.pier",
 	>>
+	
 	
 
 WebApp using Zinc
