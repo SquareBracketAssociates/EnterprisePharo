@@ -13,16 +13,16 @@
 %:Packages
 \usepackage{fontspec}
 
-\setmainfont{FiraSans}[
+\setmainfont[%
   Path = ../support/latex/fonts/ ,
   UprightFont = *-Regular ,
   BoldFont = *-Bold ,
   ItalicFont = *-Italic ,
   BoldItalicFont = *-BoldItalic
-]
+]{FiraSans}
 
-\setmonofont{FiraMono-Regular.otf}[Path = ../support/latex/fonts/]
-\setsansfont{FiraSans-Regular.otf}[Path = ../support/latex/fonts/]
+\setmonofont[Path = ../support/latex/fonts/]{FiraMono-Regular.otf}
+\setsansfont[Path = ../support/latex/fonts/]{FiraSans-Regular.otf}
 
 \usepackage[protrusion,expansion=false]{microtype}
 \usepackage{graphicx}
