@@ -12,7 +12,7 @@ This book is written in Pillar markup. If you are not familiar with it please ch
 
 First of all you have to run `./download.sh` to obtain the Pillar executable that does all the job.
 
-To generate your book execute `./compile.sh`. If you want to generate only one chapter, pass the file's path to the script: `./compile.sh Example/Example.pillar`. If you have `pdflatex` installed and available in your system's `PATH`, the script will also generate pdf files.
+To generate your book execute `./compile.sh`. If you want to generate only one chapter, pass the file's path to the script: `./compile.sh Example/Example.pillar`. If you have `lualatex` installed and available in your system's `PATH`, the script will also generate pdf files.
 
 ###Adding a chapter
 
@@ -21,7 +21,7 @@ To add a chapter create a directory for it (named, e.g., `Example`) and put ther
 Add your chapter to:
 
 * `pillar.conf` in the `inputFiles` array as: `"Example/Example.pillar"`, and
-* `_support/templates/book.latex.template` in `\graphicspath` as `{Example/}`
+* `support/templates/book.latex.template` in `\graphicspath` as `{Example/}`
 
 ###Caveats
 

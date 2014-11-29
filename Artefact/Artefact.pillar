@@ -1,4 +1,4 @@
-! Generate PDF documents with Artefact
+!Generate PDF documents with Artefact
 
 The Adobe PDF format is probably one of the most widespread electronic document formats. Used daily, it is the basis for the production of graphical, readable and exchangeable documents. If you receive a bill, follow a purchase on a web site, if you download a report, a book, or an administrative form, these files will likely PDF documents. For programmers, supporting this format has become a must. Generating PDF is part of the toolkit. 
 In Pharo, Artifact is an innovative framework that supports the design and generation of PDF documents. 
@@ -60,7 +60,7 @@ electronic documentation accessible via the Help Browser.
 - The fonts are defined in the package ==Artifact-Fonts== and document formats (A4, A3, ebook, etc.) in the package ==Artifact-Formats==.
 
 
-!!! Executing the first demoes
+!!!Executing the first demoes
 
 The best way to start with Artefact is to look at ==Artefact-Demos== package and to run each ==PDFDemos== class methods.
 
@@ -140,7 +140,7 @@ PDFDocument new
 	exportTo: 'EmptyPage.pdf' asFileReference writeStream
 ]]]
 
-!!!! Document Properties
+!!!!Document Properties
 
 A PDFDocument can be configured to select the format and compression used. 
 
