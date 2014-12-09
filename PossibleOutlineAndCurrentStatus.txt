@@ -1,3 +1,7 @@
+TODO: remove BabyMock form this book -> put it into the Progress folder
+
+
+
 Copyright/License.pier
 
 Document 
