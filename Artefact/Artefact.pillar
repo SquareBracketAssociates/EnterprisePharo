@@ -9,9 +9,7 @@ In Pharo, Artefact is an innovative framework that supports the design and gener
 
 Artefact is a PDF framework whose design was guided by the goals of efficiency, productivity and scalability.
 To achieve this, each document is described by a tree of objects. A document is an object containing a collection of other objects, each corresponding to a page. On each page both visible and non-visible items are also objects. 
-These objects then have the possibility to be reused in the same document but also across documents. Objects are elements that can be simple, e.g. a piece of text or an image, but also be complex elements with advanced behavior and a special appearance, e.g. ...
-
-@@note missing an example of a complex element here.
+These objects then have the possibility to be reused in the same document but also across documents. Objects are elements that can be simple, e.g. a piece of text or an image, but also be complex elements with advanced behavior and a special appearance, e.g. that display data in a table or generate a barcode.
 
 Artefact contains default elements such as paragraphs or tables that allow to quickly generate reports. The strength of these elements is that they are independent of each other. The order in which you position them in the document does not affect their appearance. This is in contrast to many PDF frameworks that exploit the notion of stream in the definition of styles (a piece of blue text will be followed by another piece of blue text in the absence of a directive to use a different style), Artefact considers that every element includes its own style. If an attribute is not defined in the element, Artefact then uses a style sheet that is set at the document level by default.
 
@@ -298,29 +296,40 @@ A template is an instance of class ==PDFTemplate==, which inherits from the clas
 It is a page with predefined contents that will act as the background page on which you will draw or add your components.
 For example, it can be composed of a header for a letter, a header and a footer for a report, or a delimited surface.
 
-The package ==Artefact-Templates== offers two example of models to create CD or DVD sleeve pages. The following code snippet produces a A4 page on which the outlines of a CD sleeve are drawn. 
+The package ==Artefact-Examples-Demos-Templates== offers two example of template to create CD or DVD sleeve pages. The following code snippet produces a A4 page on which the outlines of a CD sleeve are drawn. 
 
 [[[
 	pdfdoc := PDFDocument new.
 	cover := PDFCompactDiscTemplate new.
 ]]]
 
-A model is defined using the message  ==drawTemplate== which adds the Artefact elements to the page. This builds the page background.
+A template is defined using the message  ==drawTemplate== which adds the Artefact elements to the page. This builds the page background. For example, the code of the CD template is below. (As it is relatively straightforward we do not explain the code here.)
 
-@@note sd: would be nice to show the DVD or CD drawTemplate method here.
-
-+Page and Document Elements>file://figures/PDFPage.png|width=60|label=figElements+
+[[[
+PDFCompactDiscTemplate>>drawTemplate
+	self add: ((PDFRectElement 
+		from: 10 mm @ 10 mm
+		dimension: 240 mm @ 120 mm)
+		dotted: self dotted
+	).
+	self add: ((PDFLineElement  
+		from: 130mm @ 10mm
+		to: 130mm @ 130mm)
+		dotted: self dotted
+	).
+]]]
 
 !! Elements
 
-A ==PDFElement== is a reusable component that represents a text, an image, a geometric shape or even a complex graph or table.
+The contents of pages is defined using reusable components called elements. Artefact has basic elements that perform simple operations such as drawing a line, but also complex elements that can, for example, display data in a table or generate a barcode. Of course, it is possible to identify and define new components. 
 
-There are two kinds of ==PDFElement== (see Figure *figElements*):
+More specifically, a ==PDFElement== is a reusable component that represents a text, an image, a geometric shape or even a complex graph or table. There are two kinds of ==PDFElement==:
+- Simple elements inherit from ==PDFBasic== (a primitive operation in the pdf specification).
+- Composite elements inherit from ==PDFComposite== (a wrapper around multiple ==PDFElements== whether they are basic or composite).
 
-- Simple elements inherit from ==PDFBasic== (a primitive operation in the pdf specification)
-- Composite elements inherit from ==PDFComposite== (a wrapper around multiple ==PDFElements== whether they are basic or composite)
++Page and Document Elements>file://figures/PDFPage.png|width=60|label=figElements+
 
-Simple elements are as follows :
+Simple elements are as follows, and their hierarchy is shown in Figure *figElements*: 
 - ==PDFBezierCurveElement==
 - ==PDFCircleElement==
 - ==PDFLineElement==
@@ -332,7 +341,7 @@ Simple elements are as follows :
 
 +Composite Elements>file://figures/PDFComposite.png|width=60|label=figComposite+
 
-Composite elements are as follows, (see also Figure *figElements*):
+Composite elements are as follows, and their hierarchy is shown in Figure *figElements*:
 - ==PDFFormattedTextElement==
 - ==PDFParagraphElement==
 - ==PDFArrowElement==
@@ -348,67 +357,95 @@ affect other elements. This is in contrast to many PDF frameworks that use a flo
 multiple pages or documents.
 
 
-!!Composing and placement 
+!!!Composing and placement 
 
-The contents of pages is defined using reusable components. This is powerfull concept. Artefact has basic components that perform simple operations such as drawing a line, but also of complex components can, for example, to display data in a table or generate a barcode. Of course, it is possible to identify and define new components. 
+Artefact's elements have a generic behavior that manages their location on a page as well as their dimensions.
+The Artefact coordinate system is used to place components. Values can be expressed in several units such as mm, cm or inch. The origin of the coordinate system is the top left of a page.
 
-!!!Common and generic behavior
-Artefact's graphical components have a generic behavior to manage their location on a page as well as their dimensions.
-Artefact coordinate system origin is top left of a page. It is used to place component and the values can be expressed in several units such as  mm, cm or inch.
-
-!!!!Component positioning
-Sending the message  ==from:== the class of a graphical element instantiates it and sets its position.
-The following example creates a ==PDFTextElement== and place it at 15 mm from the left border and 30 mm from the top
+!!!!Element positioning
+Sending the message  ==from:== to the class of an element instantiates it and sets its position.
+The following example creates a ==PDFTextElement== and places it at 15 mm from the left border and 30 mm from the top
 
 [[[
 	PDFTextElement from: 15 mm @ 30 mm
 ]]]
 
-In addition, Artefact offers other constructors that fix the position and size of the component.
+In addition, Artefact offers other constructors that fix the position and size of the element, and we present them next.
 
 
-!!!! Compoment size
-Artefact offers two ways to set the size of a component: Using the message ==from:to:== or ==from:dimension:==.
+!!!! Element size
+Artefact offers two ways to set the size of a element: Using the message ==from:to:== or ==from:dimension:==.
 
-Using message ==from:to:==, you give the start and end position.
-The following example draws a rectangle whose origin is 15mm from the left and  30mm from the top and end is at 90 mm from the left border and 80 mm from the top of the page:
+The message ==from:to:== takes as arguments the start and the end position.
+For example, the following code draws a rectangle whose origin is 15mm from the left and  30mm from the top and its end is at 90 mm from the left border and 80 mm from the top of the page:
 [[[
 	PDFRectElement from: 15 mm @ 30 mm to: 90 mm @ 80 mm
 ]]]
 
-With the message ==from:dimension:==, you set the start position and specify its size.
+The message ==from:dimension:==, takes as arguments the start position and the size of the component. For example, the following code sets the size of the component to be 50 by 40 millimeters.
 
 [[[
 	PDFRectElement from: 15mm @ 30 mm dimension: 50mm @ 40mm
 ]]]
 
-The messages ==width== et ==height== return the width and height of the component.
+The messages ==width== and ==height== return the width and height of the component.
 
-!!!Elementary components
+!!!Simple elements
 
-The package ==Artefact-Elements-Basic== contains elementary components. There are grouped in three categories: text, geometric form and image insertion. 
+The package ==Artefact-Core-Elements-Basic== contains elementary components. There are grouped in three categories: text, images, and geometric forms. 
 
-To write text on a page, we use instances of ==PDFTextElement==. 
-The method  ==text:== sets the text to be displayed. The class method  ==from:text:== supports positionning and text definition.
+!!!Text and images
+
+To write text on a page, use instances of ==PDFTextElement==. 
+The method  ==text:== sets the text to be displayed. The class method  ==from:text:== supports positioning and text definition.
 
 [[[
 	PDFTextElement from: 15mm @ 30mm text: 'hello!'
 ]]]
 
+Images in JPEG format can also be inserted in a document. The class  ==PDFJpegElement== can be instantiated using the class messages ==fromStream:== and ==from:dimension:fromStream:==. The messages  ==width:== and ==height:== set the size of the image while respecting its original aspect ratio. 
 
-Artefact has components for main geometrical shape. Class ==PDFLineElement== draws a line using ==from:to:==.
+The following example generates a PDF document with one page.
+This page contains one image placed at two different locations. In the first case, the image is 80mm in width and 30mm in height.
+In the second case, the width is 80mm and the height is automatically computed keeping the original image ratio.
+
+[[[
+	| pdf page |
+	pdf := PDFDocument new.
+	page := PDFPage new.
+	page
+		add:
+			(PDFJpegElement
+				from: 10 mm @ 10 mm
+				dimension: 80 mm @ 30 mm
+				fromStream: (FileStream fileNamed: '/home/enterprise/image.jpg')).
+	page
+		add:
+			((PDFJpegElement fromStream: (FileStream fileNamed: '/home/enterprise/image.jpg'))
+				from: 10 mm @ 50 mm;
+				width: 80 mm).
+	pdf add: page.
+	pdf exportTo: (FileStream forceNewFileNamed: '/home/enterprise/image.pdf')
+]]]
+
+
+!!!!Geometric shapes
+
+Artefact has the following components for geometric shapes:
+
+The class ==PDFLineElement== draws a line using ==from:to:==.
 
 [[[
 	PDFLineElement from: 15mm @ 30mm to: 90mm@170mm
 ]]]
 
-The class message ==from:angle:length:== draws a ligne given a start position, an angle and a length.
+The class message ==from:angle:length:== draws a line with the given start position, angle and length.
 
 [[[
 	PDFLineElement from: 10mm @ 20mm angle: 70 length: 50mm
 ]]]
 
-Class ==PDFRectElement== represents a rectangle. Two messages are proposed: ==from: aStartPosition dimension: size== and ==from: aStartPosition to: anEndPosition==. The two following examples are equivalent:
+The class ==PDFRectElement== represents a rectangle. Two messages are relevant: ==from: dimension:== and ==from: to: ==. The two following examples are equivalent:
 
 [[[
 	PDFRectElement from: 10 mm@10mm dimension: 100 mm @ 30 mm.
@@ -441,62 +478,29 @@ Bezier curves are represented by the class ==PDFBezierCurveElement== and defined
 ]]]
 
 
-Images in JPEG format can be inserted in a document. The class  ==PDFJpegElement== can be instantiated using the class messages ==fromStream:== and ==from:dimension:fromStream:==. The messages  ==width== et ==height== sets the size of an image respecting its original ratio. 
+!!! Composite Elements
 
-The following example generates a PDF document with one page.
-This page contains one image placed at two different locations. In the first case, the image is 80mm width and 30mm height.
-In the second case, the width is 80mm and the height is automatically computed keeping the original image ratio.
-
-[[[
-	| pdf page |
-	pdf := PDFDocument new.
-	page := PDFPage new.
-	page
-		add:
-			(PDFJpegElement
-				from: 10 mm @ 10 mm
-				dimension: 80 mm @ 30 mm
-				fromStream: (FileStream fileNamed: '/home/enterprise/image.jpg')).
-	page
-		add:
-			((PDFJpegElement fromStream: (FileStream fileNamed: '/home/enterprise/image.jpg'))
-				from: 10 mm @ 50 mm;
-				width: 80 mm).
-	pdf add: page.
-	pdf exportTo: (FileStream forceNewFileNamed: '/home/enterprise/image.pdf')
-]]]
-
-The basic components implement extremely simple operations such as placing text on a page or drawing a line. 
-They are the essential building blocks of high-level components that we present now.
-
-!!! High-level components
-
-Artefact comes with a rich set of high-level components, grouped in the package Artefact-Elements-Composites. 
-These components are the result of the assembly of single components and other high-level components. 
-These elements are used to create layouts and complex contents with minimal coding and strong reuse. 
+Artefact comes with a rich set of high-level components, grouped in the package ==Artefact-Core-Elements-Composites==. 
+These components are the result of the assembly of single components and other high-level components. They are used to create layouts and complex contents with minimal coding and a high degree of reuse. 
 These components can be used in several different applications and materials. 
-They cover three areas: management of text, drawing arrows and reporting.
-
+They are divided in three areas: management of text, drawing arrows and reporting.
 
 !!!!Advanced text
 
 So far you have used the class ==PDFTextElement== to place text on a page. 
-This component is limited in terms of functionality since it only handles the position on the page. 
-To help, Artefact offers three high-level components that support advanced features: PDFFormatedTextElement, PDFCellElement
-and PDFParagrapElement.
+This component is limited in terms of functionality since it only handles the position on the page. In addition to this, Artefact offers three high-level components that support advanced features: ==PDFFormatedTextElement==, ==PDFCellElement==
+and ==PDFParagrapElement==.
 
-
-The component ==PDFFormatedTextElement== is similar to ==PDFTextElement== but brings 
-over managing the alignment (left, center, right). A component ==PDFCellElement== is  
+The component ==PDFFormatedTextElement== is similar to ==PDFTextElement== but includes managing the alignment (left, center, right). A ==PDFCellElement== is  
 a ==PDFFormatedTextElement== with a border. Finally, a ==PDFParagraphElement== 
-allows the insertion of a paragraph of text and automatically manages the break at the end of the lines.
+allows the insertion of a paragraph of text and automatically manages the breaks at the end of lines.
 
 
 !!!!Drawing arrows
 
 Arrows are very useful for generating sketches and diagrams. 
-The component ==PDFArrowElement== draws an arrow with a tip at its termination. 
-The component ==PDFDoubleArrowElement== draws two arrows at both extremities.
+The component ==PDFArrowElement== draws an arrow with a tip at its end. 
+The component ==PDFDoubleArrowElement== draws a tip at both extremities.
 
 [[[
 	PDFArrowElement from: 10mm@10mm to: 100mm@30mm
@@ -506,11 +510,10 @@ The component ==PDFDoubleArrowElement== draws two arrows at both extremities.
 
 !!!!Report creation
 
-Components inheriting from ==PDFDatatable== are the perfect illustration of the power and comfort 
-provided by the composite elements of Artefact. With these data tables, you can quickly generate reports and customize them to your needs.
+Components inheriting from ==PDFDatatable== are the perfect illustration of the power and comfort provided by the composite elements of Artefact. With these data tables, you can quickly generate reports and customize them to your needs.
 
-With class ==PDFDatatableElement== you define a report with specific dimensions on the page and on a data set. 
-These data are organized in a  tabular manner: a report contains a number of other tables, each representing a line of the report.
+With the class ==PDFDataTableElement== you define a report with specific dimensions on the page and showing a given data set. 
+The data is organized in a tabular manner: a report contains a number of rows, each representing a line of the report.
 
 [[[
 	PDFDataTableElement new
@@ -522,8 +525,7 @@ These data are organized in a  tabular manner: a report contains a number of oth
 		dimension: 150mm @ 60mm
 ]]]
 
-The class ==PDFDataTableWithColumnsCaptionElement== extend the table behavior to support captions 
-whose content is an array. The message ==captions== specifies the titles of each column of your report. 
+The subclass ==PDFDataTableWithColumnsCaptionElement== extends the table behavior to support captions. The message ==captions:== takes an array as argument, which contains the title of each column of your report. 
 It is important to note that the number of column headings should be the same as the number of columns and each line must have the same number of columns.
 
 [[[
@@ -538,19 +540,16 @@ It is important to note that the number of column headings should be the same as
 		dimension: 150 mm @ 60 mm
 ]]]
 
-Finally Artefact also provides the class ==PDFDataTableWithRowsCaptionElement== which is a variant of 
+Finally Artefact also provides a subclass ==PDFDataTableWithRowsCaptionElement== which is a variant of 
 ==PDFDataTableWithColumnsCaptionElement==. Its behavior is different since the caption is used to give a title to each line. 
-In this case, the table in the caption property must have a number of elements equal to the number of table rows.
+In this case, the table given as argument to the ==caption:== message must have a number of elements equal to the number of rows.
 
-
-Artefact offers a triggering mechanism defined by the message ==customizationBlock:==. The associated block is activated for the drawing of a cell. 
-This block takes four parameters that are the cell being drawn, the vertical and horizontal position of the cell in the table and the data presented in the cell. 
+Lastly, ==PDFDataTableElement== offers a callback mechanism defined by the message ==customizationBlock:==. The associated block is activated for the drawing of each cell. 
+It takes four parameters that are the cell being drawn, the vertical and horizontal position of the cell in the table and the data presented in the cell. 
 Using a block of code, it is then possible to change the appearance of the table or to trigger special treatment.
 
 
-The following example uses the message ==customizationBlock:== to replace the age of a person by the text =='Older than 30'== if the person is older than 
-thirty year old. The executed code only takes into account that the third cell of each line and excluding the title of each column. 
-If the age is greater than thirty, the instance variable ==text== of the cell is amended.
+The following example shows a use of the ==customizationBlock:== message. The block replaces the age of a person by the text =='Older than 30'== if the person is older than thirty. Note that the block only considers the third cell of each line and excludes the title of each column. 
 
 [[[
 	(PDFDataTableWithColumnsCaptionElement new
@@ -570,8 +569,7 @@ If the age is greater than thirty, the instance variable ==text== of the cell is
 ]]]
 
 Composite elements bring a lot of flexibility to PDF document creation. 
-Obviously, the default ones do not cover all needs and you will most likely need to create your own components. We suggest to study 
-the existing ones to see how to proceed.
+Obviously, the default ones do not cover all needs and you will most likely need to create your own components. We suggest to study the existing ones to see how to proceed.
 
 !!Stylesheet for the newbies
 
