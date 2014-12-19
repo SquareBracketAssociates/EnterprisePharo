@@ -253,19 +253,21 @@ pdfdoc metaData
 
 !!Pages, formats and models
 
-Pages are the supports for writing and drawing in your PDF documents. 
+Pages are the support for writing and drawing in your PDF documents. 
 A page defines a page size, orientation and position within a PDF document. 
-A page can be built from a model that provides an overlay on which is deposited the page contents.
+A page can be built from a model that provides an overlay on which the
+page contents are deposited.
 
 !!! Page creation 
 A page is represented by an instance of the class ==PDFPage==. 
-Creating is a page is simple done sending the message ==new== to the class.
+Creating is a page is simply done by sending the message ==new== to the class.
 
 [[[
 	page := PDFPage new.
 ]]]
 
-Sending the message ==add:== to a document with a page, will add the page at the end of the already added pages.
+Sending the message ==add:== to a document with a page as argument
+will append the page to the document.
 
 [[[
 	pdfdoc := PDFDocument new.
@@ -274,12 +276,13 @@ Sending the message ==add:== to a document with a page, will add the page at the
 ]]]
 
 By default, a page takes the dimensions and orientation of its document. 
-If your PDF document is A4 landscape, all pages added will use these settings. 
-Artefact can assign to each page specific dimensions and orientation. 
-You can mix in one document with pages with different characteristics. 
+If your PDF document is A4 landscape, all added pages will use these settings. 
+However, Artefact can assign specific dimensions and orientation to
+each page, allowing one document to have a mix of pages with different characteristics. To allow this, each instance of ==PDFPage== understands the message
+==format:==, which takes an instance of ==PDFFormat== as argument.
 
-For this, each instance of ==PDFPage== knows how to answer the message ==format:== with an instance of ==PDFFormat==. 
-The following example creates a two-pages document. The first uses the default format of the document, the second is in A4 landscape.
+
+The following example creates a two-page document. The first uses the default format of the document, the second is in A4 landscape.
 
 [[[
 	pdfdoc := PDFDocument new.
@@ -289,15 +292,13 @@ The following example creates a two-pages document. The first uses the default f
 ]]]
 
 
-!!! Template
+!!! Templates
 
-A template (instance of class ==PDFTemplate==) inherits from the class ==PDFPage==. 
-It is a page with a predefined contents and that will act as the background page on which you will draw or add your components.
-It can be composed of head for letter, a footer and header for a report, or a delimited surface
+A template is an instance of class ==PDFTemplate==, which inherits from the class ==PDFPage==. 
+It is a page with predefined contents that will act as the background page on which you will draw or add your components.
+For example, it can be composed of a header for a letter, a header and a footer for a report, or a delimited surface.
 
-The package ==Artefact-Templates== offers two example of model to create CD or DVD front page.
-
-The following code snippet produces a A4 page on which the outlines of a CD front page are drawn. 
+The package ==Artefact-Templates== offers two example of models to create CD or DVD sleeve pages. The following code snippet produces a A4 page on which the outlines of a CD sleeve are drawn. 
 
 [[[
 	pdfdoc := PDFDocument new.
@@ -306,7 +307,7 @@ The following code snippet produces a A4 page on which the outlines of a CD fron
 
 A model is defined using the message  ==drawTemplate== which adds the Artefact elements to the page. This builds the page background.
 
-@@authorToDo sd: would be nice to show the DVD or CD drawTemplate method here.
+@@note sd: would be nice to show the DVD or CD drawTemplate method here.
 
 +Page and Document Elements>file://figures/PDFPage.png|width=60|label=figElements+
 
@@ -316,10 +317,10 @@ A ==PDFElement== is a reusable component that represents a text, an image, a geo
 
 There are two kinds of ==PDFElement== (see Figure *figElements*):
 
-- Simple elements inherit from ==PDFBasic== (primitive operation in the pdf specification)
-- Composite elements inherit from ==PDFComposite== (a wrap between multiple ==PDFElements== whether they are basic or composite)
+- Simple elements inherit from ==PDFBasic== (a primitive operation in the pdf specification)
+- Composite elements inherit from ==PDFComposite== (a wrapper around multiple ==PDFElements== whether they are basic or composite)
 
-Simple elements:
+Simple elements are as follows :
 - ==PDFBezierCurveElement==
 - ==PDFCircleElement==
 - ==PDFLineElement==
@@ -331,7 +332,7 @@ Simple elements:
 
 +Composite Elements>file://figures/PDFComposite.png|width=60|label=figComposite+
 
-Composite elements (see Figure *figElements*):
+Composite elements are as follows, (see also Figure *figElements*):
 - ==PDFFormattedTextElement==
 - ==PDFParagraphElement==
 - ==PDFArrowElement==
@@ -343,9 +344,8 @@ Composite elements (see Figure *figElements*):
 
 Each ==PDFElement== has a set of properties that define its appearance (text color, font, dots, etc). 
 These properties are grouped in a stylesheet owned by each element. Every element controls its own appearance and doesn't 
-affect other (in opposition as many PDF framework that use a flow logic). This behavior allow you to move or even use in 
-multiple pages or document the same element.
-
+affect other elements. This is in contrast to many PDF frameworks that use a flow logic. This behavior allows you to move an element around or even use the same element in 
+multiple pages or documents.
 
 
 !!Composing and placement 
