@@ -56,11 +56,12 @@ BabyMock/BabyMock.pier
 Zinc/Zinc.pier
 	>> may be old and we should read the Zinc* chapter
 	>> Stef should re read it.
+	>> Luc should be removed because Zinc-HTTP is a fork of this one [22 Dec 2014]
 	
 
-	
 Zinc-HTTP
 	>> Stef should re read it.
+	>> Luc is doing a pass and test snippets on Pharo #40420 [22 Dec 2014]
 
 Zinc-REST
 	>> Stef should read it and ask crhistophe for feedback.
