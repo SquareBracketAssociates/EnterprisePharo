@@ -1,12 +1,10 @@
-TODO: remove BabyMock form this book -> put it into the Progress folder
-
-
 
 Copyright/License.pier
 
 Document 
 
 Artefact/artefact.pier	
+        >> JF did a pass [20 / Dec / 2014]
 	>> first english version done [11 / Oct / 2014]
 	>> moved from PFTE to PE
 		
