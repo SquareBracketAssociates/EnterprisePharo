@@ -1,51 +1,47 @@
 !STON: a Smalltalk Object Notation
 
-Smalltalk Object Notation (STON) is a lightweight, text-based, human-readable 
-data interchange format. It has been developed by Sven Van Caekenberghe.
-STON can be used to serialize domain level objects, either for persistency or network transport.
-As its name suggests, it is based on JSON (Javascript Object Notation).
-It adds symbols as a primitive value, class tags for object values and references.
-Implementations for Pharo Smalltalk, Squeak and Gemstone Smalltalk are available.
+Smalltalk Object Notation (STON) is a lightweight, text-based, human-readable data interchange format. It has been developed by Sven Van Caekenberghe. STON can be used to serialize domain level objects, either for persistency or for network transport.
+As its name suggests, it is based on JSON (*Javascript Object Notation>http://www.json.org*).  It adds symbols as a primitive value, and class tags for object values and references. Implementations for Pharo Smalltalk, Squeak and Gemstone Smalltalk are available.
 
 
 !! Introduction
-JSON seems to have hit a sweet spot: it is very simple, yet just powerful enough to represent some of the most common
-data structures across many different languages. JSON is very readable and relatively easy to type. JSON however knows 
-only about lists and maps. There is no concept of object types or classes. This means that it is not easy 
-to encode arbitrary objects, and some of the possible solutions are quite verbose
-(Encoding the type or class as a property and/or adding an indirection to encode the object's contents).
-STON extends JSON by adding a primitive value, 'class' tags for object values and references
-as we will see next.
+JSON seems to have hit a sweet spot: it is very simple, yet just powerful enough to represent some of the most common data structures across many different languages. JSON is very readable and relatively easy to type. If you have ever seen JSON *Javascript Object Notation>http://www.json.org*, you will be instantly familiar with STON as it uses similar primitive values, with the addition of a symbol type. Some details are slightly different though.
 
-If you have ever seen JSON http://www.json.org -  *Javascript Object Notation>http://www.json.org*, 
-you will be instantly familiar with Smaltalk Object Notation. It uses similar primitive values, 
-with the addition of a symbol type. Some details are slightly different though.
+Some of these differences are due to the fact that JSON knows only about lists and maps, which means that there is no concept of object types or classes. As a result it is not easy to encode arbitrary objects, and some of the possible solutions are quite verbose. For example, the type or class is encoded as a property and/or an indirection to encode the object's contents is added. To address this, STON extends JSON by adding a primitive value, and 'class' tags for object values and references, as we will see next.
 
 
-!!! About STON features
+
+!!! STON features and limitations
 
 STON offers three main features: 
 
-- Symbols. STON extends JSON by adding symbols as a primitive value, class tags for object values and references. Adding a symbol (globally unique string) primitive type is a very useful addition: because symbols help to represent constant values in a compact and fast yet readable way, and because symbols allow simpler and more readable map keys.
+- Symbols: STON extends JSON by adding symbols as a primitive value, and class tags for object values and references. Adding a symbol (a globally unique string) primitive type is a very useful addition. This is because symbols help to represent constant values in a readable way that is compact and fast, and because symbols allow for simpler and more readable map keys.
 
-- Circular structures. Allowing shared and circular object structures is also necessary simply because these exist in reality and because they allow for naturally efficient object graphs.
+- Circular structures: Allowing shared and circular object structures is also ueseful simply because these structures are widely used and because they allow for naturally efficient object graphs.
 
-- JSON backward compatible. Additionally, the current STON implementation is backward compatible with standard JSON.
+- JSON backward compatible: Additionally, the current STON implementation is backward compatible with standard JSON.
 
-The following example shows how references are handled.
+Limitations of STON are that in its current form it cannot serialize a number of objects that are more system or 
+implementation than domain oriented, such as Blocks and classes. STON is also less efficient than a binary encoding such as Fuel. As a new format, STON has yet to prove itself in practice.
+
+The following example shows how references are encoded.
 
 [[[
 | pt ar | 
 pt := 10@20.
 ar := { pt . pt . pt }.
 STON toString: ar
-  --> '[Point[10,20],@2,@2]'
+   --> '[Point[10,20],@2,@2]'
 ]]]
 
+@@note Why the focus on references in this example? Can't we just remove it since we have an example in 2.2.4 ?
 
-!!! Getting started
+!!! Loading STON
 
-STON is hosted on SmalltalkHub. To load STON you can execute: 
+A reference implementation for STON was implemented in Pharo and works in versions 1.3, 1.4, 2.0, 3.0 and 4.0 as well as in *http://www.squeak.org*.
+The project contains a full complement of unit tests.
+
+STON is hosted on SmalltalkHub. To load STON, execute the following code snippet: 
 
 [[[
 Gofer new
@@ -63,32 +59,31 @@ MCHttpRepository
 	password: ''
 ]]]
 
+Dale Henrichs did a port to Gemstone Smalltalk *http://www.gemstone.com/products/gemstone* that is available at *https://github.com/dalehenrich/ston* .
 
-!!! A first example: a rectangle
-Here is an example of a Rectangle ==(Rectangle center: 10@10 extent: 100@50)== and its STON 
-representation =='Rectangle{#origin:Point[-40,-15],#corner:Point[60,35]}==
+!!! Serializing and materializing objects
 
-!!!!Serializing an object 
-Here are some expressions to generate a STON representation. There are basically two messages ==toString:== 
-and ==toStringPretty:==. The first one generates a compact version and the second displays the serialized version in a more
-readable way.  
+We now show how to serialize and materialize objects, starting with a simple rectangle and then continuing with more complex objects.
+
+
+!!!!Serializing a rectangle 
+
+To generate a STON representation for an object, STON provides two messages ==toString:== and ==toStringPretty:==. The first message generates a compact version and the second displays the serialized version in a more readable way.  For example (where ==-->== precedes the output of a print-it of the expression):
 
 [[[
 STON toString: (Rectangle center: 10@10 extent: 100@50)
    --> 'Rectangle{#origin:Point[-40,-15],#corner:Point[60,35]}'
 
 STON toStringPretty: (Rectangle center: 10@10 extent: 100@50) 
-	--> 
-	Rectangle {
-   		#origin : Point [ -40, -15 ],
-   		#corner : Point [ 60, 35 ]
-   	 }
+   --> 'Rectangle {
+        	#origin : Point [ -40, -15 ],
+        	#corner : Point [ 60, 35 ]
+        }'
 ]]]
 
-Exactly how each class is represented is up to the implementation, although this document suggests some conventions 
-for well known classes.
+What is shown above follows the default representation scheme for objects. Each class can define its own custom representation, as discussed in section *customrepresentations*.
 
-!!!! Materializing an object
+!!!! Materializing a rectangle
  
 Once you have the textual representation of an object you can obtain the encoded objects using the ==STONReader== class
 as follows: 
@@ -98,24 +93,25 @@ as follows:
    #origin : Point [ -40, -15 ],
    #corner : Point [ 60, 35 ]
    }') readStream) next
+   -->  (-40@ -15) corner: (60@35)
 ]]]
 
-You can also use the STON facade as follow
+Alternatively, you can also use the STON facade as follows
 
 [[[
 (STON reader on: ( 'Rectangle {
    #origin : Point [ -40, -15 ],
    #corner : Point [ 60, 35 ]
    }') readStream) next
+   -->  (-40@ -15) corner: (60@35)
 ]]]
 
 
 
-!!! A simple example
+!!!! Serialization of maps, lists and class tags
 
-Lists are delimited by ==[== and ==]==. Items are separated by comma (==,==). 
-Maps are represented by curly braces =={== and ==}== and elements are separated by ==:== and comma as shown below.
-Class tags are represented by ==ClassName [ ... ]== or ==ClassName {...}==.
+This example shows how more complex data structures are represented in STON.
+Maps are represented by curly braces =={== and ==}== and elements are separated by ==:== and comma. Lists are delimited by ==[== and ==]== and their items are separated by a comma (==,==). Class tags are represented by ==ClassName [ ... ]== or ==ClassName {...}==.
 
 Next is an example of what pretty printed STON for a simple object looks like.
 Even without further explanation, the semantics should be clear.
@@ -139,15 +135,11 @@ TestDomainObject {
 ]]]
 
 
-!!! A large example: an HTTP response
+!!!! A large example: an HTTP response
 
-Here is a more complex example, the result of doing an HTTP request using the Zinc HTTP Components framework, a ZnResponse object.
-As you see curly braces are for dictionaries and square brackets for lists.
-You can execute the first expression to get an ZnResponse instance to work with. 
+Here is a more complex example:  a ZnResponse object. It is the result of serializing the result of the following HTTP request (using the Zinc HTTP Components framework) ==ZnEasy get: 'http://zn.stfx.eu/zn/small.html'==. It also shows that curly braces are for dictionaries and square brackets are for lists.
 
 [[[
-ZnEasy get: 'http://zn.stfx.eu/zn/small.html'.
-
 ZnResponse {
     #headers : ZnHeaders {
         #headers : ZnMultiValueDictionary {
@@ -183,23 +175,14 @@ ZnResponse {
 Note that when encoding regular objects, STON uses Symbols as keys.
 For Dictionaries, you can use Symbols, Strings and Numbers as keys.
 
-We will now go in detail in the notation. 
 
+!! How Values are Encoded
 
+We will now go into detail on how the notation encodes Smalltalk values. Values are either a primitive value or an object value. Note that the undefined object ==nil== and a reference to an already encountered object are considered values as well.
 
+!!! Primitive Values
 
-!! Smalltalk Object Notation
-Let us look now at the notation.
-
-!!!Values
-
-STON encodes a value, which is either a primitive value or an object value.
-The undefined object ==nil== and a reference to an already encountered object
-are considered values as well.
-
-
-!!!! Primitive Values
-The primitive types are numbers, strings, symbols and boolean.
+The kinds of values which are considered as primitives are numbers, strings, symbols, booleans and ==nil==. We talk about each of these next, and we show an example of their encoding. ==-->== precedes the output of a print-it of the expression.
 
 !!!!Numbers
 Numbers are either integers or floats.
@@ -208,51 +191,51 @@ Numbers are either integers or floats.
 
 [[[
 (STON reader on: '123' readStream) next.
-	--> 123
+   --> 123
 ]]]
 
 [[[
 (STON reader on: '-10e6' readStream) next.
-	--> -10e6
+   --> -10e6
 ]]]
 
 !!!!Strings 
-Strings are enclosed using single quotes. A backslash is used as an escape mechanism. 
-Some unreadable characters have there own escape code, like in JSON. 
-A general Unicode escape mechanism using four hexadecimal digits is used to encode any character. 
+
+Strings are enclosed using single quotes and backslash is used as the escape character. 
+A general Unicode escape mechanism using four hexadecimal digits can be used to encode any character. Some unreadable characters have their own escape code, like in JSON. 
 STON conventionally encodes all non-printable non-ASCII characters.
 
 [[[
 (STON reader on: '''a simple string''' readStream) next.
-	--> 'a simple string'
+   --> 'a simple string'
 ]]]
 
 [[[
-(STON reader on: '\u00E9l\u00E8ves Fran\u00E7aises' readStream) next.
-    --> '\u00E9l\u00E8ves Fran\u00E7aises'
-	Sven this does not work
+(STON reader on: '''\u00E9l\u00E8ves Fran\u00E7aises''' readStream) next.
+   --> 'élèves Françaises'
 ]]]
 
 [[[
-(STON reader on: 'a tab \t and a newline \n' readStream) next.
-	--> 'a tab \t and a newline \n'
+(STON reader on: '''a newline \n and \t a tab''' readStream) next.
+   -->  'a newline 
+         and 	 a tab'
 ]]]
+
 
 !!!!Symbols
-Symbols are introduced by a sharp sign. 
-Symbols consisting of a limited character set (letters, numbers, a dot, underscore, dash or forward slash) 
-are written literally. Symbols containing characters outside this limited set are encoded like strings, 
-enclosed in single quotes.
+
+Symbols are preceded by a ==#==. 
+Symbols consisting of a limited character set (letters, numbers, a dot, underscore, dash or forward slash) are written literally. Symbols containing characters outside this limited set are encoded like strings, enclosed in single quotes.
 
 
 [[[
 (STON reader on: '#foo' readStream) next.
-	--> #foo
+   --> #foo
 ]]]
 
 [[[
 (STON reader on: '#''Foo-bar''' readStream) next.	
-    --> #'Foo-bar'
+   --> #'Foo-bar'
 ]]]
 
 !!!!Booleans
@@ -260,86 +243,73 @@ Booleans consist of the constants ==true== and ==false==.
 
 [[[
 (STON reader on: 'true' readStream) next.		
-	--> true
+   --> true
 ]]]
 
-!!!! The UndefinedObject, ==nil==
+!!!! The UndefinedObject
+
+The undefined object is represented by the constant ==nil== 
 
 [[[
 (STON reader on: 'nil' readStream) next.		
-	--> nil
+   --> nil
 ]]]
 
 
 !!! Object Values
 
-Like JSON, STON uses two primitive compositions: lists and maps.
-Lists consist an ordered collection of arbitrary objects.
+Values that are not primitives are object values and we discuss these here. The first kind of such values is a collection of values, the second kind is all the other objects, and the last kind is a reference to another value.
+
+Like in JSON, STON uses two primitive composition mechanisms: lists and maps.
+Lists consist of an ordered collection of arbitrary objects.
 Maps consist of an unordered collection of key-value properties.
-Keys can be strings, symbols or numbers while values are arbitrary objects.
+Keys can be strings, symbols or numbers, and values are arbitrary objects.
 
 !!!!Lists 
-Lists are delimited by ==[== and ==]==. Items are separated by comma ==,==. 
+Lists are delimited by ==[== and ==]==. Items are separated by a comma ==,==. 
 
 For example the following expression is a list with two numbers -40 and -15.
 [[[
 [ -40, -15 ]
 ]]]
 
-For example, the serialization of an array is represented by a list.
+The serialization of an array is represented by a list.
 [[[
 STON toString: #(20 30 40) 
-  --> '[20,30,40]'
+   --> '[20,30,40]'
+]]]
+[[[
+STON toString:  { 1. 0. -1. true. false. nil }. 
+   --> '[1,0,-1,true,false,nil]'
 ]]]
 
 Lists are also used to represent values of certain object instance variables.
 
 [[[
 STON toString: 20@30 
-  --> 'Point[20,30]'
-
-STON toString: Date today 
- -->'Date[''2013-08-05'']'
-
-STON toString:  { 1. 0. -1. true. false. nil }. 
-  --> '[1,0,-1,true,false,nil]'
+   --> 'Point[20,30]'
 ]]]
-
+[[[
+STON toString: Date today 
+   --> 'Date[''2014-12-23'']'
+]]]
 
 !!!!Maps 
-Maps are delimited by =={== and ==}==. Keys and values are separated by a colon ==:== and items are separated by a comma (,). 
-For example the following mimetype object is a map and its parameter is also a map or dictionary.
+Maps are delimited by =={== and ==}==. Keys and values are separated by a colon ==:== and items are separated by a comma ==,==. Dictionaries are serialized as maps, for example as below:
 
 [[[
-ZnMimeType {
-    #main : 'text',
-    #sub : 'html',
-    #parameters : {
-        'charset' : 'utf-8'
-    }
- }
-]]]
-
-
-For example a dictionary is serialized as a map. 
-
-[[[
-STON toString: (Dictionary new at: #blue put: 'bluish' ; at: #green put: 'greenish' ; yourself)
-  --> '{#green:''greenish'',#blue:''bluish''}'
-
 STON toStringPretty: (Dictionary new at: #blue put: 'bluish' ; at: #green put: 'greenish' ; yourself) 
-  --> '{
-	#green : ''greenish'',
-	#blue : ''bluish''
-}'
+   --> '{
+		#green : ''greenish'',
+        	#blue : ''bluish''
+        }'
 ]]]
 
 
-
-!! Class Tag
+!!!! Class Tag
 An object in STON has a class tag and a representation. A class tag starts with an alphabetic uppercase letter 
 and contains alphanumeric characters only. A representation is either a list or a map.
-The previous example shows a class tag for the class ==ZnMimeType==.
+The next example shows a class tag for an instance of the class ==ZnMimeType==:
 
 [[[
 ZnMimeType {
@@ -351,66 +321,40 @@ ZnMimeType {
  }
 ]]]
 
-
-[[[
-STON toString: Date today 
-  -->'Date[''2013-08-05'']'
-
-STON toString: 20@30 
-  --> 'Point[20,30]'
-]]]
-
-
-
-There are generic ways to encode arbitrary objects. 
+This is a generic way to encode arbitrary objects. 
 Non-collection classes are encoded using a map of their instance variables, instance variable name 
 symbol mapped to instance variable value.
 Collection classes are encoded using a list of their values.
-Some classes have their own custom representation, often chosen for compactness and readability.
 
-[[[
-	Examples needed
-]]]
-
-
-!!!! Two handy default
-For one selected list like collection subclass, currently ==Array==, the class tag is optional, given a list representation.
+For the list like collection subclass ==Array==, the class tag is optional, given a list representation. The following pairs are thus equivalent:
 
 [[[
 	[1, 2, 3]  =  Array [1, 2, 3]
 ]]]
 
-For one selected  map like collection subclass, currently ==Dictionary==, the class tag is optional, given a map representation.
-The following pairs are thus equivalent:
+Also, for the map like collection subclass ==Dictionary== the class tag is optional, given a map representation:
 
 [[[
     {#a : 1, #b : 2} = Dictionary {#a : 1, #b : 2}
 ]]]
 
-During encoding, some classes can ask for a short list representation.
-This will instruct the pretty printer to print their encoding on one line.
-Check the senders of ==STONWriter>>#writeObject:listSingleton:== 
-and ==STONWriter>>#writeObject:streamShortList:== for details.
+!!!! References
 
-
-!! References
-
-To support shared objects and cycles in the object graph, STON adds the concept of references.
-Each object value encountered during depth first traversal is numbered from 1 up. 
+To support shared objects and cycles in the object graph, STON adds the concept of references to JSON.
+Each object value encountered during a depth first traversal of the graph is numbered from 1 up. 
 If a object is encountered again, only a reference to its number is recorded. 
 References consist of the at-sign followed by a positive integer. 
-After reconstructing an object graph, references are resolved.
+When the data is materialized, references are resolved after reconstructing the object graph.
 
-Here is an OrderedCollection with three times the same, shared Point object:
+Here is an OrderedCollection that shares a Point object three times:
 
 [[[
 | pt ar | 
 pt := 10@20.
 ar := { pt . pt . pt }.
 STON toString: ar
-  --> '[Point[10,20],@2,@2]'
+   --> '[Point[10,20],@2,@2]'
 ]]]
-
 
 A two element ==Array== that refers to itself in its second element will look like this:
 
@@ -418,12 +362,15 @@ A two element ==Array== that refers to itself in its second element will look li
 [ #foo, @1 ]
 ]]]
 
-Strings are not treated as objects and are consequently never shared.
+Note that strings are not treated as objects and are consequently never shared.
 
 
-!! Some Conventional Representations
+!! Custom Representations of Objects
+@customrepresentations
 
-In the current working reference implementation in Pharo, a number of classes received a special, custom representation. These are:
+In the current reference implementation in Pharo, a number of classes received a special, custom representation, often chosen for compactness and readability. We give a list of them here and then discuss on how to implement this for your own classes.
+
+!!! Default Custom Representations
 
 !!!!Time
 
@@ -439,30 +386,30 @@ STON toString: Time now
 
 [[[
 STON toString: Date today 
-  -->'Date[''2013-08-05'']'
+   -->  'Date[''2014-12-23'']'
 ]]]
 
 !!!!Date and Time
 
-  ==DateAndTime==, ==TimeStamp== a one element array with an ISO style ==YYYY-MM-DDTHH:MM:SS.N+TZ.TZ== string
+  ==DateAndTime==, ==TimeStamp== is represented as a one element array with an ISO style ==YYYY-MM-DDTHH:MM:SS.N+TZ.TZ== string
 	
 [[[
 STON toString: DateAndTime now 
-  --> 'DateAndTime[''2014-11-03T17:07:40.479279+01:00'']'
+   --> 'DateAndTime[''2014-11-03T17:07:40.479279+01:00'']'
 ]]]
 
 !!!! Point
 
- ==Point== a two element array with the x and y values
+ ==Point== is represented as a two element array with the x and y values
 
 [[[
 STON toString: 100@200
- --> 'Point[100,200]' 
+   --> 'Point[100,200]' 
 ]]]
 
 !!!! ByteArray
 
- ==ByteArray== a one element array with a hex string
+ ==ByteArray== is represented as a one element array with a hex string
 
 [[[
 STON toString: #( 10 20 30) asByteArray 
@@ -471,23 +418,27 @@ STON toString: #( 10 20 30) asByteArray
 
 
 !!!! Character
- ==Character== a one element array with a one element string
+ ==Character== is represented as a one element array with a one element string
 
 [[[
 STON toString: $a 
    --> 'Character[''a'']'
 ]]]
 
+!!! Creating a Custom Representation
 
-Whether or not you choose to use the default STON mapping for Objects, 
-where instance variables symbol names and their values become keys and values in a map,
-or whether you prefer a custom representation is up to you and your application.
+The choice of using a default STON mapping for objects or to prefer a custom representation is up to you and your application. In the generic mapping instance variable names (as symbols) and their values become keys and values in a map. This is flexible: it won't break when instance variables are added or removed.
+It is however more verbose and exposes all internals of an object, including ephemeral ones. Custom representations are most useful to increase the readability of small, simple objects.
 
-The generic mapping is flexible: it won't break when instance variables are added or removed.
-It is more verbose and exposes all internals of an object, including ephemeral ones.
-Custom representations are most useful to increase the readability of small, simple objects.
- 
+To implement a custom representation for a class ... 
 
+@@note how is this done? If I want to implement this myself what methods do I need to provide? fromSton: and stonOn: are sufficient ?
+
+
+During encoding, classes may ask for a short list representation.
+This is done by sending the ==#writeObject:listSingleton:== message to ==STONWriter== instructing the pretty printer to print their encoding on one line. This in contrast to using the ==#writeObject:streamShortList:== message. Browse the senders of these messages for more details.
+
+@@note I had a quick look and it's not immediately clear to me. add 2 sentences with more details on what the implementation of each method does? 
 
 
 
@@ -496,15 +447,15 @@ Custom representations are most useful to increase the readability of small, sim
 This section lists some code examples on how to use the current implementation and its API. 
 The class ==STON== acts as a class facade API to read/write to/from streams/strings 
 while hiding the actual parser or writer classes. It is a central access point, but it is very thin: 
-using the reader or writer directly is perfectly OK too, and offers some more options as well.
+using the reader or writer directly is perfectly fine, and offers some more options as well.
 
 Parsing is the simplest operation, use either the ==fromString:== or ==fromStream:== method, like this:
 
 [[[
     STON fromString: 'Rectangle { #origin : Point [ -40, -15 ], #corner : Point [ 60, 35 ]}'.
-
-    '/Users/sven/Desktop/foo.ston' asReference 
-        fileStreamDo: [ :stream | STON fromStream: stream ].
+]]]
+[[[
+    '/Users/sven/Desktop/foo.ston' asReference fileStreamDo: [ :stream | STON fromStream: stream ].
 ]]]
 
 Writing has two variants: the regular compact representation or the pretty printed one.
@@ -513,16 +464,17 @@ or ==put:onStream:== and ==put:onStreamPretty:==, like this:
 
 [[[
     STON toString: World bounds.
-
+]]]
+[[[
     STON toStringPretty: World bounds.
-
+]]]
+[[[
     '/Users/sven/Desktop/bounds.ston' asReference 
-        fileStreamDo: [ :stream | 
-            STON put: World bounds onStream: stream ].
-
+        fileStreamDo: [ :stream |  STON put: World bounds onStream: stream ].
+]]]
+[[[
     '/Users/sven/Desktop/bounds.ston' asReference 
-        fileStreamDo: [ :stream | 
-            STON put: World bounds onStreamPretty: stream ].
+        fileStreamDo: [ :stream | STON put: World bounds onStreamPretty: stream ].
 ]]]
 
 Invoking the reader (parser) directly goes like this:
@@ -535,12 +487,13 @@ Invoking the reader (parser) directly goes like this:
 The writer can be used in a similar way:
 [[[
     String streamContents: [ :stream |
-        (STON writer on: stream) 
-            nextPut: World bounds ].
+        (STON writer on: stream)  nextPut: World bounds ].
 ]]]
 
 Next is an example of how to use the STON writer to generate JSON output.
-Note that it is necessary to convert to Arrays and/or Dictionaries first.
+Note that it is necessary to convert XXXX to Arrays and/or Dictionaries first.
+
+@@note fill in the XXXX please
 
 [[[
     | bounds json |
@@ -556,36 +509,31 @@ Note that it is necessary to convert to Arrays and/or Dictionaries first.
             nextPut: json ].
 ]]]
 
-!! STON
-
-!!! Compatibility with JSON
+!! Compatibility with JSON and configuration of output
 
 The current STON implementation has a very large degree of JSON compatibility.
-Valid JSON input is almost valid STON. The only exceptions are the string delimiters (single quotes for STON, double quotes for JSON) and nil vs. null. The STON parser accepts both variants for full compatibility.
+Valid JSON input is almost always valid STON. The only exceptions are the string delimiters (single quotes for STON, double quotes for JSON) and ==nil== versus ==null==. The STON parser accepts both variants for full compatibility.
 
-The STON writer has a jsonMode option so that generated output conforms to standard JSON.
-That means the use of single quotes as string delimiters, null instead of nil, the treatment of symbols as strings.
+The STON writer has a ==jsonMode== option so that generated output conforms to standard JSON. That means the use of single quotes as string delimiters, ==null== instead of ==nil==, and the treatment of symbols as strings.
+
+@@note An example of use here would be nice
 
 Any non primitive instances that are not arrays or dictionaries will throw an error.
+
+@@note the above sentence is meaningless: I can serialize Point, Date, Object and a lot of other things. Clarify and move to a different place or remove.
+
 Another option sets the referencePolicy.
-The default for STON is to track object references and generate reference when needed.
-Other options are to signal an error on shared references or circles, or to ignore them with the risk of going into an infinite loop.
+The default for STON is to track object references and generate references when needed.
+Other options are to signal an error on shared references or circles, or to ignore them with the risk of going into an infinite loop.  
 
+@@note please give the API here with what messages to send for what result.
 
-!!! Limitations
+STON offers a way to control which instance variables get written and/or the order in which they get written.
+This can be done by overwriting ==Object class>>#stonAllInstVarNames==.
 
-STON in its current form cannot serialize a number of objects that are more system or 
-implementation than domain oriented, such as Blocks and classes. 
+!! Implementation Overview
 
-STON is also less efficient than a binary encoding such as Fuel. As a new format, 
-STON has yet to prove itself in practice.
-  
-
-!! Implementation
-
-To validate the Smalltalk Object Notation a reference implementation was implemented in Pharo *http://www.pharo.org*. 
-It works in Pharo Smalltalk versions 1.3, 1.4, 2.0, 3.0 and 4.0 as well as in *http://www.squeak.org*.
-The project contains a full complement of unit tests.
+@@note either expand this to a complete overview of how the implementation works, or (maybe better) move this to the section on creating your own custom representation (3.2)
 
 The key methods are instance method ==stonOn:== and class or instance method ==fromSton:==.
 Classes can use another external name using the class method ==stonName==.
@@ -594,10 +542,6 @@ Additionally, you have to implement the instance method ==stonProcessSubObjects:
 to allow subobjects to be procossed, to resolve forward references to real objects.
 Furthermore, the class method ==stonName== allows for class name aliasing.
 That is, the external and internal class names do not have to be identical.
-
-Dale Henrichs did a port to Gemstone Smalltalk *http://www.gemstone.com/products/gemstone 
-that is available at *https://github.com/dalehenrich/ston*.
-
 
 !! Conclusion
 STON is a practical and simple text-based object serializer. It is handy to exchange information and from that perspective it is complementary
@@ -703,6 +647,8 @@ to Fuel.
 
 !! Colon syntax for Associations
 
+@@note Sorry, I am quite lost. Please confirm: Is this a default representation for Associations? It should be in 3.1, no? What are the limitations for the key and value of this syntax? Should both be primitive values?
+
 Colon syntax for Associations. You can write ==#foo:1== which will become ==#foo->1== and vice versa.
 
 This does not change the way maps (either for dictionaries or arbitrary objects) work. In practice, this means that there are now two 
@@ -710,32 +656,17 @@ closely related expressions:
 
 [[[
 STON fromString: '[ #foo:1, #bar:2 ]'.
-	--> { #foo->1. #bar->2 }
+   --> { #foo->1. #bar->2 }
 ]]]
 
 [[[
 STON fromString: '{ #foo:1, #bar:2 }'.
- 	--> a Dictionary(#bar->2 #foo->1 )
+   --> a Dictionary(#bar->2 #foo->1 )
 ]]]
 
 In the first case you get an Array of explicit Associations, in the second case you get a Dictionary which uses Associations internally, but that is an implementation detail. And of course you can send the message ==asDictionary== to the array.
 
 Note that nesting is also possible ==#foo : 1 : 2== means ==#foo->(1->2)==.
-
-
-!! Controlling instance variables 
-STON offers a way to control which instance variables get written and/or the order in which they get written.
-This can be done by overwriting ==Object class>>#stonAllInstVarNames==.
-
-
-
-
-
-
-
-
-
-
 
 
 
