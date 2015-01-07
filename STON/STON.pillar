@@ -71,13 +71,13 @@ We now show how to serialize and materialize objects, starting with a simple rec
 To generate a STON representation for an object, STON provides two messages ==toString:== and ==toStringPretty:==. The first message generates a compact version and the second displays the serialized version in a more readable way.  For example (where ==-->== precedes the output of a print-it of the expression):
 
 [[[
-STON toString: (Rectangle center: 10@10 extent: 100@50)
-   --> 'Rectangle{#origin:Point[-40,-15],#corner:Point[60,35]}'
+STON toString: (Rectangle origin: 10@10 corner: 100@50)
+   --> 'Rectangle{#origin:Point[10,10],#corner:Point[100,50]}''
 
-STON toStringPretty: (Rectangle center: 10@10 extent: 100@50) 
+STON toStringPretty: (Rectangle origin: 10@10 corner: 100@50) 
    --> 'Rectangle {
-        	#origin : Point [ -40, -15 ],
-        	#corner : Point [ 60, 35 ]
+        	#origin : Point [ 10, 10 ],
+        	#corner : Point [ 100, 50 ]
         }'
 ]]]
 
