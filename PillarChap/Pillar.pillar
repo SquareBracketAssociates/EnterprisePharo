@@ -77,7 +77,7 @@ cd mydocument
 
 !!!Installing and exporting your first document
 
-You first need to download Pillar. For that, I recommend executing *this script>https://raw2.github.com/SquareBracketAssociates/PharoForTheEnterprise-english/master/download.sh* in the base directory.
+You first need to get Pillar. For that, I recommend *downloading executing this script>https://raw.githubusercontent.com/pillar-markup/book-skeleton/master/download.sh* in the base directory.
 
 Then, you can check everything is working fine by creating a ==first.pillar== file with this content:
 
