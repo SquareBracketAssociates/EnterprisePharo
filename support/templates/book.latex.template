@@ -20,9 +20,14 @@
 	{../Zinc-HTTP/}
 	{../Zinc-Encoding-Meta/}
 	{../Zinc-REST/}
-	{../NativeBoostX11/}
 	{../Fuel/}
 	{../STON/}
+        {../Voyage/}
+        {../WebApp/}
+        {../WebSockets/}
+        {../NeoJSON/}
+        {../RenoirST/}
+        {../NeoCSV/}
 }
 %=================================================================
 \let\wholebook=\relax
