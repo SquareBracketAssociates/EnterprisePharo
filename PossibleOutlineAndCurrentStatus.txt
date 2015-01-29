@@ -1,105 +1,99 @@
 
+
 Copyright/License.pier
 
 Document 
 
-Artefact/artefact.pier	
-        >> JF did a pass [20 / Dec / 2014]
-	>> first english version done [11 / Oct / 2014]
-	>> moved from PFTE to PE
-		
-PillarChap
 
-Serialization
+*******************************************************************************
+Finished: 
+
+	Artefact/artefact.pier	
+	   >> JF did a pass [20 / Dec / 2014]
+		>> first english version done [11 / Oct / 2014]
+		>> moved from PFTE to PE
+		
+
+*******************************************************************************
 	
 Fuel/Fuel.pier
-	>> Stef did a pass and it should be ready with minor edits [11 / Oct / 2014]
+	>> Stef did a pass and it should be ready with minor edits [11/Oct/2014]
 	>> moved from PFTE to PE
-	>> max rad it
-
+	>> max read it
+	>> Johan should do a pass / test examples
+	
 STON/STON.pier
 	>> Stef did a pass
 	>> migrated from PFTE to PE
-
-
-NativeBoost/NativeBoost.pier
-	>> Stef read it and improved it
-	>> moved from PFTE to PE
-
+	>> Johan did a pass => some things to check with Sven
 
 Zinc-Encoding-Meta
 	>> Stef read and modified it a bit 
 	>> sven took into account remark
-	>> stef should check that.
+	>> stef should check that
 
-
-
-Next on Stef’s list
-
-Localization/Localization.pier
-	>>
-	
-	
-NeoCSV/NeoCSV.pier
-	>> Stef should re read it.
-	
-NeoJSON/NeoJSON.pier
-	>> Stef should re read it.
-	
 PillarChap
 	 >> Stef should read it.
-	 
-BabyMock/BabyMock.pier
-	>> Was waiting from author 
-	>> the wiki has more and different material
-
-Zinc/Zinc.pier
-	>> may be old and we should read the Zinc* chapter
-	>> Stef should re read it.
-	>> Luc should be removed because Zinc-HTTP is a fork of this one [22 Dec 2014]
-	
+	 >> Damien should do a pass
 
 Zinc-HTTP
 	>> Stef should re read it.
 	>> Luc is doing a pass and test snippets on Pharo #40420 [22 Dec 2014]
+	>> Luc will finish his pass
+	>> Johan will try to split it
 
 Zinc-REST
 	>> Stef should read it and ask crhistophe for feedback.
+	>> Small chapter => to extend?
+	>> Luc will read it
 	
-Voyage/Voyage.pier",
-	>>
+Zinc-Encoding-Meta
+	>> Johan will do a pass
+
+*******************************************************************************
+Should be imported from PharoForReview repo:
 	
-Mustache/Mustache.pier
-	>> Stef should finish the first version
+	NeoCSV/NeoCSV.pier
+	>> Stef should re read it.
+	>> then Damien
 	
-RenoirST/RenoirST.pier",
-	>> may be we should contact gabriel
+	NeoJSON/NeoJSON.pier
+	>> Stef should re read it.
+	>> then Damien
 	
-	
-WebSockets/WebSockets.pier",
-	>>
-	
-	
+	RenoirST/RenoirST.pier
+	>> Damien will do a pass
 
-WebApp using Zinc
-	>> Stef should read it again.
+	Voyage/Voyage.pier
+	>> Damien will do a pass
 
+	WebSockets/WebSockets.pier
+	>> Luc will read it 
 
-LDAP Olivier
-	>> Olivier is not happy about the implementation 
-	>> reevaluating it
-	
-GitAndPharo/GitAndPharo.pier
-	>> will see
+	WebApp using Zinc
+	>> Stef should read it again
+	>> Luc will read it
 
+*******************************************************************************
 
+Should be imported from PharoInProgress repo:
 
+	Mustache/Mustache.pier
+		>> Stef should finish the first version
 
+*******************************************************************************
 
+To remove from a Web book:
 
+	NativeBoost/NativeBoost.pier
+		>> Stef read it and improved it
+		>> moved from PFTE to PE
 
-       "Spec/Spec.pier",
-       "DynamicSpec/DynamicSpec.pier",
-       "CalculatorTutorial/CalculatorTutorial.pier", 
+	LDAP Olivier
+		>> Olivier is not happy about the implementation 
+		>> reevaluating it
 
-       "Smacc/Smacc.pier",
+	GitAndPharo/GitAndPharo.pier
+		>> will see
+
+   Smacc/Smacc.pier
