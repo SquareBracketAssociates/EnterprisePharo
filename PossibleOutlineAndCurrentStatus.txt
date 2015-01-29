@@ -69,10 +69,6 @@ WebApp using Zinc
 	>> Stef should read it again
 	>> Luc will read it
 
-*******************************************************************************
-
-Should be imported from PharoInProgress repo:
-
 	Mustache/Mustache.pier
 		>> Stef should finish the first version
 
