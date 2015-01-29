@@ -77,7 +77,7 @@ response writeOn: Transcript.
 Transcript flush.
 ]]]
 
-If you have the Transcript open, you should something like the following:
+If you have the Transcript open, you should see something like the following:
 
 [[[language=http
 HTTP/1.1 200 OK
@@ -635,7 +635,7 @@ ZnClient new
   url: 'http://easy.t3-platform.net/rest/geo-ip';
   queryAt: 'address' put: '81.83.7.35';
   accept: ZnMimeType applicationJson;
-  contentReader: [ :entity | JSJsonParser parse: entity contents ];
+  contentReader: [ :entity | NeoJSONReader fromString: entity contents ];
   get.
 ]]]
 
@@ -669,7 +669,7 @@ ZnClient new
   post.
 ]]]
 
-Assuming there is an web service at ==http://internet-calculator.com== where you can send numbers to, we send a whitespace separated list of numbers to its sum URI and expect a number back. Exceptions occuring in the content writer can be caught with the ==ifFail:== block.
+Assuming there is a web service at ==http://internet-calculator.com== where you can send numbers to, we send a whitespace separated list of numbers to its sum URI and expect a number back. Exceptions occuring in the content writer can be caught with the ==ifFail:== block.
 
 !! Downloading and uploading
 
