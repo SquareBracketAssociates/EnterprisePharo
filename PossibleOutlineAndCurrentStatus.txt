@@ -31,6 +31,7 @@ Zinc-Encoding-Meta
 	>> Stef read and modified it a bit 
 	>> sven took into account remark
 	>> stef should check that
+	>> Johan will do a pass
 
 PillarChap
 	 >> Stef should read it.
@@ -46,31 +47,25 @@ Zinc-REST
 	>> Stef should read it and ask crhistophe for feedback.
 	>> Small chapter => to extend?
 	>> Luc will read it
-	
-Zinc-Encoding-Meta
-	>> Johan will do a pass
 
-*******************************************************************************
-Should be imported from PharoForReview repo:
-	
-	NeoCSV/NeoCSV.pier
+NeoCSV/NeoCSV.pier
 	>> Stef should re read it.
 	>> then Damien
 	
-	NeoJSON/NeoJSON.pier
+NeoJSON/NeoJSON.pier
 	>> Stef should re read it.
 	>> then Damien
 	
-	RenoirST/RenoirST.pier
+RenoirST/RenoirST.pier
 	>> Damien will do a pass
 
-	Voyage/Voyage.pier
+Voyage/Voyage.pier
 	>> Damien will do a pass
 
-	WebSockets/WebSockets.pier
+WebSockets/WebSockets.pier
 	>> Luc will read it 
 
-	WebApp using Zinc
+WebApp using Zinc
 	>> Stef should read it again
 	>> Luc will read it
 
