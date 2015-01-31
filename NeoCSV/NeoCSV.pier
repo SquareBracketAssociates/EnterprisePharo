@@ -121,6 +121,10 @@ Note how we first write the header (before customizing the writer). The ==addFie
 SD: What is the difference between nextPut and addFields: 
 SD: for the comics should I add a method to handle the relationship to other domain objects?
 
+
+
+
+
 !! Customizing NeoCSVReader
 
 The parser is flexible and forgiving. Any line ending will do, quoted and non-quoted fields are allowed.
@@ -147,8 +151,32 @@ neoCSVReader
   upToEnd.
 ]]]
 
-Here we specify 4 fields: an integer, a float, a string and a date field. Field conversions specified this way only work on indexable record classes, like Array.
+Here we specify 4 fields: an integer, a float, a string and a date field. Field conversions specified this way only work on indexable record classes, like ==Array==.
 
+
+!! Conditional 
+With NeoCSVParser you can describe how each field is read and converted, using the same mechanism you can ignore fields. Have a look at the senders of ==addIgnoredField== in the following example where we ignore the third elements of all the inputs.
+
+[[[
+
+| input |
+input := (String crlf join: #( '1,2,a,3' '1,2,b,3' '1,2,c,3' '')).
+((NeoCSVReader on: input readStream)
+                      addIntegerField;
+                      addIntegerField;
+                      addIgnoredField;
+                      addIntegerField;
+                      upToEnd)
+					  -> 
+					  {
+					     #(1 2 3) . 
+					     #(1 2 3) .
+						 #(1 2 3) . }
+]]]
+
+Adding ignored field(s) requires adding field types on all other remaining fields.
+
+!! Creating objects
 In many cases you will probably want your data to be returned as one of your domain objects. It would be wasteful to first create arrays and then convert all those. NeoCSV has non-intrusive options to create instances of your own object classes and to convert and set fields on them directly. This is done by specifying accessors and converters. Here is an example for reading Associations of Floats.
 
 
