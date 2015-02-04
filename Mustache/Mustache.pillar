@@ -1,6 +1,6 @@
 !Mustache Templates for Pharo
 
-Norbert Hartl developed a Mustache package for Pharo.   Mustache is a popular templating engine that is supported in many programming languages *http://mustache.github.io*. This chapter is an introduction to this package and a mini tutorial to get started with Mustache. It is based on the original blog written by Norbert and we extended it to offer a larger covering of the Mustache features.
+Mustache is a  templating engine that is supported in many programming languages *http://mustache.github.io* (Pharo is not listed there because these people do not reply to emails). Norbert Hartl developed a Mustache package for Pharo. This chapter is an introduction to this package and a mini tutorial to get started with Mustache. It is based on the original blog written by Norbert and we extended it to offer a larger covering of the Mustache features.
 
 The syntax of Mustache is small and covers a wide range of use cases. Mustache is simple and versatile. You can use it for many usages. We will show how Mustache is used in Pillar the system used to generate this book. Although it was designed to be a templating engine for HTML pages it is useful in different areas.
 
@@ -134,7 +134,6 @@ templateString := '{{#number}}
 {{/number}}'
 ]]]
 
-!!! Unbound, empty or false variable
 
 When a variable defining a section is set, the section is activated. 
 For example, here the =='number'== is bound to true and the =='Shown too'== text is shown.
@@ -149,6 +148,7 @@ templateString := 'Shown.
 {{/number}}'.
 context := { 'number' -> true } asDictionary.
 (MustacheTemplate on: templateString) value: context 
+->
  'Shown.
 
   Shown too!
@@ -165,12 +165,14 @@ templateString := 'Shown.
 {{/number}}'.
 context := { 'number' -> 2 } asDictionary.
 (MustacheTemplate on: templateString) value: context 
-
+->
  'Shown.
 
   Shown too!
 '
 ]]]
+
+!!! Unbound, empty or false variable
 
 !!!! With the variable set to false
 Now when the variable is bound to false, the section is not activated.
@@ -183,6 +185,7 @@ templateString := 'Shown.
 {{/number}}'.
 context := { 'number' -> false } asDictionary.
 (MustacheTemplate on: templateString) value: context 
+ -> 
  'Shown.
 '
 ]]]
@@ -198,9 +201,14 @@ templateString := 'Shown.
 {{/number}}'.
 context := { 'number' -> '' } asDictionary.
 (MustacheTemplate on: templateString) value: context 
+	->
  'Shown.
 '
 ]]]
+
+!!!! With an unbound variable
+
+When the variable is unbound the section is not activated.
 
 [[[
 | templateString context |
@@ -210,6 +218,7 @@ templateString := 'Shown.
 {{/number}}'.
 context := { 'number2' -> '' } asDictionary.
 (MustacheTemplate on: templateString) value: context 
+	->
  'Shown.
 '
 ]]]
@@ -228,6 +237,8 @@ templateString := 'Shown.
 {{/list}}'.
 context := { 'list' -> #(1 2 3) } asDictionary.
 (MustacheTemplate on: templateString) value: context 
+
+-> 
  'Shown.
 
   Shown too!
@@ -255,6 +266,8 @@ context := {
     }
 } asDictionary.
 (MustacheTemplate on: templateString) value: context  
+
+->
  'A fine list of numbers
 
 Number: 1
@@ -269,8 +282,8 @@ With such behavior we can easily generate menus and list in html.
 [[[
 '{{#coolBooks}}
      <b>{{name}}</b>
-{{/coolBooks}}' asMustacheTemplate value: 
-{'coolBooks' -> {  
+{{/coolBooks}}' asMustacheTemplate 
+	value: {'coolBooks' -> {  
     	 			{ 'name' -> 'Pharo By Example' } asDictionary.
 	 				{ 'name' -> 'Deep Into Pharo' } asDictionary.
 	 				{ 'name' -> 'Fun Wih Pharo' } asDictionary }
@@ -288,6 +301,52 @@ This outputs the following HTML snippet.
      <b>Fun Wih Pharo</b>
 '
 ]]]
+
+
+!!! Non-False Values
+When the value of a variable is non-false but a single value dictionary it will be used as the context for a single rendering.
+Here the value of 
+
+[[[
+	| template result |
+	template := MustacheTemplate on: '{{#person?}} Hi {{name}}! {{/person?}}' .
+	result := template 
+		value: { 'person?' -> { 'name' -> 'Jon' } asDictionary  } asDictionary.
+	
+		-> 
+	' Hi Jon! ' 
+]]]
+
+
+Here giving twice the same variable does not work because a dictionary cannot have a variable defined twice.
+
+[[[
+	| template result |
+	template := MustacheTemplate on: '{{#person?}} Hi {{name}}! {{/person?}}' .
+	result := template 
+		value: { 'person?' -> { 'name' -> 'Jon' . 'name' -> 'Pilou' } asDictionary  } asDictionary.
+	
+		-> 
+	' Hi Jon! ' 
+]]]
+
+To be able to loop over values as shown previously we should define multiple dictionaries as follows:
+
+[[[
+	| template result |
+	template := MustacheTemplate on: '{{#person?}} Hi {{name}}! {{/person?}}' .
+		result := template 
+			value: { 'person?' -> 
+					{  
+						{'name' -> 'Jon' } asDictionary .
+						{'name' -> 'Pilou'} asDictionary} 
+					} asDictionary 
+					
+	-> ' Hi Jon!  Hi Pilou! '
+
+]]]
+
+
 
 !! With the power of Blocks
 
@@ -308,7 +367,7 @@ The alphabet: abcdefghijklmnopqrstuvwxyz
 Now there is another interesting way of using blocks. With a block we can get access to the 
 value of a section and perform some operations on it. 
 
-This example shows that we can access the value of a section. Here the block is expecting one argument 
+This example shows that we can access the value of a section. Here the block is expecting one argument: 
 the value of this argument will be the section with subsituted variables. 
 
 [[[
@@ -327,27 +386,31 @@ outputs:
 
 
 !! UnescapedToken 
+Variable values can contain characters that will be escaped when producing the result.
+For example, when we set the value of variable to \& it is escaped into ==&amp;==.
 
 [[[
 	| template result |
 	template := MustacheTemplate on: 'This is a test for {{ name }}.'.
 	result := template value: { 'name' -> '&' } asDictionary .
-	result  'This is a test for &amp;.'
+	result  
+
+	->	
+	'This is a test for &amp;.'
 ]]]
 
-
+If the variable explicitly manipulates the variable as an unescaped variable i.e., using ==& name==. 
+In the following example the outputs is ==&== since the variable was specified not to be unescaped.
 [[[
 	| template result |
 	template := MustacheTemplate on: 'This is a test for {{& name }}.'.
 	result := template value: { 'name' -> '&' } asDictionary .
-	result  'This is a test for &.'
+	result 
+
+->  'This is a test for &.'
 ]]]
 
-
-
-By default if a template uses a variable that is not defined in a context, it....
-
-
+By default if a template uses a variable that is not defined in a context, it is lookup up in the parent contexe.
 
 
 !! Example of Menu Generation 
