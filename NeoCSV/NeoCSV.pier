@@ -229,6 +229,22 @@ Array streamContents: [ :out |
 ]]]
 
 
+!! Without Mapping Definition
+
+Both NeoCSV and NeoJSON can operate in two ways, (1) without the definition of any schema's or (2) with the definition of schema's and mappings. Therefore you can use them both using a quick and dirty explore style. Here are some examples: 
+
+[[[
+'my-data.csv' asFileReference readStreamDo: [ :in | (NeoCSVReader on: in) upToEnd ].
+
+  ->  an array of arrays
+]]]
+
+[[[
+'my-data.json' asFileReference readStreamDo: [ :in | (NeoJSONReader on: in) next ].
+
+  => objects structured using dictionaries and arrays
+]]]
+
 !! Conclusion
 
 NeoCSV provides a good support to emit or import comma separated data. 

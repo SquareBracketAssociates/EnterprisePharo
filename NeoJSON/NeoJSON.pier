@@ -221,6 +221,23 @@ instead of:
   {}
 ]]]
 
+!! Without Mapping Definition
+
+Both NeoCSV and NeoJSON can operate in two ways, (1) without the definition of any schema's or (2) with the definition of schema's and mappings. Therefore you can use them both using a quick and dirty explore style. Here are some examples: 
+
+[[[
+'my-data.csv' asFileReference readStreamDo: [ :in | (NeoCSVReader on: in) upToEnd ].
+
+  ->  an array of arrays
+]]]
+
+[[[
+'my-data.json' asFileReference readStreamDo: [ :in | (NeoJSONReader on: in) next ].
+
+  => objects structured using dictionaries and arrays
+]]]
+
+
 !! Conclusion
 
 NeoJSON is a powerful library to convert objects. Now Sven developed STON (Smalltalk object notation) which is closer to Pharo syntax and handles cycles and references between serialized objects. 
