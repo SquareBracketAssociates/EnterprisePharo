@@ -65,12 +65,12 @@ Voyage/Voyage.pier
 WebSockets/WebSockets.pier
 	>> Luc will read it 
 
-WebApp using Zinc
+WebApp/WebApp.pier using Zinc
 	>> Stef should read it again
 	>> Luc will read it
 
-	Mustache/Mustache.pier
-		>> Stef should finish the first version
+Mustache/Mustache.pier
+	>> Stef should finish the first version
 
 *******************************************************************************
 

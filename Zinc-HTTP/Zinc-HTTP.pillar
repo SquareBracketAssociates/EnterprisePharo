@@ -4,7 +4,7 @@ HTTP is arguably the most important application level network protocol for what 
 
 Naturally, Pharo has out of the box support for HTTP. Zinc is a robust, fast and elegant HTTP client and server library written and maintained by Sven van Caekenberghe. 
 
-   @@TODO: add a conclusion@@
+@@authorToDo add a conclusion
 
 !!An introduction to HTTP
 
@@ -186,7 +186,7 @@ client isSuccess
   ifFalse: [ self inform: 'Something went wrong' ]
 ]]]
 
-To make it easier to write better HTTP client code, ==ZnClient== offers some useful API. You can ask the client to consider non-successful HTTP responses as errors with the ==enforceHTTPSuccess== option. The client will then automatically throw a ==ZnHTTPUnsuccesful== exception. This is generally useful when upstream code handles errors. @@TODO: What is an upstream code???@@.
+To make it easier to write better HTTP client code, ==ZnClient== offers some useful API. You can ask the client to consider non-successful HTTP responses as errors with the ==enforceHTTPSuccess== option. The client will then automatically throw a ==ZnHTTPUnsuccesful== exception. This is generally useful when the application code that uses Zinc handles errors. 
 
 To install a local failure handler, there is the ==ifFail:== option. This will invoke a block, optionally passing an exception, whenever something goes wrong. Together, this allows the above code to be rewritten as follows.
 
@@ -294,7 +294,8 @@ ZnUrl new
 ]]]
 
 If you print the above expression, it gives you the printable representation of the URL. 
-% @@todo add a screen shot@@
+
+@@authorToDo add a screen shot?
 
 = http://www.google.com/search?q=Pharo%20Smalltalk
 
@@ -320,7 +321,7 @@ Array streamContents: [ :stream | | client |
 
 The above example sets up a client to connect to a specific host. Then it collects the results of 10 different requests, asking for random strings of a specific size. All requests will go over the same network connection.
 
-Neither party is required to keep the connection open for a long time, as this consumes resources. Both parties should be prepared to deal with connections closing, this is not an error. ==ZnClient== will try to reuse an existing connection and reconnect once if this reuse fails. The option ==connectionReuseTimeout== limits how old a connection can be for reuse to be attempted. @@to be reused? @@
+Neither party is required to keep the connection open for a long time, as this consumes resources. Both parties should be prepared to deal with connections closing, this is not an error. ==ZnClient== will try to reuse an existing connection and reconnect once if this reuse fails. The option ==connectionReuseTimeout== limits how old a connection can be for reuse to be attempted. @@authorToDo to be reused?@@
 
 Note how we also close the client using the message ==close==. A network connection is an external resource, like a file, that should be properly closed after use. If you don't do that, they will get cleaned up eventually by the system, but it is more efficient to do it yourself.
 
@@ -463,7 +464,7 @@ In the last example we explicitly set the entity to be XML and do a POST. In the
 
 The difference between PUT and POST is semantic. POST is generally used to create a new resource inside an existing collection or container, or to initiate some action or process. For this reason, the normal response to a POST request is to return the URL (or URI) of the newly created resource. Conventionally, the reponse contains this URL both in the ==Location== header accessible via the message ==location== and in the entity part.
 
-When a POST successfully created the resource, its HTTP response will be 201 Created. PUT is generally used to update an existing resource of which you know the exact URL (of @@?@@ URI). When a PUT is successful, its HTTP response will be just 200 OK and nothing else will be returned. In the subsection about REST Web Service APIs, we will come back to this.
+When a POST successfully created the resource, its HTTP response will be 201 Created. PUT is generally used to update an existing resource of which you know the exact URL (or URI). When a PUT is successful, its HTTP response will be just 200 OK and nothing else will be returned. In the subsection about REST Web Service APIs, we will come back to this.
 
 !!DELETE and other HTTP methods
 
@@ -493,7 +494,8 @@ Zn models mime-types using its ==ZnMimeType== object which has 3 components:
 
 The class side of ==ZnMimeType== has some convenience methods for accessing well known mime-types. Note that for textual (non-binary) types, the encoding defaults to UTF-8, the prevalent internet standard. Creating a ==ZnMimeType== object is as easy as sending ==asZnMimeType== to a ==String==.
 
-% @@why should we invoke ZnMimeType textHtml.@@
+@@authorToDo why should we invoke ZnMimeType textHtml
+
 [[[
 ZnMimeType textHtml.
 'text/html;charset=utf-8' asZnMimeType.
@@ -639,7 +641,7 @@ ZnClient new
   get.
 ]]]
 
-In the above example, ==get== (which returns ==contents==) will no longer return a ==String== containing JSON, but the Smalltalk dictionary that was encoded as JSON. BTW, the above example returns a country code, with central longitude/latitude coordinates, given an IP address. Note also that by using ==systemPolicy== in combination with an ==accept:== we handle most error cases before the content reader start doing its work, so it does no longer have to check for good incoming data. In any case, when the ==contentReader== throws an exception, it can be caught by the ==ifFail:== block.
+In the above example, ==get== (which returns ==contents==) will no longer return a ==String== containing JSON, but the Smalltalk dictionary that was encoded as JSON. By the way, the above example returns a country code, with central longitude/latitude coordinates, given an IP address. Note also that by using ==systemPolicy== in combination with an ==accept:== we handle most error cases before the content reader start doing its work, so it does no longer have to check for good incoming data. In any case, when the ==contentReader== throws an exception, it can be caught by the ==ifFail:== block.
 
 Here is a simpler example just parsing lines of numbers. Note how we can be fairly sure that the result will be a collection of numbers that we can sum together.
 
@@ -671,44 +673,51 @@ ZnClient new
 
 Assuming there is a web service at ==http://internet-calculator.com== where you can send numbers to, we send a whitespace separated list of numbers to its sum URI and expect a number back. Exceptions occuring in the content writer can be caught with the ==ifFail:== block.
 
-!! Downloading and uploading
+!!Downloading and uploading
 
 Often, you want to download a resource from some internet server and store its contents in a file. The well known curl and wget Unix utilities are often used to do this in scripts. There is a handy convenience method in ==ZnClient== to do just that.
 
 [[[
 ZnClient new
   url: 'http://zn.stfx.eu/zn/numbers.txt';
-  downloadTo: FileDirectory default pathName.
+  downloadTo: FileLocator imageDirectory.
 ]]]
 
-The example will download the URL and save it in a file named ==numbers.txt== next to your image. The argument to ==downloadTo:== is a path string, naming either a file or a directory. When it is a directory, the last component of the URL will be used to create a new file in that directory. When it is a file, that file will be used as given. Additionally, the ==downloadTo:== operation will use streaming so that a large file will not be taken into memory all at once, but will be copied in a loop using a buffer.
+The example will download the URL and save it in a file named ==numbers.txt== next to your image. The argument to ==downloadTo:== can be a ==FileReference== or a path string, designating either a file or a directory. When it is a directory, the last component of the URL will be used to create a new file in that directory. When it is a file, that file will be used as given. Additionally, the ==downloadTo:== operation will use streaming so that a large file will not be taken into memory all at once, but will be copied in a loop using a buffer.
 
-The inverse, uploading the raw contents of file, is just as easy using the ==uploadEntityFrom:== convenience method. Given a file path string, it will set the current request entity to be equal to a ==ZnStreamingEntity== reading bytes from the named file. The content type will be set based on the file name extension, a guess. If needed you can next override that mime type using ==contentType:==. Here is a hypothetical example.
+The inverse, uploading the raw contents of file, is just as easy using the ==uploadEntityFrom:== convenience method. Given a file reference or a path string, it will set the current request entity to be equal to a ==ZnStreamingEntity== reading bytes from the named file. The content type will be set based on the file name extension, a guess. If needed you can next override that mime type using ==contentType:==. Here is a hypothetical example.
 
 [[[
 ZnClient new
   url: 'http://cloudstorage.com/myfiles/';
   username: 'john@foo.co.uk' password: 'asecret';
-  uploadEntityFrom: (FileDirectory default / 'numbers.txt') pathName;
+  uploadEntityFrom: FileLocator imageDirectory / 'numbers.txt';
   post.
 ]]]
 
-The contents of the file ==numbers.txt== will be upload using a POST to the URL specified, again using an efficient streaming copy.
+The contents of the file ==numbers.txt== will be uploaded using a POST to the URL specified, again using an efficient streaming copy.
 
-!! Signalling progress
+!!Signalling progress
 
-Some HTTP operations, particularly those involving large resources, might take some time, especially when slower networks or servers are involved. During interactive use, Pharo Smalltalk often indicates progress during operations that take a bit longer. ==ZnClient== can do that too using the ==signalProgess== option. By default this is off. Here is an artificial example.
+Some HTTP operations, particularly those involving large resources, might take some time, especially when slower networks or servers are involved. During interactive use, Pharo Smalltalk often indicates progress during operations that take a bit longer. ==ZnClient== can do that too using the ==signalProgress== option. By default this is off. Here is an example.
 
 [[[
-UIManager default informUserDuring: [ :bar |
-  [ ^ ZnClient new
-        signalProgress: true;
-        get: 'http://zn.stfx.eu/echo?delay=2' ]
-    on: HTTPProgress
-    do: [ :progress | bar value: progress printString. progress resume ] ]
+	UIManager default informUserDuring: [ :bar |
+	  bar label: 'Downloading latest Pharo image...'.
+	  [ ^ ZnClient new
+	  			signalProgress: true;
+				url: 'http://files.pharo.org/image/stable/latest.zip';
+				downloadTo: FileLocator imageDirectory ]
+	    on: HTTPProgress
+	    do: [ :progress | 
+			bar label: progress printString.
+			progress isEmpty ifFalse: [ bar current: progress percentage ].
+		 	progress resume ] ]
 ]]]
 
 !! Using If-Modified-Since
+
+@@authorToDo Luc HERE
 
 HTTP has several options to improve the overall web experience. One of them is a technique whereby a client that already requested a resource in the past, asks a server if that resource has been modified (i.e. is newer) since he last requested it. If so, the server will give a quick 304 Not Modified response without sending the resource over again. This is done by settings the If-Modified-Since header using ==ifModifiedSince:==. This works both for regular requests as well as for downloads.
 
