@@ -18,6 +18,8 @@
 %	\usepackage{a4wide}
 % --------------------------------------------    \graphicspath{{figures/} {../figures/}}
 	\begin{document}
+		
+	% \tableofcontents
 \fi
 \sloppy
 

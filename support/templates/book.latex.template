@@ -1,3 +1,4 @@
+%!TEX TS-program = lualatex
 % -*- mode: LaTeX; -*-
 
 \documentclass[a4paper,10pt,twoside]{book}
@@ -13,21 +14,21 @@
 % Add the path for the figures of each chapter here:
 \graphicspath{
 	{../figures/}
-  	{../Copyright/}
-	{../Zinc/}	
+  	{../Copyright/}	
   	{../PillarChap/}
   	{../Artefact/}
-	{../Zinc-HTTP/}
+	{../Zinc-HTTP-Client/}
+	{../Zinc-HTTP-Server/}
 	{../Zinc-Encoding-Meta/}
 	{../Zinc-REST/}
 	{../Fuel/}
 	{../STON/}
-        {../Voyage/}
-        {../WebApp/}
-        {../WebSockets/}
-        {../NeoJSON/}
-        {../RenoirST/}
-        {../NeoCSV/}
+	{../Voyage/}
+	{../WebApp/}
+	{../WebSockets/}
+	{../NeoJSON/}
+	{../RenoirST/}
+	{../NeoCSV/}
 	{../Mustache/}
 }
 %=================================================================
