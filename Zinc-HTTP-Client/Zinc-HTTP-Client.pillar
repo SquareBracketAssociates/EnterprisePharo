@@ -4,8 +4,6 @@ HTTP is arguably the most important application level network protocol for what 
 
 Naturally, Pharo has out of the box support for HTTP. Zinc is a robust, fast and elegant HTTP client and server library written and maintained by Sven van Caekenberghe. 
 
-@@authorToDo add a conclusion
-
 !!An introduction to HTTP
 
 HTTP, short for Hypertext Transfer Protocol, functions as a request-response protocol in the client-server computing model. As an application level protocol it is layered on top of a reliable transport such as a TCP socket stream. The most important standard specification document describing HTTP version 1.1 is *RFC 2616>http://tools.ietf.org/html/rfc2616*. As usual another good starting point is the Wikipedia article on *HTTP>http://en.wikipedia.org/wiki/Http*.
@@ -295,8 +293,6 @@ ZnUrl new
 
 If you print the above expression, it gives you the printable representation of the URL. 
 
-@@authorToDo add a screen shot?
-
 = http://www.google.com/search?q=Pharo%20Smalltalk
 
 This string version can easily be parsed again into a ==ZnUrl== object
@@ -321,7 +317,7 @@ Array streamContents: [ :stream | | client |
 
 The above example sets up a client to connect to a specific host. Then it collects the results of 10 different requests, asking for random strings of a specific size. All requests will go over the same network connection.
 
-Neither party is required to keep the connection open for a long time, as this consumes resources. Both parties should be prepared to deal with connections closing, this is not an error. ==ZnClient== will try to reuse an existing connection and reconnect once if this reuse fails. The option ==connectionReuseTimeout== limits how old a connection can be for reuse to be attempted. @@authorToDo to be reused?@@
+Neither party is required to keep the connection open for a long time, as this consumes resources. Both parties should be prepared to deal with connections closing, this is not an error. ==ZnClient== will try to reuse an existing connection and reconnect once if this reuse fails. The option ==connectionReuseTimeout== limits how old a connection can be reused.
 
 Note how we also close the client using the message ==close==. A network connection is an external resource, like a file, that should be properly closed after use. If you don't do that, they will get cleaned up eventually by the system, but it is more efficient to do it yourself.
 
@@ -492,12 +488,15 @@ Zn models mime-types using its ==ZnMimeType== object which has 3 components:
 - a sub type, for example plain or html, or jpeg, png or gif, and 
 - a number of attributes, for example ==charset=utf-8==.
 
-The class side of ==ZnMimeType== has some convenience methods for accessing well known mime-types. Note that for textual (non-binary) types, the encoding defaults to UTF-8, the prevalent internet standard. Creating a ==ZnMimeType== object is as easy as sending ==asZnMimeType== to a ==String==.
-
-@@authorToDo why should we invoke ZnMimeType textHtml
+The class side of ==ZnMimeType== has some convenience methods for accessing well known mime-types. 
 
 [[[
 ZnMimeType textHtml.
+]]]
+
+Note that for textual (non-binary) types, the encoding defaults to UTF-8, the prevalent internet standard. Creating a ==ZnMimeType== object is also as easy as sending ==asZnMimeType== to a ==String==.
+
+[[[
 'text/html;charset=utf-8' asZnMimeType.
 ]]]
 
@@ -742,3 +741,6 @@ Zn client functionality will automatically use the proxy settings defined in you
 
 Accessing localhost will bypass the proxy. To find out more about Zn's usage of the proxy settings, start by browsing the ==proxy== method category of ==ZnNetworkingUtils==.
 
+!!Conclusion
+
+Zinc is a solid and very flexible HTTP library. This chapter only presented the client-side of Zinc i.e. how to use it to send HTTP requests and receive responses back. Through several code examples, we demonstrated some of the possibilities of Zinc and also its simplicity. Zinc relies on a very good object-centric decomposition of the HTTP concepts. It results is an easy to understand and extensible library.
