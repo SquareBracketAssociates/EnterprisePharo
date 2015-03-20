@@ -2,9 +2,7 @@
 
 Zinc is both a client and server HTTP library written and maintained by Sven van Caekenberghe. 
 
-This chapter focus on the server-side features of Zinc and demonstrate through small, elegant and robust examples some of the possibilities of this powerful library.
-
-@@authorToDo add a conclusion
+This chapter focuses on the server-side features of Zinc and demonstrates through small, elegant and robust examples of some possibilities of this powerful library.
 
 !!Running a simple HTTP server
 
@@ -64,16 +62,16 @@ The Transcript output will confirm what happens.
 
 Due to its implementation, the server will print a ==Wait for accept timed out== debug notification every 5 minutes. Again, although it looks like an error, it is by design and normal, expected behavior.
 
-!! Server delegate
+!!Server delegate
 
 An HTTP client sends a request and receives a response. An HTTP server receives a request and sends a response. They are each other's mirror. The fundamental Zn framework objects are used to implement both clients and servers.
 
 The functional behavior of a ==ZnServer== is defined by an object called its delegate. A delegate implements the key method ==handleRequest:== which gets the incoming request as parameter and has to produce a response as result. The delegate can reason purely in terms of a ==ZnRequest== and a ==ZnResponse==. The technical side of being an HTTP server, like the protocol itself, the networking and the (optional) multiprocessing, is handled by the server object. Here is the simplest possible delegate.
 
 [[[
-(ZnServer startDefaultOn: 1701)
-   onRequestRespond: [ :request |
-      ZnResponse ok: (ZnEntity text: 'Hello World!') ].
+	(ZnServer startDefaultOn: 1701)
+	   onRequestRespond: [ :request |
+	      ZnResponse ok: (ZnEntity text: 'Hello World!') ].
 ]]]
 
 Now go to *http://localhost:1701* or do:
@@ -87,6 +85,8 @@ This server does not even look at the incoming request. No matter what, it answe
 To help in debugging a server, enabling logging is important to learn what is going on. You can also put breakpoints where ever you want. Interrupting a running server can sometimes be a bit hard or produce strange results since the server and its spawned handler subprocesses are different from the UI process.
 
 When logging is enabled, the server will also keep track of the last request and response it processed. You can inspect these to find out what happened, even if there was no debugger raised.
+
+@@authorTodo Luc here
 
 !! The default server delegate
 
@@ -406,3 +406,7 @@ Zn implements two important techniques that are used by HTTP servers when they s
 All this is handled internally and invisibly. The main object dealing with content and transfer encoding is ==ZnEntityReader==. When necessary, the binary socket stream is wrapped with either a ==ZnChunkedReadStream== and/or a ==GZipReadStream==. Zn also makes use of a ==ZnLimitedReadStream== to make sure there is no read beyond the boundaries of one single request's body, provided the content length is set.
 
  Zinc HTTP Components was written with the explicit goal of allowing users to explore the implementation. The tests suite contains many examples that can serve as learning material.
+
+!!Conclusion
+
+@@authorToDo add a conclusion
