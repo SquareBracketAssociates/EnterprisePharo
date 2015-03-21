@@ -25,7 +25,8 @@ Fuel/Fuel.pier
 STON/STON.pier
 	>> Stef did a pass
 	>> migrated from PFTE to PE
-	>> Johan did a pass => some things to check with Sven
+	>> Johan completed a pass. It should be finished. [21 / Mar / 2015 ]
+	>> Anybody wants to double-check?
 
 Zinc-Encoding-Meta
 	>> Stef read and modified it a bit 
