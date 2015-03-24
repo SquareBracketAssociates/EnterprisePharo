@@ -53,7 +53,7 @@ ZnServer stopDefault.
 
 The Transcript output will confirm what happens.
 
-[[[
+[[[language=
 2012-05-10 13:14:20 580596 D Wait for accept timed out
 2012-05-10 13:19:20 580596 D Wait for accept timed out
 2012-05-10 13:19:42 879179 D Releasing server socket
@@ -69,9 +69,9 @@ An HTTP client sends a request and receives a response. An HTTP server receives 
 The functional behavior of a ==ZnServer== is defined by an object called its delegate. A delegate implements the key method ==handleRequest:== which gets the incoming request as parameter and has to produce a response as result. The delegate can reason purely in terms of a ==ZnRequest== and a ==ZnResponse==. The technical side of being an HTTP server, like the protocol itself, the networking and the (optional) multiprocessing, is handled by the server object. Here is the simplest possible delegate.
 
 [[[
-	(ZnServer startDefaultOn: 1701)
-	   onRequestRespond: [ :request |
-	      ZnResponse ok: (ZnEntity text: 'Hello World!') ].
+(ZnServer startDefaultOn: 1701)
+	onRequestRespond: [ :request |
+		ZnResponse ok: (ZnEntity text: 'Hello World!') ].
 ]]]
 
 Now go to *http://localhost:1701* or do:
@@ -86,9 +86,8 @@ To help in debugging a server, enabling logging is important to learn what is go
 
 When logging is enabled, the server will also keep track of the last request and response it processed. You can inspect these to find out what happened, even if there was no debugger raised.
 
-@@authorTodo Luc here
 
-!! The default server delegate
+!!The default server delegate
 
 Out of the box, a ==ZnServer== will have a certain functionality that is related to testing and debugging. This behavior is implemented by the ==ZnDefaultServerDelegate== object. Assuming your server is running locally on port 1701, this is the list of URLs that are available.
 
@@ -109,25 +108,26 @@ The bytes handler has a similar size option. Its output is in the form of a repe
 
 The echo handler is used extensively by the unit tests. It not only lists the request headers as received by the server, but even the entity if there is one. In case of a non-binary entity, the textual contents will be included. This is really useful to debug PUT or POST requests.
 
-!! Server authenticator
+!!Server authenticator
 
-Like a delegate, a ==ZnServer== also has an authenticator object whose functional job it is to authenticate requests. An authenticator has to implement the key ==authenticateRequest:do:== method whose first argument is the incoming request and second argument a block. This method has to produce a response, like ==handleRequest:== does. If the request is allowed, the block will be evaluated and produce a response. If the request is denied, the authenticator will generate a 401 Unauthorized response. One simple authenticator is available to add basic HTTP authentication.
+Like a delegate, a ==ZnServer== also has an authenticator object whose functional job is to authenticate requests. An authenticator has to implement the ==authenticateRequest:do:== method whose first argument is the incoming request and second argument a block. This method has to produce a response, like ==handleRequest:== does. If the request is allowed, the block will be evaluated and produce a response. If the request is denied, the authenticator will generate a 401 Unauthorized response. One simple authenticator is available to add basic HTTP authentication.
 
 [[[
 (ZnServer startDefaultOn: 1701)
    authenticator: (ZnBasicAuthenticator username: 'admin' password: 'secret').
 ]]]
 
-Now, when you try to visit the server at *http://localhost:1701* you will have to provide a username and password.
+Now, when you try to visit the server at *http://localhost:1701* you will have to provide a username and password. It is also possible to use ==ZnEasy== to send a get request to this URL with these credentials. 
 
 [[[
 ZnEasy get: 'http://localhost:1701' username: 'admin' password: 'secret'.
-ZnEasy get: 'http://localhost:1701'.
 ]]]
 
-Using ==ZnBasicAuthenticator== or implementing an alternative is but one of several possibilities to the problem of adding security to a web site or web application.
+Using ==ZnBasicAuthenticator== or implementing an alternative is one of several possibilities to the problem of adding security to a web site or web application.
 
-!! Logging
+!!Logging
+
+@@authorTodo Luc: the logging part of Zinc has changed. In Pharo4, the fields are not the same. The ZnLogSupport and ZnLogListener classes are not there anymore... We should update all logging code examples and the text. 
 
 Log output consists of an arbitrary message preceded by a number of fixed fields. Here is an example of a server log.
 
@@ -140,9 +140,9 @@ Log output consists of an arbitrary message preceded by a number of fixed fields
 2012-05-10 13:09:20 398924 I Wrote a ZnResponse(200 OK text/html;charset=utf-8 1195B)
 ]]]
 
-The first two fields are the date and time in a fixed sized format. The next number is a fixed sized hash of the process ID. Note how 3 different processes are involved: the one starting the server (probably the UI process), the actual server listening process, and the client worker process spawned to handle the request. Finally, the single capital letter indicates the category. After these fields, the actual message is printed.
+The first two fields are the date and time in a fixed sized format. The next number is a fixed sized hash of the process ID. Note how 3 different processes are involved: the one starting the server (probably the UI process), the actual server listening process, and the client worker process spawned to handle the request. Finally, the single capital letter indicates the category. The following categories are used: ==info== (I), ==debug== (D) and ==transaction== (T). After these fields, the actual message is printed.
 
-Both ==ZnClient== and ==ZnServer== implement logging using a similar mechanism based on the announcements framework. ==ZnLogEvents== are subclasses of Announcement sent by an HTTP server or client containing logging information. A log event has a TimeStamp, a Process ID, a category and a message. The following categories are used: ==info== (I), ==debug== (D) and ==transaction== (T).
+Both ==ZnClient== and ==ZnServer== implement logging using a similar mechanism based on the announcements framework. ==ZnLogEvents== are subclasses of Announcement sent by an HTTP server or client containing logging information. A log event has a TimeStamp, a Process ID, a category and a message. 
 
 To help in the implementation, a ==ZnLogSupport== object is used. A hierarchy of listeners under ==ZnLogListener== can then be used to process log events. Log listeners feature a filtering mechanism. The following concrete listeners are provided.
 
@@ -151,7 +151,7 @@ To help in the implementation, a ==ZnLogSupport== object is used. A hierarchy of
 - ==ZnStandardOutputLogger==
 - ==ZnMemoryLogger==
 
-To log something, send ==info:== ==debug:== or ==transaction:== to the log support object of a client or server (accessible by ==log==). The argument can be either a string or a block that will only be executed when logging is actually enabled.
+To log something, send ==info:==, ==debug:== or ==transaction:== to the log support object of a client or server (accessible by ==log==). The argument can be either a string or a block that will only be executed when logging is actually enabled.
 
 [[[
 server log info: [ 'User ', self getUsername, ' logged in.' ].
@@ -168,13 +168,15 @@ logger filter: #transaction.
 ZnServer default log addListener: logger.
 ]]]
 
-!! Server management
+!!Server management
 
 Servers instances can be started and stopped using ==start== and ==stop==. By registering a server instance, by sending it ==register==, it becomes managed. That means it will now survive image save and restart. This only happens automatically with the ==default== server, for other server instances you have to enable it manually.
 
 The main parameter a server needs is the port on which it will listen. Additionally, you can restrict the network interface the server should listen on by setting its ==bindingAddress:== to some IP address. The default, nil or #[0 0 0 0], means to listen on all interfaces. With an argument of #[127 0 0 0], the server will not respond to request over its normal network, but only to request coming from the same host. This is often used to increase security while proxying.
 
-!! Server variants
+@@authorTodo shouldn't it be #[127 0 0 1]? I am not sure but I do not remember that we can bind on subnet addresses.
+
+!!Server variants
 
 The class side of ==ZnServer== is actually a facade to instantiate a particular concrete ==ZnServer== subclass, as can be seen in ==defaultServerClass==. The hierarchy looks as follows.
 
@@ -187,11 +189,13 @@ ZnServer
 
  ==ZnServer== is an abstract class. ==ZnSingleThreadedServer== implements the core server functionality. It runs in one single process, which means it can only handle one request at a time. This one is easier to understand and debug. ==ZnMultiThreadedServer== spawns a new process on each incoming request, possibly handling multiple request/response cycles on the same connection. ==ZnManagedMultiThreadedServers== keeps explicit track of which connections are alive so that they can be stopped when the server stops instead of letting them die out.
 
-!! Static file server
+!!Static file server
 
 When most people think about a web server, they see a directory full of HTML, image, CSS, and other files, somewhere on a machine, with the web server serving these files over HTTP to web browser clients anywhere on the network. This is indeed what Apache does in its most basic form. Technically this is called static file serving.
 
 Zn can do this by using the ==ZnStaticFileServerDelegate== object. Given a directory and an optional prefix, this delegate will serve all files it finds in that directory.
+
+@@authorTodo Luc Here
 
 [[[
 (ZnServer startDefaultOn: 1701)
