@@ -127,7 +127,7 @@ Using ==ZnBasicAuthenticator== or implementing an alternative is one of several 
 
 !!Logging
 
-@@authorTodo Luc: the logging part of Zinc has changed. In Pharo4, the fields are not the same. The ZnLogSupport and ZnLogListener classes are not there anymore... We should update all logging code examples and the text. 
+@@authorToDo Luc: the logging part of Zinc has changed. In Pharo4, the fields are not the same. The ZnLogSupport and ZnLogListener classes are not there anymore... We should update all logging code examples and the text. 
 
 Log output consists of an arbitrary message preceded by a number of fixed fields. Here is an example of a server log.
 
@@ -174,7 +174,7 @@ Servers instances can be started and stopped using ==start== and ==stop==. By re
 
 The main parameter a server needs is the port on which it will listen. Additionally, you can restrict the network interface the server should listen on by setting its ==bindingAddress:== to some IP address. The default, nil or #[0 0 0 0], means to listen on all interfaces. With an argument of #[127 0 0 0], the server will not respond to request over its normal network, but only to request coming from the same host. This is often used to increase security while proxying.
 
-@@authorTodo shouldn't it be #[127 0 0 1]? I am not sure but I do not remember that we can bind on subnet addresses.
+@@authorToDo shouldn't it be #[127 0 0 1]? I am not sure but I do not remember that we can bind on subnet addresses.
 
 !!Server variants
 
@@ -195,7 +195,7 @@ When most people think about a web server, they see a directory full of HTML, im
 
 Zn can do this by using the ==ZnStaticFileServerDelegate== object. Given a directory and an optional prefix, this delegate will serve all files it finds in that directory.
 
-@@authorTodo Luc Here
+@@authorToDo Luc Here
 
 [[[
 (ZnServer startDefaultOn: 1701)
