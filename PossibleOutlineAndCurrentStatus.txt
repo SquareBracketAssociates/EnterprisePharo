@@ -43,7 +43,14 @@ Zinc-HTTP
 	>> Luc is doing a pass and test snippets on Pharo #40420 [22 Dec 2014]
 	>> Luc will finish his pass
 	>> Johan will try to split it
+	>> Luc split it into 2 chapters: client and server
 
+Zinc-HTTP-client
+	>> Luc finished his pass
+
+Zinc-HTTP-server
+	>> Luc is doing a pass
+	
 Zinc-REST
 	>> Stef should read it and ask crhistophe for feedback.
 	>> Small chapter => to extend?
