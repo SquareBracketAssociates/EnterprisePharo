@@ -383,8 +383,6 @@ outputs:
 
 
 
-
-
 !! UnescapedToken 
 Variable values can contain characters that will be escaped when producing the result.
 For example, when we set the value of variable to \& it is escaped into ==&amp;==.
@@ -435,22 +433,70 @@ By default if a template uses a variable that is not defined in a context, it is
 ]]]
 
 !! Inverted Sections
-An inverted section begins with a caret and ends with a slash. That is =={{^list}} begins a "list" inverted section while {{/list}} ends it. While sections are used to render text one or more times based on the value of the key, inverted sections may render text once based on the inverse value of the key. That is, they will be rendered if the key doesn't exist, is false, or is an empty collection.
+An inverted section begins with a caret and ends with a slash. That is =={{^list}}== begins a "list" inverted section while =={{/list}}== ends it. While sections are used to render text one or more times based on the value of the key, inverted sections may render text once based on the inverse value of the key. That is, they will be rendered if the key doesn't exist, is false, or is an empty collection.
 
+!!!! false key
 [[[
-MustacheTemplate on: 'list{{^ list }} is {{/ list}}displayed'.
+template := MustacheTemplate on: 'list{{^ list }} is {{/ list}}displayed'.
 result := template value: { 
 		'list' -> false
 	} asDictionary.
 result 
-'list is displayed'
+--> 'list is displayed'
 ]]]
 
+!!!! Empty Collection
+[[[
+template := MustacheTemplate on: 'list{{^ list }} is {{/ list}}displayed'.
+result := template value: { 
+			'list' -> { }
+	} asDictionary.
+result 
+--> 'list is displayed' 
+]]]
+
+!!!! Non Empty Collection
+[[[
+template := MustacheTemplate on: 'list{{^ list }} is {{/ list}}displayed'.
+result := template value: { 
+		'list' -> { 1 }
+	} asDictionary.
+result
+--> 'listdisplayed' 
+]]]
 
 !! Partial templates
 
-Mustache templates have a notion of sub templates that are called partials. Partial templates are useful for reusing and 
-composing templates out of simpler ones. With partials we can nested templates this way
+Mustache templates have a notion of sub-templates that are called partials. Partial templates are useful for reusing and 
+composing templates out of simpler ones. Partials begin with a greater than sign, such as =={{> user}}==.
+
+The following example shows that the partial is replaced by its definition which is then expanded. 
+[[[
+| template result |
+template := 'This is a test for {{> partial }} .' asMustacheTemplate.
+result := template 
+			value: { 'name' -> 'partial template' } asDictionary
+			partials: { 'partial' ->  '{{name}} rendering' } asDictionary.
+result
+--> 'This is a test for partial template rendering .'
+]]]
+
+The following example shows that partials works similarly with lists.
+
+[[[
+| template result |
+template := MustacheTemplate on: 'We can have a lists ({{# list}} [ {{> partial }} ] {{/ list}}) .'.
+result := template 
+			value: { 'list' -> {
+				{ 'name' -> 'first AAA' } asDictionary.
+				{ 'name' -> 'last BBB' } asDictionary  } } asDictionary
+			partials: (Dictionary new
+							at: 'partial' put: (MustacheTemplate on: 'including {{name}} item');
+			yourself).
+result 
+--> 'We can have a lists ( [ including first AAA item ]  [ including last BBB item ] ) .' 
+]]]
+
 
 
 [[[
@@ -458,11 +504,7 @@ templateString := '<h2>Names</h2>
 {{# names }}
    {{> user }}
 {{/ names }}'.
-]]]
-
-[[[
 userTemplateString := '<strong>{{name}}</strong>'.
-
 templateString asMustacheTemplate
    value: {
       'names' {
@@ -470,18 +512,18 @@ templateString asMustacheTemplate
    partials: {'user' ->  userTemplateString} asDictionary
 ]]]
 
-prints the output
+prints the following output
 
 [[[
 <h2>Names</h2>
 <strong>Username</strong>
 ]]]
 
-The dictionary given as partials: argument is supposed to be a dictionary that contains MustacheTemplates itself. A dictionary of strings will do as well because the strings are converted internally.
+The values of dictionary used as template are supposed to be MustacheTemplates. However, when strings are used instead of MustacheTemplates, strings are converted internally.
 
 !! How about JSON?
 
-Json is really easy to apply to the templates. You should install the NeoJSON package. 
+JSON is really easy to apply to the templates. You should install the NeoJSON package. 
 After that it is just as simple as the following example: 
 
 [[[
@@ -500,24 +542,14 @@ pillarString := '! Some text
 
 -item1
 -item2'.
-
 pillarDocument := PRDocumentParser parse: pillarString.
-
-htmlString := PRHTMLWriter write: pillarDocument .
-
-'main.template.html' asFileReference mustacheTemplateDuring: [ :template|
-
-'result.html' asFileReference writeStreamDo: [ :outStream |
-
-    outStream nextPutAll: (template value: { 'contents' -> htmlString
-} asDictionary)
-     ]]
+htmlString := PRHTMLWriter write: pillarDocument.
+'main.template.html' asFileReference mustacheTemplateDuring: [ :template |
+	'result.html' asFileReference writeStreamDo: [ :outStream |
+		outStream nextPutAll: (template value: { 'contents' -> htmlString} asDictionary )
+		]]
 ]]]
 
 !! Templates made easy
 
 Mustache can make template dependent tasks very easy from a simple token replacement up to nested structures to create HTML pages. We use them e.g., for generating SOAP templates. The strength of Mustache lays in the syntax and the combination of context objects. So, there is more for you to find what can be done with it. Happy templating !
-
-
-
-
