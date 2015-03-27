@@ -29,6 +29,7 @@
 	{../NeoJSON/}
 	{../RenoirST/}
 	{../NeoCSV/}
+	{../Teapot/}
 	{../Mustache/}
 }
 %=================================================================
@@ -46,7 +47,7 @@
 %=================================================================
 \author{
         Damien Cassou\quad \\
-        St\'ephane Ducasse\quad \\
+        St\'ephane Ducasse\quad Luc Fabresse\\ Johan Fabry
      	Sven Van Caekenberghe}
 \title{\Huge\bf Enterprise Pharo}
 \isodate

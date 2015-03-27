@@ -78,8 +78,10 @@ WebApp/WebApp.pier using Zinc
 	>> Luc will read it
 
 Mustache/Mustache.pier
-	>> Stef should finish the first version
+	>> Finished first version 
 
+Teapot/Teapot.pillar
+	>> Finished first version 
 *******************************************************************************
 
 To remove from a Web book:
