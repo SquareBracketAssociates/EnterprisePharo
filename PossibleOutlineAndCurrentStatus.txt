@@ -47,6 +47,8 @@ Zinc-HTTP
 
 Zinc-HTTP-client
 	>> Luc finished his pass
+	>> Johan finished a thorough pass [28 mar 2014]
+	>> somebody should read it to do a final check
 
 Zinc-HTTP-server
 	>> Luc is doing a pass
