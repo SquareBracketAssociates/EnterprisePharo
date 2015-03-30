@@ -71,6 +71,8 @@ cd mydocument
 
 !!!Installing and exporting your first document
 
+If you're a Windows user, please see section *windowsusers* for install and use pillar.
+
 You first need to get Pillar. For that, I recommend *downloading executing this script>https://raw.githubusercontent.com/pillar-markup/book-skeleton/master/download.sh* in the base directory.
 
 Then, you can check everything is working fine by creating a ==first.pillar== file with this content:
@@ -595,3 +597,45 @@ In this section we show how to use the ==pillar== command-line interface.
 [[[language=bash
 $ ./pillar export --to=latex PharoSound.pier > PharoSound.tex
 ]]]
+
+!! Pillar on Windows
+@windowsusers
+
+In this section i'll explain how to use pillar on widows.
+
+First we need to install pillar.
+
+!!! Installing pillar on windows.
+
+To use pillar create a new basic directory.
+
+You need the image of pillar. You can download it from *https://ci.inria.fr/pharo-contribution/job/Pillar/PHARO=30,VERSION=stable,VM=vm/lastSuccessfulBuild/artifact/Pillar.zip>https://ci.inria.fr/pharo-contribution/job/Pillar/PHARO=30,VERSION=stable,VM=vm/lastSuccessfulBuild/artifact/Pillar.zip*
+
+Unzip it on your pillar directory. 
+
+Then create a directory named "pharo-vm" and unzip the VM for windows that you can get on  *the pharo website (windows virtual machine)>http://pharo.org/download* .
+
+Add the sources of the VM on the pharo-vm's directory. (You can get them on the pharo website too: Pharo 3 sources).
+
+Now we'll see how to export file on windows.
+
+!!! Exporting your pillar file.
+To export a pillar file on windows you'll need to install *MsysGit>https://msysgit.github.io/* .
+This will allow you tu use unix commands on windows.
+
+Install it and run a msysGit bash. Go to your directory and use this command :
+
+[[[
+pharo-vm/pharo ./Pharo.image pillar export --to='html' first.pillar
+]]]
+
+and close Pharo.
+
+This will put the content of your file on the stdout file. We need to move it to our real file now. Use :
+
+[[[
+mv stdout first.html
+]]]
+
+
+
