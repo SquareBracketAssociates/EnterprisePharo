@@ -411,6 +411,28 @@ In the following example the outputs is ==&== since the variable was specified n
 By default if a template uses a variable that is not defined in a context, it is lookup up in the parent contexe.
 
 
+
+
+!! Changing Set Delimiter
+When you want to use Mustache to generate LaTeX you face the problem that LaTeX may contain =={{== and ==}}== which conflict
+with the Mustache set delimiter. In Mustache you can change the delimiters using the ==\= == characters separated by a space.
+Therefore =={{=<% %>=}}== defines ==<%== and ==%>== as new delimiter. To put back the default separators, we can simply use the previously defined ones: ==<%={{ }}=%>==
+
+[[[
+	"With default delimiter"
+	Number: {{ number }}
+	
+	"defining new delimiters"
+	{{=<% %>=}}
+	Number: <% number %>
+	
+	"Resetting default delimitersrs"
+	<%={{ }}=%>
+	Number: {{ number }}
+]]]
+
+
+
 !! Example of Menu Generation 
 
 [[[
