@@ -518,38 +518,7 @@ Pillar exporting mechanism can be configured using *STON>http://smalltalkhub.com
 !!! Configuration parameters
 
 [[[language=Smalltalk|eval=true
-| writeConfigurationParameter |
-writeConfigurationParameter := [: pragma | | methodWithDefaultValue methodComment |
-methodComment := [ :aMethod |
-    aMethod comment
-        ifNil: [ 'uncommented' ]
-        ifNotNil: [ :comment | comment trimBoth: [ :c | c = $" ] ] ].
-methodWithDefaultValue := pragma methodClass >> (#default , pragma selector capitalized) asSymbol.
-stream
-    nextPutAll: '!!!! ' , pragma selector;
-    lf;
-    nextPutAll: '@sec:confParam:', pragma selector;
-    lf;
-    nextPutAll: (methodComment value: pragma method);
-    lf;
-    lf;
-    nextPutAll: ';Default value';
-    lf;
-    nextPutAll: ':';
-    nextPutAll:
-            (methodWithDefaultValue comment
-                    ifNotNil: [ methodComment value: methodWithDefaultValue ]
-                    ifNil: [
-                        methodWithDefaultValue isQuick
-                            ifTrue: [ '==', methodWithDefaultValue ast statements first value formattedCode, '==' ]
-                            ifFalse: [ 'uncommented' ] ]);
-    lf;
-    lf
-    ].
-
-((Pragma allNamed: #pillarConfigurationParameter in: PRExportConfiguration) sort: [ :p1 :p2 | p1 selector < p2 selector ])
-        do: [ :pragma | writeConfigurationParameter value: pragma ]
-
+		CCDocumentationGeneration of: PRCocoonConfiguration on: stream.
 ]]]
 
 !! Templating
