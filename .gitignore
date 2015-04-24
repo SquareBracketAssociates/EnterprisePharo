@@ -33,3 +33,7 @@ files/
 stderr
 stdout
 /book-result/
+*.html
+*.md
+*.pdf
+*.tex
