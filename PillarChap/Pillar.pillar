@@ -522,7 +522,9 @@ this will confuse the parser. So, don't write --==\{{{\\begin{scriptsize}}}}==--
 On Pillar you can use some annotation in order to do some things.
 An annotation have this syntax:
 
-=${name:parameter=value|parameter2=value2}$
+[[[
+${name:parameter=value|parameter2=value2}$
+]]]
 
 For now Pillar only have the inputFile annotation.
 
