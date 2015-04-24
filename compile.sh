@@ -28,12 +28,13 @@ function pillar_one() {
 
 function mypdflatex() {
   pillar_file="$1"
+  basename=${pillar_file%.*}
 
   echo "Compiling PDF from $pillar_file..."
-  lualatex --file-line-error --interaction=batchmode "\input" "$pillar_file" 2>&1 1>/dev/null
+  lualatex --file-line-error --interaction=batchmode "\input" "$basename" 2>&1 1>/dev/null
   ret=$?
   if [[ $ret -ne 0 ]]; then
-    cat ${pillar_file%*.}.log
+    cat "$basename".log
     echo "Can't generate the PDF!"
     exit 1
   fi
