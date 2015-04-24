@@ -232,11 +232,12 @@ represents a Pillar document with the title and author set. You can use whatever
 
 !!!Chapters & Sections
 
-A line starting with ==!== becomes a chapter heading. Use multiple ==!== to create sections and subsections.
+A line starting with ==!== becomes a chapter heading. Use multiple ==!== to create sections and subsections. 
 
 @chapterAndSections
 
 To refer to a section or chapter, put an anchor (equivalent to \\label{chapterAndSections} in Latex) using the ==@chapterAndSections== syntax on a ''separate line''. Then, when you want to link to it (equivalent to \\ref{chapterAndSections} in Latex), use the ==\*chapterAndSections\*== syntax. Anchors are invisible and links will be rendered as: *chapterAndSections*.
+For each Title you create Pillar will generate an automatic anchor with the title as anchor.
 
 !!!Paragraphs and framed paragraphs
 
@@ -460,7 +461,29 @@ which produces
 self foo bar
 ]]]
 
+You can also want pillar to add some line numbers on your script. You can do it like that :
+
+= [[[language=smalltalk|lineNumber=true
+=	self foo bar.
+=	self bar foo.
+= ]]]
+
+which produces
+
+[[[language=smalltalk|lineNumber=true
+	self foo bar.
+	self bar foo.
+]]]
+
 This script can then be referenced with ==\*script1\*== (produces *script1*). Specifying the language (here ==Smalltalk==) will give you syntax highlighting.
+
+!!!!Accepted languages
+
+Here you can find the list of the class we have for the different languages and their tags.
+
+[[[language=smalltalk|eval=true
+		PRDocGeneratorAboutScriptLanguage on: stream.
+]]]
 
 !!!Raw
 
@@ -494,6 +517,31 @@ This results in
 ""Take care:"" avoid terminating the verbatim text with a ==}== as
 this will confuse the parser. So, don't write --==\{{{\\begin{scriptsize}}}}==-- but ==\{{{\\begin{scriptsize} }}}== instead.
 
+!!!Annotations
+
+On Pillar you can use some annotation in order to do some things.
+An annotation have this syntax:
+
+=${name:parameter=value|parameter2=value2}$
+
+For now Pillar only have the inputFile annotation.
+
+!!!!InputFile annotation
+
+This annotation allow you to include a file into your pillar file. We recommend you to add files at the root of your document, we still may need some improvement in order to include file into a paragraph of in other structure.
+
+This annotation takes only 1 parameter, the path of your file from the baseDirectory (if you don't change the base directory, it's your working directory).
+
+Here some example:
+
+[[[
+	${inputFile:test.pillar}$
+	
+	${inputFile:value=test.pillar}$
+	
+	${inputFile:chapter2/test.pillar}$
+]]]
+
 !!!Preformatted (less used)
 
 To create a preformatted block, begin each line with ==\===. A preformatted block uses equally spaced text so that spacing is preserved.
@@ -517,7 +565,7 @@ Pillar exporting mechanism can be configured using *STON>http://smalltalkhub.com
 
 !!! Configuration parameters
 
-[[[language=Smalltalk|eval=true
+[[[language=smalltalk|eval=true
 		CCDocumentationGeneration of: PRCocoonConfiguration on: stream.
 ]]]
 
