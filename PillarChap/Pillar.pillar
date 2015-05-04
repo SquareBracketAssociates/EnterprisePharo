@@ -582,6 +582,7 @@ In this section we show how to configure the export from the Pillar files.
 Pillar exporting mechanism can be configured using *STON>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/STON*, a lightweight, text-based, human-readable data interchange format (similar to the popular *JSON>http://www.json.org*.
 
 !!! Configuration parameters
+@configParameters
 
 [[[language=smalltalk|eval=true
 		CCDocumentationGeneration of: PRCocoonConfiguration on: stream.
@@ -631,6 +632,170 @@ In this section we show how to use the ==pillar== command-line interface.
 
 [[[language=bash
 $ ./pillar export --to=latex PharoSound.pier > PharoSound.tex
+]]]
+
+!! Pillar from Pharo
+
+Pillar uses syntax similar to that of wiki, as well as a document model, parser and exporter sets. Pillar takes a string and parses it to create a PRDocument. 
+This document's contents can be transformed (E.G. if there is an inputFile tag, it will be replaced by the file's content). 
+Then the document will be exported.
+
+!!! How to create a Pillar Document
+
+It is possible to directly create a Pillar document. There are two ways to do that:
+
+- ""* By parsing a String>documentByString*""
+- ""* By creating the document from scratch>documentByHand*""
+
+!!!! Creating a document by parsing a String
+@documentByString
+
+Creating a document by parsing a String is simple, you just need to use PRDocumentParser.
+
+[[[language=smalltalk
+	| wiki |
+	wiki := '!My Document'
+	PRDocumentParser parse: wiki
+]]]
+
+Or from a file: 
+[[[language=smalltalk
+	PRDocumentParser parse: (FileSystem workingDirectory / 'foo.pillar' contents)
+]]]
+
+!!!! Creating a document yourself
+@documentByHand
+
+For that, you first need to create a document
+
+[[[language=smalltalk
+	| document |
+	document := PRDocument new.
+]]]
+
+Once you've created your document, you can create as many ==PRDocumantItem== subclass instances as you wish and add them. For instance, you can add a title and a paragraph with an illustration
+
+[[[language=smalltalk
+	| document title figure|
+	document := PRDocument new.
+	title := (PRHeader new)
+		level: 1;
+		add: (PRText content: 'foo');
+		yourself.
+	figure := PRFigure new
+		add: (PRText content: 'Alias');
+		reference: 'file://test.png';
+		embedded: true;
+		yourself.
+	document add: title; add: figure.
+	^ document
+]]]
+
+A document usually contains many different Items.
+
+!!!!! PRText
+
+[[[language=smalltalk
+	| item |
+	item := PRText content: 'foo'
+]]]
+
+!!!!! PRRaw
+
+[[[language=smalltalk
+	| item |
+	item := PRRaw content: 'foo' type: 'html'
+]]]
+
+!!!!! Script
+
+[[[language=smalltalk
+	| item item2 |
+	item := (PRScript content: '')
+		language: PRSmalltalkScriptLanguage default;
+		eval: false;
+		lineNumber: true;
+		fromFile: 'test.st';
+		firstLine: 12;
+		lastLine: 16
+	item2 := (PRScript content: 'myScript')
+		language: PRSmalltalkScriptLanguage default;
+		eval: false	
+]]]
+
+!!!!! PRFigure
+
+[[[language=smalltalk
+	| item |
+	item := PRFigure new
+		add: (PRText content: 'Alias');
+		reference: 'file://test.png';
+		embedded: true
+]]]
+
+!!!!! PRInternalLink
+
+[[[language=smalltalk
+	| item |
+	item := PRInternalLink new
+		reference: 'Page';
+		anchor: 'Anchor';
+		embedded: true
+]]]
+
+!!!!! PRExternalLink
+
+[[[language=smalltalk
+	| item |
+	item := PRExternalLink new
+		reference: 'http://myPage.html'
+]]]
+
+!!!!! PRParagraph
+
+[[[language=smalltalk
+	| item |
+	item := PRParagraph new
+		add: (PRText content: 'Lorem ipsum dolor sit amet.')
+]]]
+
+!!!!! Other Items
+
+You can add other items as well, such as lists, annotations, tables etc... You can find how to implement all of  them in the unit-tests.
+
+!!! How to write a Document
+  
+Once you have your document, you will want to export it. But before that, there's an optional step: transforming your document. 
+A transformer is an abstraction that will visit it and adapt it. For instance, PRScriptEvaluator will visit the document and replace a script with an eval parameter set as true by its evaluation. 
+To have the list of the different transformers, you can use a transformer like this one:
+
+[[[language=smalltalk
+	| configuration |
+	configuration := PRCocoonConfiguration new baseDirectory: 'directoryWithMyFiles'.
+	PRScriptEvaluator new 
+		configuration: configuration;
+		start: document; topNode
+]]]
+
+Now we have our document. In order to export it we need to create a new instance of the PRDocumentWriter subclasses.
+
+[[[language=smalltalk
+	PRHTMLWriter write: document
+]]]
+
+!!! How to export with a configuration
+
+In order to export with a configuration you need to create a new configuration. To see all possible parameters, you may refer to *configParameters*.
+
+[[[language=smalltalk
+	PRCocoonConfiguration new
+		templateStream: PRHTMLWriter defaultTemplate;
+		configurations: Dictionary new;
+		inputFiles: {'foo.pillar', 'bar.pillar'};
+		outputType: PRHTMLWriter;
+		separateOutputFiles: false;
+		outputFile: 'test.html' asFileReference ;
+		export
 ]]]
 
 !! Pillar on Windows
