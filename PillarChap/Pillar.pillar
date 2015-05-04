@@ -465,12 +465,12 @@ self foo bar
 
 This script can then be referenced with ==\*script1\*== (produces *script1*).
 
-!!!! Syntaxe highlighting
+!!!! Syntax highlighting
 
 You have the possibility to add a parameter call ==language==. This will give you syntax highlighting.
-For example on *script1* we used the ==smalltalk== parameter.
+For example on *script1* we used the ==smalltalk== value for the ==language== parameter.
 
-Here you can find the list of the class we have for the different languages and their tags.
+Here is a list of the supported languages:
 
 [[[language=smalltalk|eval=true
 		PRDocGeneratorAboutScriptLanguage on: stream.
@@ -478,7 +478,7 @@ Here you can find the list of the class we have for the different languages and 
 
 !!!! Script with line numbers
  
-If you need to explain a long piece of code you may want the code to have line number. In that case you can use the ==lineNumber== parameter. In that case you can do like this :
+If you need to explain a long piece of code you may want the script to have line numbers you can use the ==lineNumber== parameter like this :
 
 = [[[language=smalltalk|lineNumber=true
 =     self foo bar.
@@ -492,14 +492,14 @@ which produces
 	self bar foo.
 ]]]
 
-!!!! Script form extern file
+!!!! Script from an external file
 
-If you want you can also include a script from a different file. For example if you have a file "myProject.html" and you want to take the code from line 15 to line 45, instead of copy/paste the code you can use:
+If you want you can also include a script from a external file. For example if you have a file `myProject.html` and you want to take the code from line 15 to line 45, instead of copy/paste the code you can use:
 
 = [[[language=html|fromFile=myProject.html|firstLine=15|lastLine=45
 = ]]]
 
-The ==firstLine== and ==lastLine== are optional. 
+The ==firstLine== and ==lastLine== parameters are optional. 
 
 !!!Raw
 
