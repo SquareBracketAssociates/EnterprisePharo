@@ -449,23 +449,40 @@ generates
 foo bar
 ]]]
 
+!!!! Script with a label or caption
+
 If you want either a label (to reference the script later) or a caption (to give a nice title to the script), write the following:
 
-= [[[label=script1|caption=My script that works|language=Smalltalk
+= [[[label=script1|caption=My script that works|language=smalltalk
 =     self foo bar
 = ]]]
 
 which produces
 
-[[[label=script1|caption=My script that works|language=Smalltalk
+[[[label=script1|caption=My script that works|language=smalltalk
 self foo bar
 ]]]
 
-You can also want pillar to add some line numbers on your script. You can do it like that :
+This script can then be referenced with ==\*script1\*== (produces *script1*).
+
+!!!! Syntaxe highlighting
+
+You have the possibility to add a parameter call ==language==. This will give you syntax highlighting.
+For example on *script1* we used the ==smalltalk== parameter.
+
+Here you can find the list of the class we have for the different languages and their tags.
+
+[[[language=smalltalk|eval=true
+		PRDocGeneratorAboutScriptLanguage on: stream.
+]]]
+
+!!!! Script with line numbers
+ 
+If you need to explain a long piece of code you may want the code to have line number. In that case you can use the ==lineNumber== parameter. In that case you can do like this :
 
 = [[[language=smalltalk|lineNumber=true
-=	self foo bar.
-=	self bar foo.
+=     self foo bar.
+=     self bar foo.
 = ]]]
 
 which produces
@@ -475,15 +492,14 @@ which produces
 	self bar foo.
 ]]]
 
-This script can then be referenced with ==\*script1\*== (produces *script1*). Specifying the language (here ==Smalltalk==) will give you syntax highlighting.
+!!!! Script form extern file
 
-!!!!Accepted languages
+If you want you can also include a script from a different file. For example if you have a file "myProject.html" and you want to take the code from line 15 to line 45, instead of copy/paste the code you can use:
 
-Here you can find the list of the class we have for the different languages and their tags.
+= [[[language=html|fromFile=myProject.html|firstLine=15|lastLine=45
+= ]]]
 
-[[[language=smalltalk|eval=true
-		PRDocGeneratorAboutScriptLanguage on: stream.
-]]]
+The ==firstLine== and ==lastLine== are optional. 
 
 !!!Raw
 
