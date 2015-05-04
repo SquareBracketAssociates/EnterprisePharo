@@ -3,11 +3,11 @@
 
 Voyage is a small persistence framework developed by Esteban Lorenzano, constructed as a small layer between the objects and a persistency mechanism. It is purely object-oriented and has as a goal to present a minimal API to most common development usages. Voyage is a common layer for different backends but currently it supports just two: an ''in-memory'' layer and a backend for the MongoDB database (*http://mongodb.org>http://mongodb.org/*).
 
-The in-memory layer is useful to prototype applications quickly and for initial development without a database back-end, for example using the Smalltalk image as the persistency mechanism. 
+The in-memory layer is useful to prototype applications quickly and for initial development without a database back-end, for example using the Smalltalk image as the persistency mechanism.
 
 The MongoDB database backend stores the objects into MongoDB: a document-oriented database. In MongoDB each stored entity is a JSON-style document. This document-centric nature allows for persisting complex object models in a fairly straightforward fashion. MongoDB is not an object database, like Gemstone, Magma or Omnibase, so there still is a small gap to be bridged between objects and documents. To achieve this, Voyage contains an Object-Document mapper, i.e. the document database equivalent to an Object-Relational Mapper or ORM. While this mapper does not solve all the known impedance mismatch issues when going from objects to a database, we find that using a document database fits better with the object world than a combination of a ORM and a relational database. This is because document databases tend to provide better support for the dynamic nature of the object world.
 
-Voyage provides a default way in which objects are stored in the database. Fine-grained configuration of this can be performed using Magritte descriptions. Voyage also includes a query API, which allows specific objects to be retrieved from a MongoDB database. We will discuss each of these features in this text. 
+Voyage provides a default way in which objects are stored in the database. Fine-grained configuration of this can be performed using Magritte descriptions. Voyage also includes a query API, which allows specific objects to be retrieved from a MongoDB database. We will discuss each of these features in this text.
 
 (This text started as a number of blog posts by Esteban Lorenzano, which have been extensively reworked by Johan Fabry, and including additional information shared by Sabine Knoefel and Norbert Hartl. For corrections, comments and questions about this text please send a mail to Johan Fabry. His e-mail address is dcc.uchile.cl@jfabry, but the other way around. )
 
@@ -19,20 +19,20 @@ To install Voyage, including support for the MongoDB database, go to the Configu
 
 [[[
 Gofer it
-	url: 'http://smalltalkhub.com/mc/estebanlm/Voyage/main';
-	configurationOf: 'VoyageMongo';
-	loadStable.
+  url: 'http://smalltalkhub.com/mc/estebanlm/Voyage/main';
+  configurationOf: 'VoyageMongo';
+  loadStable.
 ]]]
 
 This will load all that is needed to persist objects into a Mongo database.
 
-!!! Install MongoDB 
+!!! Install MongoDB
 
 Next is to install the MongoDB database. How to do this depends on the operating system, and is outside of the scope of this text. We refer to the *MongoDB website>http://www.mongodb.org/downloads* for more information.
 
 !!! Create a repository
 
-In Voyage, all persistent objects are stored in a repository. The kind of repository that is used determines the storage backend for the objects. 
+In Voyage, all persistent objects are stored in a repository. The kind of repository that is used determines the storage backend for the objects.
 
 To use the in-memory layer for Voyage, an instance of ==VOMemoryRepository== needs to be created, as follows:
 
@@ -43,9 +43,9 @@ repository := VOMemoryRepository new
 In this text, we shall however use the MongoDB backend. To start a new MongoDB repository or connect to an existing repository create an instance of ==VOMongoRepository==, giving as parameters the hostname and database name. For example, to connect to the database ==databaseName== on the host ==mongo.db.url== execute the following code:
 
 [[[
-repository := VOMongoRepository 
-	host: 'mongo.db.url' 
-	database: 'databaseName'.
+repository := VOMongoRepository
+  host: 'mongo.db.url'
+  database: 'databaseName'.
 ]]]
 
 Alternatively, the port to connect to is specified by using the message ==host:port:database:==. Lastly, if authentication is required, the message ==host:database:username:password:== or ==host:port:database:username:password:== needs to be used.
@@ -68,25 +68,25 @@ repository enableSingleton.
 
 @@note In this document, we are going to cover Voyage in Singleton mode, but using it in Instance mode is straightforward as well. See the ==persistence== protocol of ==VORepository== for more information.
 
-!!! Voyage API 
+!!! Voyage API
 
 The following two tables show a representative subset of the API of Voyage. These methods are defined on ==Object== and ==Class==, but will only truly perform work if (instances of) the receiver of the message is a Voyage root. See the ==voyage-model-core-extensions== persistence protocol on both classes for the full API of Voyage.
 
 First we show Singleton mode:
-||save || stores an object into repository (insert or update)	
-||remove || removes an object from repository	
-||removeAll ||removes all objects of class from repository	
+||save || stores an object into repository (insert or update)
+||remove || removes an object from repository
+||removeAll ||removes all objects of class from repository
 ||selectAll ||retrieves all objects of some kind
 ||selectOne: ||retrieves first object that matches the argument
 ||selectMany: || retrieves all objects that matches the argument
 
 
 Second is Instance mode. In Instance mode, the first argument is always the repository on which to perform the operation.
-||save:|| stores an object into repository (insert or update)	
-||remove: ||removes an object from repository	
-||removeAll: ||removes all objects of class from repository	
+||save:|| stores an object into repository (insert or update)
+||remove: ||removes an object from repository
+||removeAll: ||removes all objects of class from repository
 ||selectAll: ||retrieves all objects of some kind
-||selectOne:where: ||retrieves first object that matches the where clause	
+||selectOne:where: ||retrieves first object that matches the where clause
 ||selectMany:where: || retrieves all objects that matches the where clause
 
 !!! Resetting or dropping the database connection
@@ -115,15 +115,15 @@ Let's say we want to store an Association (i.e. a pair of objects). To do this, 
 
 [[[
 Association class>>isVoyageRoot
-	^true
-]]]	
+  ^ true
+]]]
 
 We also define the name of the collection that will be used to store documents with the ==voyageCollectionName== class method.
 
 [[[
 Association class>>voyageCollectionName
-	^ 'Associations'
-]]]	
+  ^ 'Associations'
+]]]
 
 Then, to save an association, we need to just send it the ==save== message:
 
@@ -135,12 +135,12 @@ anAssociation save.
 This will generate a collection in the database containing a document of the following structure.
 
 [[[
-{ 
-	"_id" : ObjectId("a05feb630000000000000000"), 
-	"#instanceOf" : "Association", 
-	"#version" : NumberLong("3515916499"), 
-	"key" : 'answer', 
-	"value" : 42
+{
+  "_id" : ObjectId("a05feb630000000000000000"),
+  "#instanceOf" : "Association",
+  "#version" : NumberLong("3515916499"),
+  "key" : 'answer',
+  "value" : 42
 }
 ]]]
 
@@ -148,19 +148,18 @@ The collection in the database will be named ''association'', for the name of th
 
 The stored data keeps some ''extra information'' to allow the object to be correctly reconstructed when loading:
 
-- ==instanceOf== records the Class of the stored instance. The collection can also contain subclasses of the class that was declared as a Voyage root, so to properly reconstruct instances the reference to the class is needed.
-- ==version== keeps a marker of the version of the object that is committed. This property is used internally by Voyage for refreshing cached data in the application. Without a ==version== field the application would always refresh the object with the data from the database, losing a lot of performance).
+- ==instanceOf== records the class of the stored instance. This information is important because the collection can contain subclass instances of the Voyage root class.
+- ==version== keeps a marker of the object version that is committed. This property is used internally by Voyage for refreshing cached data in the application. Without a ==version== field, the application would have to refresh the object by frequently querying the database.
 
-Note that the documents generated by Voyage are not directly visible using Voyage itself, as the goal of Voyage is to abstract away from the document structure. To see the actual documents you need to access the database directly. For MongoDB this can be done through the ==mongo== command line interface, or a GUI tool such as RoboMongo (Multi-Platform) MongoHub (for Mac), or RockMongo (in php).
+Note that the documents generated by Voyage are not directly visible using Voyage itself, as the goal of Voyage is to abstract away from the document structure. To see the actual documents you need to access the database directly. For MongoDB this can be done through the ==mongo== command line interface, or a GUI tool such as *RoboMongo>http://robomongo.org* (Multi-Platform), *MongoHub>http://mongohub.todayclose.com/* (for Mac), or *RockMongo>http://rockmongo.com* (in PHP).
 
 !!!Embedding objects
-In general, objects are not so simple as associations of literals, but more complex, containing other complex object instances inside, leading to a tree of objects. We show now how these can be stored.
 
-For example, let's say that we want to store rectangles and that each rectangle contains two points. To achieve this, we specify that the ==Rectangle== class is a document root:
+Objects can be as simple as associations of literals or more complex: objects can contain other objects, leading to a tree of objects. Saving such objects is as simple as sending the ==save== message to them. For example, let's say that we want to store rectangles and that each rectangle contains two points. To achieve this, we specify that the ==Rectangle== class is a document root:
 
 [[[
 Rectangle class>>isVoyageRoot
-	^true
+  ^ true
 ]]]
 
 This allows rectangles to be saved to the database, for example as shown by this snippet:
@@ -173,20 +172,20 @@ aRectangle save.
 This will add a document to the database with this structure:
 
 [[[
-{ 
-	"_id" : ObjectId("ef72b5810000000000000000"), 
-	"#instanceOf" : "Rectangle", 
-	"#version" : NumberLong("2460645040"), 
-	"origin" : { 
-		"#instanceOf" : "Point", 
-		"x" : 42, 
-		"y" : 1 
-	}, 
-	"corner" : { 
-		"#instanceOf" : "Point", 
-		"x" : 10, 
-		"y" : 20 
-	}
+{
+  "_id" : ObjectId("ef72b5810000000000000000"),
+  "#instanceOf" : "Rectangle",
+  "#version" : NumberLong("2460645040"),
+  "origin" : {
+    "#instanceOf" : "Point",
+    "x" : 42,
+    "y" : 1
+  },
+  "corner" : {
+    "#instanceOf" : "Point",
+    "x" : 10,
+    "y" : 20
+  }
 }
 ]]]
 
@@ -199,43 +198,43 @@ Sometimes the objects are trees that contain other root objects. For instance, y
 
 Returning to our rectangle example, let's suppose we want to keep the points in a separate collection. In other words, now the points will be referenced instead of embedded.
 
-After we add ==isVoyageRoot== to ==Point class==, and save the rectangle, in the collection ''rectangle'' we get the following document:
+After we add ==isVoyageRoot== to ==Point class==, and save the rectangle, in the ==Rectangle== collection, we get the following document:
 
 [[[
-{ 
-	"_id" : ObjectId("7c5e772b0000000000000000"), 
-	"#instanceOf" : "Rectangle", 
-	"#version" : 423858205, 
-	"origin" : { 
-		"#collection" : "point", 
-		"#instanceOf" : "Point", 
-		"__id" : ObjectId("7804c56c0000000000000000") 
-	}, 
-	"corner" : { 
-		"#collection" : "point", 
-		"#instanceOf" : "Point", 
-		"__id" : ObjectId("2a731f310000000000000000") 
-	} 
+{
+  "_id" : ObjectId("7c5e772b0000000000000000"),
+  "#instanceOf" : "Rectangle",
+  "#version" : 423858205,
+  "origin" : {
+    "#collection" : "point",
+    "#instanceOf" : "Point",
+    "__id" : ObjectId("7804c56c0000000000000000")
+  },
+  "corner" : {
+    "#collection" : "point",
+    "#instanceOf" : "Point",
+    "__id" : ObjectId("2a731f310000000000000000")
+  }
 }
 ]]]
 
 In addition to this, in the collection ''point'' we also get the two following entities:
 
 [[[
-{ 
-	"_id" : ObjectId("7804c56c0000000000000000"), 
-	"#version" : NumberLong("4212049275"), 
-	"#instanceOf" : "Point", 
-	"x" : 42, 
-	"y" : 1 
+{
+  "_id" : ObjectId("7804c56c0000000000000000"),
+  "#version" : NumberLong("4212049275"),
+  "#instanceOf" : "Point",
+  "x" : 42,
+  "y" : 1
 }
 
-{ 
-	"_id" : ObjectId("2a731f310000000000000000"), 
-	"#version" : 821387165, 
-	"#instanceOf" : "Point", 
-	"x" : 10, 
-	"y" : 20 
+{
+  "_id" : ObjectId("2a731f310000000000000000"),
+  "#version" : 821387165,
+  "#instanceOf" : "Point",
+  "x" : 10,
+  "y" : 20
 }
 ]]]
 
@@ -260,56 +259,56 @@ Consider that, continuing with the rectangle example but using embedded points, 
 - We only store instances of the ==Rectangle== class in this collection, and therefore the ==instanceOf== information is redundant.
 - The ==origin== and ==corner== attributes are always going to be points, so the ==instanceOf== information there is redundant as well.
 
-We use Magritte descriptions with specific pragmas to declare properties of the container of the Mongo descriptions of that class (all Magritte descriptions are kept in containers) and to describe both the ==origin== and ==corner== attributes. 
+We use Magritte descriptions with specific pragmas to declare properties of the container of the Mongo descriptions of that class (all Magritte descriptions are kept in containers) and to describe both the ==origin== and ==corner== attributes.
 
 The method ==mongoContainer== is defined as follows: First it uses the ==<mongoContainer>== pragma to state that it describes the container to be used for this class. Second it returns a specific ==VOMongoContainer== instance. This instance is configured such that it uses the ''retanglesForTest'' collection in the database, and that it will only store ==Rectangle== instances. Note that it is not required to specify both configuration lines. It is equally valid to only declare that the collection to be used is ''retanglesForTest'', or only specify that the collection contains just ==Rectangle== instances.
 
 [[[
-Rectangle class>>mongoContainer 
-	<mongoContainer>
-	
-	^VOMongoContainer new 
-		collectionName: 'rectanglesForTest';
-		kind: Rectangle;
-		yourself
+Rectangle class>>mongoContainer
+  <mongoContainer>
+
+  ^VOMongoContainer new
+    collectionName: 'rectanglesForTest';
+    kind: Rectangle;
+    yourself
 ]]]
 
-The two other methods use the pragma ==<mongoDescription>== and return a Mongo description that is configured with their respective attribute name and kind, as follows: 
+The two other methods use the pragma ==<mongoDescription>== and return a Mongo description that is configured with their respective attribute name and kind, as follows:
 
 [[[
 Rectangle class>>mongoOrigin
-	<mongoDescription>
+  <mongoDescription>
 
-	^VOMongoToOneDescription new
-		attributeName: 'origin';
-		kind: Point;
-		yourself
+  ^VOMongoToOneDescription new
+    attributeName: 'origin';
+    kind: Point;
+    yourself
 ]]]
 
 [[[
 Rectangle class>>mongoCorner
-	<mongoDescription>
+  <mongoDescription>
 
-	^VOMongoToOneDescription new
-		attributeName: 'corner';
-		kind: Point;
-		yourself
+  ^VOMongoToOneDescription new
+    attributeName: 'corner';
+    kind: Point;
+    yourself
 ]]]
 
 A saved rectangle, now in the ''rectanglesForTest'' collection, will look more or less as follows:
 
 [[[
-{ 
-	"_id" : ObjectId("ef72b5810000000000000000"), 
-	"#version" : NumberLong("2460645040"), 
-	"origin" : { 
-		"x" : 42, 
-		"y" : 1 
-	}, 
-	"corner" : { 
-		"x" : 10, 
-		"y" : 20 
-	}
+{
+  "_id" : ObjectId("ef72b5810000000000000000"),
+  "#version" : NumberLong("2460645040"),
+  "origin" : {
+    "x" : 42,
+    "y" : 1
+  },
+  "corner" : {
+    "x" : 10,
+    "y" : 20
+  }
 }
 ]]]
 
@@ -382,28 +381,28 @@ A slightly more complicated query is to find all elements in the database whose 
 ]]]
 
 
-Note that this way of querying only works for querying values of the object but not values of references to other objects. 
+Note that this way of querying only works for querying values of the object but not values of references to other objects.
 For such case you should build your query using id as traditionally done in relational database. But the best solution to be in the Mongo spirit, is in fact to revisit the object model to avoid relationships expressed with foreign keys.
 
 
 !!!!Using the ==at:== message to access embedded documents
 
-Since MongoDB stores documents of any complexity, it is common that one document is composed of several embedded documents, for example: 
+Since MongoDB stores documents of any complexity, it is common that one document is composed of several embedded documents, for example:
 
 [[[
-{ 
-	"origin" : { 
-		"x" : 42, 
-		"y" : 1 
-	}, 
-	"corner" : { 
-		"x" : 10, 
-		"y" : 20 
-	}
+{
+  "origin" : {
+    "x" : 42,
+    "y" : 1
+  },
+  "corner" : {
+    "x" : 10,
+    "y" : 20
+  }
 }
 ]]]
 
-In this case, to search for objects by one of the embedded document elements, the message ""==at:=="", and the field separator """.""" needs to be used. For example, to select all the rectangles whose origin x value is equal to 42, the query is as as follows. 
+In this case, to search for objects by one of the embedded document elements, the message ""==at:=="", and the field separator """.""" needs to be used. For example, to select all the rectangles whose origin x value is equal to 42, the query is as as follows.
 
 [[[
 [ :each | (each at: 'origin.x') = 42 ]
@@ -429,7 +428,7 @@ In the following example we repeat the previous query but a Javascript expressio
 [ :each | each where: 'this.origin.x == 42' ].
 ]]]
 
-More complete documentation about the use of ==$where== is in the	 *MongoDB where documentation>http://docs.mongodb.org/manual/reference/operator/where/#op._S_where*.
+More complete documentation about the use of ==$where== is in the   *MongoDB where documentation>http://docs.mongodb.org/manual/reference/operator/where/#op._S_where*.
 
 
 !!!Using JSON queries
@@ -442,16 +441,16 @@ For example, the first example of the use of MongoQueries is written as a dictio
 { 'name' -> 'John' } asDictionary
 ]]]
 
-Dictionary pairs are composed with AND semantics. The following example repeats the second example of the use of MongoQueries; selecting the elements having ==John== as name AND whose ==orders== value is greater than 10. 
+Dictionary pairs are composed with AND semantics. The following example repeats the second example of the use of MongoQueries; selecting the elements having ==John== as name AND whose ==orders== value is greater than 10.
 
 [[[
-{ 
-	'name' -> 'John'.
-	'orders' -> { '$gt' : 10 } asDictionary 
+{
+  'name' -> 'John'.
+  'orders' -> { '$gt' : 10 } asDictionary
 } asDictionary
 ]]]
 
-To construct the "greater than" statement, a new dictionary needs to be created that uses the MongoDB ==$gt== query selector to express the greater than relation. For the list of available query selectors we refer to the *MongoDB Query Selectors documentation>http://docs.mongodb.org/manual/reference/operator/query/#query-selectors*. 
+To construct the "greater than" statement, a new dictionary needs to be created that uses the MongoDB ==$gt== query selector to express the greater than relation. For the list of available query selectors we refer to the *MongoDB Query Selectors documentation>http://docs.mongodb.org/manual/reference/operator/query/#query-selectors*.
 
 
 !!!!Using dot notation to access embedded documents
@@ -460,7 +459,7 @@ To access values embedded documents with JSON queries, the dot notation is used.
 
 [[[
 {
-	'origin.x' -> {'$eq' : 42} asDictionary
+  'origin.x' -> {'$eq' : 42} asDictionary
 } asDictionary
 ]]]
 
@@ -471,31 +470,31 @@ To access values embedded documents with JSON queries, the dot notation is used.
 To express an OR condition, a dictionary whose key is =='$or'== and whose values are the expression of the condition is needed. The following example shows how to select all objects whose name is ==John== that have more than ten orders OR objects whose name is not ==John== and has ten or less orders:
 
 [[[
-{ '$or' : 
-	{
-		{ 
-			'name -> 'John'.
-			'orders' -> { '$gt': 10 } asDictionary 
-		} asDictionary.
-		{ 
-			'name -> { '$ne': 'John'} asDictionary.
-			'orders' -> { '$lte': 10 } asDictionary 
-		} asDictionary.
-	}.
+{ '$or' :
+  {
+    {
+      'name -> 'John'.
+      'orders' -> { '$gt': 10 } asDictionary
+    } asDictionary.
+    {
+      'name -> { '$ne': 'John'} asDictionary.
+      'orders' -> { '$lte': 10 } asDictionary
+    } asDictionary.
+  }.
 } asDictionary.
 ]]]
 
 
 !!!!Going beyond MongoQueries features
 
-Using JSON queries allows to use features that are not present in MongoQueries, for example the use of regular expression. Below is a query that specifies all documents with a ==fullname.lastName== that starts with a letter "D" and then matches all the attributes of the ==fullname== embedded document, by using the Mongo expressions ==$regexp== and ==$options$== as follows: 
- 
+Using JSON queries allows to use features that are not present in MongoQueries, for example the use of regular expression. Below is a query that specifies all documents with a ==fullname.lastName== that starts with a letter "D" and then matches all the attributes of the ==fullname== embedded document, by using the Mongo expressions ==$regexp== and ==$options$== as follows:
+
 [[[
 {
-	'fullname.lastName' -> { 
-		'$regexp': '^D.*'.
-		'$options': 'i'.
-	} asDictionary.
+  'fullname.lastName' -> {
+    '$regexp': '^D.*'.
+    '$options': 'i'.
+  } asDictionary.
 } asDictionary.
 ]]]
 
@@ -516,7 +515,7 @@ The following methods provide basic object retrieval.
 
 !!!!Limiting object retrieval and sorting
 
-The methods that query the database look similar to their equivalent in the Collection hierarchy. However unlike regular collections which can operate fully on memory, often Voyage collection queries need to be customized in order to optimize memory consumption and/or access speed. This is because there can be literally millions of documents in each collection, surpassing the memory limit of Smalltalk, and also the database searches have a much higher performance than the equivalent code in Smalltalk. 
+The methods that query the database look similar to their equivalent in the Collection hierarchy. However unlike regular collections which can operate fully on memory, often Voyage collection queries need to be customized in order to optimize memory consumption and/or access speed. This is because there can be literally millions of documents in each collection, surpassing the memory limit of Smalltalk, and also the database searches have a much higher performance than the equivalent code in Smalltalk.
 
 The first refinement to the queries consist in limiting the amount of results that are returned. Of the collection of all the documents that match, a subset is returned that starts at the index that is given as argument. This can be used to only retrieve the first N matches to a query, or go over the query results in smaller blocks to avoid out of memory issues in the Smalltalk image.
 
@@ -524,16 +523,16 @@ The first refinement to the queries consist in limiting the amount of results th
 - ""==selectMany:limit:=="" Retrieves a collection of objects from the database that match the query, up to the given limit. For example, ==Point selectMany: [:each | each x = 42] limit: 10 ==
 - ""==selectMany:limit:offset:=="" Retrieves a collection of objects from the database that match the query. The first object retrieved will be at the offset position plus one of the results of the query, and up to limit objects will be returned. For example, if the above example matched 25 points, the last 15 points will be returned by the query ==Point selectMany: [:each | each x = 42] limit: 20 offset: 10== (any limit argument greater than 15 will do for this example).
 
-The second customization that can be performed is to sort the results. To use this, the class ==VOOrder== provides constants to specify ==ascending== or ==descending== sort order. 
+The second customization that can be performed is to sort the results. To use this, the class ==VOOrder== provides constants to specify ==ascending== or ==descending== sort order.
 
 - ""==selectAllSortBy:=="" Retrieves all documents, sorted by the specification in the argument, which needs to be a JSON query. For example, == Point selectAllSortBy: { #x -> VOOrder ascending} asDictionary == returns the points in ascending x order.
 - ""==selectMany:sortBy:=="" Retrieves all the documents that match the query and sorts them. For example, == Point selectMany: { 'x' -> 42 } SortBy: { #y -> VOOrder descending} asDictionary == returns the points where x is 42, in descending y order.
 - ""==selectMany:sortBy:limit:offset:=="" Provides for specifying a limit and offset to the above query.
 
 
-!! Conclusion 
+!! Conclusion
 
-In this chapter we presented Voyage, a persistence framework whose strength is the presence of a basic object-document mapper and a back-end to the MongoDB database. We have shown how to store objects in, and remove object from the database, and how to optimise the storage format. This was followed by a discussion of querying the database; showing the two ways in which queries can be constructed and detailing how queries are ran. 
+In this chapter we presented Voyage, a persistence framework whose strength is the presence of a basic object-document mapper and a back-end to the MongoDB database. We have shown how to store objects in, and remove object from the database, and how to optimise the storage format. This was followed by a discussion of querying the database; showing the two ways in which queries can be constructed and detailing how queries are ran.
 
 
 % Local Variables:
