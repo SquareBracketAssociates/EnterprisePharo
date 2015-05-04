@@ -242,32 +242,32 @@ In addition to this, in the collection ''point'' we also get the two following e
 
 When the objects to be stored contain a graph of embedded objects instead of a tree, i.e. when there are cycles in the references that the embedded objects have between them, cycles between these embedded objects must be broken. If not, storing the objects will cause an infinite loop. The most straightforward solution is to declare one of the objects causing the cycle as a Voyage root. This effectively breaks the cycle at storage time, avoiding the infinite loop.
 
-For example, in the rectangle example say we have a label inside the rectangle, and this label contains a piece of text. The text also keeps a reference to the label in which it is contained. In other words there is a cycle of references between the label and the text. This cycle must be broken in order to be able to persist the rectangle. To do this, either the label or the text must be declared as a Voyage root.
+For example, in the rectangle example say we have a label inside the rectangle, and this label contains a piece of text. The text also keeps a reference to the label in which it is contained. In other words there is a cycle of references between the label and the text. This cycle must be broken in order to persist the rectangle. To do this, either the label or the text must be declared as a Voyage root.
 
 An alternative solution to break cycles, avoiding the declaration of new voyage roots, is to declare some fields of objects as transient and define how the graph must be reconstructed at load time. This will be discussed in the following section.
 
 !! Enhancing Storage
 @enhancing
 
-How objects are stored can be changed by adding Magritte descriptions to their classes. In this section, first we will talk about configuration options for the storage format of the objects, and then we will treat more advanced loading and saving of attributes, which can be used, e.g. to break cycles in embedded objects.
+How objects are stored can be changed by adding Magritte descriptions to their classes. In this section, we first talk about configuration options for the storage format of the objects. Then we treat more advanced concepts such as loading and saving of attributes, which can be used, for example, to break cycles in embedded objects.
 
 !!!Configuring Storage
 
 Consider that, continuing with the rectangle example but using embedded points, we add the following storage requirements:
 
-- We need to use a different collection named ''rectanglesForTest'' instead of ''rectangle''.
+- We need to use a different collection named ==rectanglesForTest== instead of ==rectangle==.
 - We only store instances of the ==Rectangle== class in this collection, and therefore the ==instanceOf== information is redundant.
 - The ==origin== and ==corner== attributes are always going to be points, so the ==instanceOf== information there is redundant as well.
 
-We use Magritte descriptions with specific pragmas to declare properties of the container of the Mongo descriptions of that class (all Magritte descriptions are kept in containers) and to describe both the ==origin== and ==corner== attributes.
+We use Magritte descriptions with specific pragmas to declare properties of a class and to describe both the ==origin== and ==corner== attributes.
 
-The method ==mongoContainer== is defined as follows: First it uses the ==<mongoContainer>== pragma to state that it describes the container to be used for this class. Second it returns a specific ==VOMongoContainer== instance. This instance is configured such that it uses the ''retanglesForTest'' collection in the database, and that it will only store ==Rectangle== instances. Note that it is not required to specify both configuration lines. It is equally valid to only declare that the collection to be used is ''retanglesForTest'', or only specify that the collection contains just ==Rectangle== instances.
+The method ==mongoContainer== is defined as follows: First it uses the ==<mongoContainer>== pragma to state that it describes the container to be used for this class. Second it returns a specific ==VOMongoContainer== instance. This instance is configured such that it uses the ==rectanglesForTest== collection in the database, and that it will only stores ==Rectangle== instances. Note that it is not required to specify both configuration lines. It is equally valid to only declare that the collection to be used is ==rectanglesForTest==, or only specify that the collection contains just ==Rectangle== instances.
 
 [[[
 Rectangle class>>mongoContainer
   <mongoContainer>
 
-  ^VOMongoContainer new
+  ^ VOMongoContainer new
     collectionName: 'rectanglesForTest';
     kind: Rectangle;
     yourself
@@ -279,7 +279,7 @@ The two other methods use the pragma ==<mongoDescription>== and return a Mongo d
 Rectangle class>>mongoOrigin
   <mongoDescription>
 
-  ^VOMongoToOneDescription new
+  ^ VOMongoToOneDescription new
     attributeName: 'origin';
     kind: Point;
     yourself
@@ -289,13 +289,13 @@ Rectangle class>>mongoOrigin
 Rectangle class>>mongoCorner
   <mongoDescription>
 
-  ^VOMongoToOneDescription new
+  ^ VOMongoToOneDescription new
     attributeName: 'corner';
     kind: Point;
     yourself
 ]]]
 
-A saved rectangle, now in the ''rectanglesForTest'' collection, will look more or less as follows:
+A saved rectangle, now in the ==rectanglesForTest== collection, will look more or less as follows:
 
 [[[
 {
