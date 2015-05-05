@@ -1,6 +1,6 @@
-Enterprise Pharo (english version) [![Build Status](https://ci.inria.fr/pharo-contribution/buildStatus/icon?job=PharoForTheEnterprise)](https://ci.inria.fr/pharo-contribution/job/PharoForTheEnterprise/) [![Build Status](https://travis-ci.org/SquareBracketAssociates/PharoForTheEnterprise-english.svg?branch=master)](https://travis-ci.org/SquareBracketAssociates/PharoForTheEnterprise-english)
+Enterprise Pharo (english version) [![Build Status](https://ci.inria.fr/pharo-contribution/buildStatus/icon?job=EnterprisePharoBook)](https://ci.inria.fr/pharo-contribution/job/EnterprisePharoBook/) [![Build Status](https://travis-ci.org/SquareBracketAssociates/EnterprisePharoBook-english.svg?branch=master)](https://travis-ci.org/SquareBracketAssociates/EnterprisePharoBook-english)
 ====================
-This book is continuously built on an [Inria Jenkins server](https://ci.inria.fr/pharo-contribution/job/PharoForTheEnterprise/).
+This book is continuously built on an [Inria Jenkins server](https://ci.inria.fr/pharo-contribution/job/EnterprisePharoBook/).
 
 
 How to write a book
