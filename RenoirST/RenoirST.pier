@@ -1,16 +1,16 @@
 ! Cascading Style Sheet with RenoirSt
 
-RenoirST is a DSL enabling programmatic cascading style sheet generation for Pharo Smalltalk developed by Gabriel Omar Cotelli. 
+RenoirST is a DSL enabling programmatic cascading style sheet generation for Pharo developed by Gabriel Omar Cotelli. 
 
 The goals of RenoirST are to improve CSS integration with existing web frameworks
 and to be able to write and refactor code in Pharo and deploy to CSS. Renoir features are:
 common properties declaration, CSS3 selector support, important rules and media queries support. 
 In this tutorial we will present the key features of RenoirSt with a large set of examples.
-This tutorial assumes some knowledge of CSS and Pharo Smalltalk. For a little introduction about CSS read the chapter *http://book.seaside.st/book/fundamentals/css*.
+This tutorial assumes some knowledge of CSS and Pharo Smalltalk. For a little introduction about CSS you can read the *Seaside's book CSS chapter>http://book.seaside.st/book/fundamentals/css*.
 
 !! Getting started 
 
-To load the library you can load it in your 3.0 image evaluating:
+To load the library in your image, evaluate:
 
 [[[
 Gofer it    
