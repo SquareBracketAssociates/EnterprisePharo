@@ -29,3 +29,12 @@
 .todo h4 {
     color: #3c763d;
 }
+
+.authorToDo {
+    background-color: #ff0000;
+    border: 4px solid black;
+}
+
+.authorToDo h4 {
+    color: #3c763d;
+}
