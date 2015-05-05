@@ -1,22 +1,22 @@
 ! Cascading Style Sheet with RenoirSt
 
-RenoirST is a DSL enabling programmatic cascading style sheet generation for Pharo developed by Gabriel Omar Cotelli. 
+RenoirST is a DSL enabling programmatic cascading style sheet generation for Pharo developed by Gabriel Omar Cotelli.
 
 The goals of RenoirST are to improve CSS integration with existing web frameworks
 and to be able to write and refactor code in Pharo and deploy to CSS. Renoir features are:
-common properties declaration, CSS3 selector support, important rules and media queries support. 
+common properties declaration, CSS3 selector support, important rules and media queries support.
 In this tutorial we will present the key features of RenoirSt with a large set of examples.
 This tutorial assumes some knowledge of CSS and Pharo Smalltalk. For a little introduction about CSS you can read the *Seaside's book CSS chapter>http://book.seaside.st/book/fundamentals/css*.
 
-!! Getting started 
+!! Getting started
 
 To load the library in your image, evaluate:
 
 [[[
-Gofer it    
+Gofer it
     url: 'http://smalltalkhub.com/mc/gcotelli/RenoirSt/main';
     configurationOf: 'RenoirSt';
-    loadStable 
+    loadStable
 ]]]
 
 or download a ready to use image from the Contribution CI Server *https://ci.inria.fr/pharo-contribution/job/RenoirSt/*.
@@ -33,12 +33,12 @@ CascadingStyleSheetBuilder new build
 
 Beautiful! you have now an inspector on your first (empty and useless) style sheet. Let's do now something more useful. Real stylesheets are composed of rules (or rule-sets), where each one has a selector and a declaration group. The selector determines if the rule applies to some element in the DOM, and the declaration group specifies the style to apply.
 
-!! Basics 
+!! Basics
 
 Our first style sheet will simply assign a margin to every div element in the DOM.
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div ]
   with: [:style | style margin: 2 px ];
   build
@@ -81,7 +81,7 @@ It also supports the creation of percentages: 50 percent is expressed as ==50%==
 Some properties requires integer or floating point values. In this cases just use the Pharo provided integer and float support. For example:
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div ]
   with: [:style | style zIndex: 2 ];
   build
@@ -92,10 +92,10 @@ CascadingStyleSheetBuilder new
 The library also supports abstractions for properties requiring color values. It provides a shared pool ==CssSVGColors== providing easy access to colors in the SVG 1.0 list, and some abstractions (==CssRGBColor== and ==CssHSLColor==) to create colors in the rgb or hsl space including alpha support.
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div ]
-  with: [:style | 
-    style 
+  with: [:style |
+    style
       backgroundColor: CssSVGColors aliceBlue;
       borderColor: (CssRGBColor red: 0 green: 128 blue: 0 alpha: 0.5)];
   build
@@ -117,7 +117,7 @@ Hint: In a real scenario don't harcode the colors like this example, put it in s
 RGB-Colors also support percentage-based values:
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div ]
   with: [:style | style borderColor: (CssRGBColor red: 0 percent green: 50 percent blue: 0 percent) ];
   build
@@ -137,7 +137,7 @@ div
 A lot of properties values are just keyword constants. This support is provided by the class CssConstants.
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div ]
   with: [:style | style textAlign: CssConstants justify ];
   build
@@ -156,7 +156,7 @@ div
 Some properties support a wide range of values. For example the margin property can have 1, 2 , 3 or 4 values specified. If only one value needs to be specified just provide it, in other case use an ==Array== like this:
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div ]
   with: [:style | style margin: { 2 px. 4 px } ];
   build
@@ -178,7 +178,7 @@ ZnUrl instances can be used as the value for properties requiring an URI. Both r
 
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div class: 'logo' ]
   with: [:style | style backgroundImage: 'images/logo.png' asZnUrl ];
   declareRuleSetFor: [:selector | selector div class: 'logo' ]
@@ -211,7 +211,7 @@ So far our focus was on the style part of the rule. Let's focus now on the avail
 These selectors match a specific element type in the DOM. The library provides out-of-the-box support for HTML elements, mostly using the same names that the Seaside framework. One example is the div selector used in the previous chapter. Another is the following:
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector orderedList ]
   with: [:style | style listStyleType: CssConstants lowerRoman ];
   build
@@ -231,7 +231,7 @@ ol
 One of the most common use cases is the descendant combinator.
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div orderedList ]
   with: [:style | style listStyleType: CssConstants lowerRoman ];
   build
@@ -250,7 +250,7 @@ div ol
 !!! Child Combinator
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div > selector orderedList ]
   with: [:style | style listStyleType: CssConstants lowerRoman ];
   build
@@ -268,7 +268,7 @@ div > ol
 !! Adjacent and General Siblings Combinators
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div + selector orderedList ]
   with: [:style | style listStyleType: CssConstants lowerRoman ];
   build
@@ -284,7 +284,7 @@ div + ol
 ]]]
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div ~ selector orderedList ]
   with: [:style | style listStyleType: CssConstants lowerRoman ];
   build
@@ -301,7 +301,7 @@ div ~ ol
 !!Class and Id Selectors
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | (selector div class: 'pastoral') id: #account5 ]
   with: [:style | style listStyleType: CssConstants lowerRoman ];
   build
@@ -316,7 +316,7 @@ div.pastoral#account5
 }
 ]]]
 
-!!!!Hint: 
+!!!!Hint:
 You should not hardcode the classes and ids, they should be obtained from the same object that holds them for the HTML generation. You probably have some code setting the class(es) and/or id(s) to a particular HTML element.
 
 !! Pseudo-Classes
@@ -326,7 +326,7 @@ The pseudo-class concept is introduced to allow selection based on information t
 Here is a small example that uses the pseudo-classes:
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector anchor link ]
   with: [:style | style color: CssSVGColors blue ];
   declareRuleSetFor: [:selector | selector anchor visited active]
@@ -372,13 +372,13 @@ input:checked
 !!!! Language Pseudo-class:
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | (selector lang: 'es') > selector div ]
   with: [:style | style quotes: { '"<"'. '">"' }  ];
   build
 ]]]
 
-produces 
+produces
 
 [[[
 :lang(es) > div
@@ -398,7 +398,7 @@ Standalone text and other non-element nodes are not counted when calculating the
 The ==:root== pseudo-class represents an element that is the root of the document. To build this kind of selector just send the message root to another selector:
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector root ]
   with: [:style | style color: CssSVGColors grey ];
   build
@@ -413,7 +413,7 @@ In addition to this, ==:nth-child()== can take =='odd'== and =='even'== as argum
 The library does not currently include the abstraction for this kind of formulae, but a plain string can be used, or just an integer if n is not required.
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector childAt: '3n+1' ]
   with: [:style | style color: CssSVGColors blue ];
   declareRuleSetFor: [:selector | selector childAt: 5 ]
@@ -456,7 +456,7 @@ Pseudo-elements create abstractions about the document tree beyond those specifi
 This selector describes the contents of the first formatted line of an element.
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector paragraph firstLine ]
   with: [:style | style textTransform: CssConstants uppercase ];
   build
@@ -475,7 +475,7 @@ p::first-line
 This pseudo-element represents the first letter of an element, if it is not preceded by any other content (such as images or inline tables) on its line.
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector paragraph firstLetter ]
   with: [:style | style fontSize: 200 percent ];
   build
@@ -494,7 +494,7 @@ p::first-letter
 These pseudo-elements can be used to describe generated content before or after an element's content. The content property, in conjunction with these pseudo-elements, specifies what is inserted.
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | (selector paragraph class: 'note') before ]
   with: [:style | style content: '"Note: "' ];
   declareRuleSetFor: [:selector | (selector paragraph class: 'note') after ]
@@ -502,7 +502,7 @@ CascadingStyleSheetBuilder new
   build
 ]]]
 
-produces 
+produces
 [[[
 p.note::before
 {
@@ -512,7 +512,7 @@ p.note::before
 p.note::after
 {
     content: "[*]";
-} 
+}
 ]]]
 
 !! Selector Groups
@@ -520,7 +520,7 @@ p.note::after
 A comma-separated list of selectors represents the union of all elements selected by each of the individual selectors in the list. For example, in CSS when several selectors share the same declarations, they may be grouped into a comma-separated list.
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | (selector div class: 'note') after , (selector paragraph class: 'note') before ]
   with: [:style | style content: '"Note: "' ];
   build
@@ -543,12 +543,12 @@ However, for balance, an ==!important== declaration takes precedence over a norm
 The library provides support for this feature by sending the ==beImportantDuring:== message to the style. Let's see an example:
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector paragraph ]
-  with: [:style | 
+  with: [:style |
     style beImportantDuring: [:importantStyle |
-      importantStyle 
-        textIndent: 1 em; 
+      importantStyle
+        textIndent: 1 em;
         fontStyle: CssConstants italic
     ].
     style fontSize: 18 pt.
@@ -577,10 +577,10 @@ A ==@media== rule specifies the target media types of a set of statements (see  
 The most basic media rule consists of specifying just a media type:
 
 [[[
-CascadingStyleSheetBuilder new 
-    declare: [ :cssBuilder | 
+CascadingStyleSheetBuilder new
+    declare: [ :cssBuilder |
         cssBuilder
-            declareRuleSetFor: [ :selector | selector id: #oop ] 
+            declareRuleSetFor: [ :selector | selector id: #oop ]
             with: [ :style | style color: CssSVGColors red ]
         ]
     forMediaMatching: [ :queryBuilder | queryBuilder type: CssMediaQueryConstants print ];
@@ -641,14 +641,14 @@ A new basic type is added: ==CssResolution==. This kind of measures can be creat
 Let's see a final example to better understand the media features support:
 
 [[[
-CascadingStyleSheetBuilder new 
-    declare: [ :cssBuilder | 
+CascadingStyleSheetBuilder new
+    declare: [ :cssBuilder |
         cssBuilder
-            declareRuleSetFor: [ :selector | selector id: #oop ] 
+            declareRuleSetFor: [ :selector | selector id: #oop ]
             with: [ :style | style color: CssSVGColors red ]
         ]
-    forMediaMatching: [ :queryBuilder | 
-        queryBuilder 
+    forMediaMatching: [ :queryBuilder |
+        queryBuilder
             orientation: CssMediaQueryConstants landscape;
             resolution: 300 dpi
         ];
@@ -672,5 +672,3 @@ produces:
 !! Conclusion
 
 This concludes this tutorial showing how you can programmatically emit css.
-
-
