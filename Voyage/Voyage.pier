@@ -295,7 +295,13 @@ Rectangle class>>mongoCorner
     yourself
 ]]]
 
-A saved rectangle, now in the ==rectanglesForTest== collection, will look more or less as follows:
+After resetting the repository with:
+
+[[[
+VORepository current reset
+]]]
+
+a saved rectangle, now in the ==rectanglesForTest== collection, will look more or less as follows:
 
 [[[
 {
@@ -330,15 +336,15 @@ It is possible to write specific logic for transforming attributes of an object 
 Defining accessors allows, for example, a ==Currency== object that is contained in an ==Amount== to be written to the database as its' three letter abbreviation (EUR, USD, CLP, ...). When loading this representation, it needs to be converted back into a Currency object, e.g. by instantiating a new Currency object. This is achieved as follows:
 
 [[[
-Amount class>>#mongoCurrency
-        <mongoDescription>
+Amount class>>mongoCurrency
+  <mongoDescription>
 
-        ^ VOMongoToOneDescription new
-                attributeName: 'currency';
-                accessor: (MAPluggableAccessor
-                        read: [ :amt | amt currency abbreviation ]
-                        write: [ :amt :value | amt currency: (Currency fromAbbreviation: value)]);
-                yourself
+  ^ VOMongoToOneDescription new
+    attributeName: 'currency';
+    accessor: (MAPluggableAccessor
+      read: [ :amount | amount currency abbreviation ]
+      write: [ :amount :value | amount currency: (Currency fromAbbreviation: value) ]);
+    yourself
 ]]]
 
 Also, a post-load action can be defined for an attribute or for the containing object, by adding a ==postLoad:== action to the attribute descriptor or the container descriptor. This action is a one-parameter block, and will be executed after the object has been loaded into memory with as argument the object that was loaded.
@@ -369,7 +375,7 @@ Using MongoQueries, the following operators may be used in a query:
 For example, a query that selects all elements in the database whose name is ==John== is the following:
 
 [[[
-[ :each | each name = 'John']
+[ :each | each name = 'John' ]
 ]]]
 
 
@@ -410,11 +416,10 @@ In this case, to search for objects by one of the embedded document elements, th
 
 !!!!Quering with elements from another root document
 
-With no-SQL databases, it is not possible to query on multiple collections (equivalent of JOIN in SQL). You have two options: alter your schema to use embedded documents or write application-level code to reproduce the JOIN behavior. The later option can be done with two queries:
+With no-SQL databases, it is not possible to query on multiple collections (equivalent of JOIN in SQL). You have two options: alter your schema to use embedded documents or write application-level code to reproduce the JOIN behavior. The later option can be done by sending the ==voyageId== message to an object already returned by a previous query and using that id to match another document:
 
 [[[
-color := Color selectOne: [ :each | each name = 'red' ]
-Point selectOne: [ :each | (each at: 'color.__id') = color voyageId ]
+[ :each | (each at: 'color.__id') = color voyageId ]
 ]]]
 
 
@@ -422,7 +427,7 @@ Point selectOne: [ :each | (each at: 'color.__id') = color voyageId ]
 
 To perform queries which are outside the capabilities of MongoQueries or even the MongoDB query language, MongoDB provides a way to write queries directly in Javascript using the ==$where== operand. This is also possible in MongoQueries by sending the ==where:== message:
 
-In the following example we repeat the previous query but a Javascript expression instead. The expression is  =='this.origin.x \== 42'== and to use it, the query is as follows:
+In the following example we repeat the previous query with a Javascript expression:
 
 [[[
 [ :each | each where: 'this.origin.x == 42' ].
@@ -433,7 +438,7 @@ More complete documentation about the use of ==$where== is in the   *MongoDB whe
 
 !!!Using JSON queries
 
-If MongoQueries does not allow a query to be expressed, a JSON query can be created directly. JSON queries are the MongDB query internal representation, and can be created straightforwardly in Voyage. In a nutshell: a JSON structure is mapped to a dictionary with pairs. In these pairs the key is a string and the value can be a primitive value, a collection or another JSON structure (i.e. another dictionary). To create a query, we simply need to create a dictionary that satisfies these requirements. Note that the use of JSON queries is strictly for when using the MongoDB back-end. Other back-ends, \eg~the in-memory layer, do not provide support for the use of JSON queries.
+When MongoQueries is not powerful enough to express your query, you can use a JSON query instead. JSON queries are the MongDB query internal representation, and can be created straightforwardly in Voyage. In a nutshell: a JSON structure is mapped to a dictionary with pairs. In these pairs the key is a string and the value can be a primitive value, a collection or another JSON structure (i.e., another dictionary). To create a query, we simply need to create a dictionary that satisfies these requirements. Note that the use of JSON queries is strictly for when using the MongoDB back-end. Other back-ends, e.g., the in-memory layer, do not provide support for the use of JSON queries.
 
 For example, the first example of the use of MongoQueries is written as a dictionary as follows:
 
@@ -441,7 +446,7 @@ For example, the first example of the use of MongoQueries is written as a dictio
 { 'name' -> 'John' } asDictionary
 ]]]
 
-Dictionary pairs are composed with AND semantics. The following example repeats the second example of the use of MongoQueries; selecting the elements having ==John== as name AND whose ==orders== value is greater than 10.
+Dictionary pairs are composed with AND semantics. Selecting the elements having ==John== as name AND whose ==orders== value is greater than 10 can be written like this:
 
 [[[
 {
@@ -455,7 +460,7 @@ To construct the "greater than" statement, a new dictionary needs to be created 
 
 !!!!Using dot notation to access embedded documents
 
-To access values embedded documents with JSON queries, the dot notation is used. For example, a reformulation of the MongoQueries embedded documents example is the following:
+To access values embedded in documents with JSON queries, the dot notation is used. For example, the query representing rectangles whose origin have 42 as their ==x== values can be expressed this way:
 
 [[[
 {
@@ -473,11 +478,11 @@ To express an OR condition, a dictionary whose key is =='$or'== and whose values
 { '$or' :
   {
     {
-      'name -> 'John'.
+      'name' -> 'John'.
       'orders' -> { '$gt': 10 } asDictionary
     } asDictionary.
     {
-      'name -> { '$ne': 'John'} asDictionary.
+      'name' -> { '$ne': 'John'} asDictionary.
       'orders' -> { '$lte': 10 } asDictionary
     } asDictionary.
   }.
@@ -487,7 +492,7 @@ To express an OR condition, a dictionary whose key is =='$or'== and whose values
 
 !!!!Going beyond MongoQueries features
 
-Using JSON queries allows to use features that are not present in MongoQueries, for example the use of regular expression. Below is a query that specifies all documents with a ==fullname.lastName== that starts with a letter "D" and then matches all the attributes of the ==fullname== embedded document, by using the Mongo expressions ==$regexp== and ==$options$== as follows:
+Using JSON queries allows to use features that are not present in MongoQueries, for example the use of regular expressions. Below is a query that searches for all documents with a ==fullname.lastName== that starts with the letter ==D==:
 
 [[[
 {
@@ -498,35 +503,37 @@ Using JSON queries allows to use features that are not present in MongoQueries, 
 } asDictionary.
 ]]]
 
+Option ==i== for a regular expression means case insensitivity. More options are described in the documentation of the *$regex operator>http://docs.mongodb.org/manual/reference/operator/query/regex/#op._S_regex*.
+
 This example only briefly illustrates the power of JSON queries. Many more different queries can be constructed, and the complete list of operators and usages is in the *MongoDB operator documentation>http://docs.mongodb.org/manual/reference/operator*
 
 
 !!!Executing a query
 
-Voyage has a group of methods to perform search that can be more or less mapped to regular collection methods. For the examples, we will use stored Point instances we have seen before (in the section *referencing* other roots) to illustrate the use of these methods. Note that all queries in this section can be either MongoQueries or JSON queries, unless otherwise specified.
+Voyage has a group of methods to perform searches. To illustrate the use of these methods we will use stored the Point example we have presented before. Note that all queries in this section can be written either as MongoQueries or as JSON queries, unless otherwise specified.
 
 !!!!Basic object retrieval
 
 The following methods provide basic object retrieval.
 
 - ""==selectAll=="" Retrieves all documents in the corresponding database collection. For example, ==Point selectAll== will return all Points.
-- ""==selectOne:=="" Retrieves one document that matches the query. This maps to a ==detect:== method and takes as argument a query specification (either a MongoQuery or a JSON Query). For example, ==Point selectOne: [:each | each x = 42] == or ==Point selectOne: { 'x' -> 42 } asDictionary==
-- ""==selectMany:=="" Retrieves all the documents that match the query. This maps to a ==select:== method and takes as argument a query specification, like above.
+- ""==selectOne:=="" Retrieves one document matching the query. This maps to a ==detect:== method and takes as argument a query specification (either a MongoQuery or a JSON Query). For example, ==Point selectOne: [:each | each x = 42] == or ==Point selectOne: { 'x' -> 42 } asDictionary==
+- ""==selectMany:=="" Retrieves all the documents matching the query. This maps to a ==select:== method and takes as argument a query specification, like above.
 
 !!!!Limiting object retrieval and sorting
 
-The methods that query the database look similar to their equivalent in the Collection hierarchy. However unlike regular collections which can operate fully on memory, often Voyage collection queries need to be customized in order to optimize memory consumption and/or access speed. This is because there can be literally millions of documents in each collection, surpassing the memory limit of Smalltalk, and also the database searches have a much higher performance than the equivalent code in Smalltalk.
+The methods that query the database look similar to their equivalent in the Collection hierarchy. However unlike regular collections which can operate fully on memory, often Voyage collection queries need to be customized in order to optimize memory consumption and/or access speed. This is because there can be literally millions of documents in each collection, surpassing the memory limit of Pharo, and also the database searches have a much higher performance than the equivalent code in Pharo.
 
-The first refinement to the queries consist in limiting the amount of results that are returned. Of the collection of all the documents that match, a subset is returned that starts at the index that is given as argument. This can be used to only retrieve the first N matches to a query, or go over the query results in smaller blocks to avoid out of memory issues in the Smalltalk image.
+The first refinement to the queries consist in limiting the amount of results that are returned. Of the collection of all the documents that match, a subset is returned that starts at the index that is given as argument. This can be used to only retrieve the first N matches to a query, or go over the query results in smaller blocks to avoid out of memory issues in the Pharo image.
 
 
 - ""==selectMany:limit:=="" Retrieves a collection of objects from the database that match the query, up to the given limit. For example, ==Point selectMany: [:each | each x = 42] limit: 10 ==
-- ""==selectMany:limit:offset:=="" Retrieves a collection of objects from the database that match the query. The first object retrieved will be at the offset position plus one of the results of the query, and up to limit objects will be returned. For example, if the above example matched 25 points, the last 15 points will be returned by the query ==Point selectMany: [:each | each x = 42] limit: 20 offset: 10== (any limit argument greater than 15 will do for this example).
+- ""==selectMany:limit:offset:=="" Retrieves a collection of objects from the database that match the query. The first object retrieved will be at the ==offset== position plus one of the results of the query, and up to ==limit== objects will be returned. For example, if the above example matched 25 points, the last 15 points will be returned by the query ==Point selectMany: [:each | each x = 42] limit: 20 offset: 10== (any ==limit== argument greater than 15 will do for this example).
 
 The second customization that can be performed is to sort the results. To use this, the class ==VOOrder== provides constants to specify ==ascending== or ==descending== sort order.
 
 - ""==selectAllSortBy:=="" Retrieves all documents, sorted by the specification in the argument, which needs to be a JSON query. For example, == Point selectAllSortBy: { #x -> VOOrder ascending} asDictionary == returns the points in ascending x order.
-- ""==selectMany:sortBy:=="" Retrieves all the documents that match the query and sorts them. For example, == Point selectMany: { 'x' -> 42 } SortBy: { #y -> VOOrder descending} asDictionary == returns the points where x is 42, in descending y order.
+- ""==selectMany:sortBy:=="" Retrieves all the documents matching the query and sorts them. For example, ==Point selectMany: { 'x' -> 42 } asDictionary sortBy: { #y -> VOOrder descending } asDictionary == returns the points where ==x== is 42, in descending ==y== order.
 - ""==selectMany:sortBy:limit:offset:=="" Provides for specifying a limit and offset to the above query.
 
 
