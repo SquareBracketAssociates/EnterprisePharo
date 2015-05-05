@@ -12,7 +12,9 @@ Finished:
 	   >> JF did a pass [20 / Dec / 2014]
 		>> first english version done [11 / Oct / 2014]
 		>> moved from PFTE to PE
-		
+
+        Voyage/Voyage.pier
+           >> Esteban will do a pass (2015-05-05)
 
 *******************************************************************************
 	
@@ -67,9 +69,6 @@ NeoJSON/NeoJSON.pier
 	>> then Damien
 	
 RenoirST/RenoirST.pier
-	>> Damien will do a pass
-
-Voyage/Voyage.pier
 	>> Damien will do a pass
 
 WebSockets/WebSockets.pier
