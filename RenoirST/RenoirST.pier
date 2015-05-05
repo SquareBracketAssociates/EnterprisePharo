@@ -1,4 +1,4 @@
-! Cascading Style Sheet with RenoirSt
+!Cascading Style Sheet with RenoirSt
 
 RenoirST is a DSL enabling programmatic cascading style sheet generation for Pharo developed by Gabriel Omar Cotelli.
 
@@ -8,32 +8,32 @@ common properties declaration, CSS3 selector support, important rules and media 
 In this tutorial we will present the key features of RenoirSt with a large set of examples.
 This tutorial assumes some knowledge of CSS and Pharo Smalltalk. For a little introduction about CSS you can read the *Seaside's book CSS chapter>http://book.seaside.st/book/fundamentals/css*.
 
-!! Getting started
+!!Getting started
 
 To load the library in your image, evaluate:
 
 [[[
 Gofer it
-    url: 'http://smalltalkhub.com/mc/gcotelli/RenoirSt/main';
-    configurationOf: 'RenoirSt';
-    loadStable
+  url: 'http://smalltalkhub.com/mc/gcotelli/RenoirSt/main';
+  configurationOf: 'RenoirSt';
+  loadStable
 ]]]
 
-or download a ready to use image from the Contribution CI Server *https://ci.inria.fr/pharo-contribution/job/RenoirSt/*.
+or download a ready to use image from the *Pharo contribution CI Server>https://ci.inria.fr/pharo-contribution/job/RenoirSt*.
 
 
-!! Introduction
+!!Introduction
 
 
-The main entry point for the library is the class ==CascadingStyleSheetBuilder==. Let's see some minimalist example. Copy in a workspace and Inspect-it (Alt\+i):
+The main entry point for the library is the class ==CascadingStyleSheetBuilder==. In a workspace, inspect the result of the following expression:
 
 [[[
 CascadingStyleSheetBuilder new build
 ]]]
 
-Beautiful! you have now an inspector on your first (empty and useless) style sheet. Let's do now something more useful. Real stylesheets are composed of rules (or rule-sets), where each one has a selector and a declaration group. The selector determines if the rule applies to some element in the DOM, and the declaration group specifies the style to apply.
+You now have an inspector on your first (empty and useless) style sheet. Real stylesheets are composed of rules (or rule-sets), where each one has a selector and a declaration group. The selector determines if the rule applies to some element in the DOM, and the declaration group specifies the style to apply.
 
-!! Basics
+!!Basics
 
 Our first style sheet will simply assign a margin to every div element in the DOM.
 
@@ -61,9 +61,9 @@ The properties API is mostly defined following this rules:
 - Properties with one or more dashes are mapped using camel case: margin-top became marginTop: message send.
 
 
-!! Basic CSS Types
+!!Basic CSS Types
 
-!!! Lengths
+!!!Lengths
 
 Another interest thing is 2 px message send. This message send produces a ==CssLength==. The library provides out-of-the-box support for the length units in the CSS spec. There's extensions to Integer and Float classes allowing to obtain lengths. The supported units are:
 
@@ -87,7 +87,7 @@ CascadingStyleSheetBuilder new
   build
 ]]]
 
-!!! Colors
+!!!Colors
 
 The library also supports abstractions for properties requiring color values. It provides a shared pool ==CssSVGColors== providing easy access to colors in the SVG 1.0 list, and some abstractions (==CssRGBColor== and ==CssHSLColor==) to create colors in the rgb or hsl space including alpha support.
 
@@ -132,7 +132,7 @@ div
 }
 ]]]
 
-!!! Constants
+!!!Constants
 
 A lot of properties values are just keyword constants. This support is provided by the class CssConstants.
 
@@ -151,7 +151,7 @@ div
 ]]]
 
 
-!! Multiple Property Values
+!!Multiple Property Values
 
 Some properties support a wide range of values. For example the margin property can have 1, 2 , 3 or 4 values specified. If only one value needs to be specified just provide it, in other case use an ==Array== like this:
 
@@ -202,11 +202,11 @@ div.logo
 
 
 
-!! Selectors
+!!Selectors
 
 So far our focus was on the style part of the rule. Let's focus now on the available selectors. Remember that a CSS selector represents a structure used to match elements in the document tree. This chapter assumes some familiarity with the CSS selectors and will not go in detail about the exact meaning of each one. For more details you can take a look at *http://www.w3.org/TR/css3-selectors/*
 
-!!! Type selectors
+!!!Type selectors
 
 These selectors match a specific element type in the DOM. The library provides out-of-the-box support for HTML elements, mostly using the same names that the Seaside framework. One example is the div selector used in the previous chapter. Another is the following:
 
@@ -226,7 +226,7 @@ ol
 }
 ]]]
 
-!! Combinators
+!!Combinators
 
 One of the most common use cases is the descendant combinator.
 
@@ -247,7 +247,7 @@ div ol
 ]]]
 
 
-!!! Child Combinator
+!!!Child Combinator
 
 [[[
 CascadingStyleSheetBuilder new
@@ -265,7 +265,7 @@ div > ol
 }
 ]]]
 
-!! Adjacent and General Siblings Combinators
+!!Adjacent and General Siblings Combinators
 
 [[[
 CascadingStyleSheetBuilder new
@@ -319,7 +319,7 @@ div.pastoral#account5
 !!!!Hint:
 You should not hardcode the classes and ids, they should be obtained from the same object that holds them for the HTML generation. You probably have some code setting the class(es) and/or id(s) to a particular HTML element.
 
-!! Pseudo-Classes
+!!Pseudo-Classes
 
 The pseudo-class concept is introduced to allow selection based on information that lies outside of the document tree or that cannot be expressed using the simpler selectors. Most pseudo-classes are supported just by sending one of the following messages link, visited, active, hover, focus, target, enabled, disabled or checked.
 
@@ -369,7 +369,7 @@ input:checked
 }
 ]]]
 
-!!!! Language Pseudo-class:
+!!!!Language Pseudo-class:
 
 [[[
 CascadingStyleSheetBuilder new
@@ -387,13 +387,13 @@ produces
 }
 ]]]
 
-!!!! Structural Pseudo-classes
+!!!!Structural Pseudo-classes
 
 These selectors allow selection based on extra information that lies in the document tree but cannot be represented by other simpler selectors nor combinators.
 
 Standalone text and other non-element nodes are not counted when calculating the position of an element in the list of children of its parent. When calculating the position of an element in the list of children of its parent, the index numbering starts at 1.
 
-!!!! Root Pseudo-class
+!!!!Root Pseudo-class
 
 The ==:root== pseudo-class represents an element that is the root of the document. To build this kind of selector just send the message root to another selector:
 
@@ -404,7 +404,7 @@ CascadingStyleSheetBuilder new
   build
 ]]]
 
-!!!! Kind of nth-child Pseudo-classes
+!!!!Kind of nth-child Pseudo-classes
 
 The :nth-child(an\+b) pseudo-class notation represents an element that has an\+b\-1 siblings before it in the document tree, for any positive integer or zero value of n, and has a parent element. For values of a and b greater than zero, this effectively divides the element's children into groups of a elements (the last group taking the remainder), and selecting the bth element of each group. The a and b values must be integers (positive, negative, or zero). The index of the first child of an element is 1.
 
@@ -447,11 +447,11 @@ only-of-type -> onlyOfType
 empty -> empty
 ]]]
 
-!! Pseudo-Elements
+!!Pseudo-Elements
 
 Pseudo-elements create abstractions about the document tree beyond those specified by the document language. For instance, document languages do not offer mechanisms to access the first letter or first line of an element's content. Pseudo-elements allow authors to refer to this otherwise inaccessible information. Pseudo-elements may also provide authors a way to refer to content that does not exist in the source document.
 
-!!!! First line
+!!!!First line
 
 This selector describes the contents of the first formatted line of an element.
 
@@ -489,7 +489,7 @@ p::first-letter
 }
 ]]]
 
-!!!! Before and After
+!!!!Before and After
 
 These pseudo-elements can be used to describe generated content before or after an element's content. The content property, in conjunction with these pseudo-elements, specifies what is inserted.
 
@@ -515,7 +515,7 @@ p.note::after
 }
 ]]]
 
-!! Selector Groups
+!!Selector Groups
 
 A comma-separated list of selectors represents the union of all elements selected by each of the individual selectors in the list. For example, in CSS when several selectors share the same declarations, they may be grouped into a comma-separated list.
 
@@ -534,7 +534,7 @@ p.note::before
 }
 ]]]
 
-!! Important Rules
+!!Important Rules
 
 CSS attempts to create a balance of power between author and user style sheets (*http://www.w3.org/TR/CSS2/cascade.html#important-rules*). By default, rules in an author's style sheet override those in a user's style sheet.
 
@@ -569,7 +569,7 @@ p
 Note that the important properties must be created by sending the messages to the inner argument ==importantStyle== instead of the outer argument ==style==.
 
 
-!! Media Queries
+!!Media Queries
 
 A ==@media== rule specifies the target media types of a set of statements (see  *http://www.w3.org/TR/CSS2/media.html*). The ==@media== construct allows style sheet rules that apply to various media in the same style sheet. Style rules outside of @media rules apply to all media types that the style sheet applies to. At-rules inside ==@media== are invalid in CSS2.1 (see *http://www.w3.org/TR/css3-mediaqueries/*).
 
@@ -669,6 +669,6 @@ produces:
 }
 ]]]
 
-!! Conclusion
+!!Conclusion
 
 This concludes this tutorial showing how you can programmatically emit css.
