@@ -14,7 +14,7 @@
     <!-- Bootstrap -->
     <link href="../support/html/css/bootstrap.min.css" rel="stylesheet">
     <link href="../support/html/css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="../support/html/css/annotated-paragraph.css" rel="stylesheet">
+    <link href="../support/html/css/square-braket-associates.css" rel="stylesheet">
     <style>
         .container { max-width: 55em; }
     </style>

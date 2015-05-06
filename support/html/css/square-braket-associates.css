@@ -1,3 +1,7 @@
+h5, .h5 {
+    font-size: 16px;
+}
+
 .annotated-paragraph {
     margin: 20px 0;
     padding: 15px 30px 15px 15px;
@@ -5,7 +9,7 @@
 }
 
 .annotated-paragraph h4 {
-  margin-top: 0;
+    margin-top: 0;
 }
 
 .annotated-paragraph p:last-child {
