@@ -35,7 +35,7 @@ You now have an inspector on your first (empty and useless) style sheet. Real st
 
 !!Basics
 
-Our first style sheet will simply assign a margin to every div element in the DOM.
+Our first useful style sheet will simply assign a margin to every div element in the DOM.
 
 [[[
 CascadingStyleSheetBuilder new
@@ -44,7 +44,7 @@ CascadingStyleSheetBuilder new
   build
 ]]]
 
-the expected result is:
+the expected result in CSS is:
 
 [[[
 div
@@ -53,7 +53,7 @@ div
 }
 ]]]
 
-Let's analyze it. The message ==declareRuleSetFor:with:== is used to configure a rule-set in the builder. It uses two closures, the first one is used to define the selector and the second one the style. The selector argument of the first closure provides an API to construct the selector (more on this later). The style argument on the second closure provides the API to declare CSS properties and his values.
+The message ==declareRuleSetFor:with:== is used to configure a rule-set in the builder. The message requires two blocks: the first block defines the selector and the second defines the style to apply to elements matching the selector. The selector argument of the first closure provides an API to construct the selector (more on this later). The style argument on the second closure provides the API to declare CSS properties and his values.
 
 The properties API is mostly defined following this rules:
 
