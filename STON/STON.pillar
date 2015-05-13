@@ -26,7 +26,7 @@ implementation than domain oriented, such as Blocks and classes. STON is also le
 
 !!! Loading STON
 
-A reference implementation for STON was implemented in Pharo and works in versions 1.3, 1.4, 2.0, 3.0 and 4.0 as well as in *http://www.squeak.org*.
+A reference implementation for STON was implemented in Pharo and works in versions 1.3, 1.4, 2.0, 3.0 and 4.0.
 The project contains a full complement of unit tests.
 
 STON is hosted on SmalltalkHub. To load STON, execute the following code snippet: 
@@ -558,6 +558,32 @@ Next is an example of how to use the STON writer to generate JSON output.
             referencePolicy: #error;
             nextPut: json ].
 ]]]
+
+!! Handling CR, LF inside Strings
+
+STON also supports the conversion or not of CR, LF, or CRLF characters inside strings and symbols as one chosen canonical newLine.
+
+The messages ==STONReader>>convertNewLines: aBoolean== and ==STONReader>>newLine: aCharacter== read and convert CR, LF, or CRLF inside strings and symbols as one chosen canonical newLine. When true, any newline CR, LF or CRLF read unescaped inside strings or symbols will be converted to the newline convention chosen, see ==newLine:==. The default is false, not doing any convertions.
+
+In the following example, any CR, LF or CRLF seen while reading Strings will all be converted to the same EOL, CRLF.
+[[[
+(STON reader on: ..) 
+  newLine: String crlf; 
+  convertNewLines: true; 
+  next.
+]]]
+
+The message ==STONWriter>>keepNewLines: aBoolean== works as follows: If true, any newline CR, LF or CRLF inside strings or symbols will not be escaped but will instead be converted to the newline convention chosen, see ==newLine:==. The default is false, where CR, LF or CRLF will be enscaped unchanged.
+
+[[[
+(STON writer on: ...) 
+  newLine: String crlf; 
+  keepNewLines: true; 
+  nextPut: ...
+]]]
+
+
+Any CR, LF or CRLF inside any String will no longer be written as ==\\r==, ==\\n== or ==\\r\\n== but all as CRLF, a normal EOL.
 
 
 !! Conclusion
