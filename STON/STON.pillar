@@ -127,7 +127,7 @@ TestDomainObject {
 
 !!!! A large example: an HTTP response
 
-Here is a more complex example:  a ZnResponse object. It is the result of serializing the result of the following HTTP request (using the Zinc HTTP Components framework) ==ZnEasy get: 'http://zn.stfx.eu/zn/small.html'==. It also shows that curly braces are for dictionaries and square brackets are for lists.
+Here is a more complex example:  a ZnResponse object. It is the result of serializing the result of the following HTTP request (using Zinc, see Chapters *ch:zinc-client* and *ch:zinc-server*). It also shows that curly braces are for dictionaries and square brackets are for lists.
 
 [[[
 ZnResponse {
