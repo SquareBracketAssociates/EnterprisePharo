@@ -9,7 +9,7 @@ The MongoDB database backend stores the objects into MongoDB: a document-oriente
 
 Voyage provides a default way in which objects are stored in the database. Fine-grained configuration of this can be performed using Magritte descriptions. Voyage also includes a query API, which allows specific objects to be retrieved from a MongoDB database. We will discuss each of these features in this text.
 
-(This text started as a number of blog posts by Esteban Lorenzano, which have been extensively reworked by Johan Fabry, and including additional information shared by Sabine Knoefel and Norbert Hartl. For corrections, comments and questions about this text please send a mail to Johan Fabry. His e-mail address is dcc.uchile.cl@jfabry, but the other way around. )
+This text started as a number of blog posts by Esteban Lorenzano, which have been extensively reworked by Johan Fabry, and including additional information shared by Sabine Knoefel and Norbert Hartl.
 
 !! Setup
 
