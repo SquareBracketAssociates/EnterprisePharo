@@ -1,11 +1,14 @@
 ! Serializing Complex Objects with Fuel
 
-Fuel is a fast open-source general-purpose binary object serialization framework developed by Mariano Martinez-Peck, Martìn Dias and Max Leske. It is robust and used in many industrial cases. A fundamental reason for the creation of Fuel was speed: while there is a plethora of frameworks to serialize objects based on recursive parsing of the object graphs in textual format as XML, JSON, or STON, these approaches are often slow. 
-@@authorToDo Add references to STON and JSON
-(we will present STON and JSON in other chapters of this book).
+Fuel is a fast open-source general-purpose binary object serialization
+framework developed by Mariano Martinez-Peck, Martìn Dias and Max
+Leske. It is robust and used in many industrial cases. A fundamental
+reason for the creation of Fuel was speed: while there is a plethora
+of frameworks to serialize objects based on recursive parsing of the
+object graphs in textual format as XML, JSON, or STON, these
+approaches are often slow. (For JSON and STON see also Chapter *ch:ston*.)
 
 Part of the speed of Fuel comes from the idea that objects are loaded more often than stored. This makes it worth to spend more time while storing to yield faster loading. Also, its storage scheme is based on the pickle format that puts similar objects into groups for efficiency and performance. As a result, Fuel has been shown to be one of the fastest object loaders, while still being a really fast object saver.
-@@authorToDo ML: should we include references? Maybe to Mariano's phd?) 
 Moreover, Fuel can serialize nearly any object in the image, it can even serialize a full execution stack and later reload it!
 
 The main features of Fuel are as follows:
