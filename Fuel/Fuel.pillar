@@ -106,8 +106,10 @@ FLSerializer serialize: 'stringToSerialize' toFileNamed: 'demo.fuel'.
 materializedString := FLMaterializer materializeFromFileNamed: 'demo.fuel'.
 ]]]
 
-Fuel also provides the messages ==serializeToByteArray:== and ==materializeFromByteArray:== for storing into a ==ByteArray==. This can be interesting, for example, for serializing an object graph as a blob of data into a database when using Voyage.
-@@authorToDo Put a reference to Voyage
+Fuel also provides the messages ==serializeToByteArray:== and
+==materializeFromByteArray:== for storing into a ==ByteArray==. This
+can be interesting, for example, for serializing an object graph as a
+blob of data into a database when using Voyage (see Chapter *ch:Voyage*).
 
 [[[language=Smalltalk
 anArray := FLSerializer serializeToByteArray: 'stringToSerialize'. 
