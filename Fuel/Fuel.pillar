@@ -236,7 +236,7 @@ SomeGlobal := Set new.
 aSerializer := FLSerializer newDefault.
 
 "Tell the serializer to consider SomeGlobal as global."
-aSerializer analyzer considerGlobal: SomeGlobal.
+aSerializer analyzer considerGlobal: #SomeGlobal.
 
 aSerializer 
 	serialize: SomeGlobal 
@@ -245,8 +245,6 @@ aSerializer
 "In this case, the materialized object *is* the same as the global instance."
 [ (FLMaterializer materializeFromFileNamed: 'g.fuel') == SomeGlobal ] assert.
 ]]]
-
-@@authorToDo JF Assertion Fails! Waiting for feedback of Martin and Mariano
 
 !!!Changing the environment
 
@@ -493,26 +491,23 @@ As most classes of Fuel, they have class comments that explain their purpose:
 : I represent an error produced during materialization when a serialized global name doesn't exist (at ==Smalltalk globals==).
 
 ; FLMethodChanged
-: I represent an error produced during materialization when is detected a change in the bytecodes of a method serialized as global. This error was born when testing the materialization of a ==BlockClosure== defined in a method that changed. The test produced a VM crash.
+: I represent an error produced during materialization when a change in the bytecodes of a method serialized as global is detected. This error was born when testing the materialization of a ==BlockClosure== defined in a method that changed. The test produced a VM crash.
 
 ; FLMethodNotFound
-: I represent an error produced during materialization when a serialized method in a class or trait name doesn't exist (at ==Smalltalk globals==).
+: I represent an error produced during materialization when a serialized method in a class or trait name doesn't exist (in ==Smalltalk globals==).
 
 
 %=========================================================================% 
 
 !! Object Migration
-We often need to load objects whose class has changed since it was saved. Figure *figClassChanges* illustrates typical changes to the class shape. Imagine we serialized an instance of ==Point== and we need to materialize it when ==Point== class has changed.
+We often need to load objects whose class has changed since it was saved. For example, figure *figClassChanges* illustrates typical changes that can happen to the class shape. Now imagine we previously serialized an instance of ==Point== and we need to materialize it after ==Point== class has changed.
 
 +Example of changes to a class>file://figures/ClassChanges.png|width=70|label=figClassChanges+
 
 
-@@authorToDo SD stopped here
+Let's start with the simple cases. If a variable was ""inserted"", its value will be ==nil==. If ""removed"", it is also obvious: the serialized value will be ignored. ""Change of Order"" of instance variables is handled by Fuel automatically.
 
-
-Let's start with the simple cases. If a variable was ""inserted"", its value will be ==nil==. If ""removed"", it is also obvious: the serialized value will be ignored. ""Order change"" of instance variables is handled by Fuel automatically.
-
-A more interesting case is when a variable was ""renamed"". Fuel cannot automatically guess the new name of a variable but the user can tell Fuel about the renamed variables by using the message ===migratedClassNamed:variables:==. The user should provide a mapping from old names to new ones as shown in the following example:
+A more interesting case is when a variable was ""renamed"". Fuel cannot automatically guess the new name of a variable, so the change will be understood by Fuel as two independent operations: an insertion and a removal. To resolve this problem, the user can tell the Fuel materializer which are the renamed variables by using the message ==migratedClassNamed:variables:==. It takes as first argument the name of the class and as second argument a mapping from old names to new names. This is illustrated in the following example:
 
 [[[language=Smalltalk
 FLMaterializer newDefault
@@ -520,9 +515,7 @@ FLMaterializer newDefault
 	variables: {'x' -> 'posX'. 'y' -> 'posY'}.
 ]]]
 
-Not surprisingly, if nothing is specified, the change will be understood by Fuel as two independent operations: an insertion and a removal.
-
-The last change that can happen is a ""class rename"". Again Fuel provides a way to handle this case using the message ==migrateClassNamed:toClass:==.
+The last change that can happen is a ""class rename"". Again the Fuel materializer provides a way to handle this case, using the message ==migrateClassNamed:toClass:== and an example of its use is shown below:
 
 [[[language=Smalltalk
 FLMaterializer newDefault
@@ -530,13 +523,11 @@ FLMaterializer newDefault
 	toClass: Coordinate.
 ]]]
 
-Fuel defines the message ==migrateClassNamed:toClass:variables:== that combines both ""class and variable rename"".
-
-Although not illustrated in the figure, a class could also change its ""layout"". For example, Point could change from being ""fixed"" to ""variable"". Layout changes from fixed to variable format are automatically handled by Fuel. Unfortunately, the inverse (variable to fixed) is not supported so far.
-
-You can find tests related to different kinds of migrations in ==FLMigrationTest==.
+Lastly, Fuel defines the message ==migrateClassNamed:toClass:variables:== that combines both ""class and variable rename"".
 
 Additionally, the method ==globalEnvironment:==, showed in Section *ManagingGlobals*, is useful for migrations: you can prepare an ad-hoc environment dictionary with the same keys that were used during serialization, but with the new classes as values.
+
+@@note A class could also change its ""layout"". For example, Point could change from being ""fixed"" to ""variable"". Layout changes from fixed to variable format are automatically handled by Fuel. Unfortunately, the inverse (variable to fixed) is not supported so far.
 
 
 %=========================================================================% 
