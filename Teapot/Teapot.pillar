@@ -43,7 +43,7 @@ The most important concept of Teapot is the Route. An example of a Route definit
 
 A route has three parts:
 - an HTTP method (GET, POST, PUT, DELETE, HEAD, TRACE, CONNECT, OPTIONS, PATCH),
-- an URL pattern (i.e. ==/hi==, ==/users/<name>==, ==/foo/*/bar/*==, or a regexp),
+- an URL pattern (i.e. ==/hi==, ==/users/<name>==, ==/foo/\*/bar/\*==, or a regexp),
 - an action (block, message send or any object).
 
 Here is another example. 
