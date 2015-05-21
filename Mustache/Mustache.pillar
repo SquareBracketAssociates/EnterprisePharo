@@ -1,9 +1,13 @@
 !Mustache Templates for Pharo
 @cha:mustache
 
-Mustache is a  templating engine that is supported in many programming languages *http://mustache.github.io* (Pharo is not listed there because these people do not reply to emails). Norbert Hartl developed a Mustache package for Pharo. This chapter is an introduction to this package and a mini tutorial to get started with Mustache. It is based on the original blog written by Norbert and we extended it to offer a larger covering of the Mustache features.
+Mustache is a  templating engine that is supported in many programming languages *http://mustache.github.io* (Pharo is not listed there because these people do 
+not reply to emails). Norbert Hartl developed a Mustache package for Pharo. This chapter is an introduction to this package and a mini tutorial to get started 
+with Mustache. It is based on the original blog written by Norbert and we extended it to offer a larger covering of the Mustache features.
 
-The syntax of Mustache is small and covers a wide range of use cases. Mustache is simple and versatile. You can use it for many usages. We will show how Mustache is used in Pillar the system used to generate this book. Although it was designed to be a templating engine for HTML pages it is useful in different areas.
+The syntax of Mustache is small and covers a wide range of use cases. Mustache is simple and versatile. You can use it for many usages. We will show how 
+Mustache is used in Pillar the system used to generate this book. Although it was designed to be a templating engine for HTML pages it is useful in different 
+areas.
 
 
 !! Getting started
@@ -72,10 +76,13 @@ Well, $6000.0, after taxes.
 '
 ]]]
 
-As context object we can use Dictionaries and Objects. Dictionaries need to have a key that is used in the template and Objects need a selector with the same name. In this chapter we use Dictionaries because they are easier to illustrate with.
+As context object we can use Dictionaries and Objects. Dictionaries need to have a key that is used in the template and Objects need a selector with the same 
+name. In this chapter we use Dictionaries because they are easier to illustrate with.
 
 !! Tags as Variables
-Tags can be of different types: The first type is ''variable''. The simplest one is a variable.  A =={{name}}== tag in a basic template tries to find the ==name== key in the current context. If there is no ==name== key, the parent contexts are looked up recursively. If the top context is reached and the ==name== key is still not found, nothing will be rendered. In the following example ==age== is not defined, therefore nothing is printed.
+Tags can be of different types: The first type is ''variable''. The simplest one is a variable.  A =={{name}}== tag in a basic template tries to find the 
+==name== key in the current context. If there is no ==name== key, the parent contexts are looked up recursively. If the top context is reached and the ==name== 
+key is still not found, nothing will be rendered. In the following example ==age== is not defined, therefore nothing is printed.
 
 All variables are HTML escaped by default. If you want to return unescaped HTML, use the 
 triple mustache expression: ==\{{{name\}}}==. For example ==\{{{company\}}}== will simply 
@@ -127,7 +134,9 @@ outputs
 
 !! Sections
 
-Sections render blocks of text one or more times depending on the value of the key in the current context. We present such behavior in the following sections. A section is delimited by a pound hash sign and slash. The pound sign begins it and the slash sign ends it. That is, =={{#number}}== begins a "number" section while {{/number}} ends it.
+Sections render blocks of text one or more times depending on the value of the key in the current context. We present such behavior in the following sections. 
+A section is delimited by a pound hash sign and slash. The pound sign begins it and the slash sign ends it. That is, =={{#number}}== begins a "number" section 
+while {{/number}} ends it.
 
 [[[
 templateString := '{{#number}}
@@ -138,7 +147,8 @@ templateString := '{{#number}}
 
 When a variable defining a section is set, the section is activated. 
 For example, here the =='number'== is bound to true and the =='Shown too'== text is shown.
-There are some special cases where the section is not activated: when the variable is missing, when its value is set to false, or an empty list (or string). The following examples illustrated such behavior. 
+There are some special cases where the section is not activated: when the variable is missing, when its value is set to false, or an empty list (or string). The 
+following examples illustrated such behavior. 
 
 !!!! With the variable set
 
@@ -226,8 +236,10 @@ context := { 'number2' -> '' } asDictionary.
 
 
 !! Working with non-empty lists
-We can use collections to create loop constructs in templates. If a section key exists and it has a non-false value, the text between the pound and slash are rendered and displayed one or more times (according to the collection element numbers). 
-Other said, when the value is a non-empty collection, the text in a section is displayed once for each item in the list. The context of the section is set to the current item for each iteration. 
+We can use collections to create loop constructs in templates. If a section key exists and it has a non-false value, the text between the pound and slash are 
+rendered and displayed one or more times (according to the collection element numbers). 
+Other said, when the value is a non-empty collection, the text in a section is displayed once for each item in the list. The context of the section is set to 
+the current item for each iteration. 
 Here is an example showing that the ''list'' section is evaluated three times since ''list'' binding holds a collection with three elements.
 
 [[[
@@ -456,7 +468,9 @@ Therefore =={{=<% %>=}}== defines ==<%== and ==%>== as new delimiter. To put bac
 ]]]
 
 !! Inverted Sections
-An inverted section begins with a caret and ends with a slash. That is =={{^list}}== begins a "list" inverted section while =={{/list}}== ends it. While sections are used to render text one or more times based on the value of the key, inverted sections may render text once based on the inverse value of the key. That is, they will be rendered if the key doesn't exist, is false, or is an empty collection.
+An inverted section begins with a caret and ends with a slash. That is =={{^list}}== begins a "list" inverted section while =={{/list}}== ends it. While 
+sections are used to render text one or more times based on the value of the key, inverted sections may render text once based on the inverse value of the key. 
+That is, they will be rendered if the key doesn't exist, is false, or is an empty collection.
 
 !!!! false key
 [[[
@@ -542,7 +556,8 @@ prints the following output
 <strong>Username</strong>
 ]]]
 
-The values of dictionary used as template are supposed to be MustacheTemplates. However, when strings are used instead of MustacheTemplates, strings are converted internally.
+The values of dictionary used as template are supposed to be MustacheTemplates. However, when strings are used instead of MustacheTemplates, strings are 
+converted internally.
 
 !! How about JSON?
 
@@ -575,4 +590,6 @@ htmlString := PRHTMLWriter write: pillarDocument.
 
 !! Templates made easy
 
-Mustache can make template dependent tasks very easy from a simple token replacement up to nested structures to create HTML pages. We use them e.g., for generating SOAP templates. The strength of Mustache lays in the syntax and the combination of context objects. So, there is more for you to find what can be done with it. Happy templating !
+Mustache can make template dependent tasks very easy from a simple token replacement up to nested structures to create HTML pages. We use them e.g., for 
+generating SOAP templates. The strength of Mustache lays in the syntax and the combination of context objects. So, there is more for you to find what can be 
+done with it. Happy templating !
