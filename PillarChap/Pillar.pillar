@@ -437,13 +437,12 @@ generates
 !!!Links
 
 !!!!Internal Links and Anchors
-
 @anchorName
 
 To put an anchor (equivalent to \\label in Latex), use the ==@anchorName== syntax on a ''separate line''. Then, when you want to link to it (equivalent to 
 \\ref in Latex), use the ==\*@anchorName\*== syntax. Anchors are invisible and links will be rendered as: *@anchorName*.
 
-To create a link to an other pillar file, use the ==\*Alias>path.pillar@anchorName*\==. The Alias and the anchor are optional but you will need them in some 
+To create a link to an other pillar file, use the ==\*Alias>path.pillar@anchorName\*==. The Alias and the anchor are optional but you will need them in some 
 cases (for example if you have an inter-file link and you export in LaTeX, or if you have an inter-file link and you export all your file in the same html). 
 
 !!!!External Links
