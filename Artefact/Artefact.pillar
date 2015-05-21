@@ -1,4 +1,5 @@
 !Generate PDF documents with Artefact
+@cha:artefact
 
 The Adobe PDF format is probably one of the most widespread electronic document formats. Used daily, it is the basis for the production of exchangeable documents that contain both text and graphics. If you receive a bill, follow a purchase on a web site, download a report, a book or an administrative form, these files will most likely be PDF documents. For programmers that need to provide any such reporting functionality, supporting this format has become a must and the generation of PDF documents is part of their toolkit. 
 

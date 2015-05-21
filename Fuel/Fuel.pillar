@@ -1,4 +1,5 @@
 ! Serializing Complex Objects with Fuel
+@cha:fuel
 
 Fuel is a fast open-source general-purpose binary object serialization
 framework developed by Mariano Martinez-Peck, Martìn Dias and Max

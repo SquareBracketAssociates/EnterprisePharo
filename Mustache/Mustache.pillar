@@ -1,4 +1,5 @@
 !Mustache Templates for Pharo
+@cha:mustache
 
 Mustache is a  templating engine that is supported in many programming languages *http://mustache.github.io* (Pharo is not listed there because these people do not reply to emails). Norbert Hartl developed a Mustache package for Pharo. This chapter is an introduction to this package and a mini tutorial to get started with Mustache. It is based on the original blog written by Norbert and we extended it to offer a larger covering of the Mustache features.
 

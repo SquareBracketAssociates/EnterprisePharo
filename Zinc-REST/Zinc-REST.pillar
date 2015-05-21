@@ -1,4 +1,5 @@
 ! REST Web Services
+@cha:zinc-rest
 
 Zinc HTTP Components is well suited to the implementation of REST web services, both the client and the server parts. REST or *Representational State Transfer>http://en.wikipedia.org/wiki/Representational_state_transfer* is an architectural style most easily described as using HTTP verbs and URIs to deal with encoded resources. Some kind of framework is needed to successfully implement a non-trivial REST service. There is one available in the Zinc-REST-Server package, for example. Here we will implement a very small, simplified example by hand, for educational purposes.
 

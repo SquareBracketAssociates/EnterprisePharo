@@ -1,4 +1,5 @@
 ! Handling CSV with NeoCSV
+@cha:neoCSV
 
 CSV (Comma Separated Values) is a popular data-interchange format. NeoCSV is an elegant and efficient standalone Pharo framework to read and write CSV converting to or from Pharo objects. This chapter has been written by 
 Sven Van Caekenberghe the author of NeoCSV and many other nicely designed Pharo libraries.
