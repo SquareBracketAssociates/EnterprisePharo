@@ -3,17 +3,22 @@
 
 @@note This is an unfinished draft
 
-The rise of the Internet and of Open Standards resulted in the adoption of a number of fundamental mechanisms to enable communication and collaboration between different systems.
+The rise of the Internet and of Open Standards resulted in the adoption of a number of fundamental mechanisms to enable communication and collaboration between 
+different systems.
 
-One such mechanism is the ability to encode strings or characters to bytes or to decode strings or characters from bytes. Different encoding standards have been developed over the years. Pharo supports many current and legacy encodings.
+One such mechanism is the ability to encode strings or characters to bytes or to decode strings or characters from bytes. Different encoding standards have been 
+developed over the years. Pharo supports many current and legacy encodings.
 
-Another important aspect is the ability to describe resources such as files. Both Mime-Type and URLs or URIs are basic building blocks for creating meta descriptions of resources. Pharo has objects that implement these fundamental aspects.
+Another important aspect is the ability to describe resources such as files. Both Mime-Type and URLs or URIs are basic building blocks for creating meta 
+descriptions of resources. Pharo has objects that implement these fundamental aspects.
 
-Character encoding, MIME types and URL/URIs are essential for the correct implementation of HTTP, but they are independent from it, as they are used for many other purposes.
+Character encoding, MIME types and URL/URIs are essential for the correct implementation of HTTP, but they are independent from it, as they are used for many 
+other purposes.
 
 @@note The Zinc HTTP Components load instructions here are temporary.
 
-To get the latest versions of the Zinc-Character-Encoding-Core and Zinc-Resource-Meta-Core packages discussed in this chapter, you should load Zinc HTTP Components using either of the following expressions:
+To get the latest versions of the Zinc-Character-Encoding-Core and Zinc-Resource-Meta-Core packages discussed in this chapter, you should load Zinc HTTP 
+Components using either of the following expressions:
 
 [[[
 Gofer it
@@ -36,7 +41,9 @@ Second we will show you how we can decode and encode characters and string from 
 
 !!! Characters and Strings use Unicode internally
 
-Proper character encoding and decoding is crucial in today's international world. Internally, Pharo stores characters and strings using Unicode. *Unicode>http://en.wikipedia.org/wiki/Unicode* is a very large internationally standardized collection of code points, integers, representing all of the world languages' characters.
+Proper character encoding and decoding is crucial in today's international world. Internally, Pharo stores characters and strings using Unicode. 
+*Unicode>http://en.wikipedia.org/wiki/Unicode* is a very large internationally standardized collection of code points, integers, representing all of the world 
+languages' characters.
 
 We can obtain the code point (Unicode value) of a character by sending it the ==codePoint== message.
 
@@ -60,7 +67,8 @@ Let's look at some example strings with their Unicode code points:
 ]]]
 
 For a simple language like English, all characters have code points below 128 (these code points can even fit in 7 bits). 
-These characters are part of *ASCII>http://en.wikipedia.org/wiki/ASCII*. The very first part of the so called Basic Multilingual Plane of Unicode (the first 128 code points of it) are identical to ASCII.
+These characters are part of *ASCII>http://en.wikipedia.org/wiki/ASCII*. The very first part of the so called Basic Multilingual Plane of Unicode (the first 128 
+code points of it) are identical to ASCII.
 
 [[[
 $H codePoint 
@@ -75,16 +83,19 @@ $é codePoint
   -> 233 
 ]]]
 
-And finally, there are hundreds of other languages, like Chinese, Japanese, Cyrillic, Arabic or Greek. You can see from the example (Greece in Greek) that those code points are higher than 256 and thus no longer fit in one byte.
+And finally, there are hundreds of other languages, like Chinese, Japanese, Cyrillic, Arabic or Greek. You can see from the example (Greece in Greek) that those 
+code points are higher than 256 and thus no longer fit in one byte.
 
 [[[
 $λ codePoint  
   -> 955
 ]]]
 
-Unicode code points are often written using a specific hexadecimal notation. For example, the previous character, the Greek lowercase lambda, is written as \U\+03BB. The Pharo inspector show you this value next to the decimal value.
+Unicode code points are often written using a specific hexadecimal notation. For example, the previous character, the Greek lowercase lambda, is written as 
+\U\+03BB. The Pharo inspector show you this value next to the decimal value.
 
-The good thing is, we can work with text in any language in Pharo. To display everything correctly you have to use a font that is capable of showing all the characters (or glyphs) needed. Arial Unicode MS is such a font.
+The good thing is, we can work with text in any language in Pharo. To display everything correctly you have to use a font that is capable of showing all the 
+characters (or glyphs) needed. Arial Unicode MS is such a font.
 
 
 !!! Encoding and Decoding
@@ -93,7 +104,8 @@ For communication with the world outside Pharo, the operating system, files, the
 And code points are different to bytes as you will see below. Therefore we need a way to transform our internal strings into external collection of bytes
 and vice versa.
 
-Character encoding is standard way of converting a native Pharo string, a collection of Unicode code points to series of bytes. Character decoding is the reverse process: interpreting a series of bytes as a collection of Unicode code points, as a Pharo string.
+Character encoding is standard way of converting a native Pharo string, a collection of Unicode code points to series of bytes. Character decoding is the reverse 
+process: interpreting a series of bytes as a collection of Unicode code points, as a Pharo string.
 
 To implement character encoding or decoding, a concrete ==ZnCharacterEncoder== subclass like ==ZnUTF8Encoder== is used. Character encoders do the following:
 
@@ -106,7 +118,8 @@ To implement character encoding or decoding, a concrete ==ZnCharacterEncoder== s
 
 Character encoders do proper error handling, throwing ==ZnCharacterEncodingError== when something goes wrong. The strict/lenient setting controls some behavior in this respect.
 
-The primary internet encoding is *UTF-8>http://en.wikipedia.org/wiki/UTF-8*. This is also the recommended encoding. UTF-8 is a variable length encoding that is optimized somewhat for ASCII and to a lesser degree Latin1 and some other common European encodings. 
+The primary internet encoding is *UTF-8>http://en.wikipedia.org/wiki/UTF-8*. This is also the recommended encoding. UTF-8 is a variable length encoding that is 
+optimized somewhat for ASCII and to a lesser degree Latin1 and some other common European encodings. 
 
 
 !!! Converting Strings and ByteArrays
@@ -215,7 +228,8 @@ mostly equivalent to Latin-1 or ISO-8859-1. And yes, that is a bit confusing.
 
 
 The second primary use of encoders is when dealing with streams. More specifically, when interpreting a binary read or write stream as a character stream. 
-Note that at their lowest level, all streams to and from the operating system or network are binary and thus need the use of an encoder when treating them as character streams.
+Note that at their lowest level, all streams to and from the operating system or network are binary and thus need the use of an encoder when treating them as 
+character streams.
 
 To treat a binary write stream as a character write stream, you wrap is with a ==ZnCharacterWriteStream==. Similary, to treat a binary read stream as a 
 character stream, you wrap it with a ==ZnCharacterReadStream==. Here are some examples.
@@ -269,9 +283,12 @@ some example strings.
 Simple ASCII strings are ByteStrings. Strings using special characters are WideStrings. Some non-ASCII strings are still ByteStrings. 
 The explanation is very simple. As we saw in the very first subsection of this chapter, they differ in the Unicode code points used for each character.
 
-In the first case, for ASCII, the code points are always less than 128. Hence they fit in one byte. The second string is using Latin-1 characters, whose code points are less than 256. Latin-1 characters and the first 256 Unicode characters are the same. These still fit in a byte. A ==ByteString== is a String that only stores Unicode code points that fit in a byte. This implementation is very efficient. Note that ByteString is a variable byte subclass of String.
+In the first case, for ASCII, the code points are always less than 128. Hence they fit in one byte. The second string is using Latin-1 characters, whose code 
+points are less than 256. Latin-1 characters and the first 256 Unicode characters are the same. These still fit in a byte. A ==ByteString== is a String that 
+only stores Unicode code points that fit in a byte. This implementation is very efficient. Note that ByteString is a variable byte subclass of String.
 
-Our last example has code points that no longer fit in a byte. To be able to store these, ==WideString== allocates 32-bit (4 byte) slots for each character. This implementation is necessarily less efficient. Note that WideString is a variable word subclass of String.
+Our last example has code points that no longer fit in a byte. To be able to store these, ==WideString== allocates 32-bit (4 byte) slots for each character. This 
+implementation is necessarily less efficient. Note that WideString is a variable word subclass of String.
 
 In practice, the difference between ByteString and WideString should not matter. Conversions are done automatically when needed.
 
@@ -280,12 +297,15 @@ In practice, the difference between ByteString and WideString should not matter.
  -> WideString  
 ]]]
 
-As the above example shows, assigning a Unicode character, $α, to a ByteString, 'abc' converts it to a WideString. This is actually done using a ==becomeForward:== message. When benchmarking, this conversion might show up as taking significant time. If you know upfront that you will need WideStrings, it can be better to start with the right type.
+As the above example shows, assigning a Unicode character, $α, to a ByteString, 'abc' converts it to a WideString. This is actually done using a 
+==becomeForward:== message. When benchmarking, this conversion might show up as taking significant time. If you know upfront that you will need WideStrings, it 
+can be better to start with the right type.
 
 
 !!! ByteString and ByteArray equivalence is an implementation detail
 
-There is another implementation detail worth mentioning. For the Pharo virtual machine, more specifically, for a number of primitives, ByteString and ByteArray are equivalent. Given what we now know, that makes sense. Consider the following code:
+There is another implementation detail worth mentioning. For the Pharo virtual machine, more specifically, for a number of primitives, ByteString and ByteArray 
+are equivalent. Given what we now know, that makes sense. Consider the following code:
 
 [[[
 'abcdef' asByteArray.
@@ -318,7 +338,8 @@ What about doing the same mix up with elements ?
 
 This is more what we expect: we're not allowed to do this. We are mixing two types that are not equivalent, like Character and Integer. 
 
-So although it is true that some equivalence between ByteString and ByteArray exists, you should not mix up the two. It is an implementation detail that you should not rely upon.
+So although it is true that some equivalence between ByteString and ByteArray exists, you should not mix up the two. It is an implementation detail that you 
+should not rely upon.
 
 
 !!! Beware of bogus conversions
@@ -365,14 +386,18 @@ The lazy conversion for proper Unicode WideStrings will give unexpected results:
   => #[0 0 3 149 0 0 3 187 0 0 3 187 0 0 3 172 0 0 3 180 0 0 3 177]
 ]]]
 
-This 'conversion' does not correspond to any known encoding. It is the result of writing 4-byte Unicode code points as Integers. Needless to say, using this is a bug no matter how you look at it.
+This 'conversion' does not correspond to any known encoding. It is the result of writing 4-byte Unicode code points as Integers. Needless to say, using this is 
+a bug no matter how you look at it.
 
-In this century you will look silly for not implementing proper support for all languages. When converting from strings to bytes, use a proper, explicit encoding - and vice versa.
+In this century you will look silly for not implementing proper support for all languages. When converting from strings to bytes, use a proper, explicit 
+encoding - and vice versa.
 
 
 !!! Strict and lenient encoding
 
-When we said earlier that no encoding (or the null encoder) and Latin-1 encoding are the same, we lied. There are actually 'holes' in the table, some byte values are undefined, which a strict encoder won't allow. For example, Unicode code point 150 is, strictly speaking, not in Latin-1. Depending on the 'strict' setting, you will get an error or there will be a silent conversion. Here is some code illustrating this point.
+When we said earlier that no encoding (or the null encoder) and Latin-1 encoding are the same, we lied. There are actually 'holes' in the table, some byte 
+values are undefined, which a strict encoder won't allow. For example, Unicode code point 150 is, strictly speaking, not in Latin-1. Depending on the 'strict' 
+setting, you will get an error or there will be a silent conversion. Here is some code illustrating this point.
 
 [[[
 ZnByteEncoder latin1 encodeString: 150 asCharacter asString.
@@ -398,7 +423,8 @@ ZnByteEncoder latin1 byteDomain includes: 150.
 
 The first two expressions with give a ZnCharacterEncodingError, 'Character Unicode code point outside encoder ranger'. The default encoder is strict. 
 
-Asking the encoder to ==#beLenient== results in the value going through (if that is possible). Unicode character 150 (\U\+0096) is an unprintable control character meaning 'Start of Protected Area' (SPA) and is strictly speaking not part of Latin-1. 
+Asking the encoder to ==#beLenient== results in the value going through (if that is possible). Unicode character 150 (\U\+0096) is an unprintable control 
+character meaning 'Start of Protected Area' (SPA) and is strictly speaking not part of Latin-1. 
 
 You can explicity access both the allowed byte or characters values, the domain of encoder or decoder.
 
@@ -407,7 +433,8 @@ Note that the lower half of a byte encoding, the ASCII part between 0 and 127, i
 
 !!! Available Encoders
 
-Pharo comes with support for the most important encodings currently used, as well as with support for some important legacy encodings. Seen as the objects implementing them, the following encoders are available:
+Pharo comes with support for the most important encodings currently used, as well as with support for some important legacy encodings. Seen as the objects 
+implementing them, the following encoders are available:
 
 - ZnUTF8Encoder
 - ZnUTF16Encoder
@@ -472,7 +499,8 @@ ZnMimeType imagePng asZnMimeType = 'image/png' asZnMimeType
   -> true
 ]]]
 
-Finally, ZnMimeType also knows how to convert file name extensions to mime-types using the ==forFilenameExtension:== message. This mapping is based on the Debian/Ubuntu ==/etc/mime.types== file, which was read statically into ==mimeTypeFilenameExtensionsSpec==.
+Finally, ZnMimeType also knows how to convert file name extensions to mime-types using the ==forFilenameExtension:== message. This mapping is based on the 
+Debian/Ubuntu ==/etc/mime.types== file, which was read statically into ==mimeTypeFilenameExtensionsSpec==.
 
 [[[
 ZnMimeType forFilenameExtension: 'html'.
@@ -491,11 +519,14 @@ ZnMimeType default
 
 Once you have a ZnMimeType instance, you can access its components using the ==main==, ==sub== and ==parameters== messages.
 
-An important aspect of mime-types is whether it textual or binary. You can test that with the ==isBinary== message. Typically, text, XML or JSON are considered textual, while images are binary.
+An important aspect of mime-types is whether it textual or binary. You can test that with the ==isBinary== message. Typically, text, XML or JSON are considered 
+textual, while images are binary.
 
-For textual (non-binary) types, the encoding (or charset parameter) defaults to UTF-8, the prevalent internet standard. With the convencience messages ==charSet:==, ==setCharSetUTF8== and ==clearCharSet== you can manipulate the charset parameter.
+For textual (non-binary) types, the encoding (or charset parameter) defaults to UTF-8, the prevalent internet standard. With the convencience messages 
+==charSet:==, ==setCharSetUTF8== and ==clearCharSet== you can manipulate the charset parameter.
 
-Comparing mime-types using the standard ==\=== message takes all components into account, including the parameters. Different parameters lead to different mime-types. When charsets are involved it is often better to compare using the ==matches:== message. Here is how this works in practice.
+Comparing mime-types using the standard ==\=== message takes all components into account, including the parameters. Different parameters lead to different 
+mime-types. When charsets are involved it is often better to compare using the ==matches:== message. Here is how this works in practice.
 
 [[[
 'text/plain' asZnMimeType = ZnMimeType textPlain.
@@ -513,7 +544,8 @@ ZnMimeType textPlain matches: 'text/plain' asZnMimeType.
 
 The charset=UTF-8 that is part of what ==ZnMimeType textPlain== returns is not taken into account in the second set of comparisons.
 
-The main or sub types can be a wildcard, indicated by a ==*==. This allows for matching. Obviously, everything matches ==\*/\*== (==ZnMimeType any==). Otherwise, when the sub type is ==\*==, the main types must be equal. Here is an example.
+The main or sub types can be a wildcard, indicated by a ==*==. This allows for matching. Obviously, everything matches ==\*/\*== (==ZnMimeType any==). Otherwise, 
+when the sub type is ==\*==, the main types must be equal. Here is an example.
 
 [[[
 ZnMimeType text.
@@ -534,7 +566,11 @@ ZnMimeType applicationXml matches: ZnMimeType text.
 
 URLs (or URIs) are a way to name or identify something. Often, they also contain information of where you can access the thing they name or identify. 
 
-We will be using the terms URL (*Uniform Resource Locator>http://en.wikipedia.org/wiki/Uniform_resource_locator*) and URI (*Uniform Resource Identifier>http://en.wikipedia.org/wiki/Uniform_resource_identifier*) interchangeably as is most commonly done in practice. A URI is just a name or identification, while a URL also contains information on how to find or access a resource. For example, the URI ==/documents/curriculum-vitae.html== identifies and names a document, while the URL ==http://john-doe.com/documents/curriculum-vitae.html== also specifies that we can use HTTP to access this resource on a specic server. By considering most parts optional, we can use one abstraction to implement both URI and URL using one class.
+We will be using the terms URL (*Uniform Resource Locator>http://en.wikipedia.org/wiki/Uniform_resource_locator*) and URI 
+(*Uniform Resource Identifier>http://en.wikipedia.org/wiki/Uniform_resource_identifier*) interchangeably as is most commonly done in practice. A URI is just a 
+name or identification, while a URL also contains information on how to find or access a resource. For example, the URI ==/documents/curriculum-vitae.html== 
+identifies and names a document, while the URL ==http://john-doe.com/documents/curriculum-vitae.html== also specifies that we can use HTTP to access this 
+resource on a specic server. By considering most parts optional, we can use one abstraction to implement both URI and URL using one class.
 
 The class ==ZnUrl== models URLs (or URIs) and has the following components:
 
@@ -555,7 +591,8 @@ scheme://username:password@host:port/segments?query#fragment
 
 !!! Creating URLs
 
-ZnUrls are most often created by parsing an external representation using either the ==fromString:== class message or by sending the ==asUrl== or ==asZnUrl== convenience message to a String. Using ==asUrl== or ==asZnUrl== helps in accepting both Strings and ZnUrls arguments.
+ZnUrls are most often created by parsing an external representation using either the ==fromString:== class message or by sending the ==asUrl== or ==asZnUrl== 
+convenience message to a String. Using ==asUrl== or ==asZnUrl== helps in accepting both Strings and ZnUrls arguments.
 
 [[[
 ZnUrl fromString: 'http://www.google.com/search?q=Smalltalk'.
@@ -586,7 +623,8 @@ ZnUrl components can be manipulated destructively. Here is an example:
 
 !!! External and Internal Representation of URLs
 
-Some characters of parts of a URL are illegal because they would interfere with the syntax and further processing and thus have to be encoded. The methods in accessing protocols do not do any encoding, those in parsing and printing do. Here is an example:
+Some characters of parts of a URL are illegal because they would interfere with the syntax and further processing and thus have to be encoded. The methods in 
+accessing protocols do not do any encoding, those in parsing and printing do. Here is an example:
 
 [[[
 'http://www.google.com' asZnUrl
@@ -614,9 +652,11 @@ ZnUrl fromString: 'www.example.com' defaultScheme: #http
 
 Given a known scheme, ZnUrl knows its default port, try ==portOrDefault==.
 
-A path defaults to what is commonly referred to as slash, test with ==isSlash==. Paths are most often (but don't have to be) interpreted as filesystem paths. To support this, use the ==isFilePath== and ==isDirectoryPath== tests and ==file== and ==directory== accessors.
+A path defaults to what is commonly referred to as slash, test with ==isSlash==. Paths are most often (but don't have to be) interpreted as filesystem paths. To 
+support this, use the ==isFilePath== and ==isDirectoryPath== tests and ==file== and ==directory== accessors.
 
-ZnUrl has some support to handle one URL in the context of another one, this is also known as a relative URL in the context of an absolute URL. Refer to ==isAbsolute==, ==isRelative== and ==inContextOf:==.
+ZnUrl has some support to handle one URL in the context of another one, this is also known as a relative URL in the context of an absolute URL. Refer to 
+==isAbsolute==, ==isRelative== and ==inContextOf:==.
 
 [[[
 '/folder/file.txt' asZnUrl inContextOf: 'http://fileserver.example.net:4400' asZnUrl.
@@ -641,23 +681,30 @@ The first expression retrieves the contents and returns it directly, while the s
 
 ZnUrl can be used to handle file URLs. Use ==isFile== to test for this scheme.
 
-Given a file URL, you can convert it to a regular ==FileReference== using the ==asFileReference== message. In the other direction, you can get a file URL from a ==FileReference== using the ==asUrl== or ==asZnUrl== messages.
+Given a file URL, you can convert it to a regular ==FileReference== using the ==asFileReference== message. In the other direction, you can get a file URL from a 
+==FileReference== using the ==asUrl== or ==asZnUrl== messages.
 
 Do keep in mind however that there is no such thing as a relative file URL, only absolute file URLs exist.
 
 !!! Operations on URLs
 
-To add operations to URLs you could add an extension method to the ZnUrl class. In many cases though, your operation will not work on all kinds of URLs, just on a couple of them. In other words, you need to dispatch, not just on the scheme but maybe even on other URL elements. That is where you can use ==ZnUrlOperation==.
+To add operations to URLs you could add an extension method to the ZnUrl class. In many cases though, your operation will not work on all kinds of URLs, just on 
+a couple of them. In other words, you need to dispatch, not just on the scheme but maybe even on other URL elements. That is where you can use ==ZnUrlOperation==.
 
-You start by defining a name for your operation. Using an actual example, the symbol ==#retrieveContents==. Next, you define one or more subclasses of ==ZnUrlOperation==, each defining the class side message ==operation== to return ==#retrieveContents==. All subclasses with the same operation form the group of applicable implementations.
+You start by defining a name for your operation. Using an actual example, the symbol ==#retrieveContents==. Next, you define one or more subclasses of 
+==ZnUrlOperation==, each defining the class side message ==operation== to return ==#retrieveContents==. All subclasses with the same operation form the group of applicable implementations.
 
-Given a ZnUrl instance, you send it ==performOperation:== or ==performOperation:with:==. This will send ==performOperation:with:on:== to ZnUrlOperation, which will look for an applicable handler subclass, instanciate and invoke it. Your handler subclass will have to overwrite ==performOperation== to do the actual work.
+Given a ZnUrl instance, you send it ==performOperation:== or ==performOperation:with:==. This will send ==performOperation:with:on:== to ZnUrlOperation, which 
+will look for an applicable handler subclass, instanciate and invoke it. Your handler subclass will have to overwrite ==performOperation== to do the actual work.
 
-Each subclass will be sent ==handlesOperation:with:on:== to test if it can handle the name operation with an optional argument on a specific URL. You can override this test. However, the default implementation covers the most common case: the operation name has to match and the scheme of the URL has to be part of the collection returned by ==schemes==.
+Each subclass will be sent ==handlesOperation:with:on:== to test if it can handle the name operation with an optional argument on a specific URL. You can override 
+this test. However, the default implementation covers the most common case: the operation name has to match and the scheme of the URL has to be part of the collection returned by ==schemes==.
 
-For our example, the message ==retrieveContents== on ZnUrl is implemented as an operation named ==#retrieveContents==. The handler class is either ==ZnHttpRetrieveContents== for the schemes ==http== and ==https== or ==ZnFileRetrieveContents== for the scheme ==file==.
+For our example, the message ==retrieveContents== on ZnUrl is implemented as an operation named ==#retrieveContents==. The handler class is either ==ZnHttpRetrieveContents== 
+for the schemes ==http== and ==https== or ==ZnFileRetrieveContents== for the scheme ==file==.
 
-This dispatching mechanism is more powerful than scheme specific ZnUrl subclasses because other elements can be taken into account. Another issue with scheme specific ZnUrl subclasses would be that there are an infinite number of schemes which no hierarchy could cover.
+This dispatching mechanism is more powerful than scheme specific ZnUrl subclasses because other elements can be taken into account. Another issue with scheme 
+specific ZnUrl subclasses would be that there are an infinite number of schemes which no hierarchy could cover.
 
 
 
