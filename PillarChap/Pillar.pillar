@@ -707,7 +707,7 @@ A document usually contains many different Items.
 	item := PRRaw content: 'foo' type: 'html'
 ]]]
 
-!!!!! Script
+!!!!! PRScript
 
 [[[language=smalltalk
 	| item item2 |
