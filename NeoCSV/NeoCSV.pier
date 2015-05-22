@@ -1,11 +1,13 @@
 ! Handling CSV with NeoCSV
+@cha:neoCSV
 
-CSV (Comma Separated Values) is a popular data-interchange format. NeoCSV is an elegant and efficient standalone Pharo framework to read and write CSV converting to or from Pharo objects. This chapter has been written by 
-Sven Van Caekenberghe the author of NeoCSV and many other nicely designed Pharo libraries.
+CSV (Comma Separated Values) is a popular data-interchange format. NeoCSV is an elegant and efficient standalone Pharo framework to read and write CSV 
+converting to or from Pharo objects. This chapter has been written by Sven Van Caekenberghe the author of NeoCSV and many other nicely designed Pharo libraries.
 
 !! An introduction to CSV
 
-CSV is a lightweight text-based de facto standard for human-readable tabular data interchange. Essentially, the key characteristics are that CSV (or more generally, delimiter separated text data):
+CSV is a lightweight text-based de facto standard for human-readable tabular data interchange. Essentially, the key characteristics are that CSV 
+(or more generally, delimiter separated text data):
 
 - is text-based (ASCII, Latin1, Unicode),
 - consists of records, 1 per line (any line ending convention),
@@ -22,7 +24,8 @@ Note that there is not one single official standard specification.
 
 !! NeoCSV
 
-The NeoCSV framework contains a reader (==NeoCSVReader==) and a writer (==NeoCSVWriter==) to parse respectively generate delimiter separated text data to or from Smalltalk objects. The goals of this project are:
+The NeoCSV framework contains a reader (==NeoCSVReader==) and a writer (==NeoCSVWriter==) to parse respectively generate delimiter separated text data to or 
+from Smalltalk objects. The goals of this project are:
 
 - to be standalone (have no dependencies and have little requirements),
 - to be small, elegant and understandable,
@@ -69,7 +72,8 @@ While reading,
 - any line ending is accepted, and
 - both quoted and unquoted fields are allowed.
 
-The standard delimiter is a comma character. Quoting is always done using a double quote character. A double quote character inside a field will be escaped by repeating it. Field separators and line endings are allowed inside a quoted field. Any whitespace is significant.
+The standard delimiter is a comma character. Quoting is always done using a double quote character. A double quote character inside a field will be escaped by 
+repeating it. Field separators and line endings are allowed inside a quoted field. Any whitespace is significant.
 
 
 !! Customizing NeoCSVWriter
@@ -97,7 +101,8 @@ There are 3 ways a field can be written (in increasing order of efficiency):
 - raw - converting it with ==asString== but not quoting it, and 
 - object - not quoting it and using ==printOn:== directly on the output stream.
 
-Obviously, when disabling quoting, you have to be sure your values do not contain embedded separators or line endings. If you are writing arrays of numbers for example, this would be the fastest way to do it:
+Obviously, when disabling quoting, you have to be sure your values do not contain embedded separators or line endings. If you are writing arrays of numbers for 
+example, this would be the fastest way to do it:
 
 [[[
 neoCSVWriter
@@ -107,7 +112,8 @@ neoCSVWriter
 
 The ==fieldWriter== option applies to all fields.
 
-If your data is in the form of regular domain level objects it would be wasteful to convert them to arrays just for writing them as CSV. NeoCSV has a non-intrusive option to map your domain object's fields: You add field specifications based on accessors. This is how you would write an array of Points.
+If your data is in the form of regular domain level objects it would be wasteful to convert them to arrays just for writing them as CSV. NeoCSV has a 
+non-intrusive option to map your domain object's fields: You add field specifications based on accessors. This is how you would write an array of Points.
 
 [[[
 neoCSVWriter
@@ -116,14 +122,13 @@ neoCSVWriter
   nextPutAll: { 1@2. 3@4. 5@6 }
 ]]]
 
-Note how we first write the header (before customizing the writer). The ==addField:== and ==addFields:== methods arrange for the specified accessors to be performed on the incoming objects to produce values that will be written by the fieldWriter. Additionally, there is a protocol to specify different field writing behavior per field, using ==addQuotedField:==, ==addRawField:== and ==addObjectField:==. To specify different field writers for an array (actually an SequenceableCollection subclass), you can use the methods first, second, third, ... as accessors.
+Note how we first write the header (before customizing the writer). The ==addField:== and ==addFields:== methods arrange for the specified accessors to be 
+performed on the incoming objects to produce values that will be written by the fieldWriter. Additionally, there is a protocol to specify different field 
+writing behaviour per field, using ==addQuotedField:==, ==addRawField:== and ==addObjectField:==. To specify different field writers for an array (actually an 
+SequenceableCollection subclass), you can use the methods first, second, third, ... as accessors.
 
 SD: What is the difference between nextPut and addFields: 
 SD: for the comics should I add a method to handle the relationship to other domain objects?
-
-
-
-
 
 !! Customizing NeoCSVReader
 
@@ -140,7 +145,8 @@ or
 neoCSVReader separator: $;
 ]]]
 
-NeoCSVReader will produce records that are instances of its ==recordClass==, which defaults to ==Array==. All fields are always read as Strings. If you want, you can specify converters for each field, to convert them to integers or floats, any other object. Here is an example:
+NeoCSVReader will produce records that are instances of its ==recordClass==, which defaults to ==Array==. All fields are always read as Strings. If you want, 
+you can specify converters for each field, to convert them to integers or floats, any other object. Here is an example:
 
 [[[
 neoCSVReader
@@ -151,11 +157,13 @@ neoCSVReader
   upToEnd.
 ]]]
 
-Here we specify 4 fields: an integer, a float, a string and a date field. Field conversions specified this way only work on indexable record classes, like ==Array==.
+Here we specify 4 fields: an integer, a float, a string and a date field. Field conversions specified this way only work on indexable record classes, like 
+==Array==.
 
 
 !! Conditional 
-With NeoCSVParser you can describe how each field is read and converted, using the same mechanism you can ignore fields. Have a look at the senders of ==addIgnoredField== in the following example where we ignore the third elements of all the inputs.
+With NeoCSVParser you can describe how each field is read and converted, using the same mechanism you can ignore fields. Have a look at the senders of 
+==addIgnoredField== in the following example where we ignore the third elements of all the inputs.
 
 [[[
 
@@ -177,7 +185,9 @@ input := (String crlf join: #( '1,2,a,3' '1,2,b,3' '1,2,c,3' '')).
 Adding ignored field(s) requires adding field types on all other remaining fields.
 
 !! Creating objects
-In many cases you will probably want your data to be returned as one of your domain objects. It would be wasteful to first create arrays and then convert all those. NeoCSV has non-intrusive options to create instances of your own object classes and to convert and set fields on them directly. This is done by specifying accessors and converters. Here is an example for reading Associations of Floats.
+In many cases you will probably want your data to be returned as one of your domain objects. It would be wasteful to first create arrays and then convert all 
+those. NeoCSV has non-intrusive options to create instances of your own object classes and to convert and set fields on them directly. This is done by 
+specifying accessors and converters. Here is an example for reading Associations of Floats.
 
 
 [[[
@@ -190,7 +200,9 @@ In many cases you will probably want your data to be returned as one of your dom
 
 For each field you give the mutator accessor to use, as well as an implicit or explicit conversion block.
 
-One thing that it will enforce is that all records have an equal number of fields. When there are no field accessors or converters, the field count will be set automatically after the first record is read. If you want you could set it upfront. When there are field accessors or converters, the field count will be set to the number of specified fields.
+One thing that it will enforce is that all records have an equal number of fields. When there are no field accessors or converters, the field count will be set 
+automatically after the first record is read. If you want you could set it upfront. When there are field accessors or converters, the field count will be set to 
+the number of specified fields.
 
 !! Reading a lot of objects
 
@@ -231,7 +243,8 @@ Array streamContents: [ :out |
 
 !! Without Mapping Definition
 
-Both NeoCSV and NeoJSON can operate in two ways, (1) without the definition of any schema's or (2) with the definition of schema's and mappings. Therefore you can use them both using a quick and dirty explore style. Here are some examples: 
+Both NeoCSV and NeoJSON can operate in two ways, (1) without the definition of any schema's or (2) with the definition of schema's and mappings. Therefore you 
+can use them both using a quick and dirty explore style. Here are some examples: 
 
 [[[
 'my-data.csv' asFileReference readStreamDo: [ :in | (NeoCSVReader on: in) upToEnd ].

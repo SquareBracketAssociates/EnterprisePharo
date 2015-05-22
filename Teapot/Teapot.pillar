@@ -1,8 +1,8 @@
 ! Teapot
+@cha:teapot
 
-Teapot is ''micro''' web framework on top of the Zinc HTTP web server. Teapot focuses on simplicity and ease of use. It's around 600 lines of code, not counting the tests. Teapot is developd by Attila Magyar and this chapter is heavily inspired from the Teapot original documentation. 
-
-
+Teapot is ''micro''' web framework on top of the Zinc HTTP web server. Teapot focuses on simplicity and ease of use. It's around 600 lines of code, not counting 
+the tests. Teapot is developd by Attila Magyar and this chapter is heavily inspired from the Teapot original documentation. 
 
 !! Differences between Teapot and other web frameworks
 
@@ -11,8 +11,6 @@ Teapot is not a singleton and doesn't hold any global state. You can run multipl
 - There are no thread locals or dynamic scoped variables in Teapot. Everything is explicit.
 - It doesn't rely on annotations or pragmas, you can define the routes programmatically.
 - It doesn't instantiate objects (e.g. "web controllers") for you. You can hook http events to existing objects, and manage their dependencies the way you want.
-
-
 
 !! Getting Started
 To get started, execute the following expression to load the latest stable version of Teapot. 
@@ -45,7 +43,7 @@ The most important concept of Teapot is the Route. An example of a Route definit
 
 A route has three parts:
 - an HTTP method (GET, POST, PUT, DELETE, HEAD, TRACE, CONNECT, OPTIONS, PATCH),
-- an URL pattern (i.e. ==/hi==, ==/users/<name>==, ==/foo/*/bar/*==, or a regexp),
+- an URL pattern (i.e. ==/hi==, ==/users/<name>==, ==/foo/\*/bar/\*==, or a regexp),
 - an action (block, message send or any object).
 
 Here is another example. 
@@ -65,7 +63,8 @@ Execute it to start the server. Now you can use Zinc to query the server.
 ]]]
 
 The action part takes the HTTP request (optionally) and returns the response.
-An action can be an instance of a message send ==Semd==. Note that the selector of the message can take maximum 2 arguments ( ==TeaRequest== and ==TeaResponse==).
+An action can be an instance of a message send ==Semd==. Note that the selector of the message can take maximum 2 arguments 
+( ==TeaRequest== and ==TeaResponse==).
 
 [[[language=smalltalk
 Teapot on
@@ -76,7 +75,8 @@ Teapot on
 
 !! Transformation Chain
 
-The response may undergo further transformations by a response transformer that will constructs the final HTTP response (instance of the class ==ZnResponse==). It follows the path defined below:
+The response may undergo further transformations by a response transformer that will constructs the final HTTP response (instance of the class ==ZnResponse==). 
+It follows the path defined below:
 
 [[[
 ZnRequest -> [Router] -> TeaRequest -> [Route] -> response -> [Resp.Transformer] -> ZnResponse
@@ -110,7 +110,9 @@ The first route that matches the request method and the URL is invoked.
 - If you use a Dictionary for example as return value and json as response transformer, then the output will be a json object, created from the Dictionary.
 
 
-The URL pattern may contain named parameters (e.g., ==<param1>==), whose values accessible via the request object. The request is an extension of ==ZnRequest== with some extra methods. A wildcard character ==(*)== matches to one URL path segment. A wildcard terminated pattern is a greedy match; for example, =='/foo/*'== matches to =='/foo/bar'== and =='/foo/bar/baz'== too.
+The URL pattern may contain named parameters (e.g., ==<param1>==), whose values accessible via the request object. The request is an extension of ==ZnRequest== 
+with some extra methods. A wildcard character ==(*)== matches to one URL path segment. A wildcard terminated pattern is a greedy match; for example, 
+=='/foo/*'== matches to =='/foo/bar'== and =='/foo/bar/baz'== too.
 
 Query parameters and Form parameters can be accessed the same way as path parameters ==(req at: #paramName)==.
 
@@ -140,7 +142,7 @@ Teapot on
 	GET: '/download' -> ['/tmp/afile' asFileReference readStream]; output: #stream; start.
 ]]]
 
-Figure *plainText* shows the result for ==/sometext==.
+Figure *@plainText* shows the result for ==/sometext==.
 
 +Go to the Teapot welcome at *http://localhost:1701/sometext*.>file://figures/plainText.png|width=80|label=plainText+
 
@@ -211,7 +213,8 @@ Teapot on
 
 
 !!! ==Abort:==
-An ==abort:== message sent to the request object immediately stops a request (by signaling an exception) within a before filter or route. The same rules apply to the argument to the ==abort:== message as the return value of a Route.
+An ==abort:== message sent to the request object immediately stops a request (by signaling an exception) within a before filter or route. The same rules apply 
+to the argument to the ==abort:== message as the return value of a Route.
 
 [[[language=smalltalk
 Teapot on
@@ -230,7 +233,8 @@ Teapot on
 
 !! Using Regexp
 
-Instead of ==<== and ==>== surrounded named parameters, the regexp pattern may contain subexpressions between parentheses whose values are accessible via the request object.
+Instead of ==<== and ==>== surrounded named parameters, the regexp pattern may contain subexpressions between parentheses whose values are accessible via the 
+request object.
 
 The following example matches any ==/hi/user== followed by two digits.
 
@@ -310,6 +314,5 @@ For a more complete example, study the 'Teapot-Library-Example' package.
 Teapot is a powerful and simple web framework. It is based on the notion of routes and request transformations. It supports the definition of REST application. 
 
 Now an important point: Where does the name come from? 418 I'm a teapot (RFC 2324) is an HTTP status code.
-This code was defined in 1998 as one of the traditional IETF April Fools' jokes, in RFC 2324, Hyper Text Coffee Pot Control Protocol, and is not expected to be implemented by actual HTTP servers.
-
-
+This code was defined in 1998 as one of the traditional IETF April Fools' jokes, in RFC 2324, Hyper Text Coffee Pot Control Protocol, and is not expected to be 
+implemented by actual HTTP servers.

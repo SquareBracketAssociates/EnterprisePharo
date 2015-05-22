@@ -1,8 +1,13 @@
 ! REST Web Services
+@cha:zinc-rest
 
-Zinc HTTP Components is well suited to the implementation of REST web services, both the client and the server parts. REST or *Representational State Transfer>http://en.wikipedia.org/wiki/Representational_state_transfer* is an architectural style most easily described as using HTTP verbs and URIs to deal with encoded resources. Some kind of framework is needed to successfully implement a non-trivial REST service. There is one available in the Zinc-REST-Server package, for example. Here we will implement a very small, simplified example by hand, for educational purposes.
+Zinc HTTP Components is well suited to the implementation of REST web services, both the client and the server parts. REST or 
+*Representational State Transfer>http://en.wikipedia.org/wiki/Representational_state_transfer* is an architectural style most easily described as using HTTP 
+verbs and URIs to deal with encoded resources. Some kind of framework is needed to successfully implement a non-trivial REST service. There is one available in 
+the Zinc-REST-Server package, for example. Here we will implement a very small, simplified example by hand, for educational purposes.
 
-The service will allow arbitrary *JSON>http://www.json.org/* objects to be stored on the server, each identified by an URI allocated by the server. Here is the REST API exposed by the server.
+The service will allow arbitrary *JSON>http://www.json.org/* objects to be stored on the server, each identified by an URI allocated by the server. Here is the 
+REST API exposed by the server.
 
 - ==GET /== - returns a list of all known stored object URIs
 - ==GET /n== - returns the JSON object known under URI ==/n==
@@ -10,7 +15,8 @@ The service will allow arbitrary *JSON>http://www.json.org/* objects to be store
 - ==PUT /n== - updates (replaces) the contents of an existing JSON object known under URI ==/n==
 - ==DELETE /n== - remove the JSON object known under URI ==/n==
 
-A proper implementation should best use a couple of classes, depending on how far you want to go. The following implementation is written in a workspace, not using any classes. Start by creating one global variable to hold the objects. This will be a standard dictionary mapping string URIs to objects.
+A proper implementation should best use a couple of classes, depending on how far you want to go. The following implementation is written in a workspace, not 
+using any classes. Start by creating one global variable to hold the objects. This will be a standard dictionary mapping string URIs to objects.
 
 [[[
 JSONStore := Dictionary new.
@@ -93,13 +99,18 @@ mapper := {
                 handler value value: request ] ].
 ]]]
 
-The mapper is a dynamically created array of associations (not a dictionary). Each association consists of two blocks. The first block is a condition: it tests a request and returns true when it matches. The second block is a handler that is evaluated with the incoming request to produce a response, if and only if the first condition matched.
+The mapper is a dynamically created array of associations (not a dictionary). Each association consists of two blocks. The first block is a condition: it tests 
+a request and returns true when it matches. The second block is a handler that is evaluated with the incoming request to produce a response, if and only if the first condition matched.
 
-The associations in the mapper follow exactly the list of the REST API as shown earlier. The server is set up with a block based delegate using the ==onRequestRepond:== method. Again, a more object oriented implementation would use a proper delegate object here, but for this example, the block is clearer.
+The associations in the mapper follow exactly the list of the REST API as shown earlier. The server is set up with a block based delegate using the 
+==onRequestRepond:== method. Again, a more object oriented implementation would use a proper delegate object here, but for this example, the block is clearer.
 
-The server logic thus becomes: find a matching entry in the mapper and invoke it. If no matching entry is found, we have a bad request. Error handling is of course rather limited in this small example.
+The server logic thus becomes: find a matching entry in the mapper and invoke it. If no matching entry is found, we have a bad request. Error handling is of 
+course rather limited in this small example.
 
-The jsonEntityBuilder block helps in transforming Smalltalk objects to a JSON entity. We use the *Smalltalk Object Notation>http://github.com/svenvc/ston* STON writer and reader here because it is backwards compatible with JSON. Note that to be JSON compatible, only ==Array==s and ==Dictionary==ies should be used. We use linefeeds to improve compatibility with internet conventions as well as pretty printing to help human interpretation of the data.
+The jsonEntityBuilder block helps in transforming Smalltalk objects to a JSON entity. We use the *Smalltalk Object Notation>http://github.com/svenvc/ston* STON 
+writer and reader here because it is backwards compatible with JSON. Note that to be JSON compatible, only ==Array==s and ==Dictionary==ies should be used. We 
+use linefeeds to improve compatibility with internet conventions as well as pretty printing to help human interpretation of the data.
 
 Here is a command line session using the Unix utility *curl>http://en.wikipedia.org/wiki/CURL*, interacting with our server.
 
