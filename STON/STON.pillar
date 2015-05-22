@@ -136,7 +136,7 @@ TestDomainObject {
 !!!! A large example: an HTTP response
 
 Here is a more complex example:  a ZnResponse object. It is the result of serializing the result of the following HTTP request (using Zinc, see 
-Chapters *../Zinc-HTTP-Client/Zinc-HTTP-Client.pier@ch:zinc-client* and *../Zinc-HTTP-Server/Zinc-HTTP-Server.pier@ch:zinc-server*). It also shows that curly 
+Chapters *Zinc Client>../Zinc-HTTP-Client/Zinc-HTTP-Client.pier@ch:zinc-client* and *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pier@ch:zinc-server*). It also shows that curly 
 braces are for dictionaries and square brackets are for lists.
 
 [[[
