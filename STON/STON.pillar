@@ -21,12 +21,9 @@ values and references, as we will see next.
 
 STON offers three main features: 
 
-- Symbols: STON extends JSON by adding symbols as a primitive value, and class tags for object values and references. Adding a symbol (a globally unique string)
- primitive type is a very useful addition. This is because symbols help to represent constant values in a readable way that is compact and fast, and because 
- symbols allow for simpler and more readable map keys.
+- Symbols: STON extends JSON by adding symbols as a primitive value, and class tags for object values and references. Adding a symbol (a globally unique string) primitive type is a very useful addition. This is because symbols help to represent constant values in a readable way that is compact and fast, and because  symbols allow for simpler and more readable map keys.
 
-- Circular structures: Allowing shared and circular object structures is also ueseful simply because these structures are widely used and because they allow for 
-naturally efficient object graphs.
+- Circular structures: Allowing shared and circular object structures is also ueseful simply because these structures are widely used and because they allow for naturally efficient object graphs.
 
 - JSON backward compatible: Additionally, the current STON implementation is backward compatible with standard JSON.
 
