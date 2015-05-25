@@ -617,123 +617,125 @@ We assume in this example that the number of objects to migrate can be materiali
 
 %=========================================================================% 
 
-!! Fuel Development: Debugging Tools
+% JF: Removed this because it is too much in depth and moreover 
+% FLGraphViewBuilder does not work anymore.
 
-There are a couple of packages that help us to debug Fuel, and they are loaded as follows:
+% !! Fuel Development: Debugging Tools
 
-[[[language=Smalltalk
-Gofer it
-	url: 'http://smalltalkhub.com/mc/Pharo/Fuel/main';
-	package: 'ConfigurationOfFuel';
-	load.
+% There are a couple of packages that help us to debug Fuel, and they are loaded as follows:
 
-(ConfigurationOfFuel project version: #stable) 
-	load: #(FuelDebug FuelPreview).
-]]]
+% [[[language=Smalltalk
+% Gofer it
+% 	url: 'http://smalltalkhub.com/mc/Pharo/Fuel/main';
+% 	package: 'ConfigurationOfFuel';
+% 	load.
 
-We now first talk about the internals of Fuel before we present the different tools: a graph viewer, a serialization logger and a materialization logger.
+% (ConfigurationOfFuel project version: #stable) 
+% 	load: #(FuelDebug FuelPreview).
+% ]]]
 
-!!!Internal Workings
+% We now first talk about the internals of Fuel before we present the different tools: a graph viewer, a serialization logger and a materialization logger.
 
-To understand the output of these tools, you should first know some basics of how Fuel works internally, both for serialization and materialization.
+% !!!Internal Workings
 
-;Serialization
-:The most important thing to know is that serialization is split in two main steps: analysis and encoding. The analysis phase consists of walking the graph from the specified root object and mapping each traversed object to its corresponding group, called a ""cluster"". The encoding phase runs after analysis, and it writes the graph to the stream linarly, in these steps:
+% To understand the output of these tools, you should first know some basics of how Fuel works internally, both for serialization and materialization.
 
-#header
-#for each cluster, instances part
-#for each cluster, references part
-#trailer
+% ;Serialization
+% :The most important thing to know is that serialization is split in two main steps: analysis and encoding. The analysis phase consists of walking the graph from the specified root object and mapping each traversed object to its corresponding group, called a ""cluster"". The encoding phase runs after analysis, and it writes the graph to the stream linarly, in these steps:
 
-;Materialization
-: Because of the extra effort put into serialization, we can materialize the graph in a single phase. We decode the graph by reading the input stream linearly, in the same order it was written. The materialization steps are obviously analogous to the ones above:
+% #header
+% #for each cluster, instances part
+% #for each cluster, references part
+% #trailer
 
-#header
-#for each cluster, instances part
-#for each cluster, references part
-#trailer
+% ;Materialization
+% : Because of the extra effort put into serialization, we can materialize the graph in a single phase. We decode the graph by reading the input stream linearly, in the same order it was written. The materialization steps are obviously analogous to the ones above:
 
-It is important to understand that references are ""not"" stored together with their objects. Instead, all instances are stored together and all references are 
-stored together, after the references. We use this to materialize all the references in a single step, when we know that all the objects have already been 
-materialized.
+% #header
+% #for each cluster, instances part
+% #for each cluster, references part
+% #trailer
 
-!!!FLGraphViewBuilder
-This class adds drawing capabilities to the analysis in the ==FuelDebug== package.
+% It is important to understand that references are ""not"" stored together with their objects. Instead, all instances are stored together and all references are 
+% stored together, after the references. We use this to materialize all the references in a single step, when we know that all the objects have already been 
+% materialized.
 
-Right-click a node to inspect it. Some examples:
+% !!!FLGraphViewBuilder
+% This class adds drawing capabilities to the analysis in the ==FuelDebug== package.
 
-[[[language=Smalltalk
-(FLAnalyzer newDefault
-	setDebug;
-	analysisFor: #((1) (2) (3) (4)))
-	open.
-]]]
+% Right-click a node to inspect it. Some examples:
 
-[[[language=Smalltalk
-(FLAnalyzer newDefault
-	setDebug;
-	analysisFor: #((1) (2) (3) (4)))
-	openPathsTo: 3.
+% [[[language=Smalltalk
+% (FLAnalyzer newDefault
+% 	setDebug;
+% 	analysisFor: #((1) (2) (3) (4)))
+% 	open.
+% ]]]
 
-(FLAnalyzer newDefault
-	setDebug;
-	analysisFor: #((1) (2) (3) (4)))
-	openPathsToEvery: [ :object |
-		object isNumber and: [ object > 2 ] ].
-]]]
+% [[[language=Smalltalk
+% (FLAnalyzer newDefault
+% 	setDebug;
+% 	analysisFor: #((1) (2) (3) (4)))
+% 	openPathsTo: 3.
 
-Figure *@figFuelPreview* shows how they look like.
+% (FLAnalyzer newDefault
+% 	setDebug;
+% 	analysisFor: #((1) (2) (3) (4)))
+% 	openPathsToEvery: [ :object |
+% 		object isNumber and: [ object > 2 ] ].
+% ]]]
 
-+Visual preview of graph to be serialized>file://figures/FuelPreview.png|width=60|label=figFuelPreview+
-_
+% Figure *@figFuelPreview* shows how they look like.
 
-!!!FLDebugSerialization
-I am a serialization which facilitates debugging, by logging the stream position before and after main steps of ==FLSerialization==, including cluster 
-information. Obviously, you should be familiar with the algorithm to understand the output log.
+% +Visual preview of graph to be serialized>file://figures/FuelPreview.png|width=60|label=figFuelPreview+
+% _
 
-To use, send the message ==setDebug== to your serializer and run as usual. For example:
+% !!!FLDebugSerialization
+% I am a serialization which facilitates debugging, by logging the stream position before and after main steps of ==FLSerialization==, including cluster 
+% information. Obviously, you should be familiar with the algorithm to understand the output log.
 
-[[[language=Smalltalk
-'debug.fuel' asFileReference writeStreamDo: [ :aStream |
-	FLSerializer newDefault
-		setDebug;
-		serialize: 'hello' on: aStream binary ].
-]]]
+% To use, send the message ==setDebug== to your serializer and run as usual. For example:
 
-Then, inspect the output log:
+% [[[language=Smalltalk
+% 'debug.fuel' asFileReference writeStreamDo: [ :aStream |
+% 	FLSerializer newDefault
+% 		setDebug;
+% 		serialize: 'hello' on: aStream binary ].
+% ]]]
 
-[[[language=Smalltalk
-FLDebugSerialization last log.
-]]]
+% Then, inspect the output log:
 
-!!!FLDebugMaterialization
-I am a materialization which facilitates debugging, by logging the stream position before and after main steps of ==FLMaterialization==, including cluster 
-information. Obviously, you should be familiar with the algorithm to understand the output log.
+% [[[language=Smalltalk
+% FLDebugSerialization last log.
+% ]]]
 
-To use, send the message ==setDebug== to your materializer and run as usual. For example:
+% !!!FLDebugMaterialization
+% I am a materialization which facilitates debugging, by logging the stream position before and after main steps of ==FLMaterialization==, including cluster 
+% information. Obviously, you should be familiar with the algorithm to understand the output log.
 
-[[[language=Smalltalk
-'debug.fuel' asFileReference readStreamDo: [ :aStream |
-	FLMaterializer newDefault
-		setDebug;
-		materializeFrom: aStream binary ].
-]]]
+% To use, send the message ==setDebug== to your materializer and run as usual. For example:
 
-Then, inspect the output log:
+% [[[language=Smalltalk
+% 'debug.fuel' asFileReference readStreamDo: [ :aStream |
+% 	FLMaterializer newDefault
+% 		setDebug;
+% 		materializeFrom: aStream binary ].
+% ]]]
 
-[[[language=Smalltalk
-FLDebugMaterialization last log.
-]]]
+% Then, inspect the output log:
+
+% [[[language=Smalltalk
+% FLDebugMaterialization last log.
+% ]]]
 
 
 %=========================================================================% 
 
 !! Built-in Header Support
 
-Since the serialized graph of objects can be large, and since it can be useful to store additional information with the serialized graph, Fuel supports the 
-possibility to add such information to a header. The following example shows this feature: first we add a property called timestamp to the header using the 
-message ==at:putAdditionalObject:==. We then define some pre and post actions. In particular we show how we can use the property value, using the message 
-==additionalObjectAt:== 
+It can be useful to store additional information with the serialized graph or perform pre and post materialization actions. To achieve this, Fuel supports the possibility to customize the header, an instance of ==FLHeader==.
+
+The following example shows these features: first we add a property called timestamp to the header using the message ==at:putAdditionalObject:==. We then define some pre and post actions using ==addPreMaterializationAction:== and ==addPostMaterializationAction:==, respectively. In the latter we show how we can retrieve the property value by using the message ==additionalObjectAt:== 
  
 [[[language=Smalltalk
 | serializer |
@@ -741,7 +743,7 @@ serializer := FLSerializer newDefault.
 
 serializer header 
 	at: #timestamp
-	putAdditionalObject: TimeStamp now.
+	putAdditionalObject: DateAndTime now rounded.
 
 serializer header
 	addPreMaterializationAction: [ 
@@ -754,7 +756,7 @@ serializer header
 			show: (materialization additionalObjectAt: #timestamp); 
 			cr;
 			show: 'Materialized at ';
-			show: TimeStamp now; 
+			show: DateAndTime now rounded; 
 			cr ].
 	
 serializer 
@@ -762,7 +764,7 @@ serializer
 	toFileNamed: 'demo.fuel'
 ]]]
 
-Then, you can just materialize the header info:
+Then, you can materialize the header info only, and obtain the timestamp property, as follows:
 
 [[[language=Smalltalk
 | aHeader |
@@ -770,36 +772,23 @@ aHeader := FLMaterializer materializeHeaderFromFileNamed: 'demo.fuel'.
 aHeader additionalObjectAt: #timestamp.
 ]]]
 
-Printing it, the result is:
-
-[[[language=Smalltalk
-'28 March 2013 12:44:54 pm'
-]]]
-
-If we materialize the whole file with:
+If we materialize the whole file, as below, the print string of the results is: =='a big amount of data'==.
 
 [[[language=Smalltalk
 FLMaterializer materializeFromFileNamed: 'demo.fuel' 
 ]]]
 
-Then, the print string of the results is:
-
-[[[language=Smalltalk
-'a big amount of data'
-]]]
-
-And this is shown in ==Transcript==:
+And something similar to the following is shown in ==Transcript==:
 
 [[[language=Smalltalk
 Before serializing
-Serialized at 28 March 2013 12:50:50 pm
-Materialized at 28 March 2013 1:01:21 pm
+Serialized at 2015-05-24T22:39:18-03:00
+Materialized at 2015-05-24T22:39:37-03:00
 ]]]
  
-For additional examples, look at the tests in ==FLHeaderSerializationTest==.
-
-
 !! Conclusion
+
+@@authorToDo Rewrite this.
 
 Fuel is a fast and stable binary object serializer. Some people use Fuel to get information when an error occurs in an application that they deployed to a 
 client. In such a case, they serialize the full stack and once they get the file they just load it and open a debugger on the saved stack. Fuel has been covered 
