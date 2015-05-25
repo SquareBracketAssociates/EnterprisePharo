@@ -16,14 +16,15 @@ Finished:
         Voyage/Voyage.pier
            >> Esteban will do a pass (2015-05-05)
 
-*******************************************************************************
-	
 Fuel/Fuel.pier
 	>> Stef did a pass and it should be ready with minor edits [11/Oct/2014]
 	>> moved from PFTE to PE
 	>> max read it
-	>> Johan should do a pass / test examples
-	
+	>> Johan completed a pass / test examples [25 / may / 2015]
+
+
+*******************************************************************************
+		
 STON/STON.pier
 	>> Stef did a pass
 	>> migrated from PFTE to PE
