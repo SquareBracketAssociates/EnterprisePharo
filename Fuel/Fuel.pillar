@@ -199,12 +199,8 @@ The following example uses the message ==showProgress== to display a progress ba
 !! Managing Globals
 @ManagingGlobals
 
-
-Let us assume a ==CompiledMethod== is referenced from the graph to serialize. Sometimes we may be interested in storing just the selector and name of the class, 
-because we know it will be present when materializing the graph. However, sometimes we want to really store the method in full. This means that given an object 
-graph, there is no unique way of serializing it and because of this Fuel offers dynamic and static mechanisms to customize this.
-
-@@authorToDo JF dynamic and static? which is which?
+Sometimes we may be interested in storing just the name of a reference, 
+because we know it will be present when materializing the graph. For example when the current processor scheduler ==Processor== is referenced from the graph we do not want to serialize it as it does not make sense to materialize it. Hence Fuel considers some objects as globals that may not be serialized. It also allows for you to add to this set and lastly to use a different environment when materializing globals.
 
 !!!Default Globals
 
@@ -215,13 +211,10 @@ By default, Fuel considers the following objects as globals, i.e., it will store
 - Any ==CompiledMethod==, except when either it answers false to the message ==isInstalled== or true to the message ==isDoIt==. The latter happens, for example, if this is code evaluated from a Workspace.
 - Some well-known global variables: ==Smalltalk==, ==SourceFiles==, ==Transcript==, ==Undeclared==, ==Display==, ==TextConstants==, ==ActiveWorld==, ==ActiveHand==, ==ActiveEvent==, ==Sensor==, ==Processor==, ==ImageImports==, ==SystemOrganization== and ==World==.
 
-@@authorToDo SD: is the line on compiled method correct
-
-@@authorToDo JF But what about the inverse of 3.2: DO export a certain global
 
 !!!Duplication of Custom Globals
 
-With this following code snippet, we show that by default a global value is not serialized as a global. In such a case it is duplicated on materialization.
+With this following code snippet, we show that by default a Smalltalk global value is not serialized as a global. In such a case it is duplicated on materialization.
 
 [[[language=Smalltalk
 "Define a global variable named SomeGlobal."
@@ -311,7 +304,7 @@ instance variables.
 !!!Ignoring Instance Variables
 
 Under certain conditions it may be desirable to prevent serialization of certain instance variables for a given class. A straightforward way to do this is to 
-override the hook method ==fuelIgnoredInstanceVariableNames==, at class side of this class. It returns an array of instance variable names (as symbols) and 
+override the hook method ==fuelIgnoredInstanceVariableNames==, at class side of the given class. It returns an array of instance variable names (as symbols) and 
 ""all"" instances of the class will be serialized without these instance variables. 
 
 For example, let's say we have the class ==User== and we do not want to serialize the instance variables =='accumulatedLogins'== and =='applications'==. So we 
@@ -377,8 +370,6 @@ CachedResult >> fuelAccept: aGeneralMapper
 		visitSubstitution: self
 		by: nil
 ]]]
-
-@@authorToDo JF I hate magic methods that are not explained e.g. visitSubstitution:by: and friends, visitNotSerializable:, visitGlobalSend:name:selector: 
 
 As another example, we have a ==Proxy== class and when serializing we want to serialize its ==target== instead of the proxy. So we redefine ==fuelAccept:== as 
 follows:
@@ -540,8 +531,6 @@ the class shape. Now imagine we previously serialized an instance of ==Point== a
 
 +Example of changes to a class>file://figures/ClassChanges.png|width=70|label=figClassChanges+
 
-@@authorToDo Fig reference is broken.
-
 Let's start with the simple cases. If a variable was ""inserted"", its value will be ==nil==. If it was ""removed"", it is also obvious: the serialized value will be 
 ignored. The ""change of Order"" of instance variables is handled by Fuel automatically.
 
@@ -568,8 +557,6 @@ FLMaterializer newDefault
 Lastly, Fuel defines the message ==migrateClassNamed:toClass:variables:== that combines both ""class and variable rename"".
 
 Additionally, the method ==globalEnvironment:==, shown in Section *@sec:ManagingGlobals*, is useful for migration of global variables: you can prepare an ad-hoc environment dictionary with the same keys that were used during serialization, but with the new classes as values.
-
-@@authorToDo reference is broken?
 
 @@note A class could also change its ""layout"". For example, Point could change from being ""fixed"" to ""variable"". Layout changes from fixed to variable format are automatically handled by Fuel. Unfortunately, the inverse (variable to fixed) is not supported yet.
 
@@ -788,9 +775,4 @@ Materialized at 2015-05-24T22:39:37-03:00
  
 !! Conclusion
 
-@@authorToDo Rewrite this.
-
-Fuel is a fast and stable binary object serializer. Some people use Fuel to get information when an error occurs in an application that they deployed to a 
-client. In such a case, they serialize the full stack and once they get the file they just load it and open a debugger on the saved stack. Fuel has been covered 
-by scientific publications that you can find at *http://rmod.lille.inria.fr* and you can find more information about Fuel on the following web site: 
-*http://rmod.inria.fr/web/software/Fuel*.
+Fuel is a fast and stable binary object serializer for Pharo and is available by default in Pharo since 2.0. It can serialize to and materialize from any stream and the graph of objects to be serialized can be customized in multiple ways. It can serialize nearly any object in the system. For example, cases are known of an error occurring in a deployed application, the full stack being serialized and later materialized on a development machine for debugging.
