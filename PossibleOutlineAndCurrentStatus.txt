@@ -9,12 +9,13 @@ Document
 Finished: 
 
 	Artefact/artefact.pier	
-	   >> JF did a pass [20 / Dec / 2014]
+		>> JF did a pass [20 / Dec / 2014]
 		>> first english version done [11 / Oct / 2014]
 		>> moved from PFTE to PE
 
-        Voyage/Voyage.pier
-           >> Esteban will do a pass (2015-05-05)
+	Voyage/Voyage.pier
+		>> Esteban did a pass (2015-05-05)
+		>> Johan did a last polishing pass [ 25 / may / 2015 ]
 
 Fuel/Fuel.pier
 	>> Stef did a pass and it should be ready with minor edits [11/Oct/2014]
