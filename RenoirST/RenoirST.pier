@@ -585,7 +585,7 @@ div > ol
 }
 ]]]
 
-Siblings combinators can be created using ==\+== and ==\~==:
+''Siblings combinators'' can be created using ==\+== and ==\~==:
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -637,6 +637,9 @@ CascadingStyleSheetBuilder new
   with: [:style | style color: CssSVGColors green ];
   build
 ]]]
+
+evaluates to:
+
 [[[language=css
 a:link
 {
@@ -665,26 +668,29 @@ input:checked
 ]]]
 
 !!!! Language Pseudo-class:
+
+The ==:lang(C)== pseudo-class can be used by sending the message ==lang:==:
+
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | (selector lang: 'es') > selector div ]
   with: [:style | style quotes: { '"«"'. '"»"' }  ];
   build
 ]]]
+
+evaluates to:
+
 [[[language=css
 :lang(es) > div
 {
     quotes: "«" "»";
 }
 ]]]
+
 !!!! Structural Pseudo-classes
 These selectors allow selection based on extra information that lies in the document tree but cannot be represented by other simpler selectors nor combinators.
 
-Standalone text and other non-element nodes are not counted when calculating the position of an element in the list of children of its parent. When calculating 
-the position of an element in the list of children of its parent, the index numbering starts at 1.
-
-!!!!! Root Pseudo-class
-The :root pseudo-class represents an element that is the root of the document. To build this kind of selector just send the message ==root== to another selector:
+The ==:root== pseudo-class represents an element that is the root of the document. To build this kind of selector just send the message ==root== to another selector:
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector root ]
@@ -692,16 +698,21 @@ CascadingStyleSheetBuilder new
   build
 ]]]
 
-!!!!! Kind of nth-child Pseudo-classes
+evaluates to:
+
+[[[language=css
+:root
+{
+    color: grey;
+}
+]]]
 
 The ==:nth-child(an+b)== pseudo-class notation represents an element that has ==an+b-1== siblings before it in the document tree, for any positive integer or 
-zero value of n, and has a parent element. For values of a and b greater than zero, this effectively divides the element's children into groups of a elements 
-(the last group taking the remainder), and selecting the bth element of each group. The a and b values must be integers (positive, negative, or zero). 
-The index of the first child of an element is 1.
+zero value of ==n==, and has a parent element. For values of ==a== and ==b== greater than zero, this effectively divides the element's children into groups of ==a== elements (the last group taking the remainder), and selecting the ==b==th element of each group. The ==a== and ==b== values must be integers (positive, negative, or zero). The index of the first child of an element is 1.
 
-In addition to this, ==:nth-child()== can take ‘odd’ and ‘even’ as arguments instead. The value ‘odd’ is equivalent to 2n\+1, whereas ‘even’ is equivalent to 2n.
+In addition to this, ==:nth-child()== can take ==odd== and ==even== as arguments instead. The value ==odd== is equivalent to ==2n\+1==, whereas ==even== is equivalent to ==2n==.
 
-Since version 1.1.0 the library supports an abstraction for this kind of formulae (==CssLinealPolynomial==), or just an integer if ==n== is not required.
+RenoirST supports an abstraction for this kind of formulae (==CssLinealPolynomial==), or just an integer if ==n== is not required.
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -713,6 +724,9 @@ CascadingStyleSheetBuilder new
   with: [:style | style color: CssSVGColors blue ];
   build
 ]]]
+
+evaluates to:
+
 [[[language=css
 :nth-child(3n+1)
 {
@@ -729,6 +743,8 @@ CascadingStyleSheetBuilder new
     color: blue;
 }
 ]]]
+
+@@authorToDo Damien: HERE
 
 ==CssLinealPolynomial== instances can be created by sending the message ==n== to an integer, and later this instances can receive the messages ==+== or ==-== to 
 configure the independent coefficient.
