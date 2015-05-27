@@ -1,4 +1,5 @@
 !Cascading Style Sheets with RenoirSt
+@cha:renoirst
 
 RenoirST is a DSL enabling programmatic cascading style sheet generation for Pharo developed by Gabriel Omar Cotelli.
 
@@ -6,7 +7,8 @@ The goals of RenoirST are to improve CSS integration with existing web framework
 and to be able to write and refactor code in Pharo and deploy to CSS. Renoir features are:
 common properties declaration, CSS3 selector support, important rules and media queries support.
 In this tutorial we will present the key features of RenoirSt with a large set of examples.
-This tutorial assumes some knowledge of CSS and Pharo Smalltalk. For a little introduction about CSS you can read the *Seaside's book CSS chapter>http://book.seaside.st/book/fundamentals/css*.
+This tutorial assumes some knowledge of CSS and Pharo Smalltalk. For a little introduction about CSS you can read the 
+*Seaside's book CSS chapter>http://book.seaside.st/book/fundamentals/css*.
 
 !!Getting started
 
@@ -28,7 +30,8 @@ The main entry point for the library is the class ==CascadingStyleSheetBuilder==
 CascadingStyleSheetBuilder new build
 ]]]
 
-You now have an inspector on your first (empty and useless) style sheet. Real stylesheets are composed of rules (or rule-sets), where each one has a selector and a declaration group. The selector determines if the rule applies to some element in the DOM, and the declaration group specifies the style to apply.
+You now have an inspector on your first (empty and useless) style sheet. Real stylesheets are composed of rules (or rule-sets), where each one has a selector 
+and a declaration group. The selector determines if the rule applies to some element in the DOM, and the declaration group specifies the style to apply.
 
 Our first useful style sheet will simply assign a margin to every div element in the DOM.
 
@@ -48,7 +51,9 @@ div
 }
 ]]]
 
-The message ==declareRuleSetFor:with:== is used to configure a rule-set in the builder. The message requires two blocks: the first block defines the selector and the second defines the style to apply to elements matching the selector. The ==selector== argument of the first block is an entry point to construct the selector (more on this later). The ==style== argument of the second block is an entry point to declare CSS properties and values.
+The message ==declareRuleSetFor:with:== is used to configure a rule-set in the builder. The message requires two blocks: the first block defines the selector
+and the second defines the style to apply to elements matching the selector. The ==selector== argument of the first block is an entry point to construct the 
+selector (more on this later). The ==style== argument of the second block is an entry point to declare CSS properties and values.
 
 The properties API is mostly defined following this rules:
 
@@ -63,7 +68,8 @@ We now present how the various CSS rules can be expressed with RenoirSt. RenoirS
 
 !!!!Lengths, Angles, Times and Frequencies
 
-The library provides out-of-the-box support for the length, angle, time and frequency units in the CSS spec. There are extensions for ==Integer== and ==Float== classes allowing to obtain lengths.
+The library provides out-of-the-box support for the length, angle, time and frequency units in the CSS spec. There are extensions for ==Integer== and ==Float== 
+classes allowing to obtain lengths.
 
 The supported length units are:
 - ==em== relative to font size
@@ -108,7 +114,8 @@ CascadingStyleSheetBuilder new
 
 !!!!Colors
 
-The library supports abstractions for properties requiring color values. The shared pool ==CssSVGColors== provides easy access to colors in the SVG 1.0 list, and the abstractions ==CssRGBColor== and ==CssHSLColor== allow the creation of colors in the RGB and HSL spaces including alpha support.
+The library supports abstractions for properties requiring color values. The shared pool ==CssSVGColors== provides easy access to colors in the SVG 1.0 list, 
+and the abstractions ==CssRGBColor== and ==CssHSLColor== allow the creation of colors in the RGB and HSL spaces including alpha support.
 
 
 For example,
@@ -133,7 +140,8 @@ div
 }
 ]]]
 
-@@note In a real scenario you should avoid hard coding colors as in the examples. It is recommended to put colors in objects representing a theme or something that gives them a name related to your application.
+@@note In a real scenario you should avoid hard coding colors as in the examples. It is recommended to put colors in objects representing a theme or something 
+that gives them a name related to your application.
 
 RGB-Colors also support percentage values:
 
@@ -178,7 +186,8 @@ div
 
 !!!!Several Property Values
 
-Some properties support a wide range of values. For example the ==margin== property can have 1, 2 , 3 or 4 values specified. If you only need one value, just pass it as a parameter. For more than one value, use an array:
+Some properties support a wide range of values. For example the ==margin== property can have 1, 2 , 3 or 4 values specified. If you only need one value, just 
+pass it as a parameter. For more than one value, use an array:
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -259,7 +268,8 @@ evaluates to:
 
 !!!Functional Notation
 
-A functional notation is a type of CSS component value that can represent complex types or invoke special processing. The mathematical expressions, toggling between values, attribute references, and gradients are all supported in RenoirST.
+A functional notation is a type of CSS component value that can represent complex types or invoke special processing. The mathematical expressions, toggling 
+between values, attribute references, and gradients are all supported in RenoirST.
 
 !!!!Mathematical Expressions
 
@@ -303,7 +313,9 @@ ul ul
 
 !!!!Attribute References
 
-The ==attr()== function is allowed as a component value in properties applied to an element or pseudo-element. The function returns the value of an attribute on the element. If used on a pseudo-element, it returns the value of the attribute on the pseudo-element's originating element. This function is supported using the ==CssAttributeReference== abstraction. This function can be used simply providing an attribute name:
+The ==attr()== function is allowed as a component value in properties applied to an element or pseudo-element. The function returns the value of an attribute on 
+the element. If used on a pseudo-element, it returns the value of the attribute on the pseudo-element's originating element. This function is supported using 
+the ==CssAttributeReference== abstraction. This function can be used simply providing an attribute name:
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -364,7 +376,9 @@ div::before
 
 !!!!Gradients
 
-A gradient is an image that smoothly fades from one color to another. Gradients are commonly used for subtle shading in background images, buttons, and many other places. The gradient notations described in this section allow an author to specify such an image in a terse syntax. This notation is supported using ==CssLinearGradient== and ==CssRadialGradient== asbtractions.
+A gradient is an image that smoothly fades from one color to another. Gradients are commonly used for subtle shading in background images, buttons, and many 
+other places. The gradient notations described in this section allow an author to specify such an image in a terse syntax. This notation is supported using 
+==CssLinearGradient== and ==CssRadialGradient== asbtractions.
 
 To represent a simple linear gradient from a color to another, send the ==fading:== message to ==CssLinearGradient== with the two colors in an array as a parameter:
 
@@ -442,7 +456,8 @@ Above code maps to:
 linear-gradient(to right, yellow, blue 30%);
 ]]]
 
-This results in a linear gradient from left to right with yellow at the left side and plain blue from 30% (of the horizontal line) to the right side. More than two colors can be passed as argument to ==fading:==. This can be used to create rainbows for example:
+This results in a linear gradient from left to right with yellow at the left side and plain blue from 30% (of the horizontal line) to the right side. More than 
+two colors can be passed as argument to ==fading:==. This can be used to create rainbows for example:
 
 [[[language=smalltalk
 CssLinearGradient
@@ -476,7 +491,8 @@ maps to:
 radial-gradient(yellow,green)
 ]]]
 
-This results in a radial gradient with yellow at the center and green all around. Coordinates can be passed to both the first and second parameters of the ==elliptical:at:fading:== message:
+This results in a radial gradient with yellow at the center and green all around. Coordinates can be passed to both the first and second parameters of the 
+==elliptical:at:fading:== message:
 
 [[[
 (CssRadialGradient
@@ -664,7 +680,8 @@ CascadingStyleSheetBuilder new
 !!!! Structural Pseudo-classes
 These selectors allow selection based on extra information that lies in the document tree but cannot be represented by other simpler selectors nor combinators.
 
-Standalone text and other non-element nodes are not counted when calculating the position of an element in the list of children of its parent. When calculating the position of an element in the list of children of its parent, the index numbering starts at 1.
+Standalone text and other non-element nodes are not counted when calculating the position of an element in the list of children of its parent. When calculating 
+the position of an element in the list of children of its parent, the index numbering starts at 1.
 
 !!!!! Root Pseudo-class
 The :root pseudo-class represents an element that is the root of the document. To build this kind of selector just send the message ==root== to another selector:
@@ -677,7 +694,10 @@ CascadingStyleSheetBuilder new
 
 !!!!! Kind of nth-child Pseudo-classes
 
-The ==:nth-child(an+b)== pseudo-class notation represents an element that has ==an+b-1== siblings before it in the document tree, for any positive integer or zero value of n, and has a parent element. For values of a and b greater than zero, this effectively divides the element's children into groups of a elements (the last group taking the remainder), and selecting the bth element of each group. The a and b values must be integers (positive, negative, or zero). The index of the first child of an element is 1.
+The ==:nth-child(an+b)== pseudo-class notation represents an element that has ==an+b-1== siblings before it in the document tree, for any positive integer or 
+zero value of n, and has a parent element. For values of a and b greater than zero, this effectively divides the element's children into groups of a elements 
+(the last group taking the remainder), and selecting the bth element of each group. The a and b values must be integers (positive, negative, or zero). 
+The index of the first child of an element is 1.
 
 In addition to this, ==:nth-child()== can take ‘odd’ and ‘even’ as arguments instead. The value ‘odd’ is equivalent to 2n\+1, whereas ‘even’ is equivalent to 2n.
 
@@ -710,7 +730,8 @@ CascadingStyleSheetBuilder new
 }
 ]]]
 
-==CssLinealPolynomial== instances can be created by sending the message ==n== to an integer, and later this instances can receive the messages ==+== or ==-== to configure the independent coefficient.
+==CssLinealPolynomial== instances can be created by sending the message ==n== to an integer, and later this instances can receive the messages ==+== or ==-== to 
+configure the independent coefficient.
 
 Some examples:
 [[[language=smalltalk
@@ -733,7 +754,9 @@ The rest of the selectors in this category are modeled using the following messs
 
 !!! Pseudo-Elements
 
-Pseudo-elements create abstractions about the document tree beyond those specified by the document language. For instance, document languages do not offer mechanisms to access the first letter or first line of an element's content. Pseudo-elements allow authors to refer to this otherwise inaccessible information. Pseudo-elements may also provide authors a way to refer to content that does not exist in the source document.
+Pseudo-elements create abstractions about the document tree beyond those specified by the document language. For instance, document languages do not offer 
+mechanisms to access the first letter or first line of an element's content. Pseudo-elements allow authors to refer to this otherwise inaccessible information. 
+Pseudo-elements may also provide authors a way to refer to content that does not exist in the source document.
 
 !!!! First line
 This selector describes the contents of the first formatted line of an element.
@@ -770,7 +793,8 @@ p::first-letter
 
 !!!! Before and After
 
-These pseudo-elements can be used to describe generated content before or after an element's content. The ==content== property, in conjunction with these pseudo-elements, specifies what is inserted.
+These pseudo-elements can be used to describe generated content before or after an element's content. The ==content== property, in conjunction with these 
+pseudo-elements, specifies what is inserted.
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -794,7 +818,8 @@ p.note::after
 
 !!! Selector Groups
 
-A comma-separated list of selectors represents the union of all elements selected by each of the individual selectors in the list. For example, in CSS when several selectors share the same declarations, they may be grouped into a comma-separated list.
+A comma-separated list of selectors represents the union of all elements selected by each of the individual selectors in the list. For example, in CSS when 
+several selectors share the same declarations, they may be grouped into a comma-separated list.
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -815,7 +840,9 @@ p.note::before
 
 CSS attempts to create a balance of power between author and user style sheets. By default, rules in an author's style sheet override those in a user's style sheet.
 
-However, for balance, an ==!important== declaration takes precedence over a normal declaration. Both author and user style sheets may contain ==!important== declarations, and user ==!important== rules override author ==!important== rules. This CSS feature improves accessibility of documents by giving users with special requirements control over presentation.
+However, for balance, an ==!important== declaration takes precedence over a normal declaration. Both author and user style sheets may contain ==!important== 
+declarations, and user ==!important== rules override author ==!important== rules. This CSS feature improves accessibility of documents by giving users with 
+special requirements control over presentation.
 
 The library provides support for this feature by sending ==beImportantDuring:== message to the style. Let's see an example:
 
@@ -848,7 +875,9 @@ Note that the important properties must be created by sending the messages to th
 
 !! Media Queries
 
-A ==@media== rule specifies the target media types of a set of statements. The ==@media== construct allows style sheet rules that apply to various media in the same style sheet. Style rules outside of ==@media== rules apply to all media types that the style sheet applies to. At-rules inside ==@media== are invalid in CSS2.1.
+A ==@media== rule specifies the target media types of a set of statements. The ==@media== construct allows style sheet rules that apply to various media in the 
+same style sheet. Style rules outside of ==@media== rules apply to all media types that the style sheet applies to. At-rules inside ==@media== are invalid in 
+CSS2.1.
 
 The most basic media rule consists of specifying just a media type:
 [[[language=smalltalk
@@ -862,12 +891,15 @@ CascadingStyleSheetBuilder new
     build
 ]]]
 
-To use media queries in the library just send the message ==declare:forMediaMatching:== to the builder. The first closure is evaluated with an instance of a ==CascadingStyleSheetBuilder== and the second one with a builder of media queries.
+To use media queries in the library just send the message ==declare:forMediaMatching:== to the builder. The first closure is evaluated with an instance of a 
+==CascadingStyleSheetBuilder== and the second one with a builder of media queries.
 
-The media query builder will match any media type by default. To specify a media type just send it the message ==type:== with the corresponding media type. The class ==CssMediaQueryConstants== provides easy access to the following media types:
+The media query builder will match any media type by default. To specify a media type just send it the message ==type:== with the corresponding media type. The 
+class ==CssMediaQueryConstants== provides easy access to the following media types:
 ==braille==, ==embossed==, ==handheld==, ==print==, ==projection==, ==screen==, ==speech==, ==tty== and ==tv==.
 
-The media query builder supports a variety of messages for additional conditions (called media features). Media features are used in expressions to describe requirements of the output device.
+The media query builder supports a variety of messages for additional conditions (called media features). Media features are used in expressions to describe 
+requirements of the output device.
 
 The following media feature messages are supported:
 - Accepting a ==CssMeasure== with length units
@@ -908,7 +940,8 @@ The following media feature messages are supported:
     - ==maxResolution:==
 - ==scan:== accepting ==CssMediaQueryConstants progressive== or ==CssMediaQueryConstants interlace==
 
-New units for resolutions are added using the ==CssMeasure== abstraction. This kind of measures can be created sending the messages ==dpi== (dots per inch), ==dpcm== (dots per centimeter) or ==dppx== (dots per pixel unit) to an integer or float.
+New units for resolutions are added using the ==CssMeasure== abstraction. This kind of measures can be created sending the messages ==dpi== (dots per inch), 
+==dpcm== (dots per centimeter) or ==dppx== (dots per pixel unit) to an integer or float.
 
 Let's see a final example to better understand the media features support:
 [[[language=smalltalk
@@ -941,7 +974,8 @@ Evaluates to:
 
 !! Vendor specific extensions
 
-The library doesn't provide out of the box support for non standard properties. However since version ==1.4.0== the message ==vendorPropertyAt:put:== is available to ease the creation of this kind of properties by the end user.
+The library doesn't provide out of the box support for non standard properties. However since version ==1.4.0== the message ==vendorPropertyAt:put:== is 
+available to ease the creation of this kind of properties by the end user.
 
 For example:
 
@@ -969,12 +1003,15 @@ div
 
 !!! Units
 
-The ==Units== package (available using the ConfigurationBrowser in Pharo) includes some extensions that collides with RenoirSt.  Since version ==1.1.0== this library is able to load automatically a compatibility package if it's loaded after ==Units== package. To test this integration there's an [specific job](https://ci.inria.fr/pharo-contribution/job/RenoirSt-UnitsCompatibility/) in the contribution server, that loads first ==Units== and later ==RenoirSt==.
+The ==Units== package (available using the ConfigurationBrowser in Pharo) includes some extensions that collides with RenoirSt.  Since version ==1.1.0== this 
+library is able to load automatically a compatibility package if it's loaded after ==Units== package. To test this integration there's an 
+[specific job](https://ci.inria.fr/pharo-contribution/job/RenoirSt-UnitsCompatibility/) in the contribution server, that loads first ==Units== and later ==RenoirSt==.
 [![Build Status](https://ci.inria.fr/pharo-contribution/buildStatus/icon?job=RenoirSt-UnitsCompatibility)](https://ci.inria.fr/pharo-contribution/job/RenoirSt-UnitsCompatibility/)
 
 !!! Seaside
 
-The library includes an optional configuration called ==ConfigurationOfRenoirtStPlusSeaside== including some useful extensions. The [Seaside](www.seaside.st) framework includes your own class modeling URLs, when this configuration is loaded the instances of ==WAUrl== can be used in the properties requiring an URI:
+The library includes an optional configuration called ==ConfigurationOfRenoirtStPlusSeaside== including some useful extensions. The [Seaside](www.seaside.st) 
+framework includes your own class modeling URLs, when this configuration is loaded the instances of ==WAUrl== can be used in the properties requiring an URI:
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new

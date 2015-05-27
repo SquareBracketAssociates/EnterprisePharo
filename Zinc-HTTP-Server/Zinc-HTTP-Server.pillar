@@ -1,4 +1,5 @@
 !Zinc HTTP: The server side
+@ch:zinc-server
 
 Zinc is both a client and server HTTP library written and maintained by Sven van Caekenberghe. 
 
@@ -20,7 +21,8 @@ Don't just try this yet. To be able to see what is going on, it is better to try
   start.
 ]]]
 
-So we are starting an HTTP server listening on port 1701. Using a port below 1024 requires special OS level privileges, ports like 8080 might already be in use. Now visit *http://localhost:1701* with your browser to see the Zn welcome page. Or you can try accessing the welcome page using Zn itself.
+So we are starting an HTTP server listening on port 1701. Using a port below 1024 requires special OS level privileges, ports like 8080 might already be in use. 
+Now visit *http://localhost:1701* with your browser to see the Zn welcome page. Or you can try accessing the welcome page using Zn itself.
 
 [[[
 ZnClient new get: 'http://localhost:1701'.
@@ -42,9 +44,13 @@ On the Transcript you should see output related to the server's activities.
 2012-05-10 13:09:50 398924 D Closing stream
 ]]]
 
-You can see the server starting and initializing its server socket on which it listens for incoming connections. When a connection comes in, it starts executing its request-response loop. Then it gets a GET request for ==/== (the home page), for which it answers a 200 OK response with 1195 bytes of HTML. The browser also asks for a favicon.ico, which the server supplies. The request-response loop is kept alive for some time and usually closes when the other end does. Although it looks like an error, it actually is normal, expected behavior.
+You can see the server starting and initializing its server socket on which it listens for incoming connections. When a connection comes in, it starts executing 
+its request-response loop. Then it gets a GET request for ==/== (the home page), for which it answers a 200 OK response with 1195 bytes of HTML. The browser also 
+asks for a favicon.ico, which the server supplies. The request-response loop is kept alive for some time and usually closes when the other end does. Although it 
+looks like an error, it actually is normal, expected behavior.
 
-Zn manages a default server to easy interactive experimentation. The default server also survives image save and restart cycles. All this makes it extra convenient to access the server object itself for further inspection or to stop the server.
+Zn manages a default server to easy interactive experimentation. The default server also survives image save and restart cycles. All this makes it extra 
+convenient to access the server object itself for further inspection or to stop the server.
 
 [[[
 ZnServer default.
@@ -60,13 +66,18 @@ The Transcript output will confirm what happens.
 2012-05-10 13:19:42 879179 I Stopped ZnManagingMultiThreadedServer HTTP port 1701
 ]]]
 
-Due to its implementation, the server will print a ==Wait for accept timed out== debug notification every 5 minutes. Again, although it looks like an error, it is by design and normal, expected behavior.
+Due to its implementation, the server will print a ==Wait for accept timed out== debug notification every 5 minutes. Again, although it looks like an error, it 
+is by design and normal, expected behavior.
 
 !!Server delegate
 
-An HTTP client sends a request and receives a response. An HTTP server receives a request and sends a response. They are each other's mirror. The fundamental Zn framework objects are used to implement both clients and servers.
+An HTTP client sends a request and receives a response. An HTTP server receives a request and sends a response. They are each other's mirror. The fundamental Zn 
+framework objects are used to implement both clients and servers.
 
-The functional behavior of a ==ZnServer== is defined by an object called its delegate. A delegate implements the key method ==handleRequest:== which gets the incoming request as parameter and has to produce a response as result. The delegate can reason purely in terms of a ==ZnRequest== and a ==ZnResponse==. The technical side of being an HTTP server, like the protocol itself, the networking and the (optional) multiprocessing, is handled by the server object. Here is the simplest possible delegate.
+The functional behavior of a ==ZnServer== is defined by an object called its delegate. A delegate implements the key method ==handleRequest:== which gets the 
+incoming request as parameter and has to produce a response as result. The delegate can reason purely in terms of a ==ZnRequest== and a ==ZnResponse==. The 
+technical side of being an HTTP server, like the protocol itself, the networking and the (optional) multiprocessing, is handled by the server object. Here is 
+the simplest possible delegate.
 
 [[[
 (ZnServer startDefaultOn: 1701)
@@ -80,16 +91,21 @@ Now go to *http://localhost:1701* or do:
 ZnEasy get: 'http://localhost:1701'.
 ]]]
 
-This server does not even look at the incoming request. No matter what, it answers ==200 OK== with a ==text/plain== string ==Hello World!==. The method ==onRequestRespond:== accepts a block taking a request and should produce a response. It is implemented using the helper object ==ZnValueDelegate==, which converts ==handleRequest:== to ==value:== on a wrapped block.
+This server does not even look at the incoming request. No matter what, it answers ==200 OK== with a ==text/plain== string ==Hello World!==. The method 
+==onRequestRespond:== accepts a block taking a request and should produce a response. It is implemented using the helper object ==ZnValueDelegate==, which 
+converts ==handleRequest:== to ==value:== on a wrapped block.
 
-To help in debugging a server, enabling logging is important to learn what is going on. You can also put breakpoints where ever you want. Interrupting a running server can sometimes be a bit hard or produce strange results since the server and its spawned handler subprocesses are different from the UI process.
+To help in debugging a server, enabling logging is important to learn what is going on. You can also put breakpoints where ever you want. Interrupting a running 
+server can sometimes be a bit hard or produce strange results since the server and its spawned handler subprocesses are different from the UI process.
 
-When logging is enabled, the server will also keep track of the last request and response it processed. You can inspect these to find out what happened, even if there was no debugger raised.
+When logging is enabled, the server will also keep track of the last request and response it processed. You can inspect these to find out what happened, even if 
+there was no debugger raised.
 
 
 !!The default server delegate
 
-Out of the box, a ==ZnServer== will have a certain functionality that is related to testing and debugging. This behavior is implemented by the ==ZnDefaultServerDelegate== object. Assuming your server is running locally on port 1701, this is the list of URLs that are available.
+Out of the box, a ==ZnServer== will have a certain functionality that is related to testing and debugging. This behavior is implemented by the 
+==ZnDefaultServerDelegate== object. Assuming your server is running locally on port 1701, this is the list of URLs that are available.
 
 - *http://localhost:1701/* the default for ==/==, equivalent to ==/welcome==
 - *http://localhost:1701/welcome* standard Zn greeting page
@@ -102,22 +118,29 @@ Out of the box, a ==ZnServer== will have a certain functionality that is related
 - *http://localhost:1701/bytes* a collection of bytes
 - *http://localhost:1701/echo* a textual response echoing the request
 
-The random handler normally returns 64 characters, you can specify your own size as well. For example, ==/random/1024== will respond with a 1Kb random string. The random pattern consists of hexadecimal digits and ends with a linefeed. The standard, slower UTF-8 encoding is used instead of the faster LATIN-1 encoding.
+The random handler normally returns 64 characters, you can specify your own size as well. For example, ==/random/1024== will respond with a 1Kb random string. 
+The random pattern consists of hexadecimal digits and ends with a linefeed. The standard, slower UTF-8 encoding is used instead of the faster LATIN-1 encoding.
 
-The bytes handler has a similar size option. Its output is in the form of a repeating BCDA pattern. When requesting equally sized byte patterns repeatably, some extra server side caching will improve performance.
+The bytes handler has a similar size option. Its output is in the form of a repeating BCDA pattern. When requesting equally sized byte patterns repeatably, some 
+extra server side caching will improve performance.
 
-The echo handler is used extensively by the unit tests. It not only lists the request headers as received by the server, but even the entity if there is one. In case of a non-binary entity, the textual contents will be included. This is really useful to debug PUT or POST requests.
+The echo handler is used extensively by the unit tests. It not only lists the request headers as received by the server, but even the entity if there is one. In 
+case of a non-binary entity, the textual contents will be included. This is really useful to debug PUT or POST requests.
 
 !!Server authenticator
 
-Like a delegate, a ==ZnServer== also has an authenticator object whose functional job is to authenticate requests. An authenticator has to implement the ==authenticateRequest:do:== method whose first argument is the incoming request and second argument a block. This method has to produce a response, like ==handleRequest:== does. If the request is allowed, the block will be evaluated and produce a response. If the request is denied, the authenticator will generate a 401 Unauthorized response. One simple authenticator is available to add basic HTTP authentication.
+Like a delegate, a ==ZnServer== also has an authenticator object whose functional job is to authenticate requests. An authenticator has to implement the 
+==authenticateRequest:do:== method whose first argument is the incoming request and second argument a block. This method has to produce a response, like 
+==handleRequest:== does. If the request is allowed, the block will be evaluated and produce a response. If the request is denied, the authenticator will generate 
+a 401 Unauthorized response. One simple authenticator is available to add basic HTTP authentication.
 
 [[[
 (ZnServer startDefaultOn: 1701)
    authenticator: (ZnBasicAuthenticator username: 'admin' password: 'secret').
 ]]]
 
-Now, when you try to visit the server at *http://localhost:1701* you will have to provide a username and password. It is also possible to use ==ZnEasy== to send a get request to this URL with these credentials. 
+Now, when you try to visit the server at *http://localhost:1701* you will have to provide a username and password. It is also possible to use ==ZnEasy== to send 
+a get request to this URL with these credentials. 
 
 [[[
 ZnEasy get: 'http://localhost:1701' username: 'admin' password: 'secret'.
@@ -127,7 +150,8 @@ Using ==ZnBasicAuthenticator== or implementing an alternative is one of several 
 
 !!Logging
 
-@@authorToDo Luc: the logging part of Zinc has changed. In Pharo4, the fields are not the same. The ZnLogSupport and ZnLogListener classes are not there anymore... We should update all logging code examples and the text. 
+@@authorToDo Luc: the logging part of Zinc has changed. In Pharo4, the fields are not the same. The ZnLogSupport and ZnLogListener classes are not there anymore... 
+We should update all logging code examples and the text. 
 
 Log output consists of an arbitrary message preceded by a number of fixed fields. Here is an example of a server log.
 
@@ -140,26 +164,34 @@ Log output consists of an arbitrary message preceded by a number of fixed fields
 2012-05-10 13:09:20 398924 I Wrote a ZnResponse(200 OK text/html;charset=utf-8 1195B)
 ]]]
 
-The first two fields are the date and time in a fixed sized format. The next number is a fixed sized hash of the process ID. Note how 3 different processes are involved: the one starting the server (probably the UI process), the actual server listening process, and the client worker process spawned to handle the request. Finally, the single capital letter indicates the category. The following categories are used: ==info== (I), ==debug== (D) and ==transaction== (T). After these fields, the actual message is printed.
+The first two fields are the date and time in a fixed sized format. The next number is a fixed sized hash of the process ID. Note how 3 different processes are 
+involved: the one starting the server (probably the UI process), the actual server listening process, and the client worker process spawned to handle the request. 
+Finally, the single capital letter indicates the category. The following categories are used: ==info== (I), ==debug== (D) and ==transaction== (T). After these 
+fields, the actual message is printed.
 
-Both ==ZnClient== and ==ZnServer== implement logging using a similar mechanism based on the announcements framework. ==ZnLogEvents== are subclasses of Announcement sent by an HTTP server or client containing logging information. A log event has a TimeStamp, a Process ID, a category and a message. 
+Both ==ZnClient== and ==ZnServer== implement logging using a similar mechanism based on the announcements framework. ==ZnLogEvents== are subclasses of Announcement 
+sent by an HTTP server or client containing logging information. A log event has a TimeStamp, a Process ID, a category and a message. 
 
-To help in the implementation, a ==ZnLogSupport== object is used. A hierarchy of listeners under ==ZnLogListener== can then be used to process log events. Log listeners feature a filtering mechanism. The following concrete listeners are provided.
+To help in the implementation, a ==ZnLogSupport== object is used. A hierarchy of listeners under ==ZnLogListener== can then be used to process log events. Log 
+listeners feature a filtering mechanism. The following concrete listeners are provided.
 
 - ==ZnTranscriptLogger==
 - ==ZnFileLogger==
 - ==ZnStandardOutputLogger==
 - ==ZnMemoryLogger==
 
-To log something, send ==info:==, ==debug:== or ==transaction:== to the log support object of a client or server (accessible by ==log==). The argument can be either a string or a block that will only be executed when logging is actually enabled.
+To log something, send ==info:==, ==debug:== or ==transaction:== to the log support object of a client or server (accessible by ==log==). The argument can be 
+either a string or a block that will only be executed when logging is actually enabled.
 
 [[[
 server log info: [ 'User ', self getUsername, ' logged in.' ].
 ]]]
 
-The Zn logging mechanism is using an internal lock to make it thread safe, but it does serialize logging by multiple processes. It is important to make the time spent inside the log block short and non blocking.
+The Zn logging mechanism is using an internal lock to make it thread safe, but it does serialize logging by multiple processes. It is important to make the time 
+spent inside the log block short and non blocking.
 
-You can customize a listener before adding it to a log support. The following example asks the default server to log just transaction events to a file named ==zn.log==, next to your image.
+You can customize a listener before adding it to a log support. The following example asks the default server to log just transaction events to a file named 
+==zn.log==, next to your image.
 
 [[[
 | logger |
@@ -170,15 +202,20 @@ ZnServer default log addListener: logger.
 
 !!Server management
 
-Servers instances can be started and stopped using ==start== and ==stop==. By registering a server instance, by sending it ==register==, it becomes managed. That means it will now survive image save and restart. This only happens automatically with the ==default== server, for other server instances you have to enable it manually.
+Servers instances can be started and stopped using ==start== and ==stop==. By registering a server instance, by sending it ==register==, it becomes managed. That 
+means it will now survive image save and restart. This only happens automatically with the ==default== server, for other server instances you have to enable it 
+manually.
 
-The main parameter a server needs is the port on which it will listen. Additionally, you can restrict the network interface the server should listen on by setting its ==bindingAddress:== to some IP address. The default, nil or #[0 0 0 0], means to listen on all interfaces. With an argument of #[127 0 0 0], the server will not respond to request over its normal network, but only to request coming from the same host. This is often used to increase security while proxying.
+The main parameter a server needs is the port on which it will listen. Additionally, you can restrict the network interface the server should listen on by 
+setting its ==bindingAddress:== to some IP address. The default, nil or #[0 0 0 0], means to listen on all interfaces. With an argument of #[127 0 0 0], the 
+server will not respond to request over its normal network, but only to request coming from the same host. This is often used to increase security while proxying.
 
 @@authorToDo shouldn't it be #[127 0 0 1]? I am not sure but I do not remember that we can bind on subnet addresses.
 
 !!Server variants
 
-The class side of ==ZnServer== is actually a facade to instantiate a particular concrete ==ZnServer== subclass, as can be seen in ==defaultServerClass==. The hierarchy looks as follows.
+The class side of ==ZnServer== is actually a facade to instantiate a particular concrete ==ZnServer== subclass, as can be seen in ==defaultServerClass==. The 
+hierarchy looks as follows.
 
 [[[language=
 ZnServer
@@ -187,11 +224,15 @@ ZnServer
         + ZnManagedMultiThreadedServer
 ]]]
 
- ==ZnServer== is an abstract class. ==ZnSingleThreadedServer== implements the core server functionality. It runs in one single process, which means it can only handle one request at a time. This one is easier to understand and debug. ==ZnMultiThreadedServer== spawns a new process on each incoming request, possibly handling multiple request/response cycles on the same connection. ==ZnManagedMultiThreadedServers== keeps explicit track of which connections are alive so that they can be stopped when the server stops instead of letting them die out.
+ ==ZnServer== is an abstract class. ==ZnSingleThreadedServer== implements the core server functionality. It runs in one single process, which means it can only 
+ handle one request at a time. This one is easier to understand and debug. ==ZnMultiThreadedServer== spawns a new process on each incoming request, possibly 
+ handling multiple request/response cycles on the same connection. ==ZnManagedMultiThreadedServers== keeps explicit track of which connections are alive so that 
+ they can be stopped when the server stops instead of letting them die out.
 
 !!Static file server
 
-When most people think about a web server, they see a directory full of HTML, image, CSS, and other files, somewhere on a machine, with the web server serving these files over HTTP to web browser clients anywhere on the network. This is indeed what Apache does in its most basic form. Technically this is called static file serving.
+When most people think about a web server, they see a directory full of HTML, image, CSS, and other files, somewhere on a machine, with the web server serving 
+these files over HTTP to web browser clients anywhere on the network. This is indeed what Apache does in its most basic form. Technically this is called static file serving.
 
 Zn can do this by using the ==ZnStaticFileServerDelegate== object. Given a directory and an optional prefix, this delegate will serve all files it finds in that directory.
 
@@ -215,14 +256,17 @@ You can access these files with these URLs
 - *http://localhost:1701/static-files/index.html*
 - *http://localhost:1701/static-files/small.html*
 
-The prefix is added in front of all files being served, the actual directory where the files reside is of course invisible to the end web user. You do not have to specify a prefix, then the files will be served directly.
+The prefix is added in front of all files being served, the actual directory where the files reside is of course invisible to the end web user. You do not have 
+to specify a prefix, then the files will be served directly.
 
-Note how all other URLs result in a 404 Not found. ==ZnStaticFileServerDelegate== is very simple, but it does have a couple of capabilities. It will do what most people expect with respect to directories.
+Note how all other URLs result in a 404 Not found. ==ZnStaticFileServerDelegate== is very simple, but it does have a couple of capabilities. It will do what most 
+people expect with respect to directories.
 
 - *http://localhost:1701/static-files*
 - *http://localhost:1701/static-files/*
 
-The first URL above will result in a redirect to the second. The second URL will look for either an index.html or index.htm file and serve that. Automatic generation of an index page when there is no index file is not implemented.
+The first URL above will result in a redirect to the second. The second URL will look for either an index.html or index.htm file and serve that. Automatic 
+generation of an index page when there is no index file is not implemented.
 
 As a static file server, the following features are implemented:
 
@@ -276,11 +320,15 @@ It should work just like any other repository, although it is for package storag
 
 !! Dispatching
 
-Dispatching or routing is HTTP application server speak for deciding what part of your software will handle an incoming request. This decision can be made on any of the properties of the request: the HTTP method, the URL or part of it, the query parameters, the meta headers and the entity body. Different applications will prefer different kinds of solutions to this problem.
+Dispatching or routing is HTTP application server speak for deciding what part of your software will handle an incoming request. This decision can be made on 
+any of the properties of the request: the HTTP method, the URL or part of it, the query parameters, the meta headers and the entity body. Different applications 
+will prefer different kinds of solutions to this problem.
 
-Zinc HTTP Components is a general framework that offers you all the necessary components to build your own dispatcher. Out of the box, there are the different delegates that we discussed before. Most of these have hand coded dispatching in their ==handleRequest:== method.
+Zinc HTTP Components is a general framework that offers you all the necessary components to build your own dispatcher. Out of the box, there are the different 
+delegates that we discussed before. Most of these have hand coded dispatching in their ==handleRequest:== method.
 
-==ZnDefaultServerDelegate== uses a prefix map internally that maps URI prefixes to internal methods. But it can be customized by installing a block as the value to a prefix, which accepts the request and produces a response. Here is an example of using that capability.
+==ZnDefaultServerDelegate== uses a prefix map internally that maps URI prefixes to internal methods. But it can be customized by installing a block as the value 
+to a prefix, which accepts the request and produces a response. Here is an example of using that capability.
 
 [[[
 | staticFileServerDelegate |
@@ -300,7 +348,8 @@ ZnServer default delegate prefixMap
   put: 'redirect-to-zn'.
 ]]]
 
-This is taken from the configuration of what runs at *http://zn.stfx.eu*. A static web server is set up under the ==zn== prefix pointing to the ==/home/ubuntu/zn== directory. The prefix map of the default delegate is kept as is, with its standard functionality, but is modified, such that
+This is taken from the configuration of what runs at *http://zn.stfx.eu*. A static web server is set up under the ==zn== prefix pointing to the 
+==/home/ubuntu/zn== directory. The prefix map of the default delegate is kept as is, with its standard functionality, but is modified, such that
 
 - anything with a ==zn== prefix is directly forwarded to the static file server
 - a special ==redirect-to-zn== prefix is set up which will issue a redirect to ==/zn/index.html==
@@ -316,11 +365,14 @@ Another option is to use ==ZnDispatcherDelegate==.
                          response entity: (ZnEntity html: '<h1>hello there</h1>') ]).
 ]]]
 
-You configure the dispatcher using ==map:to:== methods. First argument is the prefix, second argument is a block taking two arguments: the incoming request and an already instantiated response.
+You configure the dispatcher using ==map:to:== methods. First argument is the prefix, second argument is a block taking two arguments: the incoming request and 
+an already instantiated response.
 
 !! Seaside adaptor
 
-*Seaside>http://www.seaside.st/* is a well known, cross platform, advanced Smalltalk web application framework. It does not provide its own HTTP server but relies on an existing one by means of an adaptor. It does work well with Zn, through the use of a ==ZnZincServerAdaptor==. You can load it with the Zinc-Seaside package, but is also comes already included with certain Seaside distributions. In fact, on Pharo Smalltalk it is the default.
+*Seaside>http://www.seaside.st/* is a well known, cross platform, advanced Smalltalk web application framework. It does not provide its own HTTP server but 
+relies on an existing one by means of an adaptor. It does work well with Zn, through the use of a ==ZnZincServerAdaptor==. You can load it with the Zinc-Seaside 
+package, but is also comes already included with certain Seaside distributions. In fact, on Pharo Smalltalk it is the default.
 
 Starting this adaptor can be done using the Seaside Control panel in the normal way. Alternatively, the adaptor can be started programmatically.
 
@@ -330,9 +382,11 @@ ZnZincServerAdaptor startOn: 8080.
 
 All this is covered in the standard Seaside documentation.
 
-Since Seaside does its own character conversions, the Zn adaptor is configured to work in binary mode for maximum efficiency. There is complete support for POST and PUT requests with entities in form URL, multipart or raw encoding.
+Since Seaside does its own character conversions, the Zn adaptor is configured to work in binary mode for maximum efficiency. There is complete support for POST 
+and PUT requests with entities in form URL, multipart or raw encoding.
 
-There is even a special adaptor that combines being a Seaside adaptor with static file serving, which is useful if you don't like the WAFileLibrary machinery and prefer plain static files served directly.
+There is even a special adaptor that combines being a Seaside adaptor with static file serving, which is useful if you don't like the WAFileLibrary machinery 
+and prefer plain static files served directly.
 
 [[[
 ZnZincStaticServerAdaptor startOn: 8080 andServeFilesFrom: '/var/www/'.
@@ -340,9 +394,11 @@ ZnZincStaticServerAdaptor startOn: 8080 andServeFilesFrom: '/var/www/'.
 
 !! Character encoding
 
-Proper character encoding and decoding is crucial in today's international world. Pharo Smalltalk encodes characters and strings using Unicode. The primary internet encoding is UTF-8, but a couple of others are used as well. To translate between these two, a concrete ==ZnCharacterEncoding== subclass like ==ZnUTF8Encoder== is used.
+Proper character encoding and decoding is crucial in today's international world. Pharo Smalltalk encodes characters and strings using Unicode. The primary 
+internet encoding is UTF-8, but a couple of others are used as well. To translate between these two, a concrete ==ZnCharacterEncoding== subclass like ==ZnUTF8Encoder== is used.
 
-==ZnCharacterEncoding== is an extension and reimplementation of regular TextConverter. It only works on binary input and generated binary output. It adds the ability to compute the encoded length of a source character, a crucial operation for HTTP. It is more correct and will throw proper exceptions when things go wrong.
+==ZnCharacterEncoding== is an extension and reimplementation of regular TextConverter. It only works on binary input and generated binary output. It adds the 
+ability to compute the encoded length of a source character, a crucial operation for HTTP. It is more correct and will throw proper exceptions when things go wrong.
 
 Character encoding is mostly invisible. Here are some code snippets using the encoders directly, feel free to substitute any Unicode character to make the test more interesting.
 
@@ -354,7 +410,8 @@ self assert: (encoder decodeBytes: (encoder encodeString: string)) equals: strin
 encoder encodedByteCountForString: string.
 ]]]
 
-There are no automatic conversions in Zinc. So Zinc is one of the pieces of software that does not assume stupid defaults. You should specify a proper Content-Type header including the charset information. Otherwise Zinc has no chance of knowing what to use and the default NullEncoder will make your string wrong.
+There are no automatic conversions in Zinc. So Zinc is one of the pieces of software that does not assume stupid defaults. You should specify a proper 
+Content-Type header including the charset information. Otherwise Zinc has no chance of knowing what to use and the default NullEncoder will make your string wrong.
 
 Let us look at one example 
 SD: We should add back the o umlaut whe pillar/latex can handle it.
@@ -380,7 +437,9 @@ In the first case, a UTF-8 encoded string is POST-ed and correctly returned (in 
 
 In the second case, an ISO-8859-1 encoded string is POST-ed and correctly returned (in a UTF-8 encoded response).
 
-In both cases the decoding was done correctly, using the specified charset (if that is missing, the ZnNullEncoder is used). Now, o is not a perfect test example because its encoding value in Unicode, 246 decimal, U\+00F6 hex, still fits in 1 byte and hence survives null encoding/decoding. That is why the following still works, although it is wrong to drop the charset.
+In both cases the decoding was done correctly, using the specified charset (if that is missing, the ZnNullEncoder is used). Now, o is not a perfect test example 
+because its encoding value in Unicode, 246 decimal, U\+00F6 hex, still fits in 1 byte and hence survives null encoding/decoding. That is why the following still 
+works, although it is wrong to drop the charset.
 
 
 [[[
@@ -395,7 +454,8 @@ ZnClient new
 
 !! Resource protection limits
 
-Internet facing HTTP servers will come under attack by malicious clients. Good security is thus important. The first step is a correct and safe implementation of the HTTP protocol. One way a server protects itself is by implementing some resource limits.
+Internet facing HTTP servers will come under attack by malicious clients. Good security is thus important. The first step is a correct and safe implementation of 
+the HTTP protocol. One way a server protects itself is by implementing some resource limits.
 
 Zinc HTTP Components currently implements and enforces the following limits, most of them are hard constants.
 
@@ -405,11 +465,15 @@ Zinc HTTP Components currently implements and enforces the following limits, mos
 
 !! Content and transfer encoding
 
-Zn implements two important techniques that are used by HTTP servers when they send entity bodies to clients. Gzip encoding and chunked transfer encoding. The first one adds compression. The second one is used when the size of an entity is not known up front. Instead chunks of certain sizes are sent until the entity is complete.
+Zn implements two important techniques that are used by HTTP servers when they send entity bodies to clients. Gzip encoding and chunked transfer encoding. The 
+first one adds compression. The second one is used when the size of an entity is not known up front. Instead chunks of certain sizes are sent until the entity is complete.
 
-All this is handled internally and invisibly. The main object dealing with content and transfer encoding is ==ZnEntityReader==. When necessary, the binary socket stream is wrapped with either a ==ZnChunkedReadStream== and/or a ==GZipReadStream==. Zn also makes use of a ==ZnLimitedReadStream== to make sure there is no read beyond the boundaries of one single request's body, provided the content length is set.
+All this is handled internally and invisibly. The main object dealing with content and transfer encoding is ==ZnEntityReader==. When necessary, the binary socket 
+stream is wrapped with either a ==ZnChunkedReadStream== and/or a ==GZipReadStream==. Zn also makes use of a ==ZnLimitedReadStream== to make sure there is no read 
+beyond the boundaries of one single request's body, provided the content length is set.
 
- Zinc HTTP Components was written with the explicit goal of allowing users to explore the implementation. The tests suite contains many examples that can serve as learning material.
+ Zinc HTTP Components was written with the explicit goal of allowing users to explore the implementation. The tests suite contains many examples that can serve 
+ as learning material.
 
 !!Conclusion
 

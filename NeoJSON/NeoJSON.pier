@@ -1,14 +1,14 @@
 ! JSON
+@cha:JSON
 
-JSON (JavaScript Object Notation) is a popular data-interchange format. NeoJSON is an elegant and efficient standalone Smalltalk framework to read and write JSON converting to or from Smalltalk objects developed and actively maintained by Sven Van Caekenberghe. 
-
-
-
-
+JSON (JavaScript Object Notation) is a popular data-interchange format. NeoJSON is an elegant and efficient standalone Smalltalk framework to read and write 
+JSON converting to or from Smalltalk objects developed and actively maintained by Sven Van Caekenberghe. 
 
 !!An introduction to JSON
 
-JSON is a lightweight text-based open standard designed for human-readable data interchange. It was derived from the JavaScript scripting language for representing simple data structures and associative arrays, called objects. Despite its relationship to JavaScript, it is language-independent, with parsers available for many languages.
+JSON is a lightweight text-based open standard designed for human-readable data interchange. It was derived from the JavaScript scripting language for 
+representing simple data structures and associative arrays, called objects. Despite its relationship to JavaScript, it is language-independent, with parsers 
+available for many languages.
 
 Here are some relevant links: *http://www.json.org/*, *http://en.wikipedia.org/wiki/Json* and *http://www.ietf.org/rfc/rfc4627.txt?number=4627*.
 
@@ -28,7 +28,8 @@ That is really all there is to it. No options or additions are defined in the st
 
 !! NeoJSON
 
-The NeoJSON framework contains a reader (==NeoJSONReader==) and a writer (==NeoJSONWriter==) to parse respectively generate JSON to or from Pharo objects. The goals of this project are:
+The NeoJSON framework contains a reader (==NeoJSONReader==) and a writer (==NeoJSONWriter==) to parse respectively generate JSON to or from Pharo objects. The 
+goals of this project are:
 
 -to be standalone (have no dependencies and have little requirements)
 -to be small, elegant and understandable
@@ -106,18 +107,24 @@ NeoJSONWriter can output either in a compact format (the default) or in a pretty
 SD: examples how to do that.
 
 
-In order to use the generic mode, you have to convert your domain objects to and from Dictionaries and SequenceableCollections. This is relatively easy but not very efficient, depending on the use case.
+In order to use the generic mode, you have to convert your domain objects to and from Dictionaries and SequenceableCollections. This is relatively easy but not 
+very efficient, depending on the use case.
 
 
 !! Schemas and Mappings
 
-NeoJSON allows for the optional specification of schemas and mappings to be used when writing and/or when reading. A ==NeoJSONMapper== holds a number of schemas. Each schema is identified by either a class or a symbol. Each schema specifies a mapping, an object that will help in doing the actual reading or writing.
+NeoJSON allows for the optional specification of schemas and mappings to be used when writing and/or when reading. A ==NeoJSONMapper== holds a number of 
+schemas. Each schema is identified by either a class or a symbol. Each schema specifies a mapping, an object that will help in doing the actual reading or 
+writing.
 
-The most common mapping deals with objects that define a number of named properties or attributes. These can be defined based on instance variables (optionally derived by reflection), accessors (getter/setter pairs) or even blocks. Such an object mapping is identified by a Smalltalk class, which is also used to create new instances. Each property mapping can have an optional value schema to be used recursively when reading and/or writing property values.
+The most common mapping deals with objects that define a number of named properties or attributes. These can be defined based on instance variables (optionally 
+derived by reflection), accessors (getter/setter pairs) or even blocks. Such an object mapping is identified by a Smalltalk class, which is also used to create 
+new instances. Each property mapping can have an optional value schema to be used recursively when reading and/or writing property values.
 
-The less common custom mapping holds a generic reader and/or writer block to deal with special cases such as specific collection types with an optional schema for the elements, or a direct mapping of semi primitive types such as Date or DateAndTime.
+The less common custom mapping holds a generic reader and/or writer block to deal with special cases such as specific collection types with an optional schema 
+for the elements, or a direct mapping of semi primitive types such as Date or DateAndTime.
 
-A mapping can be specified explicitely on a mapper, or can be resolved using the #neoJsonMapping: class method.
+A mapping can be specified explicitly on a mapper, or can be resolved using the #neoJsonMapping: class method.
 
 Here are some examples of mappings:
 
@@ -142,7 +149,8 @@ mapper for: #DictionaryOfPoints customDo: [ :mapping |
 
 mapper for: ByteArray customDo: [ :mapping |
     mapping listOfType: ByteArray ]
-The classes NeoJSONReader and NeoJSONWriter are subclasses of NeoJSONMapper. When writing, mappings are used when arbitrary objects are seen. For example, in order to be able to write an array of points, you could do as follows:
+The classes NeoJSONReader and NeoJSONWriter are subclasses of NeoJSONMapper. When writing, mappings are used when arbitrary objects are seen. For example, in 
+order to be able to write an array of points, you could do as follows:
 
 String streamContents: [ :stream |
     (NeoJSONWriter on: stream)
@@ -152,7 +160,8 @@ String streamContents: [ :stream |
 
 ]]]
 
-Collections are handled automatically, like in the generic case. When reading, a mapping is used as a binding or an explicit type specifying what Pharo objects that you want to read. Here is a very simple case, reading a map as a point:
+Collections are handled automatically, like in the generic case. When reading, a mapping is used as a binding or an explicit type specifying what Pharo objects 
+that you want to read. Here is a very simple case, reading a map as a point:
 
 
 [[[
@@ -199,7 +208,8 @@ When mapping my objects with NeoJSONWriter, it is not writing the properties who
 		ifNotNil: [ jsonMapWriter writeKey: propertyName value: value as: valueSchema ] 
 ]]]
 
-It is a good default (saves space, and cpu cycles). But in there are cases where the consumer of the JSON objects expect the objects to have all the attributes previously defined.
+It is a good default (saves space, and cpu cycles). But in there are cases where the consumer of the JSON objects expect the objects to have all the attributes 
+previously defined.
 
 NeoJSON is cool and it supports this behavior. Set the writeNil: to true as follows and you are done.
 
@@ -223,7 +233,8 @@ instead of:
 
 !! Without Mapping Definition
 
-Both NeoCSV and NeoJSON can operate in two ways, (1) without the definition of any schema's or (2) with the definition of schema's and mappings. Therefore you can use them both using a quick and dirty explore style. Here are some examples: 
+Both NeoCSV and NeoJSON can operate in two ways, (1) without the definition of any schema's or (2) with the definition of schema's and mappings. Therefore you 
+can use them both using a quick and dirty explore style. Here are some examples: 
 
 [[[
 'my-data.csv' asFileReference readStreamDo: [ :in | (NeoCSVReader on: in) upToEnd ].
@@ -240,4 +251,5 @@ Both NeoCSV and NeoJSON can operate in two ways, (1) without the definition of a
 
 !! Conclusion
 
-NeoJSON is a powerful library to convert objects. Now Sven developed STON (Smalltalk object notation) which is closer to Pharo syntax and handles cycles and references between serialized objects. 
+NeoJSON is a powerful library to convert objects. Now Sven developed STON (Smalltalk object notation) which is closer to Pharo syntax and handles cycles and 
+references between serialized objects. 
