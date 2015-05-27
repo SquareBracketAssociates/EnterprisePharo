@@ -151,7 +151,6 @@ evaluates to:
 div
 {
     border-color: rgb(0%,50%,0%);
-
 }
 ]]]
 
@@ -502,97 +501,109 @@ repeating-radial-gradient(yellow, green);
 
 !!Defining the selectors
 
-So far our focus was on the ''style'' part of the rule. Let's focus now on the available ''selectors''. Remember that a CSS selector represents a structure used to match elements in the document tree. This chapter asume some familiarity with the CSS selectors and will not go in detail about the exact meaning of each one. For more details you can take a look at http://www.w3.org/TR/css3-selectors/.
+So far our focus was on the ''style'' part of the rule. Let's focus now on the available ''selectors''. Remember that a CSS selector represents a structure used to match elements in the document tree. This chapter asume some familiarity with the CSS selectors and will not go in detail about the exact meaning of each one. For more details you can take a look at *CSS3 selector documentation>http://www.w3.org/TR/css3-selectors*.
 
 !!! Type selectors
 
-These selectors match a specific element type in the DOM. The library provides out-of-the-box support for HTML elements, mostly using the same names that the ==Seaside== framework. One example is the ==div== selector used in the previous chapter. Another is the following:
+These selectors match a specific element type in the DOM. The library provides out-of-the-box support for HTML elements, mostly using the same names than the *Seaside>http://seaside.st* framework. One example is the ==div== selector used in the previous chapter:
+
+[[[language=smalltalk
+CascadingStyleSheetBuilder new
+  declareRuleSetFor: [ :selector | selector div ]
+  with: [ :style | ... ];
+  build
+]]]
+
+The following other example matches ==<ol>== (ordered list) elements:
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector orderedList ]
-  with: [:style | style listStyleType: CssConstants lowerRoman ];
-  build
+  with: [ :style | ... ]
 ]]]
+
+evaluating to:
+
 [[[language=css
 ol
 {
-    list-style-type: lower-roman;
+  ...
 }
 ]]]
 
 !!! Combinators
 
-One of the most common use cases is the **descendant combinator**.
+Selectors can be combined to represent complex queries. One of the most common use cases is the ''descendant combinator'':
+
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div orderedList ]
-  with: [:style | style listStyleType: CssConstants lowerRoman ];
-  build
+  with: [:style | ... ]
 ]]]
+
+evaluating to:
+
 [[[language=css
 div ol
 {
-    list-style-type: lower-roman;
+  ...
 }
 ]]]
 
-!!!! Child combinator
+This only matches if an ==ol== element is a descendant (direct or not) of a ==div== element.
+
+This ''child combinator'' only matches when an element is a direct child of an other one:
+
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div > selector orderedList ]
-  with: [:style | style listStyleType: CssConstants lowerRoman ];
-  build
+  with: [:style |  ]
 ]]]
+
+evaluates to
+
 [[[language=css
 div > ol
 {
-    list-style-type: lower-roman;
+  ...
 }
 ]]]
 
-!!!! Adjacent & General Siblings combinators
+Siblings combinators can be created using ==\+== and ==\~==:
+
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div + selector orderedList ]
-  with: [:style | style listStyleType: CssConstants lowerRoman ];
-  build
+  with: [:style |  ]
 ]]]
-[[[language=css
-div + ol
-{
-    list-style-type: lower-roman;
-}
-]]]
+
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div ~ selector orderedList ]
-  with: [:style | style listStyleType: CssConstants lowerRoman ];
-  build
-]]]
-[[[language=css
-div ~ ol
-{
-    list-style-type: lower-roman;
-}
+  with: [:style |  ]
 ]]]
 
-!!! Class and Id Selectors
+Class selectors can be created by sending ==class:== and id selectors can be created by sending ==id:==. For example,
+
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | (selector div class: 'pastoral') id: #account5 ]
-  with: [:style | style listStyleType: CssConstants lowerRoman ];
-  build
+  with: [:style |  ]
 ]]]
+
+evaluates to:
+
 [[[language=css
 div.pastoral#account5
 {
-    list-style-type: lower-roman;
+  ...
 }
 ]]]
+
 @@note You should not hardcode the classes and ids, they should be obtained from the same object that holds them for the HTML generation. You probably have some code setting the class(es) and/or id(s) to a particular HTML element.
 
 !!! Pseudo-Classes
+
 The pseudo-class concept is introduced to allow selection based on information that lies outside of the document tree or that cannot be expressed using the simpler selectors. Most pseudo-classes are supported just by sending one of the following messages ==link==, ==visited==, ==active==, ==hover==, ==focus==, ==target==, ==enabled==, ==disabled== or ==checked==.
 
 Here is a small example that uses the pseudo-classes:
