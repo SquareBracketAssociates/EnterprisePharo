@@ -68,8 +68,7 @@ We now present how the various CSS rules can be expressed with RenoirSt. RenoirS
 
 !!!!Lengths, Angles, Times and Frequencies
 
-The library provides out-of-the-box support for the length, angle, time and frequency units in the CSS spec. There are extensions for ==Integer== and ==Float== 
-classes allowing to obtain lengths.
+The library provides out-of-the-box support for the length, angle, time and frequency units in the CSS spec. There are extensions for ==Integer== and ==Float== classes allowing to obtain lengths.
 
 The supported length units are:
 - ==em== relative to font size
@@ -591,10 +590,6 @@ div > ol
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div + selector orderedList ]
   with: [:style |  ]
-]]]
-
-[[[language=smalltalk
-CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div ~ selector orderedList ]
   with: [:style |  ]
 ]]]
@@ -617,6 +612,24 @@ div.pastoral#account5
 ]]]
 
 @@note You should not hardcode the classes and ids, they should be obtained from the same object that holds them for the HTML generation. You probably have some code setting the class(es) and/or id(s) to a particular HTML element.
+
+A comma-separated list of selectors represents the union of all elements selected by each of the individual selectors in the list. For example, in CSS when 
+several selectors share the same declarations, they may be grouped into a comma-separated list.
+
+[[[language=smalltalk
+CascadingStyleSheetBuilder new
+  declareRuleSetFor: [:selector | selector paragraph , selector div ]
+  with: [:style | ... ]
+]]]
+
+evaluates to:
+
+[[[language=css
+p, div
+{
+  ...
+}
+]]]
 
 !!! Pseudo-Classes
 
@@ -712,7 +725,7 @@ zero value of ==n==, and has a parent element. For values of ==a== and ==b== gre
 
 In addition to this, ==:nth-child()== can take ==odd== and ==even== as arguments instead. The value ==odd== is equivalent to ==2n\+1==, whereas ==even== is equivalent to ==2n==.
 
-RenoirST supports an abstraction for this kind of formulae (==CssLinealPolynomial==), or just an integer if ==n== is not required.
+RenoirST supports an abstraction for this kind of formula (==CssLinealPolynomial==), or just an integer if ==n== is not required.
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -744,29 +757,21 @@ evaluates to:
 }
 ]]]
 
-@@authorToDo Damien: HERE
+All structural pseudo-classes can be generated using the following messages:
 
-==CssLinealPolynomial== instances can be created by sending the message ==n== to an integer, and later this instances can receive the messages ==+== or ==-== to 
-configure the independent coefficient.
-
-Some examples:
-[[[language=smalltalk
-1 n "Prints as: n".
-2 n -3 "Prints as: 2n-3".
-3 n + 1 "Prints as: 3n+1"
-]]]
-
-The rest of the selectors in this category are modeled using the following messsages:
-- ==nth-last-child()== -> ==childFromLastAt:==
-- ==nth-of-type()== -> ==siblingOfTypeAt:==
-- ==nth-last-of-type()== -> ==siblingOfTypeFromLastAt:==
-- ==first-child== -> ==firstChild==
-- ==last-child== -> ==lastChild==
-- ==first-of-type== -> ==firstOfType==
-- ==last-of-type== -> ==lastOfType==
-- ==only-child== -> ==onlyChild==
-- ==only-of-type== -> ==onlyOfType==
-- ==empty== -> ==empty==
+|! CSS pseudo-class      |! RenoirST selector message
+| ==root()==             | ==root==
+| ==nth-child()==        | ==childAt:==
+| ==nth-last-child()==   | ==childFromLastAt:==
+| ==nth-of-type()==      | ==siblingOfTypeAt:==
+| ==nth-last-of-type()== | ==siblingOfTypeFromLastAt:==
+| ==first-child==        | ==firstChild==
+| ==last-child==         | ==lastChild==
+| ==first-of-type==      | ==firstOfType==
+| ==last-of-type==       | ==lastOfType==
+| ==only-child==         | ==onlyChild==
+| ==only-of-type==       | ==onlyOfType==
+| ==empty==              | ==empty==
 
 !!! Pseudo-Elements
 
@@ -774,8 +779,7 @@ Pseudo-elements create abstractions about the document tree beyond those specifi
 mechanisms to access the first letter or first line of an element's content. Pseudo-elements allow authors to refer to this otherwise inaccessible information. 
 Pseudo-elements may also provide authors a way to refer to content that does not exist in the source document.
 
-!!!! First line
-This selector describes the contents of the first formatted line of an element.
+The ==firstLine== pseudo-element describes the contents of the first formatted line of an element.
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -783,6 +787,9 @@ CascadingStyleSheetBuilder new
   with: [:style | style textTransform: CssConstants uppercase ];
   build
 ]]]
+
+evaluates to:
+
 [[[language=css
 p::first-line
 {
@@ -790,9 +797,7 @@ p::first-line
 }
 ]]]
 
-!!!! First letter
-
-This pseudo-element represents the first letter of an element, if it is not preceded by any other content (such as images or inline tables) on its line.
+The ==firstLetter== pseudo-element represents the first letter of an element, if it is not preceded by any other content (such as images or inline tables) on its line.
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -800,6 +805,9 @@ CascadingStyleSheetBuilder new
   with: [:style | style fontSize: 200 percent ];
   build
 ]]]
+
+evaluates to:
+
 [[[language=css
 p::first-letter
 {
@@ -807,10 +815,7 @@ p::first-letter
 }
 ]]]
 
-!!!! Before and After
-
-These pseudo-elements can be used to describe generated content before or after an element's content. The ==content== property, in conjunction with these 
-pseudo-elements, specifies what is inserted.
+The ==before== and ==after== pseudo-elements can be used to describe generated content before or after an element's content. The ==content== property, in conjunction with these pseudo-elements, specifies what is inserted.
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -820,6 +825,9 @@ CascadingStyleSheetBuilder new
   with: [:style | style content: '"[*]"' ];
   build
 ]]]
+
+evaluates to:
+
 [[[language=css
 p.note::before
 {
@@ -832,26 +840,6 @@ p.note::after
 }
 ]]]
 
-!!! Selector Groups
-
-A comma-separated list of selectors represents the union of all elements selected by each of the individual selectors in the list. For example, in CSS when 
-several selectors share the same declarations, they may be grouped into a comma-separated list.
-
-[[[language=smalltalk
-CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | (selector div class: 'note') after , (selector paragraph class: 'note') before ]
-  with: [:style | style content: '"Note: "' ];
-  build
-]]]
-
-[[[language=css
-div.note::after ,
-p.note::before
-{
-    content: "Note: ";
-}
-]]]
-
 !! Important Rules
 
 CSS attempts to create a balance of power between author and user style sheets. By default, rules in an author's style sheet override those in a user's style sheet.
@@ -860,7 +848,7 @@ However, for balance, an ==!important== declaration takes precedence over a norm
 declarations, and user ==!important== rules override author ==!important== rules. This CSS feature improves accessibility of documents by giving users with 
 special requirements control over presentation.
 
-The library provides support for this feature by sending ==beImportantDuring:== message to the style. Let's see an example:
+The library provides support for this feature by sending ==beImportantDuring:== message to the style.
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -875,7 +863,9 @@ CascadingStyleSheetBuilder new
   ];
   build
 ]]]
-Evaluates to:
+
+evaluates to:
+
 [[[language=css
 p
 {
@@ -886,8 +876,7 @@ p
 ]]]
 Note that the important properties must be created by sending the messages to the inner argument ==importantStyle== instead of the outer argument ==style==.
 
-!!!!! References:
-- http://www.w3.org/TR/CSS2/cascade.html#important-rules
+@@note References: *http://www.w3.org/TR/CSS2/cascade.html#important-rules*
 
 !! Media Queries
 
@@ -900,11 +889,22 @@ The most basic media rule consists of specifying just a media type:
 CascadingStyleSheetBuilder new
     declare: [ :cssBuilder |
         cssBuilder
-            declareRuleSetFor: [ :selector | selector id: #oop ]
-            with: [ :style | style color: CssSVGColors red ]
+            declareRuleSetFor: [ :selector | selector div ]
+            with: [ :style | ]
         ]
     forMediaMatching: [ :queryBuilder | queryBuilder type: CssMediaQueryConstants print ];
     build
+]]]
+
+evaluates to:
+
+[[[language=css
+@media print
+{
+    div
+    {
+    }
+}
 ]]]
 
 To use media queries in the library just send the message ==declare:forMediaMatching:== to the builder. The first closure is evaluated with an instance of a 
@@ -984,9 +984,8 @@ Evaluates to:
     }
 }
 ]]]
-!!!!! References:
-- http://www.w3.org/TR/CSS2/media.html
-- http://www.w3.org/TR/css3-mediaqueries/
+
+@@note References: *http://www.w3.org/TR/CSS2/media.html* and *http://www.w3.org/TR/css3-mediaqueries/*.
 
 !! Vendor specific extensions
 
