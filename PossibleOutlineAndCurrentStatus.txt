@@ -67,8 +67,8 @@ NeoCSV/NeoCSV.pier
 	>> then Damien
 	
 NeoJSON/NeoJSON.pier
+	>> Damien is working on it (2015/06/08)
 	>> Stef should re read it.
-	>> then Damien
 	
 RenoirST/RenoirST.pier
 	>> Damien finished his pass (2015/06/05)
