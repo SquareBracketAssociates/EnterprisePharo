@@ -918,48 +918,17 @@ The media query builder supports a variety of messages for additional conditions
 requirements of the output device.
 
 The following media feature messages are supported:
-- Accepting a ==CssMeasure== with length units
-    - ==width:==
-    - ==minWidth:==
-    - ==maxWidht:==
-    - ==height:==
-    - ==minHeight:==
-    - ==maxHeight:==
-    - ==deviceWidth:==
-    - ==minDeviceWidth:==
-    - ==maxDeviceWidth:==
-    - ==deviceHeight:==
-    - ==minDeviceHeight:==
-    - ==maxDeviceHeight:==
-- ==orientation:== accepting ==CssMediaQueryConstants portrait== or ==CssMediaQueryConstants landscape==
-- Accepting fractions as aspect ratios
-    - ==aspectRatio:==
-    - ==minAspectRatio:==
-    - ==maxAspectRatio:==
-    - ==deviceAspectRatio:==
-    - ==minDeviceAspectRatio:==
-    - ==maxDeviceAspectRatio:==
-- Accepting integers
-    - ==color:== the argument describes the number of bits per color component of the output device
-    - ==minColor:==
-    - ==maxColor:==
-    - ==colorIndex:== the argument describes the number of entries in the color lookup table of the output device
-    - ==minColorIndex:==
-    - ==maxColorIndex:==
-    - ==monochrome:== the argument describes the number of bits per pixel in a monochrome frame buffer
-    - ==minMonochrome:==
-    - ==maxMonochrome:==
-    - ==grid:== the argument must be 1 or 0
-- Accepting a ==CssMeasure== with resolution units
-    - ==resolution:==
-    - ==minResolution:==
-    - ==maxResolution:==
-- ==scan:== accepting ==CssMediaQueryConstants progressive== or ==CssMediaQueryConstants interlace==
+- Accepting a ==CssMeasure== with length units: ==width:==, ==minWidth:==, ==maxWidht:==, ==height:==, ==minHeight:==, ==maxHeight:==, ==deviceWidth:==, ==minDeviceWidth:==, ==maxDeviceWidth:==, ==deviceHeight:==, ==minDeviceHeight:==, ==maxDeviceHeight:==;
+- ==orientation:== accepting ==CssMediaQueryConstants portrait== or ==CssMediaQueryConstants landscape==;
+- Accepting fractions as aspect ratios: ==aspectRatio:==, ==minAspectRatio:==, ==maxAspectRatio:==, ==deviceAspectRatio:==, ==minDeviceAspectRatio:==, ==maxDeviceAspectRatio:==;
+- Accepting integers: ==color:== (the argument describes the number of bits per color component of the output device), ==minColor:==, ==maxColor:==, ==colorIndex:== (the argument describes the number of entries in the color lookup table of the output device), ==minColorIndex:==, ==maxColorIndex:==, ==monochrome:== (the argument describes the number of bits per pixel in a monochrome frame buffer), ==minMonochrome:==, ==maxMonochrome:==, ==grid:== (the argument must be 1 or 0);
+- Accepting a ==CssMeasure== with resolution units: ==resolution:==, ==minResolution:==, ==maxResolution:==;
+- ==scan:== accepting ==CssMediaQueryConstants progressive== or ==CssMediaQueryConstants interlace==.
 
 New units for resolutions are added using the ==CssMeasure== abstraction. This kind of measures can be created sending the messages ==dpi== (dots per inch), 
 ==dpcm== (dots per centimeter) or ==dppx== (dots per pixel unit) to an integer or float.
 
-Let's see a final example to better understand the media features support:
+Here is a final example to better understand the media features support:
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
     declare: [ :cssBuilder |
@@ -974,7 +943,9 @@ CascadingStyleSheetBuilder new
         ];
     build
 ]]]
-Evaluates to:
+
+evaluates to:
+
 [[[language=css
 @media all and (orientation: landscape) and (resolution: 300dpi)
 {
@@ -987,12 +958,9 @@ Evaluates to:
 
 @@note References: *http://www.w3.org/TR/CSS2/media.html* and *http://www.w3.org/TR/css3-mediaqueries/*.
 
-!! Vendor specific extensions
+!! Vendor-specific extensions
 
-The library doesn't provide out of the box support for non standard properties. However since version ==1.4.0== the message ==vendorPropertyAt:put:== is 
-available to ease the creation of this kind of properties by the end user.
-
-For example:
+The library doesn't provide out of the box support for non standard properties. Nevertheless, the message ==vendorPropertyAt:put:== is available to ease the creation of this kind of properties by the end user:
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -1000,7 +968,9 @@ CascadingStyleSheetBuilder new
   with: [:style | style vendorPropertyAt: 'crazy-margin' put: 1 px ];
   build
 ]]]
-Evaluates to:
+
+evaluates to:
+
 [[[language=css
 div
 {
@@ -1018,15 +988,12 @@ div
 
 !!! Units
 
-The ==Units== package (available using the ConfigurationBrowser in Pharo) includes some extensions that collides with RenoirSt.  Since version ==1.1.0== this 
-library is able to load automatically a compatibility package if it's loaded after ==Units== package. To test this integration there's an 
-[specific job](https://ci.inria.fr/pharo-contribution/job/RenoirSt-UnitsCompatibility/) in the contribution server, that loads first ==Units== and later ==RenoirSt==.
-[![Build Status](https://ci.inria.fr/pharo-contribution/buildStatus/icon?job=RenoirSt-UnitsCompatibility)](https://ci.inria.fr/pharo-contribution/job/RenoirSt-UnitsCompatibility/)
+The ==Units== package (available using the ConfigurationBrowser in Pharo) includes some extensions colliding with RenoirSt.  RenoirST can automatically load a compatibility package if it's loaded after the ==Units== package. To test this integration there's a
+*specific continuous integration job>https://ci.inria.fr/pharo-contribution/job/RenoirSt-UnitsCompatibility*, that loads ==Units== first and then ==RenoirSt==.
 
 !!! Seaside
 
-The library includes an optional configuration called ==ConfigurationOfRenoirtStPlusSeaside== including some useful extensions. The [Seaside](www.seaside.st) 
-framework includes your own class modeling URLs, when this configuration is loaded the instances of ==WAUrl== can be used in the properties requiring an URI:
+RenoirST includes an optional configuration named ==ConfigurationOfRenoirtStPlusSeaside== including some Seaside-related useful extensions. The *Seaside>http://www.seaside.st* framework includes its own class modeling URLs: when this configuration is loaded the instances of ==WAUrl== can be used in the properties requiring an URI:
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -1034,7 +1001,9 @@ CascadingStyleSheetBuilder new
   with: [:style | style backgroundImage: 'images/logo.png' seasideUrl ];
   build
 ]]]
-Evaluates to:
+
+evaluates to:
+
 [[[language=css
 div.logo
 {
@@ -1044,14 +1013,11 @@ div.logo
 
 This optional configuration also loads extensions to ==CssDeclarationBlock== so it can be used as a ==JSObject== in plugins requiring some style parameter.
 
-To load this extensions use the Configuration Browser or try something like:
+To load this extensions use the Configuration Browser or use:
+
 [[[language=smalltalk
 Gofer it
     url: 'http://smalltalkhub.com/mc/gcotelli/RenoirSt/main';
     configurationOf: 'RenoirStPlusSeaside';
     loadStable
 ]]]
-
-There's an integration job in the CI server, testing this specific configuration: [![Build Status](https://ci.inria.fr/pharo-contribution/buildStatus/icon?job=RenoirSt-SeasideIntegration)](https://ci.inria.fr/pharo-contribution/job/RenoirSt-SeasideIntegration/).
-
-For Pharo 4 there's no stable Seaside version yet so the integration job in the CI server loads the development version: [![Build Status](https://ci.inria.fr/pharo-contribution/buildStatus/icon?job=RenoirSt-SeasideIntegration-Pharo4)](https://ci.inria.fr/pharo-contribution/job/RenoirSt-SeasideIntegration-Pharo4/)

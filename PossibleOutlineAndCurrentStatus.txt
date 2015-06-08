@@ -71,7 +71,7 @@ NeoJSON/NeoJSON.pier
 	>> then Damien
 	
 RenoirST/RenoirST.pier
-	>> Damien will do a pass
+	>> Damien finished his pass (2015/06/05)
 
 WebSockets/WebSockets.pier
 	>> Luc will read it 
