@@ -544,7 +544,8 @@ or ==put:onStream:== and ==put:onStreamPretty:==, like this:
 
 
 !!! Supporting Comments
-While JSON does not allow to have comments in a stucture STON offers the possibility to handle comments using a special stream named ==STONCStyleCommentsSkipStream==
+Like JSON, STON does not allow comments of any kind in its format.
+However, STON offers the possibility to handle comments using a special stream named ==STONCStyleCommentsSkipStream==.
 The following snippet illustrates what you can do:
 
 [[[
@@ -553,20 +554,19 @@ STON fromStream: (STONCStyleCommentsSkipStream on: 'Point[/* this is X*/ 1, /* t
 ]]]
 
 [[[
-STON fromStream: (STONCStyleCommentsSkipStream on: '// Here is how you create a point:
+STON fromStringWithComments: '// Here is how you create a point:
 Point[
 	// this is X
 	1, 
 	// this is Y
 	2 ] 
-// Nice huh ?' readStream).
-
+// Nice huh ?'.
 	=> 1@2
 ]]]
 
-
-This helper class is useable in other contexts too like NeoJSON.
-The advantage is that it does not change the STON (or JSON) syntax itself, it just adds some functionality for those who want it.
+This helper class is useable in other contexts too, like for NeoJSON.
+The advantage is that it does not change the STON (or JSON) syntax itself, 
+it just adds some functionality for those who want it.
 
 
 
