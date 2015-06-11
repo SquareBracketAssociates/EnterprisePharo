@@ -6,7 +6,7 @@ web servers to communicate. It is also becoming the most popular protocol for im
 
 With Zinc, Pharo has out of the box support for HTTP. Zinc is a robust, fast and elegant HTTP client and server library written and maintained by Sven van Caekenberghe. 
 
-!! HTTP and Zinc
+!!HTTP and Zinc
 
 HTTP, short for Hypertext Transfer Protocol, functions as a request-response protocol in the client-server computing model. As an application level protocol it 
 is layered on top of a reliable transport such as a TCP socket stream. The most important standard specification document describing HTTP version 1.1 is 

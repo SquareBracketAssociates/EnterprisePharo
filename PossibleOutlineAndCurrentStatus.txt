@@ -50,15 +50,17 @@ Zinc-HTTP
 	>> Luc split it into 2 chapters: client and server
 
 Zinc-HTTP-client
-	>> Luc finished his pass
-	>> Johan finished a thorough pass [28 mar 2014]
+	>> Luc finished his pass [12 mar 2015]
+	>> Johan finished a thorough pass [28 mar 2015]
 	>> somebody should read it to do a final check
 
 Zinc-HTTP-server
 	>> Luc is doing a pass
-	
+	>> Luc finished his passed [11 jun 2015]
+	>> somebody should read it to do a final check
+		
 Zinc-REST
-	>> Stef should read it and ask crhistophe for feedback.
+	>> Stef should read it and ask christophe for feedback.
 	>> Small chapter => to extend?
 	>> Luc will read it
 

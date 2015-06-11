@@ -150,54 +150,57 @@ Using ==ZnBasicAuthenticator== or implementing an alternative is one of several 
 
 !!Logging
 
-@@authorToDo Luc: the logging part of Zinc has changed. In Pharo4, the fields are not the same. The ZnLogSupport and ZnLogListener classes are not there anymore... 
-We should update all logging code examples and the text. 
-
 Log output consists of an arbitrary message preceded by a number of fixed fields. Here is an example of a server log.
 
 [[[language=
-2012-05-10 13:09:10 879179 I Starting ZnManagingMultiThreadedServer HTTP port 1701
-2012-05-10 13:09:10 580596 D Initializing server socket
-2012-05-10 13:09:20 398924 D Executing request/response loop
-2012-05-10 13:09:20 398924 I Read a ZnRequest(GET /)
-2012-05-10 13:09:20 398924 T GET / 200 1195B 0ms
-2012-05-10 13:09:20 398924 I Wrote a ZnResponse(200 OK text/html;charset=utf-8 1195B)
+2015-06-11 10:19:59 001 220937 Server Socket Bound 0.0.0.0:1701
+2015-06-11 10:19:59 002 233075 Started ZnManagingMultiThreadedServer HTTP port 1701
+2015-06-11 10:25:36 003 220937 Connection Accepted 127.0.0.1
+2015-06-11 10:25:36 004 879540 Request Read a ZnRequest(GET /help) 2ms
+2015-06-11 10:25:36 005 879540 Request Handled a ZnRequest(GET /help) 0ms
+2015-06-11 10:25:36 006 879540 Response Written a ZnResponse(200 OK text/html;charset=utf-8 867B) 0ms
+2015-06-11 10:25:36 007 879540 GET /help 200 867B 0ms
+2015-06-11 10:25:38 008 879540 Request Read a ZnRequest(GET /help) 1770ms
+2015-06-11 10:25:38 009 879540 Request Handled a ZnRequest(GET /help) 0ms
+2015-06-11 10:25:38 010 879540 Response Written a ZnResponse(200 OK text/html;charset=utf-8 867B) 0ms
+2015-06-11 10:25:38 011 879540 GET /help 200 867B 0ms
+2015-06-11 10:25:44 012 879540 Request Read a ZnRequest(GET /unicode) 6082ms
+2015-06-11 10:25:44 013 879540 Request Handled a ZnRequest(GET /unicode) 5ms
+2015-06-11 10:25:44 014 879540 Response Written a ZnResponse(200 OK text/html;charset=utf-8 11454B) 2ms
+2015-06-11 10:25:44 015 879540 GET /unicode 200 11454B 7ms
 ]]]
 
-The first two fields are the date and time in a fixed sized format. The next number is a fixed sized hash of the process ID. Note how 3 different processes are 
+The first two fields are the date and time in a fixed sized format. 
+The next field is the id of the log entry.
+The next number is a fixed sized hash of the process ID. Note how 3 different processes are 
 involved: the one starting the server (probably the UI process), the actual server listening process, and the client worker process spawned to handle the request. 
-Finally, the single capital letter indicates the category. The following categories are used: ==info== (I), ==debug== (D) and ==transaction== (T). After these 
-fields, the actual message is printed.
 
-Both ==ZnClient== and ==ZnServer== implement logging using a similar mechanism based on the announcements framework. ==ZnLogEvents== are subclasses of Announcement 
-sent by an HTTP server or client containing logging information. A log event has a TimeStamp, a Process ID, a category and a message. 
+Both ==ZnClient== and ==ZnServer== implement logging using a similar mechanism based on the announcements framework. ==ZnLogEvents== are subclasses of ==Announcement== 
+sent by an HTTP server or client containing logging information. A log event has a TimeStamp, an id, and a message. 
 
-To help in the implementation, a ==ZnLogSupport== object is used. A hierarchy of listeners under ==ZnLogListener== can then be used to process log events. Log 
-listeners feature a filtering mechanism. The following concrete listeners are provided.
-
-- ==ZnTranscriptLogger==
-- ==ZnFileLogger==
-- ==ZnStandardOutputLogger==
-- ==ZnMemoryLogger==
-
-To log something, send ==info:==, ==debug:== or ==transaction:== to the log support object of a client or server (accessible by ==log==). The argument can be 
-either a string or a block that will only be executed when logging is actually enabled.
+To log something, a server or client uses its own log methods.
+For example, a server can receive a ==logConnectionAccepted:== message with the socket that will process the request as argument. The implementation of ==logConnectionAccepted:== in ==ZnSingleThreadedServer== is:
 
 [[[
-server log info: [ 'User ', self getUsername, ' logged in.' ].
+logConnectionAccepted: socket
+	logLevel < 3 ifTrue: [ ^ nil ].
+	^ (self newLogEvent: ZnConnectionAcceptedEvent)
+		address: ([ socket remoteAddress ] on: Error do: [ nil ]);
+		emit
 ]]]
 
-The Zn logging mechanism is using an internal lock to make it thread safe, but it does serialize logging by multiple processes. It is important to make the time 
-spent inside the log block short and non blocking.
+==ZnConnectionAcceptedEvent== a subclass of ==ZnLogEvent== customized for connection acceptation. 
+This logging mechnism can be easily customized by implementing its own subclasses of ==ZnLogEvent==.
 
-You can customize a listener before adding it to a log support. The following example asks the default server to log just transaction events to a file named 
+You can also provide your own listener for ==ZnLogEvents==. 
+The following example shows how to log events in a file named 
 ==zn.log==, next to your image.
 
 [[[
 | logger |
-logger := ZnFileLogger onFileNamed: (FileDirectory default / 'zn.log') pathName.
-logger filter: #transaction.
-ZnServer default log addListener: logger.
+loggerStream := (Smalltalk imageDirectory / 'zn.log') writeStream.
+ZnLogEvent announcer when: ZnLogEvent do: [ :event | loggerStream lf; print: event ].
+(ZnServer defaultOn: 1701) start.
 ]]]
 
 !!Server management
@@ -207,14 +210,19 @@ means it will now survive image save and restart. This only happens automaticall
 manually.
 
 The main parameter a server needs is the port on which it will listen. Additionally, you can restrict the network interface the server should listen on by 
-setting its ==bindingAddress:== to some IP address. The default, nil or #[0 0 0 0], means to listen on all interfaces. With an argument of #[127 0 0 0], the 
+setting its ==bindingAddress:== to some IP address. The default, nil or #[0 0 0 0], means to listen on all interfaces. With an argument of #[127 0 0 1], the 
 server will not respond to request over its normal network, but only to request coming from the same host. This is often used to increase security while proxying.
 
-@@authorToDo shouldn't it be #[127 0 0 1]? I am not sure but I do not remember that we can bind on subnet addresses.
+[[[
+(ZnServer defaultOn: 1701)
+	bindingAddress: #[127 0 0 1];
+	logToTranscript;
+	start.	
+]]]
 
 !!Server variants
 
-The class side of ==ZnServer== is actually a facade to instantiate a particular concrete ==ZnServer== subclass, as can be seen in ==defaultServerClass==. The 
+The class side of ==ZnServer== is actually a factory to instantiate a particular concrete ==ZnServer== subclass, as can be seen in ==defaultServerClass==. The 
 hierarchy looks as follows.
 
 [[[language=
@@ -236,12 +244,10 @@ these files over HTTP to web browser clients anywhere on the network. This is in
 
 Zn can do this by using the ==ZnStaticFileServerDelegate== object. Given a directory and an optional prefix, this delegate will serve all files it finds in that directory.
 
-@@authorToDo Luc Here
-
 [[[
 (ZnServer startDefaultOn: 1701)
    delegate: (ZnStaticFileServerDelegate new
-                directory: (FileDirectory on: '/var/www');
+                directory: '/var/www' asFileReference;
                 prefixFromString: 'static-files';
                 yourself).
 ]]]
@@ -283,23 +289,22 @@ Here is a more complex setup.
 (ZnServer startDefaultOn: 1701)
    logToTranscript;
    delegate: (ZnStaticFileServerDelegate new
-                directory: (FileDirectory on: '/var/www');
-                mimeTypeExpirations: ZnStaticFileServerDelegate
-                                       defaultMimeTypeExpirations;
+                directory: '/var/www' asFileReference;
+                mimeTypeExpirations: ZnStaticFileServerDelegate defaultMimeTypeExpirations;
                 yourself);
    authenticator: (ZnBasicAuthenticator username: 'admin' password: 'secret').
 ]]]
 
 In the above example, we add the optional expiration and caching control based on default settings. Note that it is easy to combine static file serving with logging and authentication.
 
-!! Monticello repository server
+!!Monticello repository server
 
-An other, interesting, proof of concept example is ==ZnMonticelloServerDelegate==. It allows you to run your own Smalltalk source code repository. You can try it as follows.
+Another, interesting, proof of concept example is ==ZnMonticelloServerDelegate==. It allows you to run your own Smalltalk source code repository. You can try it out as follows.
 
 [[[
 (ZnServer startDefaultOn: 1701)
    delegate: (ZnMonticelloServerDelegate new
-                directory: (FileDirectory on: '/Users/sven/Tmp/monticello');
+                directory: '/Users/sven/Tmp/monticello' asFileReference;
                 yourself).
 ]]]
 
@@ -312,13 +317,13 @@ MCHttpRepository
   password: ''.
 ]]]
 
-It should work just like any other repository, although it is for package storage only. What makes this example interesting is that implements 3 different kinds of requests:
+It should work just like any other repository, although it is for package storage only. What makes this example interesting is that it implements 3 different kinds of requests:
 
 - list the repository, a GET for /
 - get a version, a GET for a specific file
 - store a version, a PUT of a specific file
 
-!! Dispatching
+!!Dispatching
 
 Dispatching or routing is HTTP application server speak for deciding what part of your software will handle an incoming request. This decision can be made on 
 any of the properties of the request: the HTTP method, the URL or part of it, the query parameters, the meta headers and the entity body. Different applications 
@@ -337,7 +342,7 @@ ZnServer startDefaultOn: 8080.
 
 (staticFileServerDelegate := ZnStaticFileServerDelegate new)
    prefixFromString: 'zn';
-   directory: (FileDirectory on: '/home/ubuntu/zn').
+   directory: '/home/ubuntu/zn' asFileReference.
 
 ZnServer default delegate prefixMap
   at: 'zn'
@@ -368,7 +373,7 @@ Another option is to use ==ZnDispatcherDelegate==.
 You configure the dispatcher using ==map:to:== methods. First argument is the prefix, second argument is a block taking two arguments: the incoming request and 
 an already instantiated response.
 
-!! Seaside adaptor
+!!Seaside adaptor
 
 *Seaside>http://www.seaside.st/* is a well known, cross platform, advanced Smalltalk web application framework. It does not provide its own HTTP server but 
 relies on an existing one by means of an adaptor. It does work well with Zn, through the use of a ==ZnZincServerAdaptor==. You can load it with the Zinc-Seaside 
@@ -380,8 +385,6 @@ Starting this adaptor can be done using the Seaside Control panel in the normal 
 ZnZincServerAdaptor startOn: 8080.
 ]]]
 
-All this is covered in the standard Seaside documentation.
-
 Since Seaside does its own character conversions, the Zn adaptor is configured to work in binary mode for maximum efficiency. There is complete support for POST 
 and PUT requests with entities in form URL, multipart or raw encoding.
 
@@ -392,7 +395,7 @@ and prefer plain static files served directly.
 ZnZincStaticServerAdaptor startOn: 8080 andServeFilesFrom: '/var/www/'.
 ]]]
 
-!! Character encoding
+!!Character encoding
 
 Proper character encoding and decoding is crucial in today's international world. Pharo Smalltalk encodes characters and strings using Unicode. The primary 
 internet encoding is UTF-8, but a couple of others are used as well. To translate between these two, a concrete ==ZnCharacterEncoding== subclass like ==ZnUTF8Encoder== is used.
@@ -411,23 +414,22 @@ encoder encodedByteCountForString: string.
 ]]]
 
 There are no automatic conversions in Zinc. So Zinc is one of the pieces of software that does not assume stupid defaults. You should specify a proper 
-Content-Type header including the charset information. Otherwise Zinc has no chance of knowing what to use and the default NullEncoder will make your string wrong.
+Content-Type header including the charset information. Otherwise Zinc has no chance of knowing what to use and the default NullEncoder will make your string wrong. 
 
-Let us look at one example 
-SD: We should add back the o umlaut whe pillar/latex can handle it.
+Let us look at one example:
 
 [[[
 ZnServer startDefaultOn: 1701.
 
 ZnClient new
  url: 'http://localhost:1701/echo';
- entity: (ZnEntity with: 'An der schonen blauen Donau'); 
+ entity: (ZnEntity with: 'An der schönen blauen Donau'); 
  post.
 	
 ZnClient new
  url: 'http://localhost:1701/echo';
  entity: (ZnEntity 
-           with: 'An der schonen blauen Donau' 
+           with: 'An der schönen blauen Donau' 
            type: (ZnMimeType textPlain charSet: #'iso-8859-1'; yourself));
  post;
  yourself.
@@ -437,22 +439,20 @@ In the first case, a UTF-8 encoded string is POST-ed and correctly returned (in 
 
 In the second case, an ISO-8859-1 encoded string is POST-ed and correctly returned (in a UTF-8 encoded response).
 
-In both cases the decoding was done correctly, using the specified charset (if that is missing, the ZnNullEncoder is used). Now, o is not a perfect test example 
-because its encoding value in Unicode, 246 decimal, U\+00F6 hex, still fits in 1 byte and hence survives null encoding/decoding. That is why the following still 
-works, although it is wrong to drop the charset.
+In both cases the decoding was done correctly, using the specified charset (if that is missing, the ZnNullEncoder is used). Now, ö is not a perfect test example because its Unicode encoding value is 246 in decimal, U\+00F6 in hex, still fits in 1 byte and hence survives null encoding/decoding (it would not be the case with € for example). That is why the following still works, although it is wrong to drop the charset.
 
 
 [[[
 ZnClient new
  url: 'http://localhost:1701/echo';
  entity: (ZnEntity 
-           with: 'An der schonen blauen Donau' 
+           with: 'An der schönen blauen Donau' 
            type: (ZnMimeType textPlain clearCharSet; yourself));
  post;
  yourself.
 ]]]
 
-!! Resource protection limits
+!!Resource protection limits
 
 Internet facing HTTP servers will come under attack by malicious clients. Good security is thus important. The first step is a correct and safe implementation of 
 the HTTP protocol. One way a server protects itself is by implementing some resource limits.
@@ -463,7 +463,9 @@ Zinc HTTP Components currently implements and enforces the following limits, mos
 - maximumEntitySize (16Mb) size of incoming entities, can be modified
 - maximumNumberOfDictionaryEntries (256) used in headers, urls and some entities
 
-!! Content and transfer encoding
+Of course these values may be customized if one need to.
+
+!!Content and transfer encoding
 
 Zn implements two important techniques that are used by HTTP servers when they send entity bodies to clients. Gzip encoding and chunked transfer encoding. The 
 first one adds compression. The second one is used when the size of an entity is not known up front. Instead chunks of certain sizes are sent until the entity is complete.
@@ -472,9 +474,6 @@ All this is handled internally and invisibly. The main object dealing with conte
 stream is wrapped with either a ==ZnChunkedReadStream== and/or a ==GZipReadStream==. Zn also makes use of a ==ZnLimitedReadStream== to make sure there is no read 
 beyond the boundaries of one single request's body, provided the content length is set.
 
- Zinc HTTP Components was written with the explicit goal of allowing users to explore the implementation. The tests suite contains many examples that can serve 
- as learning material.
-
 !!Conclusion
 
-@@authorToDo add a conclusion
+Zinc HTTP Components was written with the explicit goal of allowing users to explore the implementation. The tests suite contains many examples that can serve as learning material. This carefulness while writing Zinc HTTP Components code now enable users customize it to their need or build on top of it. Zinc is indeed an extremely malleable piece of software.
