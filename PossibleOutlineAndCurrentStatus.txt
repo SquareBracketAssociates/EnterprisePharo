@@ -17,20 +17,32 @@ Finished:
 		>> Esteban did a pass (2015-05-05)
 		>> Johan did a last polishing pass [ 25 / may / 2015 ]
 
-Fuel/Fuel.pier
-	>> Stef did a pass and it should be ready with minor edits [11/Oct/2014]
-	>> moved from PFTE to PE
-	>> max read it
-	>> Johan completed a pass / test examples [25 / may / 2015]
+	Fuel/Fuel.pier
+		>> Stef did a pass and it should be ready with minor edits [11/Oct/2014]
+		>> moved from PFTE to PE
+		>> max read it
+		>> Johan completed a pass / test examples [25 / may / 2015]
 
+	Zinc-HTTP-client
+		>> Luc finished his pass [12 mar 2015]
+		>> Johan finished a thorough pass [28 mar 2015]
+		>> somebody should read it to do a final check
 
-*******************************************************************************
+	Zinc-HTTP-server
+		>> Luc is doing a pass
+		>> Luc finished his passed [11 jun 2015]
+		>> somebody should read it to do a final check
+
+	STON/STON.pier
+		>> Stef did a pass
+		>> migrated from PFTE to PE
+		>> Johan completed a pass. It should be finished. [21 / Mar / 2015 ]
+		>> Anybody wants to double-check?
+
+	RenoirST/RenoirST.pier
+		>> Damien finished his pass (2015/06/05)
 		
-STON/STON.pier
-	>> Stef did a pass
-	>> migrated from PFTE to PE
-	>> Johan completed a pass. It should be finished. [21 / Mar / 2015 ]
-	>> Anybody wants to double-check?
+*******************************************************************************		
 
 Zinc-Encoding-Meta
 	>> Stef read and modified it a bit 
@@ -41,29 +53,7 @@ Zinc-Encoding-Meta
 PillarChap
 	 >> Stef should read it.
 	 >> Damien should do a pass
-
-Zinc-HTTP
-	>> Stef should re read it.
-	>> Luc is doing a pass and test snippets on Pharo #40420 [22 Dec 2014]
-	>> Luc will finish his pass
-	>> Johan will try to split it
-	>> Luc split it into 2 chapters: client and server
-
-Zinc-HTTP-client
-	>> Luc finished his pass [12 mar 2015]
-	>> Johan finished a thorough pass [28 mar 2015]
-	>> somebody should read it to do a final check
-
-Zinc-HTTP-server
-	>> Luc is doing a pass
-	>> Luc finished his passed [11 jun 2015]
-	>> somebody should read it to do a final check
 		
-Zinc-REST
-	>> Stef should read it and ask christophe for feedback.
-	>> Small chapter => to extend?
-	>> Luc will read it
-
 NeoCSV/NeoCSV.pier
 	>> Stef should re read it.
 	>> then Damien
@@ -71,10 +61,12 @@ NeoCSV/NeoCSV.pier
 NeoJSON/NeoJSON.pier
 	>> Damien is working on it (2015/06/08)
 	>> Stef should re read it.
-	
-RenoirST/RenoirST.pier
-	>> Damien finished his pass (2015/06/05)
 
+Zinc-REST
+	>> Stef should read it and ask christophe for feedback.
+	>> Luc will read it 
+	>> Luc finished a pass [12 jun 2015]
+	
 WebSockets/WebSockets.pier
 	>> Luc will read it 
 
@@ -87,8 +79,17 @@ Mustache/Mustache.pier
 
 Teapot/Teapot.pillar
 	>> Finished first version 
+	
 *******************************************************************************
 
+Zinc-HTTP
+	>> Stef should re read it.
+	>> Luc is doing a pass and test snippets on Pharo #40420 [22 Dec 2014]
+	>> Luc will finish his pass
+	>> Johan will try to split it
+	>> Luc split it into 2 chapters: client and server
+	>> This chapter does not exsit anymore
+	
 To remove from a Web book:
 
 	NativeBoost/NativeBoost.pier

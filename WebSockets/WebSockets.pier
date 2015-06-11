@@ -47,9 +47,15 @@ and to manage keeping alive the connection using ping and pong frames.
 
 !!Source Code
 
-The code implementing Zinc WebSockets resides in a single package called 'Zinc-WebSocket-Core' in the Zinc HTTP Components repositories. There is also an 
-accompanying 'Zinc-WebSocket-Tests' package containing the unit tests. The ==ConfigurationOfZincHTTPComponents== has a group called =='WebSocket'== that you can 
-load separately.
+The code implementing Zinc WebSockets resides in a single package called 'Zinc-WebSocket-Core' in the Zinc HTTP Components repositories. There is also an accompanying 'Zinc-WebSocket-Tests' package containing the unit tests. The ==ConfigurationOfZincHTTPComponents== has a group called =='WebSocket'== that you can load separately. Here the loading code snippet:
+
+[[[
+Gofer new
+	smalltalkhubUser: 'SvenVanCaekenberghe' project: 'ZincHTTPComponents';
+	package: 'ConfigurationOfZincHTTPComponents';
+	load.
+(Smalltalk globals at: #ConfigurationOfZincHTTPComponents) project latestVersion load: 'WebSocket'.
+]]]
 
 !!!Using Client Side WebSockets
 

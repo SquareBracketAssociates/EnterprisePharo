@@ -1,4 +1,4 @@
-! REST Web Services
+!Scripting a REST Web Service with Zinc
 @cha:zinc-rest
 
 Zinc HTTP Components is well suited to the implementation of REST web services, both the client and the server parts. REST or 
@@ -6,6 +6,7 @@ Zinc HTTP Components is well suited to the implementation of REST web services, 
 verbs and URIs to deal with encoded resources. Some kind of framework is needed to successfully implement a non-trivial REST service. There is one available in 
 the Zinc-REST-Server package, for example. Here we will implement a very small, simplified example by hand, for educational purposes.
 
+!!The expected REST interface
 The service will allow arbitrary *JSON>http://www.json.org/* objects to be stored on the server, each identified by an URI allocated by the server. Here is the 
 REST API exposed by the server.
 
@@ -15,14 +16,15 @@ REST API exposed by the server.
 - ==PUT /n== - updates (replaces) the contents of an existing JSON object known under URI ==/n==
 - ==DELETE /n== - remove the JSON object known under URI ==/n==
 
-A proper implementation should best use a couple of classes, depending on how far you want to go. The following implementation is written in a workspace, not 
-using any classes. Start by creating one global variable to hold the objects. This will be a standard dictionary mapping string URIs to objects.
+!!The server code
+
+A proper implementation should best use a couple of classes, depending on how far you want to go. The following implementation is written in a workspace, not using any classes. Start by creating one global variable to hold the objects. This will be a standard dictionary mapping string URIs to objects.
 
 [[[
 JSONStore := Dictionary new.
 ]]]
 
-The server implementation uses two helper objects: a jsonEntityBuilder and a mapper. Both make use of block closures.
+The server implementation uses two helper objects: a jsonEntityBuilder and a mapper. Both make use of block closures. You also may need to load the STON project.
 
 [[[
 | jsonEntityBuilder mapper |
@@ -99,19 +101,18 @@ mapper := {
                 handler value value: request ] ].
 ]]]
 
-The mapper is a dynamically created array of associations (not a dictionary). Each association consists of two blocks. The first block is a condition: it tests 
-a request and returns true when it matches. The second block is a handler that is evaluated with the incoming request to produce a response, if and only if the first condition matched.
+The mapper is a dynamically created array of associations (not a dictionary). Each association consists of two blocks. The first block is a condition: it tests a request and returns true when it matches. The second block is a handler that is evaluated with the incoming request to produce a response, if and only if the first condition matched.
 
 The associations in the mapper follow exactly the list of the REST API as shown earlier. The server is set up with a block based delegate using the 
-==onRequestRepond:== method. Again, a more object oriented implementation would use a proper delegate object here, but for this example, the block is clearer.
+==onRequestRepond:== method. Again, a more object-oriented implementation would use a proper delegate object here, but for this example, the block is clearer.
 
-The server logic thus becomes: find a matching entry in the mapper and invoke it. If no matching entry is found, we have a bad request. Error handling is of 
-course rather limited in this small example.
+The server logic thus becomes: find a matching entry in the mapper and invoke it. If no matching entry is found, we have a bad request. Error handling is of course rather limited in this small example.
 
 The jsonEntityBuilder block helps in transforming Smalltalk objects to a JSON entity. We use the *Smalltalk Object Notation>http://github.com/svenvc/ston* STON 
 writer and reader here because it is backwards compatible with JSON. Note that to be JSON compatible, only ==Array==s and ==Dictionary==ies should be used. We 
 use linefeeds to improve compatibility with internet conventions as well as pretty printing to help human interpretation of the data.
 
+!!A command line client
 Here is a command line session using the Unix utility *curl>http://en.wikipedia.org/wiki/CURL*, interacting with our server.
 
 [[[language=bash
@@ -157,6 +158,8 @@ $ curl http://localhost:1701/2
 Not Found /2
 ]]]
 
+!!A Zinc client
+
 It is trivial to use ==ZnClient== to have the same interaction. But we can do better: using a contentWriter and contentReader, we can customise the client to do the JSON conversions automatically.
 
 [[[
@@ -192,7 +195,7 @@ Now we can hold the same conversation as above, only in this case in terms of re
  ==>> 'Created /2'
 
  client put: '/2' contents: (Dictionary with: #bar -> -1)
- ==>> 'Updated /2'
+ ==>> 'Updated'
 
  client get: '/2'
  ==>> a Dictionary('bar'->-1 )
@@ -201,10 +204,16 @@ Now we can hold the same conversation as above, only in this case in terms of re
  ==>> #('/1' '/2')
 
  client delete: '/2'
- ==>> 'Deleted /2'
+ ==>> 'Deleted'
 
  client get: '/2'
  ==>> throws a ZnHttpUnsuccessful exception
 ]]]
 
-This rather long example concludes the HTTP chapter.
+!!Conclusion
+
+This chapter concludes the presentation of Zinc HTTP Components.
+Through this example, we demonstrated Zinc flexibility.
+On the one hand, it can be used for fast prototyping or experiting.
+But on the other hand, it is a solid software to write object-oriented Web applications.
+ 
