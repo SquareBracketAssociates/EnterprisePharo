@@ -1,19 +1,25 @@
 !Zinc HTTP: The server side
 @ch:zinc-server
 
-Zinc is both a client and server HTTP library written and maintained by Sven van Caekenberghe. 
+Zinc is both a client and server HTTP library written and maintained by Sven van Caekenberghe. HTTP clients and servers are each others' mirror: An HTTP client sends
+a request and receives a response. An HTTP server receives a request
+and sends a response. Hence the fundamental Zn framework objects are used to implement both clients and servers.
 
-This chapter focuses on the server-side features of Zinc and demonstrates through small, elegant and robust examples of some possibilities of this powerful library.
+This chapter focuses on the server-side features of Zinc and
+demonstrates through small, elegant and robust examples some
+possibilities of this powerful library. The client side is described
+in Chapter *Zinc Client side>..Zinc-HTTP-Client/Zinc-HTTP-Client.pillar@ch:zinc-client*
 
 !!Running a simple HTTP server
 
-Getting an independent HTTP server up and running inside your Smalltalk image is surprisingly easy.
+Getting an independent HTTP server up and running inside a Pharo image is surprisingly easy.
 
 [[[
 ZnServer startDefaultOn: 1701.
 ]]]
 
-Don't just try this yet. To be able to see what is going on, it is better to try this with logging enabled.
+Don't try this just yet. To be able to see what is going on, it is
+better to enable logging, as follows:
 
 [[[
 (ZnServer defaultOn: 1701)
@@ -21,63 +27,60 @@ Don't just try this yet. To be able to see what is going on, it is better to try
   start.
 ]]]
 
-So we are starting an HTTP server listening on port 1701. Using a port below 1024 requires special OS level privileges, ports like 8080 might already be in use. 
-Now visit *http://localhost:1701* with your browser to see the Zn welcome page. Or you can try accessing the welcome page using Zn itself.
-
-[[[
-ZnClient new get: 'http://localhost:1701'.
-]]]
-
-On the Transcript you should see output related to the server's activities.
+This starts the default HTTP server, listening on port 1701. We use
+1701 in the example because using a port below 1024 requires special OS level privileges, and ports like 8080 might already be in use. 
+Visiting *http://localhost:1701* with a browser yields the Zn welcome
+page. The Transcript produces output related to the server's
+activities, for example:
 
 [[[language=
-2012-05-10 13:09:10 879179 I Starting ZnManagingMultiThreadedServer HTTP port 1701
-2012-05-10 13:09:10 580596 D Initializing server socket
-2012-05-10 13:09:20 398924 D Executing request/response loop
-2012-05-10 13:09:20 398924 I Read a ZnRequest(GET /)
-2012-05-10 13:09:20 398924 T GET / 200 1195B 0ms
-2012-05-10 13:09:20 398924 I Wrote a ZnResponse(200 OK text/html;charset=utf-8 1195B)
-2012-05-10 13:09:20 398924 I Read a ZnRequest(GET /favicon.ico)
-2012-05-10 13:09:20 398924 T GET /favicon.ico 200 318B 0ms
-2012-05-10 13:09:20 398924 I Wrote a ZnResponse(200 OK image/vnd.microsoft.icon 318B)
-2012-05-10 13:09:50 398924 D ConnectionTimedOut: Data receive timed out. while reading request
-2012-05-10 13:09:50 398924 D Closing stream
+2015-06-11 18:06:31 001 565881 Server Socket Bound 0.0.0.0:1701
+2015-06-11 18:06:31 002 275888 Started ZnManagingMultiThreadedServer HTTP port 1701
+2015-06-11 18:06:35 003 565881 Connection Accepted 127.0.0.1
+2015-06-11 18:06:35 004 097901 Request Read a ZnRequest(GET /) 0ms
+2015-06-11 18:06:35 005 097901 Request Handled a ZnRequest(GET /) 0ms
+2015-06-11 18:06:35 006 097901 Response Written a ZnResponse(200 OK text/html;charset=utf-8 977B) 2ms
+2015-06-11 18:06:35 007 097901 GET / 200 977B 2ms
+2015-06-11 18:06:35 008 097901 Request Read a ZnRequest(GET /favicon.ico) 129ms
+2015-06-11 18:06:35 009 097901 Request Handled a ZnRequest(GET /favicon.ico) 0ms
+2015-06-11 18:06:35 010 097901 Response Written a ZnResponse(200 OK image/vnd.microsoft.icon 318B) 2ms
+2015-06-11 18:06:35 011 097901 GET /favicon.ico 200 318B 2ms
+2015-06-11 18:06:35 012 097901 Request Read a ZnRequest(GET /favicon.ico) 32ms
+2015-06-11 18:06:35 013 097901 Request Handled a ZnRequest(GET /favicon.ico) 0ms
+2015-06-11 18:06:35 014 097901 Response Written a ZnResponse(200 OK image/vnd.microsoft.icon 318B) 0ms
+2015-06-11 18:06:35 015 097901 GET /favicon.ico 200 318B 0ms
+2015-06-11 18:07:05 016 097901 Server Read Error ConnectionTimedOut: Data receive timed out.
+2015-06-11 18:07:05 017 097901 Server Connection Closed 127.0.0.1
 ]]]
 
 You can see the server starting and initializing its server socket on which it listens for incoming connections. When a connection comes in, it starts executing 
-its request-response loop. Then it gets a GET request for ==/== (the home page), for which it answers a 200 OK response with 1195 bytes of HTML. The browser also 
-asks for a favicon.ico, which the server supplies. The request-response loop is kept alive for some time and usually closes when the other end does. Although it 
+its request-response loop. Then it gets a ==GET== request for ==/== (the home page), to which it answers a 200 OK response with 997 bytes of HTML. The browser also 
+asks for a ==favicon.ico==, which the server supplies. The request-response loop is kept alive for some time and usually closes when the other end does. Although it 
 looks like an error, it actually is normal, expected behavior.
 
-Zn manages a default server to easy interactive experimentation. The default server also survives image save and restart cycles. All this makes it extra 
-convenient to access the server object itself for further inspection or to stop the server.
-
-[[[
-ZnServer default.
-ZnServer stopDefault.
-]]]
-
-The Transcript output will confirm what happens.
+The example uses the default server: Zn manages a default server to
+ease interactive experimentation. The server object is obtained by:
+==ZnServer default==.  The default server also survives image save
+and restart cycles and needs to be stopped with ==ZnServer stopDefault.== The Transcript output will confirm what happens:
 
 [[[language=
-2012-05-10 13:14:20 580596 D Wait for accept timed out
-2012-05-10 13:19:20 580596 D Wait for accept timed out
-2012-05-10 13:19:42 879179 D Releasing server socket
-2012-05-10 13:19:42 879179 I Stopped ZnManagingMultiThreadedServer HTTP port 1701
+2015-06-11 18:11:07 018 565881 Server Socket Released 0.0.0.0:1701
+2015-06-11 18:11:07 019 275888 Stopped ZnManagingMultiThreadedServer HTTP port 1701
 ]]]
 
-Due to its implementation, the server will print a ==Wait for accept timed out== debug notification every 5 minutes. Again, although it looks like an error, it 
-is by design and normal, expected behavior.
+@@note Due to its implementation, the server will print a ==Wait for accept timed out== debug notification every 5 minutes. Again, although it looks like an error, it is by design and normal, expected behavior.
 
 !!Server delegate
 
-An HTTP client sends a request and receives a response. An HTTP server receives a request and sends a response. They are each other's mirror. The fundamental Zn 
-framework objects are used to implement both clients and servers.
-
 The functional behavior of a ==ZnServer== is defined by an object called its delegate. A delegate implements the key method ==handleRequest:== which gets the 
-incoming request as parameter and has to produce a response as result. The delegate can reason purely in terms of a ==ZnRequest== and a ==ZnResponse==. The 
-technical side of being an HTTP server, like the protocol itself, the networking and the (optional) multiprocessing, is handled by the server object. Here is 
-the simplest possible delegate.
+incoming request as parameter and has to produce a response as
+result. The delegate only needs to reason in terms of a ==ZnRequest==
+and a ==ZnResponse==. The technical side of being an HTTP server, like
+the protocol itself, the networking and the (optional) multiprocessing, is handled by the
+server object.
+
+This allows us to write what is arguably the simplest possible HTTP
+server behavior:
 
 [[[
 (ZnServer startDefaultOn: 1701)
@@ -92,31 +95,27 @@ ZnEasy get: 'http://localhost:1701'.
 ]]]
 
 This server does not even look at the incoming request. No matter what, it answers ==200 OK== with a ==text/plain== string ==Hello World!==. The method 
-==onRequestRespond:== accepts a block taking a request and should produce a response. It is implemented using the helper object ==ZnValueDelegate==, which 
+==onRequestRespond:== accepts a block that takes a request and that should produce a response. It is implemented using the helper object ==ZnValueDelegate==, which 
 converts ==handleRequest:== to ==value:== on a wrapped block.
 
-To help in debugging a server, enabling logging is important to learn what is going on. You can also put breakpoints where ever you want. Interrupting a running 
-server can sometimes be a bit hard or produce strange results since the server and its spawned handler subprocesses are different from the UI process.
 
-When logging is enabled, the server will also keep track of the last request and response it processed. You can inspect these to find out what happened, even if 
-there was no debugger raised.
-
-
-!!The default server delegate
+!!The default server delegate, testing and debugging
 
 Out of the box, a ==ZnServer== will have a certain functionality that is related to testing and debugging. This behavior is implemented by the 
-==ZnDefaultServerDelegate== object. Assuming your server is running locally on port 1701, this is the list of URLs that are available.
+==ZnDefaultServerDelegate== object. Assuming a server is running locally on port 1701, this is the list of URLs that are available.
 
-- *http://localhost:1701/* the default for ==/==, equivalent to ==/welcome==
-- *http://localhost:1701/welcome* standard Zn greeting page
-- *http://localhost:1701/favicon.ico* nice Zn favicon used by browsers
-- *http://localhost:1701/help* this list of URLs
-- *http://localhost:1701/status* a textual page showing some server internals
-- *http://localhost:1701/dw-bench* a dynamically generated page for benchmarking
-- *http://localhost:1701/unicode* a UTF-8 encoded page listing the first 591 Unicode characters
-- *http://localhost:1701/random* a random string of characters
+- *http://localhost:1701/* the default for ==/==, equivalent to   ==/welcome==
 - *http://localhost:1701/bytes* a collection of bytes
+- *http://localhost:1701/dw-bench* a dynamically generated page for benchmarking
 - *http://localhost:1701/echo* a textual response echoing the request
+- *http://localhost:1701/favicon.ico* nice Zn favicon used by browsers
+- *http://localhost:1701/form-test-1*  to *http://localhost:1701/form-test-3*  are form test pages
+- *http://localhost:1701/help* this list of URLs
+- *http://localhost:1701/random* a random string of characters
+- *http://localhost:1701/session* information about the session
+- *http://localhost:1701/status* a textual page showing some server internals
+- *http://localhost:1701/unicode* a UTF-8 encoded page listing the first 591 Unicode characters
+- *http://localhost:1701/welcome* standard Zn greeting page
 
 The random handler normally returns 64 characters, you can specify your own size as well. For example, ==/random/1024== will respond with a 1Kb random string. 
 The random pattern consists of hexadecimal digits and ends with a linefeed. The standard, slower UTF-8 encoding is used instead of the faster LATIN-1 encoding.
@@ -127,30 +126,38 @@ extra server side caching will improve performance.
 The echo handler is used extensively by the unit tests. It not only lists the request headers as received by the server, but even the entity if there is one. In 
 case of a non-binary entity, the textual contents will be included. This is really useful to debug PUT or POST requests.
 
+In general, to help in debugging a server, enabling logging is
+important to learn what is going on. Breakpoints can be put anywhere
+in the server, but interrupting a running 
+server can sometimes be a bit hard or produce strange results. This is
+because the server and its spawned handler subprocesses are different from the UI process.
+
+When logging is enabled, the server will also keep track of the last request and response it processed. You can inspect these to find out what happened, even if 
+there was no debugger raised.
+
 !!Server authenticator
 
-Like a delegate, a ==ZnServer== also has an authenticator object whose functional job is to authenticate requests. An authenticator has to implement the 
+Similar to the delegate, a ==ZnServer== also has an authenticator object whose function is to authenticate requests. An authenticator has to implement the 
 ==authenticateRequest:do:== method whose first argument is the incoming request and second argument a block. This method has to produce a response, like 
-==handleRequest:== does. If the request is allowed, the block will be evaluated and produce a response. If the request is denied, the authenticator will generate 
-a 401 Unauthorized response. One simple authenticator is available to add basic HTTP authentication.
+==handleRequest:== does. If the request is allowed, the block should be evaluated, which will produce the response. If the request is denied, the authenticator should generate a 401 Unauthorized response. One simple authenticator is available to add basic HTTP authentication:
 
 [[[
 (ZnServer startDefaultOn: 1701)
    authenticator: (ZnBasicAuthenticator username: 'admin' password: 'secret').
 ]]]
 
-Now, when you try to visit the server at *http://localhost:1701* you will have to provide a username and password. It is also possible to use ==ZnEasy== to send 
+Now, when you try to visit the server at *http://localhost:1701* you will have to provide a username and password. Note that it is also possible to use ==ZnEasy== to send 
 a get request to this URL with these credentials. 
 
 [[[
 ZnEasy get: 'http://localhost:1701' username: 'admin' password: 'secret'.
 ]]]
 
-Using ==ZnBasicAuthenticator== or implementing an alternative is one of several possibilities to the problem of adding security to a web site or web application.
+@@note Using ==ZnBasicAuthenticator== or implementing an alternative authenticator is only one of several possibilities to address the problem of adding security to a web site or web application.
 
 !!Logging
 
-Log output consists of an arbitrary message preceded by a number of fixed fields. Here is an example of a server log.
+Log output consists of a log message preceded by a number of fixed fields. Here is an example of a server log.
 
 [[[language=
 2015-06-11 10:19:59 001 220937 Server Socket Bound 0.0.0.0:1701
