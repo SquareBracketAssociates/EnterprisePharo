@@ -66,6 +66,7 @@ Zinc-REST
 	>> Stef should read it and ask christophe for feedback.
 	>> Luc will read it 
 	>> Luc finished a pass [12 jun 2015]
+	>> Johan will do a pass and integrate at the end of Zinc-HTTP-Server
 	
 WebSockets/WebSockets.pier
 	>> Luc will read it 
