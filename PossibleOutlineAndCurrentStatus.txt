@@ -32,6 +32,7 @@ Finished:
 		>> Luc is doing a pass
 		>> Luc finished his passed [11 jun 2015]
 		>> somebody should read it to do a final check
+		>> Johan finished a pass and integrated Zinc-REST [13 / jun / 2015]
 
 	STON/STON.pier
 		>> Stef did a pass
@@ -67,6 +68,7 @@ Zinc-REST
 	>> Luc will read it 
 	>> Luc finished a pass [12 jun 2015]
 	>> Johan will do a pass and integrate at the end of Zinc-HTTP-Server
+	>> Integrated, [13 / jun / 2015], chapter is candidate for deletion.
 	
 WebSockets/WebSockets.pier
 	>> Luc will read it 
