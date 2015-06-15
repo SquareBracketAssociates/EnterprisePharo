@@ -63,13 +63,6 @@ NeoJSON/NeoJSON.pier
 	>> Damien is working on it (2015/06/08)
 	>> Stef should re read it.
 
-Zinc-REST
-	>> Stef should read it and ask christophe for feedback.
-	>> Luc will read it 
-	>> Luc finished a pass [12 jun 2015]
-	>> Johan will do a pass and integrate at the end of Zinc-HTTP-Server
-	>> Integrated, [13 / jun / 2015], chapter is candidate for deletion.
-	
 WebSockets/WebSockets.pier
 	>> Luc will read it 
 
@@ -85,13 +78,22 @@ Teapot/Teapot.pillar
 	
 *******************************************************************************
 
+Zinc-REST
+	>> Stef should read it and ask christophe for feedback.
+	>> Luc will read it 
+	>> Luc finished a pass [12 jun 2015]
+	>> Johan will do a pass and integrate at the end of Zinc-HTTP-Server
+	>> Integrated, [13 / jun / 2015]
+	==> chapter is candidate for deletion.
+
+
 Zinc-HTTP
 	>> Stef should re read it.
 	>> Luc is doing a pass and test snippets on Pharo #40420 [22 Dec 2014]
 	>> Luc will finish his pass
 	>> Johan will try to split it
 	>> Luc split it into 2 chapters: client and server
-	>> This chapter does not exsit anymore
+	>> This chapter has been deleted
 	
 To remove from a Web book:
 

@@ -491,52 +491,70 @@ like for the second GET request.
 
 !!Saving code to a repository
 
-@@authorToDo  Luc HERE
-
-
 If all is well, you now have a package called ==MyFirstWebApp== containing two classes, ==MyFirstWebApp== and ==MyFirstWebAppTest==. The first one should have 
 9 methods, the second 5. If you are unsure about your code, you can double check with the full listing at the end of this document. Our Web app should now work 
 as expected, and we have some tests to prove it.
 
-But our code currently only lives in our development image. Let's change that and move our code to a source code repository. For this we first have to define a 
-Monticello package. Click on the package name in the first column of the browser and select the option 'Create an MC package'. Use the same name.
+But our code currently only lives in our development image. 
+Let's change that and move our code to a source code repository. 
 
-@@todo Creating a monticello packag
+!!!The Monticello Browser
 
-Pharo uses distributed source code management. Your code can live on your local file system, or it can live on a server. The main place for storing Pharo code 
-is on SmalltalkHub http://www.smalltalkhub.com. Go over there and create yourself a new account. Once you have an account, create and register a new project 
-called =='MyFirstWebApp'==. You can leave the public option checked, it means that you and others can download the code without credentials. Go to the project's page.
+For this we first have to use the Monticello Browser tool. 
+In the first pane of the Nautilus Broswer, click on the icon in front of your package named  ==MyFirstWebApp== as shown in Figure *@OpenMC*.
 
-@@todo MyFirstWebApp’s project page on SmalltalkHub
++Open Monticello on your package.>file://figures/19-OpenMC.png|width=80|label=OpenMC+
+
+Once opened, Monticello shows on it left pane the list of loaded packages.
+The currently selected one should be yours as depicted in Figure *@MCOpened*. 
+
++The Monticello browser.>file://figures/20-MCOpened.png|width=80|label=MCOpened+
+
+The left pane of Monticello shows the list of repositories in which the currently selected package can be saved. 
+Indeed, Pharo uses distributed source code management. 
+Your code can live on your local file system, or it can live on a server. 
+As shown in Figure *@MCOpened*, by default, your package ==MyFirstWebApp== can only be saved locally in a directory. 
+We can easily add a remote repository. 
+The main place for storing Pharo code is on SmalltalkHub *http://www.smalltalkhub.com*. 
+Go over there and create yourself a new account. 
+Once you have an account, create and register a new project called =='MyFirstWebApp'==. 
+You can leave the public option checked, it means that you and others can download the code without credentials. 
+Your project's page should look like the one on Figure *@WebAppStHubRepo*.
+
++Smalltalkhub project page.>file://figures/21-WebAppStHubRepo.png|width=80|label=WebAppStHubRepo+
 
 On this page, select and copy the Monticello registration template (make sure to copy the whole contents, including the username and password parts). Now go 
-back to Pharo and add a repository for your package (right-click on the package name, select Open...  Add a repository).
+back to Pharo and in Monticello, click on the ""\+Repository"" button (be sure that your pacakge is selected in the left pane).
+% add a repository for your package (right-click on the package name, select Open...  Add a repository).
 
-Select Smalltalkhub.com as repository type and overwrite the presented template with the one you just copied. It should look similar to 
+Select Smalltalkhub.com as repository type and overwrite the presented template with the one you just copied. It should look similar to Figure *@AddRepoInMC*. Before accepting, fill in your user(name) and password (between the single quotes), the ones you gave during registration on SmalltalkHub.
 
-[[[
-MCHttpRepository
-    location: 'http://www.smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/mai
-    user: ''
-    password: ''
-]]]
++Adding a Smalltalkhub repository in Monticello for your project.>file://figures/22-AddRepoInMC.png|width=80|label=AddRepoInMC+
 
-Now before accepting, fill in your user(name) and password (between the single quotes), the ones you gave during registration on SmalltalkHub.
+% [[[
+% MCHttpRepository
+%     location: 'http://www.smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main'
+%     user: ''
+%     password: ''
+% ]]]
 
-Open the Monticello Browser to see what we have done. Find your package in the first column and your repository in the second one.
+Now, Monticello Browser shows you to repositories to save your package as shown in Figure *@23-StHubRepoInMc*.
 
++Multiple repositories for a project in Monticello.>file://figures/23-StHubRepoInMc.png|width=80|label=StHubRepoInMc+
 
-@@todo The Monticello Browser looking at our package and repository
+You may have notice that there is an asterisk (==*==) in front of your package name.
+It indicates that the package is dirty, that it has uncommitted changes. 
+By clicking on the 'Changes' button, you see what has locally changed (or force a change computation). 
+You should get a browser showing all the changes that you made. 
+Since this is the first version, all your changes are additions.
 
-There should be a asterisk (==*==) in front of your package name, indicating that the package is dirty, that it has uncommitted changes. If not, force a change 
-computation by clicking 'Changes' button. You should get a browser showing all the changes that you made. Since this is the first version, all your changes are additions.
-
-!!!!The Changes/Diff Browser for our package.
+!!!The Changes/Diff Browser
 
 OK, we're almost done. Go back to the Monticello Browser and click the 'Save' button (with your package and repository selected). Leave the version name, 
 something like MyFirstWebApp-SvenVanCaekenberghe.1 alone, write a nice commit message in the second pane and press Accept to save your code to SmalltalkHub.
 
-!!!!Commiting to SmalltalkHub
+!!!Commiting to SmalltalkHub
+
 When all goes well, you will see an upload progress bar and finally a version window that confirms the commit. You can close it later on.
 
 [[[
@@ -556,17 +574,19 @@ in your local package cache. Click the ‘Copy’ button and select your Smallta
 
 You can now browse back to Smalltalkhub.com to confirm that your code arrived there.
 
-!!!!Looking at our commit on SmalltalkHub
+!!!Looking at our commit on SmalltalkHub
 
 After a successful commit, it is a good idea to save your image. 
 In any case, your package should now no longer be dirty, and there should be no more differences between the local version and the one on SmalltalkHub.
 
 !!Defining a project configuration
 
+@@authorToDo  Luc HERE
+
 Real software consists of several packages and will depend on extra external libraries and frameworks. In practice, software configuration management, including 
 the management of dependencies and versions, is thus a necessity.
 
-To solve this problem, Pharo is using Metacello (there is a full chapter on the book Deep into Pharo). And although we don’t really need it for our small 
+To solve this problem, Pharo is using Metacello (the book Deep into Pharo book contains a full chapter on it). And although we don’t really need it for our small 
 example, we are going to use it anyway. Of course, we will not go into details as this is a complex subject.
 
 To create a Metacello configuration, you define an object, what else did you expect ? First create a new package as well as a Metacello package called 
