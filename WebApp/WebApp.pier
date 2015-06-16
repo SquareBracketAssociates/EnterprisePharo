@@ -4,7 +4,7 @@
 % -First version: July 10, 2012 by Sven Van Caekenberghe
 % -Second version: September 10, 2012 by Stéphane Ducasse
 
-This chapter details the whole development process of a Web application in Pharo through a detailled example.
+This chapter details the whole development process of a Web application in Pharo through a detailed example.
 Of course, there are an infinite number of ways to make a Web application.
 Even in Pharo, there are multiple frameworks approaching this problem, most notably Seaside, AIDAweb and Iliad.
 However, the presented example is directly built on top of the foundational framework called Zinc HTTP Components. 
@@ -499,7 +499,7 @@ Let's change that and move our code to a source code repository.
 !!!The Monticello Browser
 
 For this we first have to use the Monticello Browser tool. 
-In the first pane of the Nautilus Broswer, click on the icon in front of your package named  ==MyFirstWebApp== as shown in Figure *@OpenMC*.
+In the first pane of the Nautilus Browser, click on the icon in front of your package named  ==MyFirstWebApp== as shown in Figure *@OpenMC*.
 
 +Open Monticello on your package.>file://figures/19-OpenMC.png|width=80|label=OpenMC+
 
@@ -553,7 +553,7 @@ Since this is the first version, all your changes are additions.
 OK, we're almost done. Go back to the Monticello Browser and click the 'Save' button (with your package and repository selected). Leave the version name, 
 something like MyFirstWebApp-SvenVanCaekenberghe.1 alone, write a nice commit message in the second pane and press Accept to save your code to SmalltalkHub.
 
-!!!Commiting to SmalltalkHub
+!!!Committing to SmalltalkHub
 
 When all goes well, you will see an upload progress bar and finally a version window that confirms the commit. You can close it later on.
 
@@ -588,11 +588,11 @@ To solve this problem, Pharo is using Metacello (the book Deep into Pharo *http:
 % @@authorToDo  Luc: started a how-to create a ConfigOf using Versionner
 % To create a Metacello configuration, you define an object, what else did you expect? 
 % You can do it by manually copying the template class ==MetacelloConfigTemplate== into a newly created package named ==ConfigurationOfMyFirstWebApp== (name convention). And then modifying the methods ==baselineX:== and ==versionX:== methods.
-% A more convient method is to use the Versionner tool.
+% A more convenient method is to use the Versionner tool.
 % Open Versionner by clicking on the world menu entry ""Tools>Versionner"".
 % Create a new project named 'MyFirstWebApp' by clicking on the 'New Project' button.
 % In the newly opened window, select the development branch that is green.
-% Then, click on the \+ icon to add the Monnticello package named 'MyFirstWebApp' as a dependency of this project.
+% Then, click on the \+ icon to add the Monticello package named 'MyFirstWebApp' as a dependency of this project.
 % You can now select the repository we added before in Monticello to save this project.
 % Before clicking on the button "Commit the project" at the top, Versionner should look like in Figure *@CommitProjectInVersionner*.
 %
@@ -643,9 +643,14 @@ Now we need a real cloud server to run our Web app.
 
 It used to be hard and expensive to get access to a real server permanently connected to the internet. Not anymore: prices have comes down and operating cloud servers has become a much easier to use service.
 
-For this guide, we will be using Digital Ocean. The entry level server there, which is more than powerful enough for our experiment, costs just $5 a month. If 
-you stop and remove the server after a couple of days, you will only pay cents. Go ahead and make yourself an account and register a credit card.
-If you really want to test without a credit card, you can also use *http://c9.io* that freely provides some testing environments after creating an account.
+If you really want to test the deployment of Pharo Web app, you can use cloud9 (*http://c9.io*).
+It freely provides some testing environments after creating an account.
+Note that this is for testing purpose only and that a real hosting solution such as Digital Ocean (*http://www.digitalocean.com*) is better.
+
+For this guide, we will be using Digital Ocean. 
+The entry level server there, which is more than powerful enough for our experiment, costs just $5 a month. 
+If you stop and remove the server after a couple of days, you will only pay cents. 
+Go ahead and make yourself an account and register a credit card.
 
 !!!First part of the Create Droplet form
 
@@ -660,7 +665,7 @@ Finally click the ‘Create Droplet’ button.
 In less than a minute, your new server instance will be ready. Your root password will be emailed to you. If you look at your droplets, you should see your new 
 server in the list. Click on it to see its details.
 
-!!! Looking at your Droplet
+!!!Looking at your Droplet
 
 The important step now is to get SSH command line access to your new server, preferably using a normal terminal. With the IP address from the control panel and 
 the root password emailed to you, try to log in.
@@ -749,16 +754,14 @@ We added a little twist here: we changed the default root (==/==) handler to red
 ...
 ]]]
 
-You can surf to the correct IP address and port to test you application. Note that ==/welcome==, ==/help== and ==/image== are still available too. Type ctrl-c to kill the server again. Figure *@runningOnCloud9* shows how this testing delpoyment looks like on Cloud9.
-
-+Our Web app running in the cloud.>file://figures/24-runningOnCloud9.png|width=80|label=runningOnCloud9+
-
-
-You can then put the server in background, running for real.
+You can surf to the correct IP address and port to test you application. Note that ==/welcome==, ==/help== and ==/image== are still available too. Type ctrl-c to kill the server again. You can then put the server in background, running for real.
 
 [[[
 # nohup ./pharo myfirstwebapp.image run.st &
 ]]]
+
+Figure *@runningOnCloud9* shows how the deployment looks like on cloud9.
++Our Web app running in the cloud.>file://figures/24-runningOnCloud9.png|width=80|label=runningOnCloud9+
 
 !!Have fun extending this Web app
 
