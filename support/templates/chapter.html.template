@@ -16,7 +16,7 @@
     <link href="../support/html/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="../support/html/css/square-braket-associates.css" rel="stylesheet">
     <style>
-        .container { max-width: 55em; }
+/*        .container { max-width: 55em; } */
     </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
