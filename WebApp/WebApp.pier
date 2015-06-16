@@ -4,8 +4,6 @@
 % -First version: July 10, 2012 by Sven Van Caekenberghe
 % -Second version: September 10, 2012 by Stéphane Ducasse
 
-@@authorToDo Luc: redo figs \+ current figs render badly in Pdf because of the shadow (strange thing to look at)
-
 This chapter details the whole development process of a Web application in Pharo through a detailled example.
 Of course, there are an infinite number of ways to make a Web application.
 Even in Pharo, there are multiple frameworks approaching this problem, most notably Seaside, AIDAweb and Iliad.
@@ -523,11 +521,13 @@ Your project's page should look like the one on Figure *@WebAppStHubRepo*.
 
 +Smalltalkhub project page.>file://figures/21-WebAppStHubRepo.png|width=80|label=WebAppStHubRepo+
 
-On this page, select and copy the Monticello registration template (make sure to copy the whole contents, including the username and password parts). Now go 
-back to Pharo and in Monticello, click on the ""\+Repository"" button (be sure that your pacakge is selected in the left pane).
+On this page, select and copy the Monticello registration template (make sure to copy the whole contents, including the username and password parts). 
+Now, go back to Pharo and in Monticello, click on the ""\+Repository"" button (be sure that your package is selected in the left pane).
 % add a repository for your package (right-click on the package name, select Open...  Add a repository).
 
-Select Smalltalkhub.com as repository type and overwrite the presented template with the one you just copied. It should look similar to Figure *@AddRepoInMC*. Before accepting, fill in your user(name) and password (between the single quotes), the ones you gave during registration on SmalltalkHub.
+Select Smalltalkhub.com as repository type and overwrite the presented template with the one you just copied. 
+It should look similar to Figure *@AddRepoInMC*. 
+Before accepting, fill in your user(name) and password (between the single quotes), the ones you gave during registration on SmalltalkHub.
 
 +Adding a Smalltalkhub repository in Monticello for your project.>file://figures/22-AddRepoInMC.png|width=80|label=AddRepoInMC+
 
@@ -538,7 +538,7 @@ Select Smalltalkhub.com as repository type and overwrite the presented template 
 %     password: ''
 % ]]]
 
-Now, Monticello Browser shows you to repositories to save your package as shown in Figure *@23-StHubRepoInMc*.
+Now, Monticello Browser shows you to repositories to save your package as shown in Figure *@StHubRepoInMc*.
 
 +Multiple repositories for a project in Monticello.>file://figures/23-StHubRepoInMc.png|width=80|label=StHubRepoInMc+
 
@@ -581,21 +581,28 @@ In any case, your package should now no longer be dirty, and there should be no 
 
 !!Defining a project configuration
 
-@@authorToDo  Luc HERE
-
 Real software consists of several packages and will depend on extra external libraries and frameworks. In practice, software configuration management, including 
 the management of dependencies and versions, is thus a necessity.
+To solve this problem, Pharo is using Metacello (the book Deep into Pharo *http://deepintopharo.com* contains a full chapter on it). And although we don’t really need it for our small example, we are going to use it anyway. Of course, we will not go into details as this is a complex subject.
 
-To solve this problem, Pharo is using Metacello (the book Deep into Pharo book contains a full chapter on it). And although we don’t really need it for our small 
-example, we are going to use it anyway. Of course, we will not go into details as this is a complex subject.
+% @@authorToDo  Luc: started a how-to create a ConfigOf using Versionner
+% To create a Metacello configuration, you define an object, what else did you expect? 
+% You can do it by manually copying the template class ==MetacelloConfigTemplate== into a newly created package named ==ConfigurationOfMyFirstWebApp== (name convention). And then modifying the methods ==baselineX:== and ==versionX:== methods.
+% A more convient method is to use the Versionner tool.
+% Open Versionner by clicking on the world menu entry ""Tools>Versionner"".
+% Create a new project named 'MyFirstWebApp' by clicking on the 'New Project' button.
+% In the newly opened window, select the development branch that is green.
+% Then, click on the \+ icon to add the Monnticello package named 'MyFirstWebApp' as a dependency of this project.
+% You can now select the repository we added before in Monticello to save this project.
+% Before clicking on the button "Commit the project" at the top, Versionner should look like in Figure *@CommitProjectInVersionner*.
+%
+% +Using Versionner to create and commit a project.>file://figures/26-CommitProjectInVersionner|width=80|label=CommitProjectInVersionner+
 
-To create a Metacello configuration, you define an object, what else did you expect ? First create a new package as well as a Metacello package called 
-==ConfigurationOfMyFirstWebApp==. Then go find the class ==MetacelloConfigTemplate==. You have to copy this class (right-click on the class name) and name it 
-==ConfigurationOfMyFirstWebApp== as well. Now move the copy to your new package by dragging it, or by editing the category field of the class definition.
-
-We are going to define three methods: one defining a baseline for our configuration, one defining concrete package versions for that baseline, and one declaring 
-that version as the stable released version. Here is the code (if you would be working in Pharo 3.0 you will notice that ==MetacelloConfigTemplate== contains 
-some extra template methods, remove any baseline or version related ones and overwrite ==stable:==)
+To create a Metacello configuration, you define an object, what else did you expect?
+But we must respect some name conventions so Monticello can help us to generate part of this Metacello configuration.
+Open Monticello and click on the \+Config button to add a configuration named ==ConfigurationOfMyFirstWebApp==.
+With a right click on it, you can "Browse configuration" which open a Nautilus browser on this newly created class.
+We are now going to define three methods: one defining a baseline for our configuration, one defining concrete package versions for that baseline, and one declaring that version as the stable released version. Here is the code (if you would be working in Pharo 3.0 you will notice that ==MetacelloConfigTemplate== contains some extra template methods, remove any baseline or version related ones and overwrite ==stable:==)
 
 [[[
 ConfigurationOfMyFirstWebApp>>baseline1: spec
@@ -603,7 +610,7 @@ ConfigurationOfMyFirstWebApp>>baseline1: spec
     spec for: #common do: [
       spec
         blessing: #baseline;
-        repository: 'http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/m
+        repository: 'http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main'
         package: 'MyFirstWebApp' ]
 ConfigurationOfMyFirstWebApp>>version1: spec
     <version: '1' imports: #('1-baseline')>
@@ -616,37 +623,33 @@ ConfigurationOfMyFirstWebApp>>stable: spec
     spec for: #common version: '1'
 ]]]
 
-
-You can test your configuration by trying to load it.
+Once you committed the project (that consists in both the Metacello configuration and the Monticello package 'MyFirstWebApp'), you can test your configuration by trying to load it.
 
 [[[
 ConfigurationOfMyFirstWebApp load.
 ]]]
 
 
-Of course, not much will happen since you already have the specified version loaded. For some feedback, make sure the Transcript is open and inspect the above expression.
+Of course, not much will happen since you already have the specified version loaded. 
+For some feedback, make sure the Transcript is open and inspect the above expression.
 
-
-
-Now add your SmalltalkHub repository to the ConfigurationOfMyFirstWebApp Monticello package. Double-check the changes in the Monticello Browser, remember we 
-copied a whole class. Now commit by saving to your SmalltalkHub repository. Use the Web interface to verify that all went well.
-
-
+Now add your SmalltalkHub repository to the ConfigurationOfMyFirstWebApp Monticello package. Double-check the changes in the Monticello Browser, remember we  copied a whole class. Now commit by saving to your SmalltalkHub repository. Use the Web interface to verify that all went well.
 
 !!Running a real cloud server
 
-So we created our first Web app and tested it locally. We stored our source code in the SmalltalkHub repository and created a Metacello configuration for it. 
+So we created our first Web app and tested it locally. 
+We stored our source code in the SmalltalkHub repository and created a Metacello configuration for it. 
 Now we need a real cloud server to run our Web app.
 
-It used to be hard and expensive to get access to a real server permanently connected to the internet. Not any more: prices have comes down and operating cloud 
-servers has become a much easier to use service.
+It used to be hard and expensive to get access to a real server permanently connected to the internet. Not anymore: prices have comes down and operating cloud servers has become a much easier to use service.
 
 For this guide, we will be using Digital Ocean. The entry level server there, which is more than powerful enough for our experiment, costs just $5 a month. If 
 you stop and remove the server after a couple of days, you will only pay cents. Go ahead and make yourself an account and register a credit card.
+If you really want to test without a credit card, you can also use *http://c9.io* that freely provides some testing environments after creating an account.
 
 !!!First part of the Create Droplet form
 
-A server instance is called a Droplet. Click the ‘Create Droplet ’ button and fill in the form. Pick a hostname, select the smallest size, pick a region close 
+A server instance is called a Droplet. Click the ‘Create Droplet’ button and fill in the form. Pick a hostname, select the smallest size, pick a region close 
 to you. As operating system image, we’ll be using a 32-bit Ubuntu Linux, version 13.04 x32. You can optionally use an SSH key pair to log in - it is a good idea, 
 see How to Use SSH Keys with DigitalOcean Droplets - just skip this option for now if you are uncomfortable with it, it is not necessary for this tutorial. 
 Finally click the ‘Create Droplet’ button.
@@ -669,7 +672,7 @@ Your server is freshly installed and includes only the most essential core packa
 functionality offered by *http://get.pharo.org*. The following command will install a fresh Pharo 2.0 image together with all other files needed.
 
 [[[
-  # curl get.pharo.org/20+vm | bash
+  # curl get.pharo.org/40+vm | bash
 ]]]
 
 Make sure the VM\+image combination works by asking for the image version.
@@ -677,7 +680,7 @@ Make sure the VM\+image combination works by asking for the image version.
 
 [[[
 # ./pharo Pharo.image printVersion
-[version] 2.0 #20611
+[version] 4.0 #40614
 ]]]
 
 Let's quickly test the stock HTTP server that comes with Pharo, like we did in the third section of this guide.
@@ -691,7 +694,7 @@ HTTP Components welcome page. If this works, you can press ctrl-C in the termina
 
 !!Deploying for production
 
-We now have a running server. It can run Pharo too, but it is currently using a generic image. How do we get our code deployed ? To do this we use the Metacello 
+We now have a running server. It can run Pharo too, but it is currently using a generic image. How do we get our code deployed? To do this we use the Metacello 
 configuration. But first, we are going to make a copy of the stock Pharo.image that we downloaded. We want to keep the original clean while we make changes to the copy.
 
 [[[
@@ -702,33 +705,33 @@ We now have a new image (and changes) file called myfirstwebapp.image (and myfir
 Metacello configuration. Before actually loading anything, we will ask for all available versions to verify that we can access the repository.
 
 [[[
-# ./pharo myfirstwebapp.image config http://www.smalltalkhub.com/mc/SvenVanCaeken
-  ===============================================================================
-  Notice: Available versions for ConfigurationOfMyFirstWebApp
-  ===============================================================================
-  1
-  1-baseline
-  bleedingEdge
-  last
-  stable
+# ./pharo myfirstwebapp.image config http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main ConfigurationOfMyFirstWebApp
+'Available versions for ConfigurationOfMyFirstWebApp'
+1
+1-baseline
+bleedingEdge
+last
+stable
 ]]]
 
-Since we have only one version, all the above are equivalent references to the same version. Now we will load and install the stable version.
+You should have only one version, all the above are equivalent references to the same version. 
+Now we will load and install the stable version.
 
 [[[
-# ./pharo myfirstwebapp.image config http://www.smalltalkhub.com/mc/SvenVanCaeken
-  ===============================================================================
-  Notice: Installing ConfigurationOfMyFirstWebApp stable
-  ===============================================================================
+# ./pharo myfirstwebapp.image config http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main ConfigurationOfMyFirstWebApp --install=stable
+'Installing ConfigurationOfMyFirstWebApp stable'
+
+Loading 1 of ConfigurationOfMyFirstWebApp...
+...
 ]]]
 
 
 After loading all necessary code, the config option will also save our image so that it now permanently includes our code. Although we could try to write a 
-(long) one line expression to start our Web app in a server and pass it to the eval option, it is better to write a small script. Create a file called ‘run.st’ with the following contents
+(long) one line expression to start our Web app in a server and pass it to the eval option, it is better to write a small script. Create a file called ‘run.st’ with the following contents:
 
 [[[
 ZnServer defaultOn: 8080.
-  ZnServer default logToStandardOutput.
+  ZnServer default logToTranscript.
   ZnServer default delegate
     map: 'image' to: MyFirstWebApp new;
     map: 'redirect-to-image' to: [ :request | ZnResponse redirect: 'image' ];
@@ -736,59 +739,59 @@ ZnServer defaultOn: 8080.
 ZnServer default start.
 ]]]
 
-We added a little twist here: we changed the default root (==/==) handler to redirect to our new ==/image== Web app. Test the startup script like this
+We added a little twist here: we changed the default root (==/==) handler to redirect to our new ==/image== Web app. Test the startup script like this:
 
 [[[
 # ./pharo myfirstwebapp.image run.st
-  2013-07-10 11:46:58 660707 I Starting ZnManagingMultiThreadedServer HTTP port 808
-  2013-07-10 11:46:58 670019 D Initializing server socket
-  2013-07-10 11:47:12 909356 D Executing request/response loop
-  2013-07-10 11:47:12 909356 I Read a ZnRequest(GET /)
-  2013-07-10 11:47:12 909356 T GET / 302 16B 0ms
-  2013-07-10 11:47:12 909356 I Wrote a ZnResponse(302 Found text/plain;charset=utf-
-  2013-07-10 11:47:12 909356 I Read a ZnRequest(GET /image)
-  2013-07-10 11:47:12 909356 T GET /image 200 282B 0ms
-  2013-07-10 11:47:12 909356 I Wrote a ZnResponse(200 OK text/html;charset=utf-8 28
-  2013-07-10 11:47:12 909356 I Read a ZnRequest(GET /image?raw=true)
-  2013-07-10 11:47:12 909356 T GET /image?raw=true 200 18778B 82ms
-  2013-07-10 11:47:12 909356 I Wrote a ZnResponse(200 OK image/png 18778B)
+
+2015-06-15 15:59:56 001 778091 Server Socket Bound 0.0.0.0:8080
+2015-06-15 15:59:56 002 013495 Started ZnManagingMultiThreadedServer HTTP port 8080
+...
 ]]]
 
-Surf to the correct IP address and port to test you application. Note that ==/welcome==, ==/help== and ==/image== are still available too. Type ctrl-c to kill 
-the server again. Now it is time to put the server in background, running for real.
+You can surf to the correct IP address and port to test you application. Note that ==/welcome==, ==/help== and ==/image== are still available too. Type ctrl-c to kill the server again. Figure *@runningOnCloud9* shows how this testing delpoyment looks like on Cloud9.
+
++Our Web app running in the cloud.>file://figures/24-runningOnCloud9.png|width=80|label=runningOnCloud9+
+
+
+You can then put the server in background, running for real.
 
 [[[
 # nohup ./pharo myfirstwebapp.image run.st &
 ]]]
 
-!!One more step
+!!Have fun extending this Web app
 
-Did you like the example so far? Would you like to take one more step? Here is a little extension left as an exercise.
+Did you like the example so far? Would you like to take one more step? 
+Here is a little extension left as an exercise.
 Add an extra section at the bottom of the main page that shows a miniature version of the previous image. 
 Initially, you can show an empty image. 
 Here are a couple of hints. 
 Read only as far as you need, try to figure it out by yourself.
 
 !!!Hint 1
-You can scale a form object into another one using just one message taking a single argument. You can use the same classes that we used for parsing as a tool 
-to generate PNG, JPEG or GIF images given a form.
+You can scale a form object into another one using just one message taking a single argument. 
+You can use the same classes that we used for parsing as a tool to generate PNG, JPEG or GIF images given a form.
 
-When you are done, save your code as a new version. Then update your configuration with a new, stable version. Finally, go to the server, update your image 
-based on the configuration and restart the running vm\+image.
+When you are done, save your code as a new version. 
+Then update your configuration with a new, stable version. 
+Finally, go to the server, update your image based on the configuration and restart the running vm\+image.
 
 !!!Hint 2
-Change the #html method referring to a new variant, ==/image?previous=true==, for the second image. Adjust ==handleGetRequest:== to look for that attribute.
-Add a helper method ==pngImageEntityForForm:== and a ==previousImage== accessor. It is easy to create an empty, blank form as default. Call a 
-==updatePreviousImage== at the right spot in ==handlePostRequest:== and implement the necessary functionality there.
+
+Change the ==html== method referring to a new variant, ==/image?previous=true==, for the second image. Adjust ==handleGetRequest:== to look for that attribute.
+Add a helper method ==pngImageEntityForForm:== and a ==previousImage== accessor. 
+It is easy to create an empty, blank form as default. 
+Call a ==updatePreviousImage== at the right spot in ==handlePostRequest:== and implement the necessary functionality there.
 
 !!!Hint 3
 If you found it difficult to find the right methods, have a look at the following ones:
 
--Form>>scaledIntoFormOfSize: 
--Form class>>extent:depth: 
--PNGReadWriter>>nextPutImage:
--ByteArray class>>streamContents: 
--ZnByteArrayEntity class>>with:type:
+-==Form>>scaledIntoFormOfSize:==
+-==Form class>>extent:depth:==
+-==PNGReadWriter>>nextPutImage:==
+-==ByteArray class>>streamContents:==
+-==ZnByteArrayEntity class>>with:type:==
 
 !!Solution, part 1, new methods
 
@@ -862,31 +865,37 @@ Here are the changes to 3 existing methods for the complete solution.
 ]]]
 
 !!Solution, part 3, updated configuration
+
 To update our configuration, add 1 method and change 1 method.
 
 [[[
 version2: spec
-	<version: '2' imports: #('1-baseline')>
-    spec for: #common do: [
+   <version: '2' imports: #('1-baseline')>
+   spec for: #common do: [
       spec
-        blessing: #release;
-        package: 'MyFirstWebApp' with: 'MyFirstWebApp-SvenVanCaekenberghe.2' ]
-  stable: spec
-    <symbolicVersion: #'stable'>
-    spec for: #common version: '2'
+         blessing: #release;
+         package: 'MyFirstWebApp' with: 'MyFirstWebApp-SvenVanCaekenberghe.2' ]
+
+stable: spec
+	<symbolicVersion: #'stable'>
+	spec for: #common version: '2'
 ]]]
 
 Of course, you will have to substitute your name for the concrete version.
 
 !!Conclusion
+
 Congratulations: you have now built and deployed your first Web app with Pharo. Hopefully you are interested in learning more. From the Pharo website you should 
 be able to find all the information you need. Don’t forget about the Pharo by Example book and the mailing lists.
 This guide was an introduction to writing Web applications using Pharo, touching on the fundamentals of HTTP. Like we mentioned in the introduction, there are a 
 couple of high level frameworks that offer more extensive support for writing Web applications. The three most important ones are Seaside, AIDAweb and Iliad.
 
 !!Listing
-Here is the full code listing of the Web app. You can also find the code, including the tests and the Metacello configuration, checked in to SmalltalkHub in my 
-MyFirstWebApp project. A similar example is also included in Zinc HTTP Components itself, under the name ==ZnImageExampleDelegate==[Tests].
+
+Here is the full code listing of the Web app. 
+You can also find the code, including the tests and the Metacello configuration, on SmalltalkHub in my 
+MyFirstWebApp project here: *http://smalltalkhub.com/#!/~SvenVanCaekenberghe/MyFirstWebApp*. 
+A similar example is also included in the Zinc HTTP Components project itself, under the name ==ZnImageExampleDelegate==[Tests].
 
 [[[
 Object subclass: #MyFirstWebApp
@@ -922,23 +931,23 @@ handleGetRequest: request
 
 [[[
 handlePostRequest: request
-  | part newImage badRequest |
-  badRequest := [ ^ ZnResponse badRequest: request ].
-  (request hasEntity
+   | part newImage badRequest |
+   badRequest := [ ^ ZnResponse badRequest: request ].
+   (request hasEntity
       and: [ request contentType matches: ZnMimeType multiPartFormData ])
-    ifFalse: badRequest.
-  part := request entity
-            partNamed: #file
-            ifNone: badRequest.
-  newImage := part entity.
-  (newImage notNil
+         ifFalse: badRequest.
+   part := request entity
+      partNamed: #file
+      ifNone: badRequest.
+   newImage := part entity.
+   (newImage notNil
       and: [ newImage contentType matches: 'image/*' asZnMimeType ])
-    ifFalse: badRequest.
-  [ self formForImageEntity: newImage ]
-    on: Error
-    do: badRequest.
+         ifFalse: badRequest.
+   [ self formForImageEntity: newImage ]
+      on: Error
+      do: badRequest.
    image := newImage.
-	  ^ ZnResponse redirect: #image
+   ^ ZnResponse redirect: #image
 ]]]
 
 [[[
