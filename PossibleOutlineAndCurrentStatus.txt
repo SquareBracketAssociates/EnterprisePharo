@@ -42,6 +42,11 @@ Finished:
 
 	RenoirST/RenoirST.pier
 		>> Damien finished his pass (2015/06/05)
+
+	WebApp/WebApp.pier using Zinc
+		>> Stef should read it again
+		>> Luc will read it
+		>> Luc finished his pass (all screenshots with Pharo4, removed some beginners text, ...) [17 jun 2015]
 		
 *******************************************************************************		
 
@@ -65,10 +70,6 @@ NeoJSON/NeoJSON.pier
 
 WebSockets/WebSockets.pier
 	>> Luc will read it 
-
-WebApp/WebApp.pier using Zinc
-	>> Stef should read it again
-	>> Luc will read it
 
 Mustache/Mustache.pier
 	>> Finished first version 
