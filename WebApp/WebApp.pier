@@ -642,10 +642,9 @@ We stored our source code in the SmalltalkHub repository and created a Metacello
 Now we need a real cloud server to run our Web app.
 
 It used to be hard and expensive to get access to a real server permanently connected to the internet. Not anymore: prices have comes down and operating cloud servers has become a much easier to use service.
-
-If you really want to test the deployment of Pharo Web app, you can use cloud9 (*http://c9.io*).
-It freely provides some testing environments after creating an account.
-Note that this is for testing purpose only and that a real hosting solution such as Digital Ocean (*http://www.digitalocean.com*) is better.
+If you just want to test the deployment of this Pharo Web app, you can use cloud9 (*http://c9.io*).
+It freely provides some testing environments after creating an account. 
+Note that cloud9 is for testing purpose only and that a real hosting solution such as Digital Ocean (*http://www.digitalocean.com*) is better.
 
 For this guide, we will be using Digital Ocean. 
 The entry level server there, which is more than powerful enough for our experiment, costs just $5 a month. 
