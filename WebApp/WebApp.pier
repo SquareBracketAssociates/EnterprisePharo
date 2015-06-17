@@ -23,7 +23,7 @@ The Web application that we are going to build will show a picture and allow use
 Because we want to focus on the basic mechanics, the fundamentals as well as the build and deploy process, there are some simplifications. There will be one 
 picture for all users, no login and we will store the picture in memory.
 
-+A simple Web application>file://figures/image-web-app.png|width=80|label=imageweb+
++A simple Web application>file://figures/image-web-app.jpg|width=80|label=imageweb+
 
 In our implementation, ==/image== will serve an HTML page containing the image and a form. To serve the raw image itself, we'll add a parameter, like 
 ==/image?raw=true==. These will be GET HTTP requests. The form will submit its data to ==/image== as a POST request.
@@ -59,7 +59,7 @@ MyFirstWebApp>>handleRequest: request
 Create a new protocol called 'public' (by right-clicking in the third column). When the new protocol is selected, a new method template will appear in the bottom 
 pane. Overwrite the whole template with the code above and accept it (as shown Figure *@pharo-in-action*).
 
-+Defining a first version of the application.>file://figures/8-MethodAdded.png|width=80|label=pharo-in-action+
++Defining a first version of the application.>file://figures/8-MethodAdded.jpg|width=80|label=pharo-in-action+
 
 What we do here is to look at the incoming request to make sure the URI path is ==/image== which will be the final name of our Web app. 
 If not, we return a Not Found (code 404) response. 
@@ -84,7 +84,7 @@ The second expression adds a route from ==/image== to an instance of our Web app
 If all is well, ==http://localhost:8080/image== should show your friendly message as shown in Figure  *@helloWebApp-in-action*. 
 Note how we are not even serving HTML, just plain text.
 
-+Your first hello world Web app in action>file://figures/9-RunTheWebApp.png|width=100|label=helloWebApp-in-action+
++Your first hello world Web app in action>file://figures/9-RunTheWebApp.jpg|width=100|label=helloWebApp-in-action+
 
 Try changing the text. 
 
@@ -96,7 +96,7 @@ Then, if you try to load the Web app URI, a debugger will open in Pharo allowing
 You can just continue the execution by clicking on the proceed button.
 Or you can look into the actual request and response objects moving around (as shown in Figure *@InspectingIncomingRequest*.
 
-+Using the debugger to navigate execution>file://figures/11-InspectingIncomingRequest.png|width=80|label=InspectingIncomingRequest+
++Using the debugger to navigate execution>file://figures/11-InspectingIncomingRequest.jpg|width=80|label=InspectingIncomingRequest+
 
 Note how this is a live environment: you make a little changes directly in the debugger window (such as changing the text in the response) and it is immediately used.
 
@@ -126,7 +126,7 @@ MyFirstWebApp>>handleRequest: request
 Accept the above two methods and test ==http://localhost:8080/image== again to make sure you now see a real HTML page. 
 You should get the result displayed in Figure *@htmlResponse*.
 
-+Returning an HTML response>file://figures/12-htmlResponse.png|width=100|label=htmlResponse+
++Returning an HTML response>file://figures/12-htmlResponse.jpg|width=100|label=htmlResponse+
 
 You have probably noted the red exclamation mark icon in front of our class name in the browser.
 This is an indication that we have no class comment, which is not good: documentation is important.
@@ -189,7 +189,7 @@ If it has a non-empty query variable ==raw== we serve the raw image directly, el
 
 Check it out: you should now see an image in the browser (cf. Figure *@servingPharoLogo*) when visiting ==http://localhost:8080/image==!
 
-+Serving the Pharo logo>file://figures/13-servingPharoLogo.png|width=100|label=servingPharoLogo+
++Serving the Pharo logo>file://figures/13-servingPharoLogo.jpg|width=100|label=servingPharoLogo+
 
 !!Uploading a new image
 
@@ -276,7 +276,7 @@ The first test makes sure the current POST request actually contains an entity a
 Next, we handle the case when there is no file part. 
 Finally, we make sure the file part is actually an image (JPEG, PNG or GIF) by matching with the wildcard ==image/*== mime type. You can now upload a new image through the Web app (cf. Figure *@ChangingDisplayedImage*) that is saved in memory and displayed for all visitors until the application is restarted. 
 
-+Changing the displayed image>file://figures/14-ChangingDisplayedImage.png|width=80|label=ChangingDisplayedImage+
++Changing the displayed image>file://figures/14-ChangingDisplayedImage.jpg|width=80|label=ChangingDisplayedImage+
 
 If you are curious, set a breakpoint in the ==handlePostRequest:== method and inspect the request object of an actual request. 
 You can learn an awful lot from looking at live objects.
@@ -308,7 +308,7 @@ ZnServer default delegate map: #image to: MyFirstWebApp new.
 
 If you now try to upload an image through the Web browser, the debugger will pop up in Pharo telling you that ==ZnResponse== does not understand ==redirectTo:== and show you the offending code. You could fix the code and try uploading again to see if it works as shown in Figure *@dnu*.
 
-+Debugging.>file://figures/15-debugMode.png|width=100|label=dnu+
++Debugging.>file://figures/15-debugMode.jpg|width=100|label=dnu+
 
 But we can do even better! Just fix the code directly within the debugger window and accept it. 
 Now you can restart and proceed the execution. 
@@ -322,7 +322,7 @@ Now set a breakpoint in ==handleGetRequest:== and reload the main page.
 There will be two requests coming in: the first one for ==/image== and the second one for ==/image?raw=true==. 
 Proceed the first one.
 
-+Live change.>file://figures/16-LiveModification.png|width=80|label=live+
++Live change.>file://figures/16-LiveModification.jpg|width=80|label=live+
 
 Now, with the execution being stopped for the second request, click on the image instance variable in the bottom left pane (cf. Figure *@live*). The pane next to it will show some 
 image entity. Select the whole contents and replace it with ==self downloadPharoLogo== and accept the change. Now proceed the execution. Your previously 
@@ -402,7 +402,7 @@ Writing tests is creating objects, letting them interact and then asserting a nu
 You should start by creating a new subclass of ==TestCase== named ==MyFirstWebAppTest==.
 But the Pharo browser helps you here using the "Jump to test class" in the contextual menu on ==MyFirstWebApp== (cf. Figure *@CreateTestClass*).
 
-+Automatically create a test class.>file://figures/17-CreateTestClass.png|width=80|label=CreateTestClass+
++Automatically create a test class.>file://figures/17-CreateTestClass.jpg|width=80|label=CreateTestClass+
 
 Add now the following helper method on ==MyFirstWebAppTest==:
 
@@ -439,7 +439,7 @@ MyFirstWebAppTest>>testMainPage
 
 In ==testMainPage== we do a request for the main page, ==/image==, and assert that the request is successful and contains HTML. Make sure the test is green by running it from the system browser by clicking on the round icon in front of the method name in the fourth pane (cf. Figure *@RunningTestCase*).
 
-+Running a test case.>file://figures/18-RunningTestCase.png|width=80|label=RunningTestCase+
++Running a test case.>file://figures/18-RunningTestCase.jpg|width=80|label=RunningTestCase+
 
 Let's try to write a test for the actual raw image being served.
 
@@ -501,12 +501,12 @@ Let's change that and move our code to a source code repository.
 For this we first have to use the Monticello Browser tool. 
 In the first pane of the Nautilus Browser, click on the icon in front of your package named  ==MyFirstWebApp== as shown in Figure *@OpenMC*.
 
-+Open Monticello on your package.>file://figures/19-OpenMC.png|width=80|label=OpenMC+
++Open Monticello on your package.>file://figures/19-OpenMC.jpg|width=80|label=OpenMC+
 
 Once opened, Monticello shows on it left pane the list of loaded packages.
 The currently selected one should be yours as depicted in Figure *@MCOpened*. 
 
-+The Monticello browser.>file://figures/20-MCOpened.png|width=80|label=MCOpened+
++The Monticello browser.>file://figures/20-MCOpened.jpg|width=80|label=MCOpened+
 
 The left pane of Monticello shows the list of repositories in which the currently selected package can be saved. 
 Indeed, Pharo uses distributed source code management. 
@@ -519,7 +519,7 @@ Once you have an account, create and register a new project called =='MyFirstWeb
 You can leave the public option checked, it means that you and others can download the code without credentials. 
 Your project's page should look like the one on Figure *@WebAppStHubRepo*.
 
-+Smalltalkhub project page.>file://figures/21-WebAppStHubRepo.png|width=80|label=WebAppStHubRepo+
++Smalltalkhub project page.>file://figures/21-WebAppStHubRepo.jpg|width=80|label=WebAppStHubRepo+
 
 On this page, select and copy the Monticello registration template (make sure to copy the whole contents, including the username and password parts). 
 Now, go back to Pharo and in Monticello, click on the ""\+Repository"" button (be sure that your package is selected in the left pane).
@@ -529,7 +529,7 @@ Select Smalltalkhub.com as repository type and overwrite the presented template 
 It should look similar to Figure *@AddRepoInMC*. 
 Before accepting, fill in your user(name) and password (between the single quotes), the ones you gave during registration on SmalltalkHub.
 
-+Adding a Smalltalkhub repository in Monticello for your project.>file://figures/22-AddRepoInMC.png|width=80|label=AddRepoInMC+
++Adding a Smalltalkhub repository in Monticello for your project.>file://figures/22-AddRepoInMC.jpg|width=80|label=AddRepoInMC+
 
 % [[[
 % MCHttpRepository
@@ -540,7 +540,7 @@ Before accepting, fill in your user(name) and password (between the single quote
 
 Now, Monticello Browser shows you to repositories to save your package as shown in Figure *@StHubRepoInMc*.
 
-+Multiple repositories for a project in Monticello.>file://figures/23-StHubRepoInMc.png|width=80|label=StHubRepoInMc+
++Multiple repositories for a project in Monticello.>file://figures/23-StHubRepoInMc.jpg|width=80|label=StHubRepoInMc+
 
 You may have notice that there is an asterisk (==*==) in front of your package name.
 It indicates that the package is dirty, that it has uncommitted changes. 
@@ -760,7 +760,7 @@ You can surf to the correct IP address and port to test you application. Note th
 ]]]
 
 Figure *@runningOnCloud9* shows how the deployment looks like on cloud9.
-+Our Web app running in the cloud.>file://figures/24-runningOnCloud9.png|width=80|label=runningOnCloud9+
++Our Web app running in the cloud.>file://figures/24-runningOnCloud9.jpg|width=80|label=runningOnCloud9+
 
 !!Have fun extending this Web app
 
