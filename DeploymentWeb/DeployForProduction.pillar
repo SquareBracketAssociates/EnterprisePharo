@@ -1,0 +1,181 @@
+!Deploying a Pharo application for production
+
+It is very easy to develop with Pharo and its ecosystem. Once your development needs to go into production to produce value, a lot of questions comes out of the box: which operating system should I use? how do I run my application? how do I ensure y application will be restarted after a reboot or a crash? how do I log?
+
+There are a lot of questions and even more answers but following sections will try to make things clearer and to provide one guideline that works.
+
+!! Where to host your application?
+The easiest (and fastest) way to host your application is to host it in the cloud. 
+
+""*PharoCloud>http://pharocloud.com*"" proposes pre-packaged solutions (including seaside and pier, database support) as well as the possibility to use your own image. You could start very quickly from there but you do not have full control on your pharo stack. It is enough in most cases: PharoCloud manages defaults for you.
+
+There are a lot of other cloud providers : *Amazon AWS>https://aws.amazon.com/*, *Openshit>https://www.openshift.com/*, *Microsoft Azure>http://azure.microsoft.com*, etc. Many pharoers use ""*DigitalOcean>https://www.digitalocean.com/*"" (simplicity, cheaper). 
+
+Choose your cloud provider according to your needs.
+
+!! Which Operating System?
+A lot of pharo developers uses OS X to develop their applications but it is not really a solution for a production deployment as there is no more Apple server hardware. Most pharoers deploy on Linux because ""Linux"" is well know to be stable even with months of up-time. It is also a simpler solution (comparing to Windows) in many aspects (remote access, configurability) and the most supported OS by cloud providers.
+
+You also have many flavors of Linux distributions. If you restrict your choice to well-known open-source distributions, competitors are ""centos"", ""debian"" and ""ubuntu"". Anyone will do the job, choose the most appropriate for you. A long-term support (""LTS"") version is welcomed if you do not want to update your OS too often.
+
+Last but not least, take care that Pharo provides a *virtual machine>http://pharo.org/gnu-linux-installation* for the selected Operating System if you do not want to compile the VM by yourself. A big problem is that, waiting for Spur64, the Pharo VM is 32 bits and requires 32 bits libraries not availaible by default on recent distributions. Check that instructions to install required 32 bits libraries are available on the Pharo web site.
+
+!! Build your image
+The best option to obtain a clean image to deploy is to start from a fresh *stable pharo image>http://files.pharo.org/image/stable/latest.zip* and to install needed packages through your application Metacello configuration and the command line handler. The configuration has to explicitely describes all dependencies used in your application.
+
+First, create a copy of the clean image with your application name:
+[[[language=bash­
+$ ./pharo Pharo.image save myapp]]]
+Then, install your dependencies:
+[[[language=bash­
+$ ./pharo myapp.image config http://www.smalltalkhub.com/mc/Me/MyApp/main ConfigurationOfMyApp --install=stable
+===============================================================================
+Notice: Installing ConfigurationOfMyApp stable
+===============================================================================
+]]]
+
+After loading all necessary code, the config option will also save the image so that it now permanently includes your code.
+
+The best approach for this is to create a Continuous Integration job to automatically produce clean images of your application, deployment-ready.
+
+!! Run your application
+Although you could try to write a (long) one line expression to start your application in a server and pass it to the eval option of the pharo command, it is better to write a small script. Create a file called ‘myapp.st’ with the instructions needed to start your application. Here is an example of a script used to start a web application using Zinc
+[[[language=Smalltalk
+ZnServer defaultOn: 8080.
+ZnServer default logToStandardOutput.
+ZnServer default delegate 
+  map: 'image' to: MyFirstWebApp new;
+  map: 'redirect-to-image' to: [ :request | ZnResponse redirect: 'image' ];
+  map: '/' to: 'redirect-to-image'. 
+ZnServer default start ]]]
+You can test the startup script like this:
+[[[language=bash­
+$ ./pharo myapp.image myapp.st
+2013-07-10 11:46:58 660707 I Starting ZnManagingMultiThreadedServer HTTP port 8080
+2013-07-10 11:46:58 670019 D Initializing server socket
+2013-07-10 11:47:12 909356 D Executing request/response loop
+2013-07-10 11:47:12 909356 I Read a ZnRequest(GET /)
+2013-07-10 11:47:12 909356 T GET / 302 16B 0ms
+2013-07-10 11:47:12 909356 I Wrote a ZnResponse(302 Found text/plain;charset=utf-8 16B)
+2013-07-10 11:47:12 909356 I Read a ZnRequest(GET /image)
+2013-07-10 11:47:12 909356 T GET /image 200 282B 0ms
+2013-07-10 11:47:12 909356 I Wrote a ZnResponse(200 OK text/html;charset=utf-8 282B)
+2013-07-10 11:47:12 909356 I Read a ZnRequest(GET /image?raw=true)
+2013-07-10 11:47:12 909356 T GET /image?raw=true 200 18778B 82ms
+2013-07-10 11:47:12 909356 I Wrote a ZnResponse(200 OK image/png 18778B)]]]
+Type ctrl-c to kill the server.
+
+You could use the nohup utility command to have a long-running process (nohup starts pharo in the background in such a way that the subsequent terminal logout does not stop it) but it is not a good solution as it does not support recovery .
+[[[language=bash­
+$ nohup ./pharo myapp.image run.st &]]]
+It is now time to put the server in production mode, running for real and robust to faults.
+
+!! Recovery
+!!! Automatic start
+One important aspect for application production is that they need to be up as much as possible. To limit downtimes, you should have ""a simple script to start/stop your application"". This script should be configured to be __run automatically at system startup__. On linux servers, it could be done with a simple Shell script that you place in the ''/etc/init.d'' directory.
+
+You can find a template named *pharo-service-script.sh>https://github.com/pharo-project/pharo-deployment-scripts/blob/master/pharo-service-script.sh* in the *GitHub pharo-project/pharo-deployment-scripts repository>https://github.com/pharo-project/pharo-deployment-scripts*. Copy it to set up your application service script and give it the name of your application. The ""pharo-service-script.sh"" script is derivated from the template provided by the Ubuntu distribution (/etc/init.d/skeleton). It manages the launch in background, with a given user, of another script named ""pharo-run-script.sh"".
+
+The *pharo-run-script.sh>https://github.com/pharo-project/pharo-deployment-scripts/blob/master/pharo-run-script.sh* is a simple script that runs a Pharo image with a given smalltalk script to evaluate. In most cases, you will not have to edit this file (maybe you will need to adjust the Pharo vm path and/or Pharo vm options). You just have to name files following these convention.
+
+Create a folder with your application name: ''myapp'', then copy the ""pharo-run-script.sh"" script into this folder by renaming it with the folder name: ''myapp''. Do not forget give the script execution permissions: ==chmod a+x ./myapp==. Finally, create a script named ''myapp.st'' that will be used to start your Pharo application (e.g. start a web server).
+You will end with a file hierarchy like this one:
+- /etc/init.d/myapp (service script)
+- /opt/myapp
+-- myapp (generic pharo run script)
+-- myapp.st (image startup script)
+-- myapp.image
+-- myapp.changes
+- /usr/bin/pharo-vm-nox
+
+Then, you can test / run your application first by running the ==./myapp== script, then by using the service command (uses the pharo init script): ==service myapp start==, ==service myapp stop==.
+
+!!! Monitoring
+Your application could also crash or be killed by the system or alive but not responding to requests. In such cases, you would like to stop the application and restart it.
+To do so, you need to first detect if your application is running or not. It can be done with the previous script with the status command. If your application is a web application, you may wish to check if your application is able to answer to HTTP requests. To do so, you need to define some 'ping' url to your application that will be used by the monitoring tool.
+
+A simple solution to both monitor your application and take appropriate actions (e.g. restart) is to use the *monit tool>https://mmonit.com/* that can be easily installed:
+[[[language=bash­
+$ sudo apt-get install monit]]]
+Then, the configuration of monit takes place in the ''/etc/monit/monitrc'' file.
+!!!! Monit global configuration
+!!!!! Monit dashboard
+You can first activate the embedded HTTP dashboard of monit. We will only allow local connections with a given username/password.
+[[[language=bash­
+set httpd port 2812 and
+  use address localhost  # only accept connection from localhost
+  allow localhost        # allow localhost to connect to the server and
+  allow admin:monit      # require user 'admin' with password 'monit']]]
+Do not forget to apply the new configuration:
+[[[language=bash
+$ sudo monit reload]]]
+It does not mean that you will not be able to connect to the monit dashboard from another host. You will just need to use an SSH tunnel to achieve that. If the server running your application and monit is named myserver.com, then you could simply run
+[[[language=bash­
+$ ssh -L 2812:localhost:2812 myserver.com]]]
+Keep the SSH connection open, and then browse *http://localhost:2812>http://localhost:2812* to display the monit dashboard.
+!!!!! Email settings
+If you want notifications from monit, you need to configure email settings so that monit can send emails. Edit the ''/etc/monit/monitrc'' file and add the following lines:
+[[[language=bash­
+set mailserver <smtp.domain>]]]
+!!!! Monitor system services
+Configuration files related to an application should be put into the ''/etc/monit/monitrc.d'' directory (more modular that everything in the core configuration file.
+To enable a configuration just symlink it to conf.d. We will first enable pre-defined configuration for SSH.
+[[[language=bash­
+$ sudo ln -s /etc/monit/monitrc.d/openssh-server /etc/monit/conf.d/openssh-server
+$ sudo monit reload]]]
+""Warning"": default configurations fro well-known services are provided by monit but may require some adaptations (ex: wrong path to the PID file). To check errors, you may need to run monit in verbose mode:
+[[[language=bash­
+$ sudo monit -v]]]
+and check the monit error log (default location is ''/var/log/monit.log'').
+
+!!!! Monit configuration for a simple Pharo application
+First create a new file <myapp> (update myapp with your application name) in ''/etc/monit/monitrc.d''.
+We will check that the application is running
+[[[language=bash­
+alert me@domain.com
+
+check process myapp with pidfile /var/run/myapp.pid
+  start program = "/etc/init.d/myapp start"
+  stop program  = "/etc/init.d/myapp stop"
+  if 5 restarts within 5 cycles
+    then timeout
+]]]
+The ''alert'' instruction is used to be notified about all alerts related to this service. The monitoring is described with the check command. We ask monit to check a given pid file. If there is no pid or no process associated to the pid, monit will start the program with the given instruction. The last instruction prevents infinite loops if there is a problem with the script.
+
+Start the monitoring
+[[[language=bash­
+$ sudo ln -s /etc/monit/monitrc.d/myapp /etc/monit/conf.d/myapp
+$ sudo monit reload]]]
+
+You can now check if your app is running. To test the recovery, kill your application and check that it will be relaunch.
+
+!!!! Monit configuration for a Pharo web application
+Most of applications depoyed on servers are web applications. What may happens is that your Pharo image is running (processus alive) but your image is not anymore able to handle HTTP requests (one reason may be a resource limit exceeded like the number of opened sockets or any other reason). In such cases, your application becomes unusable. A useful check would be to test if your application can deal with a simple HTTP request. We will ask monit to monitor your web server by doing regular checks to a predifined URL and validate the HTTP response content.
+Here is an example of monit configuration for a web application:
+[[[language=bash­
+alert me@domain.com
+
+check process myapp with pidfile /var/run/myapp.pid
+  start program = "/etc/init.d/myapp start"
+  stop program  = "/etc/init.d/myapp stop"
+  if failed (url http://localhost:8080/ping
+    and content == "pong"
+    and timeout 10 seconds)
+    then restart
+  if 5 restarts within 5 cycles 
+    then timeout
+]]]
+It will try to connect to the given URL, here localhost on the port 8080, do a HTTP GET on ''/ping''. Monit will restart the process myapp if the connection fails or if the content of the HTTP response is not equal to "pong" or if there is no answer before 10 seconds.
+In addition, you may want to monitor apache if there is an apache server in front of your application. You could do it with a dedicated configuration. You can adapt the configuration provided by monit. You just need to remove the http protocol check that is already done for your application.
+[[[language=bash­
+if failed host localhost port 80 with protocol http with timeout 25 seconds for 4 times within 5 cycles then restart ]]]
+Then, activate the apache monitoring and relaod the monit configuration:
+[[[language=bash­
+$ sudo ln -s /etc/monit/monitrc.d/apache2 /etc/monit/conf.d/apache2
+$ sudo monit reload]]]
+
+!! Backup
+One essential point when you have an application into production is that you do not want to lose data! In most cases, your image hosting your application should be stateless, i.e. if a problem occurs, no need to save the image state, just restart it. If you need persitent data, the best is to use a database (postgres, mongo, fuel, etc). What needs to be saved carefully is the database content. The backup is often proposed by cloud providers. If not, you need to ensure a regular backup and keep backups for a moving window time (ex: all backups from the last 30 days).
+
+!! Logging
+TODO
