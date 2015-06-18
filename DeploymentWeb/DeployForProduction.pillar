@@ -79,75 +79,92 @@ $ ./pharo myapp.image myapp.st
 
 Type ==Ctrl-c== to kill the server.
 
-In the following we present how to configure recovery, backup and logging.
+In Unix systems, init scripts are used to automatically start services when the server reboots and to monitor the status of these services. These scripts typically have a ==start== command, a ==stop== command and a ==status== command (some init-scripts have more than these 3 commands). Your application's init script should be configured to be automatically executed when the server restarts. This init script must typically be placed n the ''/etc/init.d'' directory.
 
-!!Recovery
+You can find a *template for such an init script>https://github.com/pharo-project/pharo-deployment-scripts/blob/master/pharo-service-script.sh* in the *GitHub pharo-project/pharo-deployment-scripts repository>https://github.com/pharo-project/pharo-deployment-scripts*. Give this script the name of your application. This script is derived from the template provided by the Ubuntu distribution in ==/etc/init.d/skeleton==.
 
-!!!Automatic Start
+The *pharo-run-script.sh>https://github.com/pharo-project/pharo-deployment-scripts/blob/master/pharo-run-script.sh* is another useful script. It runs a Pharo image with a given Smalltalk script file to evaluate (the ==myapp.st== you wrote above). You may need to edit this file to configure the Pharo VM path or options.
 
-One important requirement for application production is that they need to be up as much as possible. To limit downtimes, you should have ""a simple script to start/stop your application"". This script should be configured to be __run automatically at system startup__. On linux servers, it could be done with a simple Shell script that you place in the ''/etc/init.d'' directory.
+Create a folder with your application name ''myapp'', then copy the ==pharo-run-script.sh== script into this folder. Give the script execution permissions: ==chmod a+x ./myapp==.
 
-You can find a template named *pharo-service-script.sh>https://github.com/pharo-project/pharo-deployment-scripts/blob/master/pharo-service-script.sh* in the *GitHub pharo-project/pharo-deployment-scripts repository>https://github.com/pharo-project/pharo-deployment-scripts*. Copy it to set up your application service script and give it the name of your application. The ""pharo-service-script.sh"" script is derivated from the template provided by the Ubuntu distribution (/etc/init.d/skeleton). It manages the launch in background, with a given user, of another script named ""pharo-run-script.sh"".
-
-The *pharo-run-script.sh>https://github.com/pharo-project/pharo-deployment-scripts/blob/master/pharo-run-script.sh* is a simple script that runs a Pharo image with a given smalltalk script to evaluate. In most cases, you will not have to edit this file (maybe you will need to adjust the Pharo vm path and/or Pharo vm options). You just have to name files following these convention.
-
-Create a folder with your application name: ''myapp'', then copy the ""pharo-run-script.sh"" script into this folder by renaming it with the folder name: ''myapp''. Do not forget give the script execution permissions: ==chmod a+x ./myapp==. Finally, create a script named ''myapp.st'' that will be used to start your Pharo application (e.g. start a web server).
-You will end with a file hierarchy like this one:
-- /etc/init.d/myapp (service script)
+You should end with a file hierarchy like this one:
+- /etc/init.d/myapp (init script)
 - /opt/myapp
--- myapp (generic pharo run script)
--- myapp.st (image startup script)
--- myapp.image
--- myapp.changes
+--myapp (generic pharo run script)
+--myapp.st (image startup script)
+--myapp.image
+--myapp.changes
 - /usr/bin/pharo-vm-nox
 
 Then, you can test / run your application first by running the ==./myapp== script, then by using the service command (uses the pharo init script): ==service myapp start==, ==service myapp stop==.
 
-!!!Monitoring
-Your application could also crash or be killed by the system or alive but not responding to requests. In such cases, you would like to stop the application and restart it.
-To do so, you need to first detect if your application is running or not. It can be done with the previous script with the status command. If your application is a web application, you may wish to check if your application is able to answer to HTTP requests. To do so, you need to define some 'ping' url to your application that will be used by the monitoring tool.
 
-A simple solution to both monitor your application and take appropriate actions (e.g. restart) is to use the *monit tool>https://mmonit.com/* that can be easily installed:
-[[[language=bash
-$ sudo apt-get install monit]]]
-Then, the configuration of monit takes place in the ''/etc/monit/monitrc'' file.
-!!!!Monit Global Configuration
-!!!!!Monit Dashboard
+When the Pharo image crashes (this ''will'' happen), there must be a way to automatically recover from this crash. For this to work, (1) the application data must be backed up, (2) there must be a way to know when the application has crashed, and (3) there must be a way to automatically restart the application. In the following we cover these points.
+
+!!Backup
+
+You do not want to lose data! To do that, the simplest solution is to make your image stateless: if your image crashes, no data should be lost because no data is in the image. If your application requires persistent data (''e.g.'', user accounts), the best is to use a database (''e.g.'', PostgreSQL, MongoDB). You must then make sure that your database is backed up properly.
+
+!!Monitoring
+
+To automatically restart your application when it crashes, there must be a way to detect that it has crashed.
+
+With a standard operating system's init-script (see below), you can use the ==status== command to detect if Pharo is running or not. Nevertheless, Pharo can be running (the ==status== command detects it fine) but not responding (''i.e.'', HTTP requests never get answered). This can happen if the image is frozen for example. If your application is a web application, you may wish to check if your application is able to answer to HTTP requests. To do so, you need to define some ==ping== url to your application that will be used by the monitoring tool.
+
+A simple solution to both monitor your application and take appropriate actions (''e.g.'', restart) is to use the *monit utility>https://mmonit.com/monit*.
+
+You can configure Monit through the ==/etc/monit/monitrc== file.
+
+!!!Monit Global Configuration
+
+!!!!Monit Dashboard
+
 You can first activate the embedded HTTP dashboard of monit. We will only allow local connections with a given username/password.
-[[[language=bash
+
+[[[language=monit
 set httpd port 2812 and
   use address localhost  # only accept connection from localhost
   allow localhost        # allow localhost to connect to the server and
-  allow admin:monit      # require user 'admin' with password 'monit']]]
+  allow admin:monit      # require user 'admin' with password 'monit'
+]]]
+
 Do not forget to apply the new configuration:
-[[[language=bash
-$ sudo monit reload]]]
-It does not mean that you will not be able to connect to the monit dashboard from another host. You will just need to use an SSH tunnel to achieve that. If the server running your application and monit is named myserver.com, then you could simply run
-[[[language=bash
-$ ssh -L 2812:localhost:2812 myserver.com]]]
-Keep the SSH connection open, and then browse *http://localhost:2812>http://localhost:2812* to display the monit dashboard.
-!!!!!Email Settings
-If you want notifications from monit, you need to configure email settings so that monit can send emails. Edit the ''/etc/monit/monitrc'' file and add the following lines:
-[[[language=bash
-set mailserver <smtp.domain>]]]
 
-!!!!Monitor System Services
-
-Configuration files related to an application should be put into the ''/etc/monit/monitrc.d'' directory (more modular that everything in the core configuration file.
-To enable a configuration just symlink it to conf.d. We will first enable pre-defined configuration for SSH.
 [[[language=bash
-$ sudo ln -s /etc/monit/monitrc.d/openssh-server /etc/monit/conf.d/openssh-server
-$ sudo monit reload]]]
-""Warning"": default configurations fro well-known services are provided by monit but may require some adaptations (ex: wrong path to the PID file). To check errors, you may need to run monit in verbose mode:
-[[[language=bash
-$ sudo monit -v]]]
-and check the monit error log (default location is ''/var/log/monit.log'').
+$ sudo monit reload
+]]]
 
-!!!!Monit Configuration for a Simple Pharo Application
+To connect from a different place than localhost, use an SSH tunnel. If the server running both your application and monit is named ==myserver.com==, then you can execute the following to connect to your server and open a local port:
 
-First create a new file <myapp> (update myapp with your application name) in ''/etc/monit/monitrc.d''.
-We will check that the application is running
 [[[language=bash
+$ ssh -L 2812:localhost:2812 myserver.com
+]]]
+
+Keep the SSH connection open, and browse to *http://localhost:2812>http://localhost:2812* to display the monit dashboard.
+
+!!!!Email Settings
+
+If you want notifications from monit, you need to configure email settings so that monit can send emails. Edit the monit configuration file again and add the following line:
+
+[[[language=monit
+set mailserver <smtp.domain>
+]]]
+
+!!!Monitor System Services
+
+To check for errors, you may need to run monit in verbose mode:
+
+[[[language=bash
+$ sudo monit -v
+]]]
+
+and check the monit error log, by default in ==/var/log/monit.log==.
+
+!!!Monit Configuration for a Simple Pharo Application
+
+Application-specific configuration files must be added to the ==/etc/monit/monitrc.d== directory. Create a new ==myapp== file in this directory:
+
+[[[language=monit
 alert me@domain.com
 
 check process myapp with pidfile /var/run/myapp.pid
@@ -156,20 +173,21 @@ check process myapp with pidfile /var/run/myapp.pid
   if 5 restarts within 5 cycles
     then timeout
 ]]]
-The ''alert'' instruction is used to be notified about all alerts related to this service. The monitoring is described with the check command. We ask monit to check a given pid file. If there is no pid or no process associated to the pid, monit will start the program with the given instruction. The last instruction prevents infinite loops if there is a problem with the script.
 
-Start the monitoring
+With this in place, when a problem occurs, the ''alert'' instruction makes sure ==me@domain.com== is notified. The monitoring is described with the check command. We ask monit to check a given pid file. If there is no pid or no process associated to the pid, monit will start the program with the given instruction. The content of the ==/etc/init.d/myapp== init script is described below. The last instruction prevents infinite loops if there is a problem with the script.
+
 [[[language=bash
 $ sudo ln -s /etc/monit/monitrc.d/myapp /etc/monit/conf.d/myapp
-$ sudo monit reload]]]
+$ sudo monit reload
+]]]
 
-You can now check if your app is running. To test the recovery, kill your application and check that it will be relaunch.
+@@authorToDo what is the purpose of the symbolic link?
 
-!!!!Monit Configuration for a Pharo Web Application
+!!!Monit Configuration for a Pharo Web Application
 
-Most of applications depoyed on servers are web applications. What may happens is that your Pharo image is running (processus alive) but your image is not anymore able to handle HTTP requests (one reason may be a resource limit exceeded like the number of opened sockets or any other reason). In such cases, your application becomes unusable. A useful check would be to test if your application can deal with a simple HTTP request. We will ask monit to monitor your web server by doing regular checks to a predifined URL and validate the HTTP response content.
-Here is an example of monit configuration for a web application:
-[[[language=bash
+A Pharo image may be running (alive process) but not responding to HTTP requests anymore. In such cases, your application becomes unusable. This state can be verified by sending a simple HTTP request and checking for the response. We can ask monit to monitor your web server by doing regular checks to a predifined URL and validate the HTTP response content:
+
+[[[language=monit
 alert me@domain.com
 
 check process myapp with pidfile /var/run/myapp.pid
@@ -182,17 +200,20 @@ check process myapp with pidfile /var/run/myapp.pid
   if 5 restarts within 5 cycles 
     then timeout
 ]]]
-It will try to connect to the given URL, here localhost on the port 8080, do a HTTP GET on ''/ping''. Monit will restart the process myapp if the connection fails or if the content of the HTTP response is not equal to "pong" or if there is no answer before 10 seconds.
-In addition, you may want to monitor apache if there is an apache server in front of your application. You could do it with a dedicated configuration. You can adapt the configuration provided by monit. You just need to remove the http protocol check that is already done for your application.
-[[[language=bash
-if failed host localhost port 80 with protocol http with timeout 25 seconds for 4 times within 5 cycles then restart ]]]
-Then, activate the apache monitoring and relaod the monit configuration:
+
+This configuration will try to connect to the ==/ping== on localhost. If monit can not connect, or no answer arrives before 10 seconds, or the content is not exactly ==pong==, monit will restart the application.
+
+You may also want to monitor Apache if there is an Apache server in front of your application. You can do that by adapting the already existing ==apache2== monit configuration file:
+
+[[[language=monit
+if failed host localhost port 80 with protocol http with timeout 25 seconds for 4 times within 5 cycles then restart
+]]]
+
+Activate the Apache monitoring and reload the monit configuration:
+
 [[[language=bash
 $ sudo ln -s /etc/monit/monitrc.d/apache2 /etc/monit/conf.d/apache2
-$ sudo monit reload]]]
+$ sudo monit reload
+]]]
 
-!!Backup
-One essential point when you have an application into production is that you do not want to lose data! In most cases, your image hosting your application should be stateless, i.e. if a problem occurs, no need to save the image state, just restart it. If you need persitent data, the best is to use a database (postgres, mongo, fuel, etc). What needs to be saved carefully is the database content. The backup is often proposed by cloud providers. If not, you need to ensure a regular backup and keep backups for a moving window time (ex: all backups from the last 30 days).
-
-!!Logging
-TODO
+%  LocalWords:  monit
