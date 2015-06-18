@@ -1,14 +1,14 @@
 !WebSockets
 @cha:webSockets
 
-Sven Van Caekenberghe
+% Sven Van Caekenberghe
 
-September 2012 - Updated January 2013
-(This is a draft)
+% September 2012 - Updated January 2013
+% (This is a draft)
 
-The WebSocket protocol defines a full-duplex single socket connection over which messages can be sent between a client and a server. It simplifies much of the 
-complexity around bi-directional web communication and connection management. WebSocket represents the next evolutionary step in web communication compared to 
-Comet and Ajax.
+The WebSocket protocol defines a full-duplex single socket connection over which messages can be sent between a client and a server. It simplifies much of the complexity around bi-directional web communication and connection management. 
+WebSocket represents the next evolutionary step in Web communication compared to Comet and Ajax.
+And of course, Zinc HTTP Components supports Web sockets as you will discover throughout this chapter.
 
 !!An Introduction to WebSockets
 
@@ -16,26 +16,21 @@ HTTP, one of the main technologies of the internet, defines a communication prot
 lies with the client and each interaction consists of a client request and a server response. When correctly implemented and used, HTTP is enormously scaleable 
 and very flexible.
 
-With the arrival of advanced Web applications mimicking regular desktop applications with rich user interfaces, as well as mobile Web applications, it became 
-clear that HTTP was not suitable or not a great fit for two use cases:
+With the arrival of advanced Web applications mimicking regular desktop applications with rich user interfaces, as well as mobile Web applications, it became clear that HTTP was not suitable or not a great fit for two use cases:
 
-when the server wants to take the initiative and send the client a message
-when the client wants to send (many) (possibly asynchronous) short messages with little overhead
-In the HTTP protocol, the server cannot take the initiative to send a message, the only workaround is for the client to do some form of polling. For short 
-messages, the HTTP protocol adds quite a lot of overhead in the form of meta data headers. For many applications, the response (and the delay waiting for it) 
-are not needed. Previously, Comet and Ajax were used as (partial) solutions to these use cases.
+- when the server wants to take the initiative and send the client a message. In the HTTP protocol, the server cannot take the initiative to send a message, the only workaround is for the client to do some form of polling. 
+- when the client wants to send (many) (possibly asynchronous) short messages with little overhead. For short messages, the HTTP protocol adds quite a lot of overhead in the form of meta data headers. For many applications, the response (and the delay waiting for it) are not needed. 
 
-The WebSocket protocol defines a reliable communication channel between two equal parties, typically, but not necessarily, a Web client and a Web server, over 
-which asynchronous messages can be send with very little overhead. Messages can be any String or ByteArray. Overhead is just a couple of bytes. There is no such 
-thing as a direct reply or a synchronous confirmation.
+Previously, Comet and Ajax were used as (partial) solutions to these use cases.
+The WebSocket protocol defines a reliable communication channel between two equal parties, typically, but not necessarily, a Web client and a Web server, over which asynchronous messages can be send with very little overhead. 
+Messages can be any String or ByteArray. Overhead is just a couple of bytes. There is no such thing as a direct reply or a synchronous confirmation.
 
-Using WebSockets, a server can notify a client instantly of interesting events, and clients can quickly send small notifications to a server, possibly 
-multiplexing many virtual communications channels over a single network socket.
+Using WebSockets, a server can notify a client instantly of interesting events, and clients can quickly send small notifications to a server, possibly multiplexing many virtual communications channels over a single network socket.
 
 !!The WebSocket Protocol
 
-Zinc WebSockets implements RFC 6455 http://tools.ietf.org/html/rfc6455, not any of the previous development versions. For an introduction to, both 
-http://en.wikipedia.org/wiki/WebSocket and http://www.websocket.org are good starting points.
+Zinc WebSockets implements RFC 6455 *http://tools.ietf.org/html/rfc6455*, not any of the previous development versions. 
+For an introduction to, both *http://en.wikipedia.org/wiki/WebSocket* and *http://www.websocket.org* are good starting points.
 
 As a protocol, WebSocket starts with an initial setup handshake that is based on HTTP. The initiative for setting up a WebSocket lies with the client, who is 
 sending a so called connection upgrade request. The upgrade request contains a couple of special HTTP headers. The server begins as a regular HTTP server 
@@ -47,7 +42,10 @@ and to manage keeping alive the connection using ping and pong frames.
 
 !!Source Code
 
-The code implementing Zinc WebSockets resides in a single package called 'Zinc-WebSocket-Core' in the Zinc HTTP Components repositories. There is also an accompanying 'Zinc-WebSocket-Tests' package containing the unit tests. The ==ConfigurationOfZincHTTPComponents== has a group called =='WebSocket'== that you can load separately. Here the loading code snippet:
+The code implementing Zinc WebSockets resides in a single package called 'Zinc-WebSocket-Core' in the Zinc HTTP Components repository. 
+There is also an accompanying 'Zinc-WebSocket-Tests' package containing the unit tests. 
+The ==ConfigurationOfZincHTTPComponents== has a group called =='WebSocket'== that you can load separately. 
+Here the loading code snippet:
 
 [[[
 Gofer new
@@ -57,18 +55,19 @@ Gofer new
 (Smalltalk globals at: #ConfigurationOfZincHTTPComponents) project latestVersion load: 'WebSocket'.
 ]]]
 
-!!!Using Client Side WebSockets
+!!Using Client Side WebSockets
 
-An endpoint for a WebSocket is specified using a URL
+An endpoint for a WebSocket is specified using an URL:
 
 [[[
 ws://www.example.com:8088/my-app
 ]]]
 
-Two new schemes are defined, ==ws://== for regular WebSockets and ==wss://== for the secure (TLS/SSL) variant. The ==host:port== and path specification should be familiar.
+Two new schemes are defined, ==ws://== for regular WebSockets and ==wss://== for the secure (TLS/SSL) variant. The ==host:port:== and path specification should be familiar.
 
-Zinc WebSockets supports the usage of client side WebSockets of both the regular and secure variants (the secure variant requires Zodiac TLS/SSL). The API is 
-really simple, once you open the socket, you use ==sendMessage:== and ==readMessage:== and finally ==close==.
+Zinc WebSockets supports the usage of client side WebSockets of both the regular and secure variants.
+Note that the secure variant requires loading the Zodiac TLS/SSL Pharo project *http://smalltalkhub.com/#!/~SvenVanCaekenberghe/Zodiac*. 
+Zinc WebSockets API is really simple, once you opened the socket, you use ==sendMessage:== and ==readMessage:== and finally ==close==.
 
 Here is a client side example taking to a public echo service:
 
@@ -89,7 +88,7 @@ different frames of the same message. At the other end, these will be joined tog
 In any non-trivial application, you will have to add your own encoding and decoding to messages. In many cases, JSON will be the obvious choice as the client 
 end is often JavaScript. A modern, standalone JSON parser and writer is NeoJSON.
 
-To use secure web sockets, just use the proper URL scheme ==wss://== as in the following example:
+To use secure Web sockets, just use the proper URL scheme ==wss://== as in the following example:
 
 [[[
 | webSocket |
@@ -103,15 +102,13 @@ Of course, your image has to contain Zodiac and your VM needs access to the prop
 
 !!Using Server Side WebSockets
 
-Since the WebSocket protocol starts off as HTTP, it is logical that a ZnServer with a special delegate is the starting point. ==ZnWebSocketDelegate== implements 
-the standard ==handleRequest:== to check if the incoming request is a valid WebSocket connection upgrade request. If so, the matching 101 switching protocols 
-response is constructed and sent. From that moment on, the network socket stream is handed over to a new, server side ==ZnWebSocket== object.
+Since the WebSocket protocol starts off as HTTP, it is logical that a ZnServer with a special delegate is the starting point. ==ZnWebSocketDelegate== implements the standard ==handleRequest:== to check if the incoming request is a valid WebSocket connection upgrade request. If so, the matching 101 switching protocols response is constructed and sent. From that moment on, the network socket stream is handed over to a new, server side ==ZnWebSocket== object.
 
- ==ZnWebSocketDelegate== has two properties. An optional prefix implements a specific path, like ==/my-ws-app==. The required handler is any object implementing 
- ==value:== with the new web socket as argument.
+==ZnWebSocketDelegate== has two properties. An optional prefix implements a specific path, like ==/my-ws-app==. 
+The required handler is any object implementing ==value:== with the new Web socket as argument.
 
-Let's implement the echo service that we connected to as a client in the previous subsection. In essence, we should go in a loop, reading a message and sending 
-it back. Here is the code:
+Let's implement the echo service that we connected to as a client in the previous section. 
+In essence, we should go in a loop, reading a message and sending it back. Here is the code:
 
 [[[
 ZnServer startDefaultOn: 1701.
@@ -142,15 +139,13 @@ ConnectionClosed (or its more specific subclass ZnWebSocketClosed)
 The ==readMessage== call blocks on the socket stream waiting for input until its timeout expires, which will be signaled with a ConnectionTimedOut exception. 
 In most applications, you should just keep on reading, essentially ignoring the timeout for an infinite wait on incoming messages.
 
-This behavior is implemented in the ==ZnWebSocket>>runWith:== convenience method: it enters a loop reading messages and passing them to a block, continuing on 
-timeouts. This simplifies our example:
+This behavior is implemented in the ==ZnWebSocket>>runWith:== convenience method: it enters a loop reading messages and passing them to a block, continuing on timeouts. This simplifies our example:
 
 [[[
 ZnServer startDefaultOn: 1701.
 ZnServer default delegate: (ZnWebSocketDelegate handler:
   [ :webSocket |
     webSocket runWith: [ :message |
-      message := webSocket readMessage.
       webSocket sendMessage: message ] ]).
 ]]]
 
@@ -308,6 +303,6 @@ the WebSocket protocol. It is thus easiest to organize things so that your clien
 
 The implementation of Zinc WebSockets as an add-on to Zinc HTTP Components was made possible in part through financial backing by Andy Burnett of Knowinnovation Inc. and ESUG.
 
-!! Conclusion
+!!Conclusion
 
 WebSockets integrate smoothly with Zinc to form another part of the Pharo web stack.
