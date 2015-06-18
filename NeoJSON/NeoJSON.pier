@@ -79,12 +79,6 @@ While reading:
 -JSON maps become instances of mapClass, ==Dictionary== by default;
 -JSON lists become instances of listClass, ==Array== by default.
 
-This example creates a Pharo dictionary (with ==x== and ==y== keys):
-
-[[[language=smalltalk
-NeoJSONReader fromString: ' { "x" : 1, "y" : 2 } '.
-]]]
-
 The following example creates a Pharo array from a JSON expression:
 
 [[[language=smalltalk
@@ -99,31 +93,47 @@ This expression can be decomposed to better control the reading process:
   next.
 ]]]
 
-The above expression is equivalent to the previous one except that an ordered collection will be used in place of an array.
-
-There is also an option to convert all map keys to symbols, which is off by default. 
-
-@@authorToDo DC: example of how to specify options
+The above expression is equivalent to the previous one except that a Pharo ordered collection will be used in place of an array.
 
 
+The next example creates a Pharo dictionary (with =='x'== and =='y'== keys):
+
+[[[language=smalltalk
+NeoJSONReader fromString: ' { "x" : 1, "y" : 2 } '.
+]]]
+
+To automatically convert keys to symbols, pass ==true== to ==propertyNamesAsSymbols:== like this:
+
+[[[language=smalltalk
+(NeoJSONReader on: ' { "x" : 1, "y" : 2 } ' readStream)
+	propertyNamesAsSymbols: true;
+	next
+]]]
+
+The result of this expression is a dictionary with ==#x== and ==#y== as keys.
 
 !!!Writing to JSON
 
 While writing:
 
--Dictionary and SmallDictionary become maps
--all other Collection classes become lists
--all other Objects are rejected
+-instances of ==Dictionary== and ==SmallDictionary== become maps;
+-all other collections become lists;
+-all other non-primitive objects are rejected.
 
 Here are some examples writing in generic mode:
 
-[[[
+[[[language=smalltalk
 NeoJSONWriter toString: #(1 2 3).
-
 NeoJSONWriter toString: { Float pi. true. false. 'string' }.
-
-NeoJSONWriter toStringPretty: (Dictionary new at: #x put: 1; at: #y put: 2; yourself).
+NeoJSONWriter toString: { #a -> '1' . #b -> '2' } asDictionary.
 ]]]
+
+Above expressions return a compact string (/i.e./, with neither indentation nor new lines). To get a nicely formatted output, use ==toStringPretty:== like this:
+
+[[[language=smalltalk
+NeoJSONWriter toStringPretty: #(1 2 3).
+]]]
+
 NeoJSONWriter can output either in a compact format (the default) or in a pretty printed format. 
 
 SD: examples how to do that.
