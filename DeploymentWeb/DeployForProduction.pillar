@@ -8,7 +8,7 @@ The easiest (and fastest) way to host your application is to host it in the clou
 
 *PharoCloud>http://pharocloud.com*, for example, proposes pre-packaged solutions (including Seaside and Pier, database support) as well as the possibility to use your own Pharo image. You could start very quickly from there but you do not have full control on your pharo stack. It is enough in most cases: PharoCloud manages defaults for you.
 
-There are many other cloud providers including *Amazon AWS>https://aws.amazon.com/*, *Openshit>https://www.openshift.com/* and *Microsoft Azure>http://azure.microsoft.com*. Many Pharo users use *DigitalOcean>https://www.digitalocean.com/* as it is both simple and cheap.
+There are many other cloud providers including *Amazon AWS>https://aws.amazon.com/*, *Openshit>https://www.openshift.com/*, *OVH>https://www.ovh.com/fr* and *Microsoft Azure>http://azure.microsoft.com*. Many Pharo users use *DigitalOcean>https://www.digitalocean.com/* as it is both simple and cheap.
 
 Choose your cloud provider according to your needs.
 
@@ -18,7 +18,7 @@ In the rest of this chapter, we detail how to setup a server to host a Pharo web
 
 A lot of pharo developers use Mac OS X to develop their applications but it is not really a solution for a production deployment as there is no more Apple server hardware. Most Pharo developers prefer to deploy on GNU/Linux because GNU/Linux stability is well known. Deploying on Windows is a bit more complex and less supported by cloud providers.
 
-There are many Linux distributions you can choose from. If you restrict your choice to well-known open-source distributions, competitors are *Centos>http://www.centos.org*, *Debian>http://www.debian.org* and *Ubuntu>http://www.ubuntu.com*. Most distribution will do the job, choose the most appropriate for you. A long-term support (''aka.'', LTS) version is welcomed if you do not want to update your operating system too often. The Pharo Virtual Machine (VM) comes pre-packages for some distributions. For other distributions, you will have to compile the VM sources yourself. Pay attention that the Pharo VM is still 32bits as of 2015 and you will have to install 32-bit libraries on your 64-bit Operating System.
+There are many Linux distributions you can choose from. If you restrict your choice to well-known open-source distributions, competitors are *Centos>http://www.centos.org*, *Debian>http://www.debian.org* and *Ubuntu>http://www.ubuntu.com*. Most distribution will do the job, choose the most appropriate for you. A long-term support (''aka.'', LTS) version is welcomed if you do not want to update your operating system too often. The Pharo Virtual Machine (VM) comes pre-packaged for some distributions. For other distributions, you will have to compile the VM sources yourself. Pay attention that the Pharo VM is still 32bits as of 2015 and you will have to install 32-bit libraries on your 64-bit Operating System.
 
 !!Build your Image
 
@@ -56,8 +56,7 @@ ZnServer default delegate
   map: '/' to: 'redirect-to-image'. 
 ZnServer default start
 ]]]
-
-@@authorToDo Damien: explain what the above script does
+This script will start an instance of the Zinc Web Server on localhost on the port 8080 and store it as the default instance. We configured the Zinc instance to log on the standard output, we changed the default root (/) handler to redirect to your new /image web app. ==MyFirstWebApp== class handles HTTP requests by implementing the ==#handleRequest:== message.
 
 You can test the startup script like this:
 
@@ -79,11 +78,11 @@ $ ./pharo myapp.image myapp.st
 
 Type ==Ctrl-c== to kill the server.
 
-In Unix systems, init scripts are used to automatically start services when the server reboots and to monitor the status of these services. These scripts typically have a ==start== command, a ==stop== command and a ==status== command (some init-scripts have more than these 3 commands). Your application's init script should be configured to be automatically executed when the server restarts. This init script must typically be placed n the ''/etc/init.d'' directory.
+In Unix systems, init scripts are used to automatically start services when the server reboots and to monitor the status of these services. These scripts typically have a ==start== command, a ==stop== command and a ==status== command (some init-scripts have more than these 3 commands). Your application's init script should be configured to be automatically executed when the server restarts. This init script must typically be placed in the ''/etc/init.d'' directory.
 
 You can find a *template for such an init script>https://github.com/pharo-project/pharo-deployment-scripts/blob/master/pharo-service-script.sh* in the *GitHub pharo-project/pharo-deployment-scripts repository>https://github.com/pharo-project/pharo-deployment-scripts*. Give this script the name of your application. This script is derived from the template provided by the Ubuntu distribution in ==/etc/init.d/skeleton==.
 
-The *pharo-run-script.sh>https://github.com/pharo-project/pharo-deployment-scripts/blob/master/pharo-run-script.sh* is another useful script. It runs a Pharo image with a given Smalltalk script file to evaluate (the ==myapp.st== you wrote above). You may need to edit this file to configure the Pharo VM path or options.
+The *pharo-run-script.sh>https://github.com/pharo-project/pharo-deployment-scripts/blob/master/pharo-run-script.sh* is another useful script. It runs a Pharo image with a pre-defined Smalltalk script file to evaluate (the ==myapp.st== you wrote above). You may need to edit this file to configure the Pharo VM path or options.
 
 Create a folder with your application name ''myapp'', then copy the ==pharo-run-script.sh== script into this folder. Give the script execution permissions: ==chmod a+x ./myapp==.
 
@@ -150,6 +149,12 @@ set mailserver <smtp.domain>
 ]]]
 
 !!!Monitor System Services
+Configuration files related to an application (or a service) should be put into the ==/etc/monit/monitrc.d== directory (more modular that everything in the core configuration file). To enable a configuration just symlink it to ==conf.d==.
+We will first enable pre-defined configuration for SSH.
+[[[language=bash­
+$ sudo ln -s /etc/monit/monitrc.d/openssh-server /etc/monit/conf.d/openssh-server
+$ sudo monit reload]]]
+""Warning"": default configurations for well-known services are provided by monit but may require some adaptations (ex: wrong path to the PID file).
 
 To check for errors, you may need to run monit in verbose mode:
 
@@ -173,14 +178,12 @@ check process myapp with pidfile /var/run/myapp.pid
     then timeout
 ]]]
 
-With this in place, when a problem occurs, the ''alert'' instruction makes sure ==me@domain.com== is notified. The monitoring is described with the check command. We ask monit to check a given pid file. If there is no pid or no process associated to the pid, monit will start the program with the given instruction. The last instruction prevents infinite loops if there is a problem with the script.
-
+With this in place, when a problem occurs, the ''alert'' instruction makes sure ==me@domain.com== is notified by email. The monitoring is described with the check command. We ask monit to check a given pid file. If there is no pid or no process associated to the pid, monit will start the program with the given instruction. The last instruction prevents infinite loops if there is a problem with the script.
+We  now activate the monitoring of myapp:
 [[[language=bash
 $ sudo ln -s /etc/monit/monitrc.d/myapp /etc/monit/conf.d/myapp
 $ sudo monit reload
 ]]]
-
-@@authorToDo what is the purpose of the symbolic link?
 
 !!!Monit Configuration for a Pharo Web Application
 
@@ -200,7 +203,7 @@ check process myapp with pidfile /var/run/myapp.pid
     then timeout
 ]]]
 
-This configuration will try to connect to the ==/ping== on localhost. If monit can not connect, or no answer arrives before 10 seconds, or the content is not exactly ==pong==, monit will restart the application.
+This configuration will try to connect to the ==/ping== URL on localhost. If monit can not connect, or no answer arrives before 10 seconds, or the content is not exactly ==pong==, monit will restart the application.
 
 You may also want to monitor Apache if there is an Apache server in front of your application. You can do that by adapting the already existing ==apache2== monit configuration file:
 
