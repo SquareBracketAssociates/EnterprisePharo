@@ -63,11 +63,11 @@ PillarChap
 	 >> Damien should do a pass
 		
 NeoCSV/NeoCSV.pier
+	>> Damien is working on it (2015/06/19)
 	>> Stef should re read it.
-	>> then Damien
 	
 NeoJSON/NeoJSON.pier
-	>> Damien is working on it (2015/06/08)
+	>> Damien finished his pass on it (2015/06/19)
 	>> Stef should re read it.
 
 WebSockets/WebSockets.pier
@@ -98,6 +98,9 @@ Zinc-HTTP
 	>> Luc split it into 2 chapters: client and server
 	>> This chapter has been deleted
 	
+DeploymentWeb
+        >> Damien did his pass on it (2015/06/19)
+
 To remove from a Web book:
 
 	NativeBoost/NativeBoost.pier
