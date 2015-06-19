@@ -218,4 +218,29 @@ $ sudo ln -s /etc/monit/monitrc.d/apache2 /etc/monit/conf.d/apache2
 $ sudo monit reload
 ]]]
 
-%  LocalWords:  monit
+!!! Put an HTTP server in front of your web application
+
+You may wonder why it is a good idea to put a web server like Apache or Nginx in front of your Pharo web application? Mature web server fully implements standards and commoditized functionalities, e.g. virtual hosting handling (multiple domains on the same IP address), URL rewriting, etc. They are also more stable, have built-in mechanism for binding to privileged ports (below 1024) as root and then executing as a non-privileged user, and more robust to attacks. They can also be used to serve static content and to display a maintenance page.
+
+Here is a simple Apache configuration that can be used to redirect the incoming traffic (internet) on the default HTTP port (80) to your Pharo web application running on the local interface on the port 8080.
+[[[language=apache
+<VirtualHost *:80>
+  ServerName mydomain.com
+  #ServerAlias anothercooldomain.org
+ 
+  ProxyPreserveHost On
+  ProxyRequests Off
+  <Proxy *>
+    Order allow,deny
+    Allow from all
+  </Proxy>
+  ProxyPass / http://127.0.0.1:8080/
+  ProxyPassReverse / http://127.0.0.1:8080/
+
+  ErrorLog /var/log/apache2/myapp-error.log
+  CustomLog /var/log/apache2/myapp-access.log combined
+</VirtualHost>
+]]]
+The first section declares the full server name (including the domain), the second one activates the proxy to forward the traffic to your Pharo web application, and the last one creates dedicated log files.
+
+%  LocalWords:  monit,
