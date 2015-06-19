@@ -208,8 +208,8 @@ The above expression returns an instance of ==DateAndTime==. The message ==encod
 [[[language=smalltalk
 String streamContents: [ :stream |
   (NeoJSONWriter on: stream)
-	for: DateAndTime customDo: [ :mapping | mapping encoder: #printString ];
-	nextPut: DateAndTime now ].
+    for: DateAndTime customDo: [ :mapping | mapping encoder: #printString ];
+    nextPut: DateAndTime now ].
 ]]]
 
 The above expression returns a string representing the current date and time.
@@ -219,60 +219,29 @@ On modern hardware, NeoJSON can write or read tens of thousands of small objects
 
 !!Emitting null values
 
-When mapping my objects with NeoJSONWriter, it is not writing the properties whose values are null.
+For efficiency reasons, by default, ==NeoJSONWriter== does not write ==nil== values:
 
-[[[
-  NeoJSONPropertyMapping>>#writeObject: anObject on: jsonMapWriter
-  | value |
-  value := getter value: anObject.
-  value
-    ifNotNil: [ jsonMapWriter writeKey: propertyName value: value as: valueSchema ] 
+[[[language=smalltalk
+String streamContents: [ :stream |
+  (NeoJSONWriter on: stream)
+  mapAllInstVarsFor: Point;
+  nextPut: Point new ].
 ]]]
 
-It is a good default (saves space, and cpu cycles). But in there are cases where the consumer of the JSON objects expect the objects to have all the attributes 
-previously defined.
+The above expression returns the =='{}'== string. If you want to see the uninitialized instance properties, pass ==true== to the ==writeNil:== message:
 
-NeoJSON is cool and it supports this behavior. Set the writeNil: to true as follows and you are done.
-
-[[[
-
- String streamContents: [ :stream |
-    (NeoJSONWriter on: stream) 
-      writeNil: true;
-      mapAllInstVarsFor: Point;
-      nextPut: Point new.
-]]]
-which will give you:
-[[[
-  {"x":null,"y":null}
-]]]
-instead of:
-
-[[[
-  {}
+[[[language=smalltalk
+String streamContents: [ :stream |
+  (NeoJSONWriter on: stream)
+  mapAllInstVarsFor: Point;
+  writeNil: true;
+  nextPut: Point new ].
 ]]]
 
-!! Without Mapping Definition
-
-Both NeoCSV and NeoJSON can operate in two ways, (1) without the definition of any schema's or (2) with the definition of schema's and mappings. Therefore you 
-can use them both using a quick and dirty explore style. Here are some examples: 
-
-[[[
-'my-data.csv' asFileReference readStreamDo: [ :in | (NeoCSVReader on: in) upToEnd ].
-
-  ->  an array of arrays
-]]]
-
-[[[
-'my-data.json' asFileReference readStreamDo: [ :in | (NeoJSONReader on: in) next ].
-
-  => objects structured using dictionaries and arrays
-]]]
-
+The above expression returns the =='{"x":null,"y":null}'== string.
 
 !! Conclusion
 
-NeoJSON is a powerful library to convert objects. Now Sven developed STON (Smalltalk object notation) which is closer to Pharo syntax and handles cycles and 
-references between serialized objects. 
+NeoJSON is a powerful library to convert objects. Sven, the author of NeoJSON, also developed STON (Smalltalk object notation) which is closer to Pharo syntax and handles cycles and references between serialized objects.
 
 %  LocalWords:  Caekenberghe
