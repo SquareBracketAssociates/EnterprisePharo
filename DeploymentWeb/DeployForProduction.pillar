@@ -96,8 +96,7 @@ You should end with a file hierarchy like this one:
 --myapp.changes
 - /usr/bin/pharo-vm-nox
 
-Then, you can test / run your application first by running the ==./myapp== script, then by using the service command (uses the pharo init script): ==service myapp start==, ==service myapp stop==.
-
+When the file hierarchy is ready, you can start your application by executing the ==./myapp== script or by using the init script through ==service myapp start==.
 
 When the Pharo image crashes (this ''will'' happen), there must be a way to automatically recover from this crash. For this to work, (1) the application data must be backed up, (2) there must be a way to know when the application has crashed, and (3) there must be a way to automatically restart the application. In the following we cover these points.
 
@@ -109,7 +108,7 @@ You do not want to lose data! To do that, the simplest solution is to make your 
 
 To automatically restart your application when it crashes, there must be a way to detect that it has crashed.
 
-With a standard operating system's init-script (see below), you can use the ==status== command to detect if Pharo is running or not. Nevertheless, Pharo can be running (the ==status== command detects it fine) but not responding (''i.e.'', HTTP requests never get answered). This can happen if the image is frozen for example. If your application is a web application, you may wish to check if your application is able to answer to HTTP requests. To do so, you need to define some ==ping== url to your application that will be used by the monitoring tool.
+With a standard operating system's init script such as the one described above, you can use the ==status== command to detect if Pharo is running or not. Nevertheless, Pharo can be running (the ==status== command detects it fine) but not responding (''i.e.'', HTTP requests never get answered). This can happen if the image is frozen for example. If your application is a web application, you may wish to check if your application is able to answer to HTTP requests. To do so, you need to define some ==ping== url to your application that will be used by the monitoring tool.
 
 A simple solution to both monitor your application and take appropriate actions (''e.g.'', restart) is to use the *monit utility>https://mmonit.com/monit*.
 
@@ -160,7 +159,7 @@ $ sudo monit -v
 
 and check the monit error log, by default in ==/var/log/monit.log==.
 
-!!!Monit Configuration for a Simple Pharo Application
+!!!Monit Configuration to Control a Pharo Application
 
 Application-specific configuration files must be added to the ==/etc/monit/monitrc.d== directory. Create a new ==myapp== file in this directory:
 
@@ -174,7 +173,7 @@ check process myapp with pidfile /var/run/myapp.pid
     then timeout
 ]]]
 
-With this in place, when a problem occurs, the ''alert'' instruction makes sure ==me@domain.com== is notified. The monitoring is described with the check command. We ask monit to check a given pid file. If there is no pid or no process associated to the pid, monit will start the program with the given instruction. The content of the ==/etc/init.d/myapp== init script is described below. The last instruction prevents infinite loops if there is a problem with the script.
+With this in place, when a problem occurs, the ''alert'' instruction makes sure ==me@domain.com== is notified. The monitoring is described with the check command. We ask monit to check a given pid file. If there is no pid or no process associated to the pid, monit will start the program with the given instruction. The last instruction prevents infinite loops if there is a problem with the script.
 
 [[[language=bash
 $ sudo ln -s /etc/monit/monitrc.d/myapp /etc/monit/conf.d/myapp
