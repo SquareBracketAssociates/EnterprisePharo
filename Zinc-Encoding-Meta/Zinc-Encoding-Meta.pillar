@@ -120,7 +120,7 @@ optimized somewhat for ASCII and to a lesser degree for Latin1 and some other co
 !!! Converting Strings and ByteArrays
 
 The first use of encoders is to convert Strings to ByteArrays and vice-versa.
-We however deal only indirectly with character encoders. String and ByteArray have some convenience methods to do encoding and decoding:
+We however deal only indirectly with character encoders. ==String== and ==ByteArray== have some convenience methods to do encoding and decoding:
 
 [[[
 'Hello' utf8Encoded. 
@@ -262,8 +262,8 @@ Internally, the character streams will use an encoder instance to do the actual 
 
 Up until now we spoke about Strings as being a collection of Characters, each of which is represented as a Unicode code point. 
 And this is conceptually totally how they should be thought about. However, in reality, the class ==String== is an abstract class with two concrete subclasses. 
-This will show up when inspecting String instances, so it is important to understand what is going on. Let's explore the actual classes of 
-some example strings.
+This will show up when inspecting ==String== instances, so it is important
+to understand what is going on. Consider the following example strings:
 
 [[[
 'Hello' class.
@@ -276,32 +276,29 @@ some example strings.
   -> WideString
 ]]]
 
-Simple ASCII strings are ByteStrings. Strings using special characters may be WideStrings as some non-ASCII strings are still ByteStrings. 
-The explanation is very simple when considering the Unicode code points used for each character.
+Simple ASCII strings are ByteStrings. Strings using special characters may be WideStrings or may still be ByteStrings. 
+The explanation of the use of the ==WideString== or ==ByteString== class is very simple when considering the Unicode code points used for each character.
 
 In the first case, for ASCII, the code points are always less than 128. Hence they fit in one byte. The second string is using Latin-1 characters, whose code 
-points are less than 256. These still fit in a byte. A ==ByteString== is a String that 
-only stores Unicode code points that fit in a byte in an implementation that is very efficient. Note that ByteString is a variable byte subclass of String. 
+points are less than 256. These still fit in a byte. A ==ByteString== is a ==String== that 
+only stores Unicode code points that fit in a byte, in an implementation that is very efficient. Note that ==ByteString== is a variable byte subclass of ==String==. 
 
 Our last example has code points that no longer fit in a byte. To be able to store these, ==WideString== allocates 32-bit (4 byte) slots for each character. This 
-implementation is necessarily less efficient. Note that WideString is a variable word subclass of String.
+implementation is necessarily less efficient. Note that ==WideString== is a variable word subclass of ==String==.
 
-In practice, the difference between ByteString and WideString should not matter. Conversions are done automatically when needed.
+In practice, the difference between ==ByteString== and ==WideString== should not matter. Conversions are done automatically when needed.
 
 [[[
 'abc' copy at: 1 put: $α; class.  
  -> WideString  
 ]]]
 
-As the above example shows, assigning a Unicode character, $α, to a ByteString, 'abc' converts it to a WideString. This is actually done using a 
-==becomeForward:== message. When benchmarking, this conversion might show up as taking significant time. If you know upfront that you will need WideStrings, it 
-can be better to start with the right type.
+As the above example shows, assigning a Unicode character, ==$α==, to a ==ByteString==, =='abc'== converts it to a ==WideString==. (This is actually done using a ==becomeForward:== message.) When benchmarking, this conversion might show up as taking significant time. If you know upfront that you will need WideStrings, it can be better to start with the right type.
 
 
 !!! ByteString and ByteArray equivalence is an implementation detail
 
-There is another implementation detail worth mentioning. For the Pharo virtual machine, more specifically, for a number of primitives, ByteString and ByteArray 
-are equivalent. Given what we now know, that makes sense. Consider the following code:
+There is another implementation detail worth mentioning: for the Pharo virtual machine, more specifically, for a number of primitives, ==ByteString== and ==ByteArray== instances are equivalent. Given what we now know, that makes sense. Consider the following code:
 
 [[[
 'abcdef' asByteArray.
@@ -317,8 +314,7 @@ are equivalent. Given what we now know, that makes sense. Consider the following
   -> #[65 66 67 100 101 102]
 ]]]
 
-Pay close attention: in the third expression, we send the message ==replaceFrom:to:with:== on a ==ByteString==, but give a ==ByteArray== as third argument. 
-So we are replacing part of a ==ByteString== with a ==ByteArray==. And it works!
+In the third expression, we send the message ==replaceFrom:to:with:== on a ==ByteString==, but give a ==ByteArray== as third argument. So we are replacing part of a ==ByteString== with a ==ByteArray==. And it works!
 
 The last example goes the other way around: we replace part of a ==ByteArray== with a ==ByteString==, which works as well. 
 
@@ -332,7 +328,7 @@ What about doing the same mix up with elements ?
   => Error: improper store into indexable object
 ]]]
 
-This is more what we expect: we're not allowed to do this. We are mixing two types that are not equivalent, like Character and Integer. 
+This is more what we expect: we're not allowed to do this. We are mixing two types that are not equivalent, like ==Character== and ==Integer==. 
 
 So although it is true that some equivalence between ByteString and ByteArray exists, you should not mix up the two. It is an implementation detail that you 
 should not rely upon.
@@ -341,7 +337,7 @@ should not rely upon.
 !!! Beware of bogus conversions
 
 Given a string, it is tempting to send it the message ==asByteArray== to convert it to bytes. Similary, it is tempting to convert a byte array by 
-sending it the message ==asString==. These are bogus conversions that you should not use. For some strings it will work, for other not. Basically 
+sending it the message ==asString==. These are however bogus conversions that should not be used as for some strings they will work, but for others not. Success depends on the code points of the characters in the string. Basically 
 the conversion is possible for strings for which the following property holds:
 
 [[[
@@ -355,7 +351,7 @@ the conversion is possible for strings for which the following property holds:
   -> false
 ]]]
 
-Now, even though the first two can be converted, you are not using the same encoding. Here is a way to explicitly express this idea:
+Now, even though the first two can be converted, they will not be using the same encoding. Here is a way to explicitly express this idea:
 
 [[[
 #(null ascii latin1 utf8) allSatisfy: [ :each | 
@@ -382,18 +378,17 @@ The lazy conversion for proper Unicode WideStrings will give unexpected results:
   => #[0 0 3 149 0 0 3 187 0 0 3 187 0 0 3 172 0 0 3 180 0 0 3 177]
 ]]]
 
-This 'conversion' does not correspond to any known encoding. It is the result of writing 4-byte Unicode code points as Integers. Needless to say, using this is 
-a bug no matter how you look at it.
+This 'conversion' does not correspond to any known encoding. It is the result of writing 4-byte Unicode code points as Integers.
 
-In this century you will look silly for not implementing proper support for all languages. When converting from strings to bytes, use a proper, explicit 
-encoding - and vice versa.
+@@note Using this is a bug no matter how you look at it. In this century you will look silly for not implementing proper support for all languages. When converting from strings to bytes  -- and vice versa -- use a proper, explicit encoding.
 
 
 !!! Strict and lenient encoding
 
-When we said earlier that no encoding (or the null encoder) and Latin-1 encoding are the same, we lied. There are actually 'holes' in the table, some byte 
-values are undefined, which a strict encoder won't allow. For example, Unicode code point 150 is, strictly speaking, not in Latin-1. Depending on the 'strict' 
-setting, you will get an error or there will be a silent conversion. Here is some code illustrating this point.
+No encoding (or the null encoder) and Latin-1 encoding are in fact not completely the same. This is because there are 'holes' in the table: some byte 
+values are undefined, which a strict encoder won't allow, and the default encoder is strict. 
+
+For example, the Unicode code point 150 is strictly speaking not in Latin-1:
 
 [[[
 ZnByteEncoder latin1 encodeString: 150 asCharacter asString.
@@ -402,6 +397,9 @@ ZnByteEncoder latin1 encodeString: 150 asCharacter asString.
 ZnByteEncoder latin1 decodeBytes: #[ 150 ].
   -> ZnCharacterEncodingError: 'Character Unicode code point outside encoder range'
 ]]]
+
+The encoder can however be instructed to ==beLenient==, which will produce a silent conversion (if that is possible). In this case, Unicode character 150 (==U+0096==) is an unprintable control character meaning 'Start of Protected Area' (SPA) and is strictly speaking not part of Latin-1. 
+
 [[[
 ZnByteEncoder latin1 beLenient encodeString: 150 asCharacter asString.
   -> #[ 150 ]
@@ -409,6 +407,9 @@ ZnByteEncoder latin1 beLenient encodeString: 150 asCharacter asString.
 ZnByteEncoder latin1 beLenient decodeBytes: #[ 150 ].
   -> ''
 ]]]
+
+You can explicity access both the allowed byte or character values, i.e. the domain of encoder or decoder:
+
 [[[
 ZnByteEncoder latin1 characterDomain includes: 150 asCharacter.
   -> false
@@ -417,51 +418,41 @@ ZnByteEncoder latin1 byteDomain includes: 150.
   -> false
 ]]]
 
-The first two expressions with give a ZnCharacterEncodingError, 'Character Unicode code point outside encoder ranger'. The default encoder is strict. 
-
-Asking the encoder to ==#beLenient== results in the value going through (if that is possible). Unicode character 150 (\U\+0096) is an unprintable control 
-character meaning 'Start of Protected Area' (SPA) and is strictly speaking not part of Latin-1. 
-
-You can explicity access both the allowed byte or characters values, the domain of encoder or decoder.
-
-Note that the lower half of a byte encoding, the ASCII part between 0 and 127, is always treated as mapping one on one.
-
+Note that the lower half of a byte encoding, the ASCII part between 0 and 127, is always treated as a one to one mapping.
 
 !!! Available Encoders
 
-Pharo comes with support for the most important encodings currently used, as well as with support for some important legacy encodings. Seen as the objects 
+Pharo comes with support for the most important encodings currently used, as well as with support for some important legacy encodings. Seen as the classes 
 implementing them, the following encoders are available:
 
-- ZnUTF8Encoder
-- ZnUTF16Encoder
-- ZnByteEncoder
-- ZnNullEncoder
+- ==ZnUTF8Encoder==
+- ==ZnUTF16Encoder==
+- ==ZnByteEncoder==
+- ==ZnNullEncoder==
 
-Where ==ZnByteEncoder== groups a large number of encodings. Here is a list of all recognized, canonical names: windows874, windows1255, xcp1254, iso88594, iso885914, windows1256, xcp1255 greek, 
+Where ==ZnByteEncoder== groups a large number of encodings. This list is available as ==ZnByteEncoder knownEncodingIdentifiers==. Here is a list of all recognized, canonical names: windows874, windows1255, xcp1254, iso88594, iso885914, windows1256, xcp1255 greek, 
 iso88595, iso885915, windows1257, xcp1256, iso88593, iso88596, cp1250, iso885916, windows1258, maccyrillic, cp1251, koi8u, mac, xcp1258, iso88597, 
 cp1252, iso88598, cp874, xcp1257, koi8r, cp1253, iso88599, arabic, koi8, cp1254, macroman, cyrillic, cp1255, ibm866, latin1, cp1256,
  latin2, cp1257, cp866, macintosh, latin3, cp1258, latin4, xmaccyrillic, latin5, latin6, windows1250, ibm819, windows1251, xcp1250, iso885910, 
- windows1252, xcp1251, iso88591, iso885911, windows1253, xcp1252, hebrew, iso88592, windows1254, xcp1253, xmacroman, dos874 and  iso885913. 
- This list is available as ==ZnByteEncoder knownEncodingIdentifiers==.
-
+ windows1252, xcp1251, iso88591, iso885911, windows1253, xcp1252, hebrew, iso88592, windows1254, xcp1253, xmacroman, dos874 and iso885913. 
 
 !! Mime-Types
 
-A mime-type is an official, cross-platform definition of a file or document type or format. The official term is an *Internet media type>http://en.wikipedia.org/wiki/Mime-type*.
+A mime-type is a standard, cross-platform definition of a file or document type or format. The official term is an *Internet media type>http://en.wikipedia.org/wiki/Internet_media_type*.
 
-Mime-types are modeled using ==ZnMimeType== objects which have 3 components:
+Mime-types are modeled using ==ZnMimeType== objects, which have 3 components:
 
 # a main type, for example ==text== or ==image==, 
 # a sub type, for example ==plain== or ==html==, or ==jpeg==, ==png== or ==gif==, and 
 # a number of attributes, for example ==charset=utf-8==.
 
-The mime-type syntax is ==<main>/<sub>[;<param1>=<value1>[,<param2>=<value2>]*]==.
+The mime-type syntax is as follows: ==<main>/<sub>[;<param1>=<value1>[,<param2>=<value2>]*]==.
 
 !!! Creating Mime-Types
 
-You create instances of ZnMimeType by explicitly specifying its components, by parsing a string or by accessing predefined values. In any case, you always get a new instance.
+Instances of ==ZnMimeType== are created by explicitly specifying its components, through parsing a string or by accessing predefined values. In any case, a new instance is always created.
 
-The class side of ==ZnMimeType== has some convenience methods for accessing well known mime-types. Doing so makes sure you get the formulation right. 
+The class side of ==ZnMimeType== has some convenience methods (in the ==convenience== protocol) for accessing well known mime-types, which is the recommended way for obtaining these mime-types:
 
 [[[
 ZnMimeType textHtml.
@@ -471,21 +462,21 @@ ZnMimeType imagePng
   -> image/png
 ]]]
 
-Here is how you would create a mime-type by explicitly specifying its components.
+Here is an example of how to create a mime-type by explicitly specifying its components:
 
 [[[
 ZnMimeType main: 'image' sub: 'png'.
   -> image/png
 ]]]
 
-The main parsing interface is the class side ==fromString:== message.
+The main parsing interface of ==ZnMimeType== is the class side ==fromString:== message.
 
 [[[
-ZnMimeType fromString 'image/png'.
+ZnMimeType fromString: 'image/png'.
   -> image/png
 ]]]
 
-To make it easier to write code that accepts both instances and strings, you can use the ==asZnMimeType== message.
+To make it easier to write code that accepts both instances and strings, the ==asZnMimeType== message can be used:
 
 [[[
 'image/png' asZnMimeType
@@ -495,8 +486,8 @@ ZnMimeType imagePng asZnMimeType = 'image/png' asZnMimeType
   -> true
 ]]]
 
-Finally, ZnMimeType also knows how to convert file name extensions to mime-types using the ==forFilenameExtension:== message. This mapping is based on the 
-Debian/Ubuntu ==/etc/mime.types== file, which was read statically into ==mimeTypeFilenameExtensionsSpec==.
+Finally, ==ZnMimeType== also knows how to convert file name extensions to mime-types using the ==forFilenameExtension:== message. This mapping is based on the 
+Debian/Ubuntu ==/etc/mime.types== file, which is encoded into the ==mimeTypeFilenameExtensionsSpec== method.
 
 [[[
 ZnMimeType forFilenameExtension: 'html'.
@@ -515,14 +506,14 @@ ZnMimeType default
 
 Once you have a ZnMimeType instance, you can access its components using the ==main==, ==sub== and ==parameters== messages.
 
-An important aspect of mime-types is whether it textual or binary. You can test that with the ==isBinary== message. Typically, text, XML or JSON are considered 
+An important aspect of mime-types is whether the type is textual or binary, which is testable with the ==isBinary== message. Typically, text, XML or JSON are considered 
 textual, while images are binary.
 
 For textual (non-binary) types, the encoding (or charset parameter) defaults to UTF-8, the prevalent internet standard. With the convencience messages 
 ==charSet:==, ==setCharSetUTF8== and ==clearCharSet== you can manipulate the charset parameter.
 
 Comparing mime-types using the standard ==\=== message takes all components into account, including the parameters. Different parameters lead to different 
-mime-types. When charsets are involved it is often better to compare using the ==matches:== message. Here is how this works in practice.
+mime-types. As a result, when charsets are involved it is often better to compare using the ==matches:== message, as follows:
 
 [[[
 'text/plain' asZnMimeType = ZnMimeType textPlain.
@@ -560,35 +551,32 @@ ZnMimeType applicationXml matches: ZnMimeType text.
 
 !! URLs
 
-URLs (or URIs) are a way to name or identify something. Often, they also contain information of where you can access the thing they name or identify. 
+URLs (or URIs) are a way to name or identify an entity. Often, they also contain information of where the entity they name or identify can be accessed. 
 
 We will be using the terms URL (*Uniform Resource Locator>http://en.wikipedia.org/wiki/Uniform_resource_locator*) and URI 
-(*Uniform Resource Identifier>http://en.wikipedia.org/wiki/Uniform_resource_identifier*) interchangeably as is most commonly done in practice. A URI is just a 
+(*Uniform Resource Identifier>http://en.wikipedia.org/wiki/Uniform_resource_identifier*) interchangeably, as is most commonly done in practice. A URI is just a 
 name or identification, while a URL also contains information on how to find or access a resource. For example, the URI ==/documents/curriculum-vitae.html== 
 identifies and names a document, while the URL ==http://john-doe.com/documents/curriculum-vitae.html== also specifies that we can use HTTP to access this 
-resource on a specic server. By considering most parts optional, we can use one abstraction to implement both URI and URL using one class.
+resource on a specific server.
 
-The class ==ZnUrl== models URLs (or URIs) and has the following components:
+By considering most parts of an URL as optional, we can use one abstraction to implement both URI and URL using one class. The class ==ZnUrl== models URLs (or URIs) and has the following components:
 
-# scheme - like #http, #https, #ws, #wws, #file or nil
-# host - hostname string or nil
-# port - port integer or nil
-# segments - collection of path segments, ends with #/ for directories
-# query - query dictionary or nil
-# fragment - fragment string or nil
-# username - username string or nil
-# password - password string or nil
+# scheme - like ==#http==, ==#https ==, ==#ws==, ==#wws==, ==#file == or == nil==
+# host - hostname string or ==nil ==
+# port - port integer or ==nil==
+# segments - collection of path segments, ends with ==#/== for directories
+# query - query dictionary or ==nil==
+# fragment - fragment string or ==nil==
+# username - username string or ==nil==
+# password - password string or ==nil==
 
 The syntax of the external representation of a ZnUrl informally looks like this:
-
-[[[
-scheme://username:password@host:port/segments?query#fragment
-]]]
+==scheme://username:password@host:port/segments?query#fragment==
 
 !!! Creating URLs
 
 ZnUrls are most often created by parsing an external representation using either the ==fromString:== class message or by sending the ==asUrl== or ==asZnUrl== 
-convenience message to a String. Using ==asUrl== or ==asZnUrl== helps in accepting both Strings and ZnUrls arguments.
+convenience message to a string.
 
 [[[
 ZnUrl fromString: 'http://www.google.com/search?q=Smalltalk'.
@@ -596,7 +584,7 @@ ZnUrl fromString: 'http://www.google.com/search?q=Smalltalk'.
 'http://www.google.com/search?q=Smalltalk' asUrl.
 ]]]
 
-The same instance can also be constucted programmatically.
+The same instance can also be constructed programmatically:
 
 [[[
 ZnUrl new
@@ -607,7 +595,7 @@ ZnUrl new
   yourself.
 ]]]
 
-ZnUrl components can be manipulated destructively. Here is an example:
+==ZnUrl== components can be manipulated destructively. Here is an example:
 
 [[[
 'http://www.google.com/?one=1&two=2' asZnUrl
@@ -619,11 +607,11 @@ ZnUrl components can be manipulated destructively. Here is an example:
 
 !!! External and Internal Representation of URLs
 
-Some characters of parts of a URL are illegal because they would interfere with the syntax and further processing and thus have to be encoded. The methods in 
-accessing protocols do not do any encoding, those in parsing and printing do. Here is an example:
+Some characters of parts of a URL are considered as illegal because including them would interfere with the syntax and further processing. They thus have to be encoded. The methods of ==ZnUrl== in the 
+==accessing== protocols do not do any encoding, while those in ==parsing== and ==printing== do. Here is an example:
 
 [[[
-'http://www.google.com' asZnUrl
+'http://www.google.com' 
     addPathSegment: 'some encoding here';
     queryAt: 'and some encoding' put: 'here, too';
     yourself
@@ -646,22 +634,38 @@ ZnUrl fromString: 'www.example.com' defaultScheme: #http
   -> http://www.example.com/
 ]]]
 
-Given a known scheme, ZnUrl knows its default port, try ==portOrDefault==.
+Given a known scheme, ZnUrl knows its default port, and this is accessed by ==portOrDefault==.
 
-A path defaults to what is commonly referred to as slash, test with ==isSlash==. Paths are most often (but don't have to be) interpreted as filesystem paths. To 
-support this, use the ==isFilePath== and ==isDirectoryPath== tests and ==file== and ==directory== accessors.
+A path defaults to what is commonly referred to as slash, which is testable with ==isSlash==. Paths are most often (but don't have to be) interpreted as filesystem paths. To support this, the ==isFilePath== and ==isDirectoryPath== tests and ==file== and ==directory== accessors are provided.
 
-ZnUrl has some support to handle one URL in the context of another one, this is also known as a relative URL in the context of an absolute URL. Refer to 
-==isAbsolute==, ==isRelative== and ==inContextOf:==.
+ZnUrl has some support to handle one URL in the context of another one, this is also known as a relative URL in the context of an absolute URL. This is implemented using the ==isAbsolute==, ==isRelative== and ==inContextOf:== methods. For example:
 
 [[[
 '/folder/file.txt' asZnUrl inContextOf: 'http://fileserver.example.net:4400' asZnUrl.
   -> http://fileserver.example.net:4400/folder/file.txt
 ]]]
 
-!!! Odd and Ends
 
-Sometimes, the combination of a host and port are referred to as authority, see ==authority==.
+!!! Operations on URLs
+
+To add operations to URLs you could add an extension method to the ZnUrl class. In many cases though, it will not work on all kinds of URLs but only on a subset. In other words, you need to dispatch, not just on the scheme but maybe even on other URL elements. That is where ==ZnUrlOperation== comes in.
+
+The first step for its use is defining a name for the operation. For example, the symbol ==#retrieveContents==. Second, one or more subclasses of 
+==ZnUrlOperation== need to be defined, each defining the class side message ==operation== to return the name, ==#retrieveContents== in the example. Then all subclasses with the same operation form the group of applicable implementations. Third, these handler subclasses overwrite ==performOperation== to do the actual work.
+
+Given a ZnUrl instance, sending it ==performOperation:== or ==performOperation:with:== will send ==performOperation:with:on:== to ==ZnUrlOperation==. In turn, it 
+will look for an applicable handler subclass, instanciate and invoke it. 
+
+Each subclass will be sent ==handlesOperation:with:on:== to test if it can handle the named operation with an optional argument on a specific URL. The default implementation already covers the most common case: the operation name has to match and the scheme of the URL has to be part of the collection returned by ==schemes==.
+
+For our example, the message ==retrieveContents== on ZnUrl is implemented as an operation named ==#retrieveContents==. The handler class is either ==ZnHttpRetrieveContents== 
+for the schemes ==http== and ==https== or ==ZnFileRetrieveContents== for the scheme ==file==.
+
+This dispatching mechanism is more powerful than scheme specific ==ZnUrl== subclasses because other elements can be taken into account. It also addresses another issue with scheme specific ==ZnUrl== subclasses, which is that there are an infinite number of schemes which no hierarchy could cover.
+
+!!! Odds and Ends
+
+Sometimes, the combination of a host and port are referred to as authority, and this is accessable with the ==authority== message.
 
 There is a convenience method ==retrieveContents== to download the resource a ZnUrl points to:
 
@@ -673,35 +677,7 @@ There is a convenience method ==retrieveContents== to download the resource a Zn
 
 The first expression retrieves the contents and returns it directly, while the second expression saves the contents directly to a file.
 
-!!! File URLs
-
 ZnUrl can be used to handle file URLs. Use ==isFile== to test for this scheme.
 
-Given a file URL, you can convert it to a regular ==FileReference== using the ==asFileReference== message. In the other direction, you can get a file URL from a 
-==FileReference== using the ==asUrl== or ==asZnUrl== messages.
-
-Do keep in mind however that there is no such thing as a relative file URL, only absolute file URLs exist.
-
-!!! Operations on URLs
-
-To add operations to URLs you could add an extension method to the ZnUrl class. In many cases though, your operation will not work on all kinds of URLs, just on 
-a couple of them. In other words, you need to dispatch, not just on the scheme but maybe even on other URL elements. That is where you can use ==ZnUrlOperation==.
-
-You start by defining a name for your operation. Using an actual example, the symbol ==#retrieveContents==. Next, you define one or more subclasses of 
-==ZnUrlOperation==, each defining the class side message ==operation== to return ==#retrieveContents==. All subclasses with the same operation form the group of applicable implementations.
-
-Given a ZnUrl instance, you send it ==performOperation:== or ==performOperation:with:==. This will send ==performOperation:with:on:== to ZnUrlOperation, which 
-will look for an applicable handler subclass, instanciate and invoke it. Your handler subclass will have to overwrite ==performOperation== to do the actual work.
-
-Each subclass will be sent ==handlesOperation:with:on:== to test if it can handle the name operation with an optional argument on a specific URL. You can override 
-this test. However, the default implementation covers the most common case: the operation name has to match and the scheme of the URL has to be part of the collection returned by ==schemes==.
-
-For our example, the message ==retrieveContents== on ZnUrl is implemented as an operation named ==#retrieveContents==. The handler class is either ==ZnHttpRetrieveContents== 
-for the schemes ==http== and ==https== or ==ZnFileRetrieveContents== for the scheme ==file==.
-
-This dispatching mechanism is more powerful than scheme specific ZnUrl subclasses because other elements can be taken into account. Another issue with scheme 
-specific ZnUrl subclasses would be that there are an infinite number of schemes which no hierarchy could cover.
-
-
-
-
+Given a file URL, it can be converted to a regular ==FileReference== using the ==asFileReference== message. In the other direction, you can get a file URL from a 
+==FileReference== using the ==asUrl== or ==asZnUrl== messages. Do keep in mind however that there is no such thing as a relative file URL, only absolute file URLs exist.

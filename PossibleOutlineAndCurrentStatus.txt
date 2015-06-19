@@ -47,14 +47,16 @@ Finished:
 		>> Stef should read it again
 		>> Luc will read it
 		>> Luc finished his pass (all screenshots with Pharo4, removed some beginners text, ...) [17 jun 2015]
-		
-*******************************************************************************		
 
 Zinc-Encoding-Meta
 	>> Stef read and modified it a bit 
 	>> sven took into account remark
 	>> stef should check that
 	>> Johan will do a pass
+	>> Johan finished his pass [18 / jun /2015 ]		
+
+*******************************************************************************		
+
 
 PillarChap
 	 >> Stef should read it.
