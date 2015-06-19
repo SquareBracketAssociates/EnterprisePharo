@@ -123,7 +123,7 @@ We start a default server on port 1701 and replace its delegate with a ==ZnWebSo
 request on to its handler. In this example, a block is used as handler. The handler is given a new connected ==ZnWebSocket== instance. For the echo service, we 
 go into a repeat loop, reading a message and sending it back.
 
-Finally, you can stop the server using
+Finally, you can stop the server using:
 
 [[[
 ZnServer stopDefault.
@@ -150,36 +150,57 @@ ZnServer default delegate: (ZnWebSocketDelegate handler:
 ]]]
 
 That leaves us with the problem of ==ConnectionClosed==. This exception can occur at the lowest level when the underlying network connection closes unexpectedly, 
-or at the WebSocket protocol level when the other end sends a close frame. In either case we have to deal with it as a server. In our trivial echo example, we 
-can catch and ignore any ConnectionClosed exception.
+or at the WebSocket protocol level when the other end sends a close frame. In either case we have to deal with it as a server. In our trivial echo example, we can catch and ignore any ConnectionClosed exception or log it as follows:
 
-There is a handy shortcut method on the class side of ==ZnWebSocket== that helps to quickly set up a server implementing a WebSocket service.
+% There is a handy shortcut method on the class side of ==ZnWebSocket== that helps to quickly set up a server implementing a WebSocket service.
+% BUG in Pharo4 (fixed in bleedingEdge Zinc)
+% [[[
+% ZnWebSocket
+%   startServerOn: 8080
+%   do: [ :webSocket |
+%     [
+%       webSocket runWith: [ :message |
+%         message := webSocket readMessage.
+%         webSocket sendMessage: message ] ]
+%       on: ConnectionClosed
+%       do: [ self crLog: 'Ignoring connection close, done' ] ].
+% ]]]
+% Don't forget to inspect the above code so that you have a reference to the server to close it, as this will not be the default server.
 
 [[[
-ZnWebSocket
-  startServerOn: 8080 
-  do: [ :webSocket |
-    [ 
-      webSocket runWith: [ :message |
-        message := webSocket readMessage.
-        webSocket sendMessage: message ] ]
-      on: ConnectionClosed 
-      do: [ self crLog: 'Ignoring connection close, done' ] ].
+ZnServer stopDefault.
+ZnServer startDefaultOn: 1701.
+ZnServer default delegate: (ZnWebSocketDelegate handler:
+  [ :webSocket |
+		[	webSocket runWith: [ :message |
+				webSocket sendMessage: message ] 
+		]	on: ConnectionClosed
+			do: [ self crLog: 'Ignoring connection close, done' ] ]).
+]]]		
+
+
+Although using a block as handler is convenient, for non-trivial examples a regular object implementing ==value:== will probably be better. 
+You can find such an implementation in ==ZnWebSocketEchoHandler==.
+
+[[[
+ZnServer stopDefault.
+ZnServer startDefaultOn: 1701.
+ZnServer default 
+	delegate: (ZnWebSocketDelegate 
+					handler: ZnWebSocketEchoHandler new).
 ]]]
 
-Don't forget to inspect the above code so that you have a reference to the server to close it, as this will not be the default server.
+The current process (thread) as spawned by the server can be used freely by the handler code, for as long as the web socket connection lasts. 
+The responsibility for closing the connection lies with the handler, although a close from the other side will be handled correctly.
 
-Although using a block as handler is convenient, for non-trivial examples a regular object implementing ==value:== will probably be better. You can find such an 
-implementation in ==ZnWebSocketEchoHandler==.
-
-The current process (thread) as spawned by the server can be used freely by the handler code, for as long as the web socket connection lasts. The responsibility 
-for closing the connection lies with the handler, although a close from the other side will be handled correctly.
-
-To test our echo service, you could connect to it using a client side web socket, like we did in the previous subsection. This is what the unit test 
-==ZnWebSocketTests>>testEcho== does. Another solution is to run some JavaScript code in a web browser. You can find the necessary HTML page containing JavaScript 
-code invoking the echo service on the class side of ==ZnWebSocketEchoHandler==. The following setup will serve this code:
+To test our echo service, you could connect to it using a client side web socket, like we did in the previous subsection. 
+This is what the unit test ==ZnWebSocketTests>>testEcho== does. 
+Another solution is to run some JavaScript code in a web browser. 
+You can find the necessary HTML page containing JavaScript code invoking the echo service on the class side of ==ZnWebSocketEchoHandler==. 
+The following setup will serve this code:
 
 [[[
+ZnServer stopDefault.
 ZnServer startDefaultOn: 1701.
 ZnServer default logToTranscript.
 ZnServer default delegate
@@ -191,17 +212,18 @@ ZnServer default delegate
   to: (ZnWebSocketDelegate map: 'ws-echo' to: ZnWebSocketEchoHandler new).
 ]]]
 
-Now, you can try the following URLs:
+Now, you can try the following URLs in your Web browser:
 
-[[[
-http://localhost:1701/ws-echo-client-remote
-http://localhost:1701/ws-echo-client
-]]]
+- *http://localhost:1701/ws-echo-client-remote*
+- *http://localhost:1701/ws-echo-client*
 
 The first one will connect to ==ws://echo.websocket.org== as a reference, the second one will connect to our implementation at ==ws://localhost:1701/ws-echo==.
 
-Another simple example is available in ==ZnWebSocketStatusHandler== where a couple of Smalltalk image statistics are emitted every second for an efficient live 
-view in your browser. In this scenario, the server accepts each incoming web socket connection and starts streaming to it, not interested in any incoming messages. Here is the core loop:
+!!Building a Pharo Statistics Web Page
+
+Another simple example is available in ==ZnWebSocketStatusHandler== where a couple of Smalltalk image statistics are emitted every second for an efficient live view in your browser. 
+In this scenario, the server accepts each incoming web socket connection and starts streaming to it, not interested in any incoming messages. 
+Here is the core loop:
 
 [[[
 ZnWebSocketStatusHandler>>value: webSocket
@@ -216,8 +238,31 @@ ZnWebSocketStatusHandler>>value: webSocket
   self crLog: 'Stopping status streaming' 
 ]]]
 
-The last example, ==ZnWebSocketChatroomHandler==, implements the core logic of a chatroom: clients can send messages to the server who distributes them to all 
-connected clients. In this case, the handler has to manage a collection of all connected client web sockets. Here is the core loop:
+Here is code to setup all examples:
+
+[[[
+ZnServer stopDefault.
+ZnServer startDefaultOn: 1701.
+ZnServer default logToTranscript.
+ZnServer default delegate
+  map: 'ws-status-client' 
+  to: [ :request | ZnResponse ok: (ZnEntity html: ZnWebSocketStatusHandler clientHtml) ];
+  map: 'ws-status'
+  to: (ZnWebSocketDelegate map: 'ws-status' to: ZnWebSocketStatusHandler new).
+]]]
+
+Visit *http://localhost:1701/ws-status-client* to see statistics (uptime, memory, ...) of your running Pharo lively refreshed in a Web page.
+
+What happened is that your Web browser contacted the Zinc server on *http://localhost:1701/ws-status-client* and got back the HTML and Javascript code in ==ZnWebSocketStatusHandler class>>clientHtml==. 
+The execution of this Javascript code by the Web browser sent an HTTP request to the Zinc server on *http://localhost:1701/ws-status* asking for an upgrade to up a Web socket connection. Then, the ==ZnWebSocketStatusHandler== object can send status updates through this Web socket connection directly to the Javascript code that refreshes the HTML page content.
+
+
+!!Building a Web Chat
+
+Another available example is ==ZnWebSocketChatroomHandler==.
+It implements the core logic of a chatroom: clients can send messages to the server who distributes them to all connected clients. 
+In this case, the handler has to manage a collection of all connected client web sockets. 
+Here is the core loop:
 
 [[[
 ZnWebSocketChatroomHandler>>value: webSocket
@@ -232,7 +277,7 @@ ZnWebSocketChatroomHandler>>value: webSocket
       self unregister: webSocket ]
 ]]]
 
-Distributing the message is as simple as iterating over each client (ignoring some details):
+Distributing a message is as simple as iterating over each client (ignoring some details):
 
 [[[
 ZnWebSocketChatroomHandler>>distributeMessage: message
@@ -240,35 +285,21 @@ ZnWebSocketChatroomHandler>>distributeMessage: message
     each sendMessage: message ].
 ]]]
 
+
 Here is code to setup all examples:
 
 [[[
+ZnServer stopDefault.	
 ZnServer startDefaultOn: 1701.
 ZnServer default logToTranscript.
 ZnServer default delegate
-  map: 'ws-echo-client-remote' 
-  to: [ :request | ZnResponse ok: (ZnEntity html: ZnWebSocketEchoHandler clientHtmlRemote) ];
-  map: 'ws-echo-client' 
-  to: [ :request | ZnResponse ok: (ZnEntity html: ZnWebSocketEchoHandler clientHtml) ];
-  map: 'ws-echo'
-  to: (ZnWebSocketDelegate map: 'ws-echo' to: ZnWebSocketEchoHandler new);
   map: 'ws-chatroom-client' 
   to: [ :request | ZnResponse ok: (ZnEntity html: ZnWebSocketChatroomHandler clientHtml) ];
   map: 'ws-chatroom'
-  to: (ZnWebSocketDelegate map: 'ws-chatroom' to: ZnWebSocketChatroomHandler new);
-  map: 'ws-status-client' 
-  to: [ :request | ZnResponse ok: (ZnEntity html: ZnWebSocketStatusHandler clientHtml) ];
-  map: 'ws-status'
-  to: (ZnWebSocketDelegate map: 'ws-status' to: ZnWebSocketStatusHandler new).
+  to: (ZnWebSocketDelegate map: 'ws-chatroom' to: ZnWebSocketChatroomHandler new).
 ]]]
 
-Visit any of the following URLs:
-
-[[[
-http://localhost:1701/ws-echo-client
-http://localhost:1701/ws-status-client
-http://localhost:1701/ws-chat-client
-]]]
+Visit *http://localhost:1701/ws-chat-client* to access your Web chat application.
 
 Inside your Pharo image, you can also send chat messages, much like a moderator:
 
@@ -277,7 +308,7 @@ Inside your Pharo image, you can also send chat messages, much like a moderator:
   handler distributeMessage: 'moderator>>No trolling please!'.
 ]]]
 
-!!A Quick Tour of the Implementation
+!!A Quick Tour of Zinc WebSocket Implementation
 
 All code resides in the =='Zinc-WebSocket-Core'== package. The wire level protocol, the encoding and decoding of frames can be found in ==ZnWebSocketFrame==. 
 The key methods are ==writeOn:== and ==readFrom:== as well as the instance creation protocol. Together with the testing protocol and #printOn: these should give 
@@ -290,16 +321,11 @@ Two exceptions, ==ZnWebSocketFailed== and ==ZnWebSocketClosed== and a shared ==Z
 
 !!Live Demo
 
-There is a live demo available with the basic Zinc-WebSocket demos: echo, status & chatroom.
-
-[[[
-http://websocket.stfx.eu
-]]]
+There is a live demo available at *http://websocket.stfx.eu* with the basic Zinc-WebSocket demos: echo, status & chatroom.
 
 Have a look at ==ZnWebSocketDelegate class>>installExamplesInServer:== as a starting point to learn how this demo was set up.
 
-Setting up a production demo is complicated by the fact that most proxies and load balancers, most notable market leader Apache, do not (yet) deal correctly with 
-the WebSocket protocol. It is thus easiest to organize things so that your client talk directly to your Smalltalk image.
+Setting up a production demo is complicated by the fact that most proxies and load balancers, most notable market leader Apache, do not (yet) deal correctly with the WebSocket protocol. It is thus easier to organize things such that your client talk directly to your Smalltalk image.
 
 The implementation of Zinc WebSockets as an add-on to Zinc HTTP Components was made possible in part through financial backing by Andy Burnett of Knowinnovation Inc. and ESUG.
 
