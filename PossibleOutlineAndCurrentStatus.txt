@@ -68,6 +68,7 @@ PillarChap
 NeoCSV/NeoCSV.pier
 	>> Damien is working on it (2015/06/19)
 	>> Stef should re read it.
+	>> Damien will work on it
 	
 NeoJSON/NeoJSON.pier
 	>> Damien finished his pass on it (2015/06/19)
@@ -75,6 +76,7 @@ NeoJSON/NeoJSON.pier
 
 Mustache/Mustache.pier
 	>> Finished first version 
+	>> Johan will work on it
 
 Teapot/Teapot.pillar
 	>> Finished first version 
