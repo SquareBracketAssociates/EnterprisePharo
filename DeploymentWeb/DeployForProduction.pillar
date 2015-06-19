@@ -8,7 +8,7 @@ The easiest (and fastest) way to host your application is to host it in the clou
 
 *PharoCloud>http://pharocloud.com*, for example, proposes pre-packaged solutions (including Seaside and Pier, database support) as well as the possibility to use your own Pharo image. You could start very quickly from there but you do not have full control on your pharo stack. It is enough in most cases: PharoCloud manages defaults for you.
 
-There are many other cloud providers including *Amazon AWS>https://aws.amazon.com/*, *Openshit>https://www.openshift.com/*, *OVH>https://www.ovh.com/fr* and *Microsoft Azure>http://azure.microsoft.com*. Many Pharo users use *DigitalOcean>https://www.digitalocean.com/* as it is both simple and cheap.
+There are many other cloud providers including *Amazon AWS>https://aws.amazon.com/*, *Openshift>https://www.openshift.com/*, *OVH>https://www.ovh.com/* and *Microsoft Azure>http://azure.microsoft.com*. Many Pharo users use *DigitalOcean>https://www.digitalocean.com/* as it is both simple and cheap.
 
 Choose your cloud provider according to your needs.
 
@@ -107,7 +107,7 @@ You do not want to lose data! To do that, the simplest solution is to make your 
 
 To automatically restart your application when it crashes, there must be a way to detect that it has crashed.
 
-With a standard operating system's init script such as the one described above, you can use the ==status== command to detect if Pharo is running or not. Nevertheless, Pharo can be running (the ==status== command detects it fine) but not responding (''i.e.'', HTTP requests never get answered). This can happen if the image is frozen for example. If your application is a web application, you may wish to check if your application is able to answer to HTTP requests. To do so, you need to define some ==ping== url to your application that will be used by the monitoring tool.
+With a standard operating system's init script such as the one described above, you can use the ==status== command to detect if Pharo is running or not. Nevertheless, Pharo can be running (the ==status== command detects it fine) but not responding (''i.e.'', HTTP requests never get answered). This can happen if the image is frozen for example. If your application is a web application, you may wish to check if your application is able to answer to HTTP requests. To do so, you need to define some ==ping== URL to your application that will be used by the monitoring tool.
 
 A simple solution to both monitor your application and take appropriate actions (''e.g.'', restart) is to use the *monit utility>https://mmonit.com/monit*.
 
@@ -149,7 +149,7 @@ set mailserver <smtp.domain>
 ]]]
 
 !!!Monitor System Services
-Configuration files related to an application (or a service) should be put into the ==/etc/monit/monitrc.d== directory (more modular that everything in the core configuration file). To enable a configuration just symlink it to ==conf.d==.
+Configuration files related to an application (or a service) should be put into the ==/etc/monit/monitrc.d== directory (more modular than everything in the core configuration file). To enable a configuration just symlink it to ==conf.d==.
 We will first enable pre-defined configuration for SSH.
 [[[language=bash­
 $ sudo ln -s /etc/monit/monitrc.d/openssh-server /etc/monit/conf.d/openssh-server
@@ -178,7 +178,7 @@ check process myapp with pidfile /var/run/myapp.pid
     then timeout
 ]]]
 
-With this in place, when a problem occurs, the ''alert'' instruction makes sure ==me@domain.com== is notified by email. The monitoring is described with the check command. We ask monit to check a given pid file. If there is no pid or no process associated to the pid, monit will start the program with the given instruction. The last instruction prevents infinite loops if there is a problem with the script.
+With this in place, when a problem occurs, the ''alert'' instruction makes sure ==me@domain.com== is notified by email. The monitoring is described with the check command. We ask monit to check a given PID file. If there is no PID or no process associated to the PID, monit will start the program with the given instruction. The last instruction prevents infinite loops if there is a problem with the script.
 We  now activate the monitoring of myapp:
 [[[language=bash
 $ sudo ln -s /etc/monit/monitrc.d/myapp /etc/monit/conf.d/myapp
