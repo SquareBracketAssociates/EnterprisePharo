@@ -261,7 +261,7 @@ The execution of this Javascript code by the Web browser sent an HTTP request to
 
 Another available example is ==ZnWebSocketChatroomHandler==.
 It implements the core logic of a chatroom: clients can send messages to the server who distributes them to all connected clients. 
-In this case, the handler has to manage a collection of all connected client web sockets. 
+In this case, the handler has to manage a collection of all connected client Web sockets. 
 Here is the core loop:
 
 [[[
@@ -286,7 +286,7 @@ ZnWebSocketChatroomHandler>>distributeMessage: message
 ]]]
 
 
-Here is code to setup all examples:
+Here is code to start this Web chat app:
 
 [[[
 ZnServer stopDefault.	
@@ -300,22 +300,25 @@ ZnServer default delegate
 ]]]
 
 Visit *http://localhost:1701/ws-chat-client* to access your Web chat application.
+You can open multiple tabs on this same URL to simulate multiple users on the Chat.
 
-Inside your Pharo image, you can also send chat messages, much like a moderator:
+You can also send chat messages directly from Pharo, much like a moderator:
 
 [[[
 (ZnServer default delegate prefixMap at: 'ws-chatroom')
   handler distributeMessage: 'moderator>>No trolling please!'.
 ]]]
 
+
 !!A Quick Tour of Zinc WebSocket Implementation
 
-All code resides in the =='Zinc-WebSocket-Core'== package. The wire level protocol, the encoding and decoding of frames can be found in ==ZnWebSocketFrame==. 
-The key methods are ==writeOn:== and ==readFrom:== as well as the instance creation protocol. Together with the testing protocol and #printOn: these should give 
-enough information to understand the implementation.
+All code resides in the =='Zinc-WebSocket-Core'== package. 
+The wire level protocol, the encoding and decoding of frames can be found in ==ZnWebSocketFrame==. 
+The key methods are ==writeOn:== and ==readFrom:== as well as the instance creation protocol. Together with the testing protocol and ==printOn:== these should give enough information to understand the implementation.
 
- ==ZnWebSocket== implements the protocol above frames, either from a server or a client perspective. The key methods are ==readMessage== and ==readFrame==, 
- sending is quite simple. Client side setup can be found on the class side of ==ZnWebSocket==. Server side handling of the setup is implemented in ==ZnWebSocketDelegate==.
+==ZnWebSocket== implements the protocol above frames, either from a server or a client perspective. The key methods are ==readMessage== and ==readFrame==, sending is quite simple. 
+Client-side setup can be found on the class side of ==ZnWebSocket==. 
+Server-side handling of the setup is implemented in ==ZnWebSocketDelegate==.
 
 Two exceptions, ==ZnWebSocketFailed== and ==ZnWebSocketClosed== and a shared ==ZnWebSocketUtils== class round out the core code.
 
@@ -323,12 +326,13 @@ Two exceptions, ==ZnWebSocketFailed== and ==ZnWebSocketClosed== and a shared ==Z
 
 There is a live demo available at *http://websocket.stfx.eu* with the basic Zinc-WebSocket demos: echo, status & chatroom.
 
-Have a look at ==ZnWebSocketDelegate class>>installExamplesInServer:== as a starting point to learn how this demo was set up.
+Have a look at ==ZnWebSocketDelegate class>>installExamplesInServer:== as a starting point to learn how these demos were set up.
 
-Setting up a production demo is complicated by the fact that most proxies and load balancers, most notable market leader Apache, do not (yet) deal correctly with the WebSocket protocol. It is thus easier to organize things such that your client talk directly to your Smalltalk image.
+Setting up a production demo is complicated by the fact that most proxies and load balancers, most notable market leader Apache, do not (yet) deal correctly with the WebSocket protocol. It is thus easier to organize things such that your client directly talk to your Smalltalk image.
 
 The implementation of Zinc WebSockets as an add-on to Zinc HTTP Components was made possible in part through financial backing by Andy Burnett of Knowinnovation Inc. and ESUG.
 
 !!Conclusion
 
-WebSockets integrate smoothly with Zinc to form another part of the Pharo web stack.
+WebSockets integrate smoothly with Zinc HTTP Components to form another part of the Pharo Web stack.
+It provides support for building modern single page Web applications in Pharo.
