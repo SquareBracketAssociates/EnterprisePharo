@@ -1,25 +1,15 @@
 !Mustache Templates for Pharo
 @cha:mustache
 
-Mustache is a  templating engine that is supported in many programming languages *http://mustache.github.io* (Pharo is not listed there because these people do 
-not reply to emails). Norbert Hartl developed a Mustache package for Pharo. This chapter is an introduction to this package and a mini tutorial to get started 
-with Mustache. It is based on the original blog written by Norbert and we extended it to offer a larger covering of the Mustache features.
+Mustache is a framework-agnostic, logic-free templating format that "emphasizes separating logic from presentation: it is impossible to embed application logic in this template language". It is supported in many programming languages, as shown at *http://mustache.github.io*. The full syntax documentation is available online at *http://mustache.github.io/mustache.5.html*.
 
-The syntax of Mustache is small and covers a wide range of use cases. Mustache is simple and versatile. You can use it for many usages. We will show how 
-Mustache is used in Pillar the system used to generate this book. Although it was designed to be a templating engine for HTML pages it is useful in different 
-areas.
+Mustache is simple and versatile, its syntax is small and covers a wide range of use cases. Although it was designed to be a templating engine for HTML pages it is useful in different areas. For example, in this chapter we will also show how Mustache is used in Pillar, the system used to generate this book
 
+Norbert Hartl developed a Mustache package for Pharo. This chapter is an introduction to this package and a mini tutorial to get started with Mustache. This text is based on the original blog entries written by Norbert and extended to offer a larger covering of the Mustache features.
 
 !! Getting started
-Mustache is available on smalltalkhub at the following address. 
-[[[
-MCHttpRepository
-	location: 'http://www.smalltalkhub.com/mc/NorbertHartl/Mustache/main'
-	user: ''
-	password: ''
-]]]
 
-You can load it with the following expression.
+To install Mustache, execute the following expression in a workspace:
 
 [[[
 Gofer it
@@ -28,12 +18,10 @@ Gofer it
 	  loadStable
 ]]]
 
-!! A first example
 A Mustache expression takes two arguments as input: 
-(1) a template and (2) a context object (which is a list of bindings) called a hash in Mustache jargon.
+(1) a template and (2) a context object (which is a list of bindings). The latter is called a hash in Mustache jargon.
 
-A simple Mustache template looks like this (taken literally from the Mustache documentation 
-available at *http://mustache.github.io/mustache.5.html*):
+Consider a simple Mustache template (taken literally from the documentation):
 
 [[[
 templateString := 'Hello {{ name }}
@@ -44,11 +32,8 @@ Well, ${{taxed_value}}, after taxes.
 ]]]
 
 
-The expression =={{}}== delimits a tag or variable inside a template. 
-Here =={{ name }}== represents the variable ==name==. When the template is evaluated with a context, 
-variables are replaced by their values given by a context.  
-
-Given a context object with some bindings as the following one: 
+The expression =={{}}== delimits a ''tag'' or variable inside a template. 
+Here =={{ name }}== represents the variable ==name==. When the template is evaluated with a context, variables are replaced by their values given by a context. A possible context for the template above is the following: 
 
 [[[
 context := {
@@ -58,7 +43,7 @@ context := {
   'in_ca' -> true } asDictionary
 ]]]
 
-We can evaluate a template using the following ways:
+Given a context object with some bindings, we can evaluate a template in two different ways:
 
 [[[
 (MustacheTemplate on: templateString) value: context
@@ -66,7 +51,7 @@ We can evaluate a template using the following ways:
 templateString asMustacheTemplate value: context
 ]]]
 
-We get the following output: 
+For the above example, we get the following output in both cases: 
 
 [[[
 'Hello Chris
@@ -77,80 +62,77 @@ Well, $6000.0, after taxes.
 ]]]
 
 As context object we can use Dictionaries and Objects. Dictionaries need to have a key that is used in the template and Objects need a selector with the same 
-name. In this chapter we use Dictionaries because they are easier to illustrate with.
+name. In this chapter we use Dictionaries for brevity.
 
 !! Tags as Variables
-Tags can be of different types: The first type is ''variable''. The simplest one is a variable.  A =={{name}}== tag in a basic template tries to find the 
-==name== key in the current context. If there is no ==name== key, the parent contexts are looked up recursively. If the top context is reached and the ==name== 
-key is still not found, nothing will be rendered. In the following example ==age== is not defined, therefore nothing is printed.
-
-All variables are HTML escaped by default. If you want to return unescaped HTML, use the 
-triple mustache expression: ==\{{{name\}}}==. For example ==\{{{company\}}}== will simply 
-print the given html while =={{Company}}== is printing the version where
- all the characters of the input are escaped (i.e., transformed into their html representation).
+Tags can be of different types: The first and simplest type is ''variable''. 
+We explain its working with an example: a =={{age}}== tag in a basic template tries to find the 
+==age== key in the current context. If there is no ==age== key, the parent contexts are looked up recursively. If the top context is reached and the ==age== 
+key is still not found, nothing will be rendered. For example, In the following example ==age== is not defined, therefore nothing is present in the output (included below after the ==-->==).
 
 [[[
 '* {{name}}
 * {{age}}
-* {{company}}
-* {{{company}}}' asMustacheTemplate value:
+* {{company}}' asMustacheTemplate value:
 {
  'name' -> 'Chris' .
  'company' -> '<b>GitHub</b>'
 } asDictionary
-
+ -->
 '* Chris
 * 
 * &lt;b&gt;GitHub&lt;/b&gt;
-* <b>GitHub</b>'
 ]]]
 
-Finally, we can use the character ==&== to unescape a variable as in =={{& name}}==. 
-This may be useful when changing delimiters.
+The last line above shows that all variables are HTML escaped by default, e.g. if a binding for that variable contains a ==<== character it will be converted to ==&lt;== . To return unescaped HTML, the 
+triple mustache expression must be used: ==\{{{name\}}}==. Also, the character ==&== can be used to unescape a variable as in =={{& name}}==. This can be useful when changing delimiters, which is discussed later in this chapter.
+The template below shows the different ways in which ==company== is escaped in the output (included below after the ==-->==).
 
 [[[
 '* {{name}}
 * {{age}}
 * {{&company}}
 * {{company}}
-* {{{&company}}}
 * {{{company}}}' asMustacheTemplate value:
 {
 'age' -> 33 .
  'name' -> 'Chris' .
  'company' -> '<b>GitHub</b>'
 } asDictionary
-]]]
-outputs
-
-[[[
- '* Chris
-* 
+ -->
+'* Chris
+* 33
 * <b>GitHub</b>
 * &lt;b&gt;GitHub&lt;/b&gt;
-* 
 * <b>GitHub</b>'
 ]]]
 
 !! Sections
 
-Sections render blocks of text one or more times depending on the value of the key in the current context. We present such behavior in the following sections. 
-A section is delimited by a pound hash sign and slash. The pound sign begins it and the slash sign ends it. That is, =={{#number}}== begins a "number" section 
-while {{/number}} ends it.
+Sections render blocks of text a number of times if their key is present in the context. A section is delimited by a hash sign and a slash. For example, =={{#number}}== begins a section for the ''number'' variable while =={{/number}}== ends it.
+
+When a variable is not present in the context the section is not present in the output:
 
 [[[
-templateString := '{{#number}}
-  Never shown!
-{{/number}}'
+| templateString context |
+templateString := 'Shown.
+{{#number}}
+  Shown too!
+{{/number}}'.
+context := { 'foo' -> 'true' } asDictionary.
+(MustacheTemplate on: templateString) value: context 
+  -->
+'Shown.
+'
 ]]]
 
 
-When a variable defining a section is set, the section is activated. 
-For example, here the =='number'== is bound to true and the =='Shown too'== text is shown.
-There are some special cases where the section is not activated: when the variable is missing, when its value is set to false, or an empty list (or string). The 
-following examples illustrated such behavior. 
+When the variable is set, the output depends on the contents of the variable and there are two distinct cases, as we discuss next.
 
-!!!! With the variable set
+!!! With the variable set to non-collection values
+
+For values that are not collections, the output will be present once.
+For example, below =='number'== is bound to ==true== which causes the =='Shown too'== text to be shown. The same will happen when ==number== is bound to another value, e.g. ==42==.
 
 [[[| templateString context |
 templateString := 'Shown.
@@ -159,34 +141,14 @@ templateString := 'Shown.
 {{/number}}'.
 context := { 'number' -> true } asDictionary.
 (MustacheTemplate on: templateString) value: context 
-->
- 'Shown.
+ -->
+'Shown.
 
   Shown too!
 '
 ]]]
 
-The same happens when number is bound to another value such as 2.
-
-[[[
-| templateString context |
-templateString := 'Shown.
-{{#number}}
-  Shown too!
-{{/number}}'.
-context := { 'number' -> 2 } asDictionary.
-(MustacheTemplate on: templateString) value: context 
-->
- 'Shown.
-
-  Shown too!
-'
-]]]
-
-!!! Unbound, empty or false variable
-
-!!!! With the variable set to false
-Now when the variable is bound to false, the section is not activated.
+There is one exception to this rule: when the variable is bound to ==false== the section is not present in the output:
 
 [[[
 | templateString context |
@@ -196,51 +158,15 @@ templateString := 'Shown.
 {{/number}}'.
 context := { 'number' -> false } asDictionary.
 (MustacheTemplate on: templateString) value: context 
- -> 
- 'Shown.
-'
-]]]
-
-!!!! With the variable set to an empty string
-
-Similarly when the binding is an empty string or an empty collection, the section is not activated.
-[[[
-| templateString context |
-templateString := 'Shown.
-{{#number}}
-  Shown too!
-{{/number}}'.
-context := { 'number' -> '' } asDictionary.
-(MustacheTemplate on: templateString) value: context 
-	->
- 'Shown.
-'
-]]]
-
-!!!! With an unbound variable
-
-When the variable is unbound the section is not activated.
-
-[[[
-| templateString context |
-templateString := 'Shown.
-{{#number}}
-  Shown too!
-{{/number}}'.
-context := { 'number2' -> '' } asDictionary.
-(MustacheTemplate on: templateString) value: context 
-	->
- 'Shown.
+  -->
+'Shown.
 '
 ]]]
 
 
-!! Working with non-empty lists
-We can use collections to create loop constructs in templates. If a section key exists and it has a non-false value, the text between the pound and slash are 
-rendered and displayed one or more times (according to the collection element numbers). 
-Other said, when the value is a non-empty collection, the text in a section is displayed once for each item in the list. The context of the section is set to 
-the current item for each iteration. 
-Here is an example showing that the ''list'' section is evaluated three times since ''list'' binding holds a collection with three elements.
+!!! With the variable set to a collection
+
+We can use collections to create loop constructs in templates. If a section key is present in the context and it has a collection as a value, the text of the section is present as many times as there are items in the collection.
 
 [[[
 | templateString context |
@@ -250,8 +176,7 @@ templateString := 'Shown.
 {{/list}}'.
 context := { 'list' -> #(1 2 3) } asDictionary.
 (MustacheTemplate on: templateString) value: context 
-
--> 
+  --> 
  'Shown.
 
   Shown too!
@@ -262,8 +187,9 @@ context := { 'list' -> #(1 2 3) } asDictionary.
 '
 ]]]
 
-Now we can iterate over nested elements. For example, we define a ''list'' binding that 
-contains multiple ''number'' bindings. The section ''list'' is evaluated for each of the its ''number'' bindings.
+@@note Consequently, if the collection is empty (or if it is the empty string), the output is present 0 times, i.e. it is absent.
+
+When processing collections, Mustache iterates over them and for each element of the collection the context of the section is set to the current item. This allows a section to use variables that are contained in the elements of the collection. For example, below we define a ''list'' binding that contains multiple ''number'' bindings. The section ''list'' is evaluated for each of the its ''number'' bindings.
 
 [[[
 | templateString context |
@@ -279,8 +205,7 @@ context := {
     }
 } asDictionary.
 (MustacheTemplate on: templateString) value: context  
-
-->
+  -->
  'A fine list of numbers
 
 Number: 1
@@ -289,8 +214,7 @@ Number: 2
 '
 ]]]
 
-With such behavior we can easily generate menus and list in html. 
-
+With such behavior we can easily generate menus and lists in html, for example:
 
 [[[
 '{{#coolBooks}}
@@ -316,48 +240,44 @@ This outputs the following HTML snippet.
 ]]]
 
 
-!!! Non-False Values
-When the value of a variable is non-false but a single value dictionary it will be used as the context for a single rendering.
-Here the value of 
+%JF this section brings nothing new to the table
+% !!!! Dictionaries with repeated values
 
-[[[
-	| template result |
-	template := MustacheTemplate on: '{{#person?}} Hi {{name}}! {{/person?}}' .
-	result := template 
-		value: { 'person?' -> { 'name' -> 'Jon' } asDictionary  } asDictionary.
-	
-		-> 
-	' Hi Jon! ' 
-]]]
+% When the value of a variable is a dictionary with a single value it will be only used once as context, for example:
 
+% [[[
+% | template result |
+% template := MustacheTemplate on: '{{#person?}} Hi {{name}}! {{/person?}}' .
+% result := template value: { 'person?' -> { 'name' -> 'Jon' } asDictionary  } asDictionary.
+%  --> 
+%  ' Hi Jon! ' 
+% ]]]
 
-Here giving twice the same variable does not work because a dictionary cannot have a variable defined twice.
+% Here giving twice the same variable does not work because a dictionary cannot have a variable defined twice.
 
-[[[
-	| template result |
-	template := MustacheTemplate on: '{{#person?}} Hi {{name}}! {{/person?}}' .
-	result := template 
-		value: { 'person?' -> { 'name' -> 'Jon' . 'name' -> 'Pilou' } asDictionary  } asDictionary.
-	
-		-> 
-	' Hi Jon! ' 
-]]]
+% [[[
+% | template result |
+% template := MustacheTemplate on: '{{#person?}} Hi {{name}}! {{/person?}}' .
+% result := template value: { 'person?' -> { 'name' -> 'Jon' . 'name' -> 'Smith' } asDictionary  } asDictionary.
+%  --> 
+%  ' Hi Jon! ' 
+% ]]]
 
-To be able to loop over values as shown previously we should define multiple dictionaries as follows:
+% To be able to loop over values as shown previously we should define multiple dictionaries as follows:
 
-[[[
-	| template result |
-	template := MustacheTemplate on: '{{#person?}} Hi {{name}}! {{/person?}}' .
-		result := template 
-			value: { 'person?' -> 
-					{  
-						{'name' -> 'Jon' } asDictionary .
-						{'name' -> 'Pilou'} asDictionary} 
-					} asDictionary 
+% [[[
+% 	| template result |
+% 	template := MustacheTemplate on: '{{#person?}} Hi {{name}}! {{/person?}}' .
+% 		result := template 
+% 			value: { 'person?' -> 
+% 					{  
+% 						{'name' -> 'Jon' } asDictionary .
+% 						{'name' -> 'Pilou'} asDictionary} 
+% 					} asDictionary 
 					
-	-> ' Hi Jon!  Hi Pilou! '
+% 	-> ' Hi Jon!  Hi Pilou! '
 
-]]]
+% ]]]
 
 
 
