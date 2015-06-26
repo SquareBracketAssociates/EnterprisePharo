@@ -59,6 +59,11 @@ Finished:
 		>> Luc will read it 
 		>> Luc finished his pass [19 jun 2015]
 
+	Mustache/Mustache.pier
+		>> Finished first version 
+		>> Johan will work on it
+		>> Johan finished his pass [25 / jun / 2015]
+
 *******************************************************************************		
 
 PillarChap
@@ -73,10 +78,6 @@ NeoCSV/NeoCSV.pier
 NeoJSON/NeoJSON.pier
 	>> Damien finished his pass on it (2015/06/19)
 	>> Stef should re read it.
-
-Mustache/Mustache.pier
-	>> Finished first version 
-	>> Johan will work on it
 
 Teapot/Teapot.pillar
 	>> Finished first version 
