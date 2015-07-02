@@ -81,6 +81,9 @@ NeoJSON/NeoJSON.pier
 
 Teapot/Teapot.pillar
 	>> Finished first version 
+
+DeploymentWeb/DeploymentWeb.pillar
+	>> Christophe Demarey should ask Philippe Back or Norbert Hartl to review
 	
 *******************************************************************************
 
