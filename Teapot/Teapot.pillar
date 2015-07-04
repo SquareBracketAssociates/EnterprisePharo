@@ -1,16 +1,8 @@
 ! Teapot
 @cha:teapot
 
-Teapot is a ''micro'' web framework on top of the Zinc HTTP web server described in Chapter  *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pillar@ch:zinc-server*. Teapot focuses on simplicity and ease of use. It's around 600 lines of code, not counting 
-unit tests. Teapot is developd by Attila Magyar and this chapter is heavily inspired from the original documentation of Teapot. 
+Teapot is a ''micro'' web framework on top of the Zinc HTTP web server described in Chapter  *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pillar@ch:zinc-server*. Teapot focuses on simplicity and ease of use. It's around 600 lines of code, not counting unit tests. Teapot is developed by Attila Magyar and this chapter is heavily inspired from the original documentation of Teapot. 
 
-!! Differences between Teapot and other web frameworks
-
-Teapot is not a singleton and doesn't hold any global state. You can run multiple Teapot servers inside the same image with their state being isolated from each other.
-
-- There are no thread locals or dynamically scoped variables in Teapot. Everything is explicit.
-- It doesn't rely on annotations or pragmas, the routes are defined programmatically.
-- It doesn't instantiate objects (e.g. "web controllers") for you. You can hook http events to existing objects, and manage their dependencies as required.
 
 !! Getting Started
 To get started,  execute the following code snippet, it will load the latest stable version of Teapot. 
@@ -30,9 +22,53 @@ It is straightforward to launch Teapot and add a page:
 
 Opening a browser on *http://localhost:1701/welcome* results in the following:
 
-+Go to the Teapot welcome at *http://localhost:1701/welcome*. >file://figures/TeapotWelcome.png|width=80|label=TeapotWelcome+
++Go to the Teapot welcome at *http://localhost:1701/welcome*>file://figures/TeapotWelcome.png|width=50|label=TeapotWelcome+
 	
-	
+
+!!! Differences between Teapot and other web frameworks
+
+Teapot is not a singleton and doesn't hold any global state. You can run multiple Teapot servers inside the same image with their state being isolated from each other.
+
+- There are no thread locals or dynamically scoped variables in Teapot. Everything is explicit.
+- It doesn't rely on annotations or pragmas, the routes are defined programmatically.
+- It doesn't instantiate objects (e.g. "web controllers") for you. You can hook http events to existing objects, and manage their dependencies as required.
+
+
+
+!! A REST example, showing some CRUD operations
+
+Before getting into the details of Teapot. Here is a simple example for managing books. With the following code, we can list books, add a book and delete a book.
+
+[[[language=smalltalk
+| books teapot |
+books := Dictionary new.
+teapot := Teapot configure: {#defaultOutput -> #json. #port -> 8080. #debugMode -> true }.
+teapot
+   GET: '/books' -> books;
+   PUT: '/books/<id>' ->
+      [ :req | | book |
+         book := {'author' -> (req at: #author). 'title' -> (req at: #title)} asDictionary.
+         books at: (req at: #id) put: book];
+   DELETE: '/books/<id>' -> [ :req | books removeKey: (req at: #id)]; 
+   exception: KeyNotFound -> (TeaResponse notFound body: 'No such book');
+   start.
+]]]
+
+Now you can create a book with ZNClient or your web client as follows: 
+
+[[[language=smalltalk
+ZnClient new
+   url: 'http://localhost:8080/books/1';
+   formAt: 'author' put: 'SquareBracketAssociates'; 
+   formAt: 'title' put: 'Pharo For The Enterprise'; 
+   put
+]]]
+
+You can also list the contents using *http://localhost:1701/books* 
+For a more complete example, study the 'Teapot-Library-Example' package.
+
+OK now you you get the general feel of Teapot, let us see the key concepts.
+
 !! Route
 
 The most important concept of Teapot is the Route. The template for route definitions is as follows:
@@ -165,7 +201,7 @@ Teapot on
 
 Figure *@plainText* shows the result for the ==/sometext== route.
 
-+Teapot producing plain text *http://localhost:1701/sometext*.>file://figures/plainText.png|width=80|label=plainText+
++Teapot producing plain text *http://localhost:1701/sometext*.>file://figures/plainText.png|width=50|label=plainText+
 
 If the NeoJSON package is loaded (See 
 chapter  *NeoJSON>../NeoJSON/NeoJSON.pillar@cha:JSON*.) the ==jsonlist== transformer will return a JSON array:
@@ -182,8 +218,7 @@ ZnEasy get: 'http://localhost:1701/download'
  --> a ZnResponse(200 OK application/octet-stream 35B)
 ]]]
 
-If Mustache is installed  (See 
-chapter  *Mustache>../Mustache/Mustache.pillar@cha:mustache*.)  you can output templated information.
+If Mustache is installed  (See chapter  *Mustache>../Mustache/Mustache.pillar@cha:mustache*.)  you can output templated information.
 
 [[[language=smalltalk
 Teapot on
@@ -254,37 +289,6 @@ Teapot can straightforwardly serve static files. The following example serves th
 Teapot on
 	serveStatic: '/static' from: '/var/www/htdocs'; start.
 ]]]
-
-!! A REST example, showing some CRUD operations
-
-Lastly, here is a simple REST example for managing books. With the following code, we can list books, add a book and delete a book.
-
-[[[language=smalltalk
-| books teapot |
-books := Dictionary new.
-teapot := Teapot configure: {#defaultOutput -> #json. #port -> 8080. #debugMode -> true }.
-teapot
-   GET: '/books' -> books;
-   PUT: '/books/<id>' ->
-      [ :req | | book |
-         book := {'author' -> (req at: #author). 'title' -> (req at: #title)} asDictionary.
-         books at: (req at: #id) put: book];
-   DELETE: '/books/<id>' -> [ :req | books removeKey: (req at: #id)]; 
-   exception: KeyNotFound -> (TeaResponse notFound body: 'No such book');
-   start.
-]]]
-
-Now you can create a book with ZNClient as follows: 
-
-[[[language=smalltalk
-ZnClient new
-   url: 'http://localhost:8080/books/1';
-   formAt: 'author' put: 'SquareBracketAssociates'; 
-   formAt: 'title' put: 'Pharo For The Enterprise'; 
-   put
-]]]
-
-For a more complete example, study the 'Teapot-Library-Example' package.
 
 !! Conclusion
 Teapot is a powerful and simple web framework. It is based on the notion of routes and request transformations. It supports the definition of REST application. 
