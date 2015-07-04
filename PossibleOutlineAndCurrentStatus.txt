@@ -64,6 +64,11 @@ Finished:
 		>> Johan will work on it
 		>> Johan finished his pass [25 / jun / 2015]
 
+	Teapot/Teapot.pillar
+		>> Finished first version 
+		>> Johan finished his pass [3 / jul / 2015]
+
+
 *******************************************************************************		
 
 PillarChap
@@ -78,9 +83,6 @@ NeoCSV/NeoCSV.pier
 NeoJSON/NeoJSON.pier
 	>> Damien finished his pass on it (2015/06/19)
 	>> Stef should re read it.
-
-Teapot/Teapot.pillar
-	>> Finished first version 
 
 DeploymentWeb/DeploymentWeb.pillar
 	>> Christophe Demarey should ask Philippe Back or Norbert Hartl to review
