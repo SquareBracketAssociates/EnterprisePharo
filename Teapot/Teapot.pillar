@@ -67,7 +67,7 @@ ZnClient new
 You can also list the contents using *http://localhost:1701/books* 
 For a more complete example, study the 'Teapot-Library-Example' package.
 
-OK now you you get the general feel of Teapot, let us see the key concepts.
+Now that you get the general feel of Teapot, let us see the key concepts.
 
 !! Route
 
