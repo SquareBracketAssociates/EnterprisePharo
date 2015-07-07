@@ -2,54 +2,58 @@
 @cha:neoCSV
 
 CSV (Comma Separated Values) is a popular data-interchange format. NeoCSV is an elegant and efficient standalone Pharo framework to read and write CSV 
-converting to or from Pharo objects. This chapter has been written by Sven Van Caekenberghe the author of NeoCSV and many other nicely designed Pharo libraries.
+converting to and from Pharo objects. This chapter has been written by Sven Van Caekenberghe the author of NeoCSV and many other nicely designed Pharo libraries.
 
 !! An introduction to CSV
 
-CSV is a lightweight text-based de facto standard for human-readable tabular data interchange. Essentially, the key characteristics are that CSV 
-(or more generally, delimiter separated text data):
+CSV is a lightweight text-based ''de facto'' standard for human-readable tabular data interchange. Essentially, the key characteristics are that CSV 
+(or more generally, delimiter-separated text data):
 
-- is text-based (ASCII, Latin1, Unicode),
-- consists of records, 1 per line (any line ending convention),
-- where records consist of fields separated by a delimiter (comma, tab, semicolon),
-- where every record has the same number of fields, and 
-- where fields can be quoted should they contain separators or line endings.
+-is text-based (ASCII, Latin1, Unicode);
+-consists of records, 1 per line (any line ending convention);
+-where ''records'' consist of ''fields'' separated by a ''delimiter'' (comma, tab, semicolon);
+-where every record has the same number of fields; and 
+-where fields can be quoted should they contain separators or line endings.
 
-Here are some relevant links:
-
-*http://en.wikipedia.org/wiki/Comma-separated_values*
-*http://tools.ietf.org/html/rfc4180*
+@@note References: *http://en.wikipedia.org/wiki/Comma-separated_values*, *http://tools.ietf.org/html/rfc4180*
 
 Note that there is not one single official standard specification.
 
 !! NeoCSV
 
-The NeoCSV framework contains a reader (==NeoCSVReader==) and a writer (==NeoCSVWriter==) to parse respectively generate delimiter separated text data to or 
-from Smalltalk objects. The goals of this project are:
+The NeoCSV framework contains a reader (==NeoCSVReader==) and a writer (==NeoCSVWriter==) to parse and generate delimiter-separated text data to and 
+from Smalltalk objects. The goals of NeoCSV are:
 
-- to be standalone (have no dependencies and have little requirements),
-- to be small, elegant and understandable,
-- to be efficient (both in time and space), and
-- to be flexible and non-intrusive.
+-to be standalone (have no dependencies and little requirements);
+-to be small, elegant and understandable;
+-to be efficient (both in time and space); and
+-to be flexible and non-intrusive.
+
+To load NeoJSON, evaluate the following or use the Configuration Browser:
+
+[[[language=smalltalk
+Gofer it
+  smalltalkhubUser: 'SvenVanCaekenberghe' project: 'Neo';
+  configurationOf: 'NeoJSON';
+  loadStable.
+]]]
 
 To use either the reader or the writer, you instantiate them on a character stream and use standard stream access messages. Here are two examples:
 
-The first one read a sequences of data separated by ==,== and containing some line breaks. The reader produces arrays corresponding to the lines with the data.
- 
+The first example reads a sequence of data separated by ==,== and containing line breaks. The reader produces arrays corresponding to the lines with the data (the ==withCRs== method converts backslashes to new lines).
+
 [[[
 (NeoCSVReader on: '1,2,3\4,5,6\7,8,9' withCRs readStream) upToEnd.
   -->  #(#('1' '2' '3') #('4' '5' '6') #('7' '8' '9'))
 ]]]
 
-
 The second proceeds from the inverse: given a set of data as arrays it produces comma separated lines.
 
 [[[
 String streamContents: [ :stream |
-  (NeoCSVWriter on: stream) 
+  (NeoCSVWriter on: stream)
     nextPutAll: #( (x y z) (10 20 30) (40 50 60) (70 80 90) ) ].
-
-  --> 
+  -->
  '"x","y","z"
 "10","20","30"
 "40","50","60"
