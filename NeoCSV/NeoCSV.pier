@@ -54,7 +54,7 @@ String streamContents: [ :stream |
   (NeoCSVWriter on: stream)
     nextPutAll: #( (x y z) (10 20 30) (40 50 60) (70 80 90) ) ].
   -->
- '"x","y","z"
+  '"x","y","z"
 "10","20","30"
 "40","50","60"
 "70","80","90"
@@ -93,20 +93,22 @@ neoCSVWriter separator: $;
 ]]]
 
 
-Likewise, any of the three common line end conventions can be set: in the following example we set carriage return.
+Likewise, any of the three common line end conventions can be set. In the following example we set carriage return:
 
 [[[
 neoCSVWriter lineEndConvention: #cr
 ]]]
 
-There are 3 ways a field can be written (in increasing order of efficiency):
+There are 3 mechanisms that the writer may use to write a field (in increasing order of efficiency):
 
-- quoted - converting it with ==asString== and quoting it (the default), 
-- raw - converting it with ==asString== but not quoting it, and 
-- object - not quoting it and using ==printOn:== directly on the output stream.
+;quoted
+:converting it with ==asString== and quoting it (the default);
+;raw
+:converting it with ==asString== but not quoting it; and
+;object
+:not quoting it and using ==printOn:== directly on the output stream.
 
-Obviously, when disabling quoting, you have to be sure your values do not contain embedded separators or line endings. If you are writing arrays of numbers for 
-example, this would be the fastest way to do it:
+Obviously, when disabling quoting, you have to be sure your values do not contain embedded separators or line endings. If you are writing arrays of numbers for example, this would be the fastest way to do it:
 
 [[[
 neoCSVWriter
@@ -116,23 +118,39 @@ neoCSVWriter
 
 The ==fieldWriter== option applies to all fields.
 
-If your data is in the form of regular domain level objects it would be wasteful to convert them to arrays just for writing them as CSV. NeoCSV has a 
-non-intrusive option to map your domain object's fields: You add field specifications based on accessors. This is how you would write an array of Points.
+If your data is in the form of regular domain level objects it would be wasteful to convert them to arrays just for writing them as CSV. NeoCSV has a non-intrusive option to map your domain object's fields: You add field specifications based on accessors. This is how you would write an array of Points.
 
 [[[
-neoCSVWriter
-  nextPut: #(x y);
-  addFields: #(x y);
-  nextPutAll: { 1@2. 3@4. 5@6 }
+String streamContents: [ :stream |
+  (NeoCSVWriter on: stream)
+    nextPut: #('x field' 'y field');
+    addFields: #(x y);
+    nextPutAll: { 1@2. 3@4. 5@6 } ].
+  -->
+  '"x field","y field"
+"1","2"
+"3","4"
+"5","6"
+'
 ]]]
 
-Note how we first write the header (before customizing the writer). The ==addField:== and ==addFields:== methods arrange for the specified accessors to be 
-performed on the incoming objects to produce values that will be written by the fieldWriter. Additionally, there is a protocol to specify different field 
-writing behaviour per field, using ==addQuotedField:==, ==addRawField:== and ==addObjectField:==. To specify different field writers for an array (actually an 
-SequenceableCollection subclass), you can use the methods first, second, third, ... as accessors.
+Note how ==nextPut:== is used to first write the header (''i.e.'', the first line). After printing the header, the writer is customized: the ==addField:== and ==addFields:== methods arrange for the specified selectors (here ==x== and ==y==) to be sent on each incoming object to produce fields that will be written.
 
-SD: What is the difference between nextPut and addFields: 
-SD: for the comics should I add a method to handle the relationship to other domain objects?
+Additionally, there is a protocol to specify different field writing behavior per field. using ==addQuotedField:==, ==addRawField:== and ==addObjectField:==.
+
+To specify different field writers for an array (actually any ==SequenceableCollection== subclass), you can use the ==first==, ==second==, ==third==, etc. methods as selectors:
+
+[[[
+String streamContents: [ :stream |
+  (NeoCSVWriter on: stream)
+    addFields: #(first third second);
+    nextPutAll: { 'acb' . 'dfe' . 'gih' }].
+  -->
+  '"a","b","c"
+"d","e","f"
+"g","h","i"
+'
+]]]
 
 !! Customizing NeoCSVReader
 
@@ -150,15 +168,17 @@ neoCSVReader separator: $;
 ]]]
 
 NeoCSVReader will produce records that are instances of its ==recordClass==, which defaults to ==Array==. All fields are always read as Strings. If you want, 
-you can specify converters for each field, to convert them to integers or floats, any other object. Here is an example:
+you can specify converters for each field, to convert them to integers, floats or any other object. Here is an example:
 
 [[[
-neoCSVReader
+(NeoCSVReader on: '1,2.3,abc,2015/07/07' readStream)
+  separator: $,;
   addIntegerField;
   addFloatField;
   addField;
   addFieldConverter: [ :string | Date fromString: string ];
   upToEnd.
+--> an Array(an Array(1 2.3 'abc' 7 July 2015))
 ]]]
 
 Here we specify 4 fields: an integer, a float, a string and a date field. Field conversions specified this way only work on indexable record classes, like 
