@@ -245,7 +245,7 @@ $ wc paul.csv
 10000001 10000001 342781577 paul.csv
 ]]]
 
-The following code selectively collects every record with a third field lower than 1000 (there is around 10 thousands of those).  (this takes a bit of time, be patient).
+The following code selectively collects every record with a third field lower than 1000 (this takes a bit of time, be patient):
 
 [[[language=smalltalk
 Array streamContents: [ :out |
