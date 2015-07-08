@@ -1,10 +1,10 @@
-! Handling CSV with NeoCSV
+!Handling CSV with NeoCSV
 @cha:neoCSV
 
 CSV (Comma Separated Values) is a popular data-interchange format. NeoCSV is an elegant and efficient standalone Pharo framework to read and write CSV 
 converting to and from Pharo objects. This chapter has been written by Sven Van Caekenberghe the author of NeoCSV and many other nicely designed Pharo libraries.
 
-!! An introduction to CSV
+!!An introduction to CSV
 
 CSV is a lightweight text-based ''de facto'' standard for human-readable tabular data interchange. Essentially, the key characteristics are that CSV 
 (or more generally, delimiter-separated text data):
@@ -19,7 +19,7 @@ CSV is a lightweight text-based ''de facto'' standard for human-readable tabular
 
 Note that there is not one single official standard specification.
 
-!! NeoCSV
+!!NeoCSV
 
 The NeoCSV framework contains a reader (==NeoCSVReader==) and a writer (==NeoCSVWriter==) to parse and generate delimiter-separated text data to and 
 from Smalltalk objects. The goals of NeoCSV are:
@@ -61,7 +61,7 @@ String streamContents: [ :stream |
 '
 ]]]
 
-!! Generic Mode
+!!Generic Mode
 
 NeoCSV can operate in generic mode without any further customization. While writing,
 
@@ -80,7 +80,7 @@ The standard delimiter is a comma character. Quoting is always done using a doub
 repeating it. Field separators and line endings are allowed inside a quoted field. Any whitespace is significant.
 
 
-!! Customizing NeoCSVWriter
+!!Customizing NeoCSVWriter
 
 Any character can be used as field separator, for example:
 
@@ -118,7 +118,9 @@ neoCSVWriter
 
 The ==fieldWriter== option applies to all fields.
 
-If your data is in the form of regular domain level objects it would be wasteful to convert them to arrays just for writing them as CSV. NeoCSV has a non-intrusive option to map your domain object's fields: You add field specifications based on accessors. This is how you would write an array of Points.
+!!!Writing Objects
+
+If your data is in the form of regular domain-level objects it would be wasteful to convert them to arrays just for writing them as CSV. NeoCSV has a non-intrusive option to map your domain object's fields: You add field specifications based on accessors. This is how you would write an array of ==Point==s.
 
 [[[
 String streamContents: [ :stream |
@@ -136,7 +138,7 @@ String streamContents: [ :stream |
 
 Note how ==nextPut:== is used to first write the header (''i.e.'', the first line). After printing the header, the writer is customized: the ==addField:== and ==addFields:== methods arrange for the specified selectors (here ==x== and ==y==) to be sent on each incoming object to produce fields that will be written.
 
-Additionally, there is a protocol to specify different field writing behavior per field. using ==addQuotedField:==, ==addRawField:== and ==addObjectField:==.
+To change the writing behavior for a specific field, you have to use ==addQuotedField:==, ==addRawField:== and ==addObjectField:==.
 
 To specify different field writers for an array (actually any ==SequenceableCollection== subclass), you can use the ==first==, ==second==, ==third==, etc. methods as selectors:
 
@@ -152,7 +154,7 @@ String streamContents: [ :stream |
 '
 ]]]
 
-!! Customizing NeoCSVReader
+!!Customizing NeoCSVReader
 
 The parser is flexible and forgiving. Any line ending will do, quoted and non-quoted fields are allowed.
 
@@ -185,83 +187,73 @@ Here we specify 4 fields: an integer, a float, a string and a date field. Field 
 ==Array==.
 
 
-!! Conditional 
-With NeoCSVParser you can describe how each field is read and converted, using the same mechanism you can ignore fields. Have a look at the senders of 
-==addIgnoredField== in the following example where we ignore the third elements of all the inputs.
+!!!Ignoring Fields
 
-[[[
+While reading from a CSV file, you can ignore fields using ==addIgnoredField==. In the following example, the third field of each record is ignored:
 
+[[[language=smalltalk
 | input |
-input := (String crlf join: #( '1,2,a,3' '1,2,b,3' '1,2,c,3' '')).
-((NeoCSVReader on: input readStream)
-                      addIntegerField;
-                      addIntegerField;
-                      addIgnoredField;
-                      addIntegerField;
-                      upToEnd)
-					  -> 
-					  {
-					     #(1 2 3) . 
-					     #(1 2 3) .
-						 #(1 2 3) . }
+(NeoCSVReader on: '1,2,a,3\1,2,b,3\1,2,c,3\' withCRs readStream)
+  addIntegerField;
+  addIntegerField;
+  addIgnoredField;
+  addIntegerField;
+  upToEnd
+  -->  #(#(1 2 3) #(1 2 3) #(1 2 3))
 ]]]
 
-Adding ignored field(s) requires adding field types on all other remaining fields.
+Adding ignored field(s) requires adding field types on all other fields.
 
-!! Creating objects
-In many cases you will probably want your data to be returned as one of your domain objects. It would be wasteful to first create arrays and then convert all 
-those. NeoCSV has non-intrusive options to create instances of your own object classes and to convert and set fields on them directly. This is done by 
-specifying accessors and converters. Here is an example for reading Associations of Floats.
+!!!Creating Objects
 
+In many cases you will probably want your data to be returned as one of your domain objects. It would be wasteful to first create arrays and then convert all those. NeoCSV has non-intrusive options to create instances of your own classes and to convert and set fields on them directly. This is done by specifying accessors and converters. Here is an example for reading ==Association==s of ==Float==s.
 
-[[[
+[[[language=smalltalk
 (NeoCSVReader on: '1.5,2.2\4.5,6\7.8,9.1' withCRs readStream)
   recordClass: Association;
   addFloatField: #key: ;
-  addFloatField: #value: ; 
+  addFloatField: #value: ;
   upToEnd.
+  --> {1.5->2.2. 4.5->6. 7.8->9.1}
 ]]]
 
-For each field you give the mutator accessor to use, as well as an implicit or explicit conversion block.
+For each field you have to give the mutating accessor to use. You might also want to pass a conversion block using ==addField:converter:==.
 
-One thing that it will enforce is that all records have an equal number of fields. When there are no field accessors or converters, the field count will be set 
-automatically after the first record is read. If you want you could set it upfront. When there are field accessors or converters, the field count will be set to 
-the number of specified fields.
+!!!Reading many Objects
 
-!! Reading a lot of objects
+Handling large CSV files is possible with NeoCVS. In the following, we first create a large CSV file then read it partly (this takes a bit of time, be patient).
 
-Handling large CSV file is possible with NeoCVS since it pays attention to have 
-For example its ==do:== is implemented as streaming over the record one by one, never holding more than one in memory.
-Here is a little example generating first over 300 Mb of data and loading it partly.
-
-[[[
-'paul.csv' asFileReference writeStreamDo: [ :file|
-  ZnBufferedWriteStream on: file do: [ :out |
-    (NeoCSVWriter on: out) in: [ :writer |
-      writer writeHeader: { #Number. #Color. #Integer. #Boolean}.
-      1 to: 1e7 do: [ :each |
-        writer nextPut: { each. #(Red Green Blue) atRandom. 1e6 atRandom. #(true false) atRandom } ] ] ] ].
+[[[language=smalltalk
+'paul.csv' asFileReference writeStreamDo: [ :file |
+  ZnBufferedWriteStream on: file do: [ :out | | writer |
+    writer := (NeoCSVWriter on: out).
+    writer writeHeader: { #Number. #Color. #Integer. #Boolean}.
+    1 to: 1e7 do: [ :each |
+        writer nextPut: { each. #(Red Green Blue) atRandom. 1e6 atRandom. #(true false) atRandom } ] ] ].
 ]]]
 
 
-This results in a 300Mb file:
+Above code results in a 300Mb file:
 
-[[[
-]]]$ ls -lah paul.csv 
+[[[language=bash
+$ ls -lah paul.csv 
 -rw-r--r--@ 1 sven  staff   327M Nov 14 20:45 paul.csv
 $ wc paul.csv 
- 10000001 10000001 342781577 paul.csv
+10000001 10000001 342781577 paul.csv
 ]]]
 
+The following code selectively collects every record with a third field lower than 1000 (there is around 10 thousands of those).  (this takes a bit of time, be patient).
 
-This is a selective read and collect (loads about 10K records):
-
-[[[
+[[[language=smalltalk
 Array streamContents: [ :out |
-  'paul.csv' asFileReference readStreamDo: [ :in |
-    (NeoCSVReader on: (ZnBufferedReadStream on: in)) in: [ :reader |
-      reader skipHeader; addIntegerField; addSymbolField; addIntegerField; addFieldConverter: [ :x | x = #true ].
-      reader do: [ :each | each third < 1000 ifTrue: [ out nextPut: each ] ] ] ] ].
+  'paul.csv' asFileReference readStreamDo: [ :input |
+    (NeoCSVReader on: (ZnBufferedReadStream on: in))
+      skipHeader;
+      addIntegerField;
+      addSymbolField;
+      addIntegerField;
+      addFieldConverter: [ :x | x = #true ];
+      do: [ :each | each third < 1000 ifTrue: [ out nextPut: each ] ] ] ].
 ]]]
 
 
@@ -286,3 +278,4 @@ can use them both using a quick and dirty explore style. Here are some examples:
 
 NeoCSV provides a good support to emit or import comma separated data. 
  
+%  LocalWords:  accessor
