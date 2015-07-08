@@ -1,13 +1,16 @@
 !Handling CSV with NeoCSV
 @cha:neoCSV
 
-CSV (Comma Separated Values) is a popular data-interchange format. NeoCSV is an elegant and efficient standalone Pharo framework to read and write CSV 
-converting to and from Pharo objects. This chapter has been written by Sven Van Caekenberghe the author of NeoCSV and many other nicely designed Pharo libraries.
+CSV (Comma Separated Values) is a popular data-interchange format. This chapter presents NeoCSV, a library to parse and export CSV files.
+This chapter has originally been written by Sven Van Caekenberghe the author of NeoCSV and many other nicely designed Pharo libraries.
 
-!!An introduction to CSV
+!!NeoCSV
 
-CSV is a lightweight text-based ''de facto'' standard for human-readable tabular data interchange. Essentially, the key characteristics are that CSV 
-(or more generally, delimiter-separated text data):
+NeoCSV is an elegant and efficient standalone Pharo library to read (resp. write) CSV files converting to (resp. from) Pharo objects.
+
+!!!An introduction to CSV
+
+CSV is a lightweight text-based ''de facto'' standard for human-readable tabular data interchange. Essentially, the key characteristics are that CSV (or more generally, delimiter-separated text data):
 
 -is text-based (ASCII, Latin1, Unicode);
 -consists of records, 1 per line (any line ending convention);
@@ -19,9 +22,9 @@ CSV is a lightweight text-based ''de facto'' standard for human-readable tabular
 
 Note that there is not one single official standard specification.
 
-!!NeoCSV
+!!!Hands On NeoCSV
 
-The NeoCSV framework contains a reader (==NeoCSVReader==) and a writer (==NeoCSVWriter==) to parse and generate delimiter-separated text data to and 
+NeoCSV contains a reader (==NeoCSVReader==) and a writer (==NeoCSVWriter==) to parse and generate delimiter-separated text data to and 
 from Smalltalk objects. The goals of NeoCSV are:
 
 -to be standalone (have no dependencies and little requirements);
