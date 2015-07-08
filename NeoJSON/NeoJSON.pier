@@ -1,8 +1,8 @@
 ! JSON
 @cha:JSON
 
-JSON (JavaScript Object Notation) is a popular data-interchange format. NeoJSON is an elegant and efficient standalone Smalltalk framework to read and write 
-JSON converting to and from Smalltalk objects. The framework is developed and actively maintained by Sven Van Caekenberghe.
+JSON (JavaScript Object Notation) is a popular data-interchange format. NeoJSON is an elegant and efficient standalone Smalltalk library to read and write 
+JSON converting to and from Smalltalk objects. The library is developed and actively maintained by Sven Van Caekenberghe.
 
 !!An introduction to JSON
 
@@ -38,14 +38,14 @@ Gofer it
 ]]]
 
 
-The NeoJSON framework contains a reader (==NeoJSONReader==) and a writer (==NeoJSONWriter==) to parse, respectively generate, JSON to and from Pharo objects. The goals of this framework are:
+The NeoJSON library contains a reader (==NeoJSONReader==) and a writer (==NeoJSONWriter==) to parse, respectively generate, JSON to and from Pharo objects. The goals of NeoJSON are:
 
 -to be standalone (have no dependencies and little requirements);
 -to be small, elegant and understandable;
 -to be efficient (both in time and space);
 -to be flexible and non-intrusive.
 
-Compared to other Smalltalk JSON frameworks, NeoJSON
+Compared to other Smalltalk JSON libraries, NeoJSON
 
 -has less dependencies and little requirements;
 -can be more efficient (be faster and use less memory);
