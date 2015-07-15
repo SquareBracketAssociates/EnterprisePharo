@@ -60,10 +60,39 @@
 \sloppy % To avoid LaTeX's annoying habit of letting lines stick over the margins!
 \mainmatter
 
-{{{content}}}
+\input{../Copyright/License.tex}
+ 
+\part{Simple Web applications}
 
+\input{../Teapot/Teapot.tex}
+\input{../WebApp/WebApp.tex}
 
-\backmatter
+\part{HTTP}
+
+\input{../Zinc-Encoding-Meta/Zinc-Encoding-Meta.tex}
+\input{../Zinc-HTTP-Client/Zinc-HTTP-Client.tex}
+\input{../Zinc-HTTP-Server/Zinc-HTTP-Server.tex}
+\input{../Zinc-REST/Zinc-REST.tex}
+\input{../WebSockets/WebSockets.tex}
+
+\part{Data}
+
+\input{../NeoCSV/NeoCSV.tex}
+\input{../NeoJSON/NeoJSON.tex}
+\input{../STON/STON.tex}
+\input{../Fuel/Fuel.tex}
+\input{../Voyage/Voyage.tex}
+
+\part{Presentation}
+
+\input{../Mustache/Mustache.tex}
+\input{../RenoirST/RenoirST.tex}
+\input{../PillarChap/Pillar.tex}
+\input{../Artefact/Artefact.tex}
+
+\part{Deployment}
+
+\input{../DeploymentWeb/DeployForProduction.tex}
 
 % another try
 % \printglossary
@@ -73,9 +102,12 @@
 % \printindex
 \appendix
 
+\part{Appendix}
+
 \chapter{Authors}
 
 List of authors sorted alphabetically:
+
 \begin{tabular}{l}
 Cassou Damien \\	 
 Ducasse St\'ephane \\
@@ -84,7 +116,7 @@ Fabry Johan \\
 Van Caekenberghe Sven\\
 \end{tabular}
 
-
+\backmatter
 
 
 \end{document}
