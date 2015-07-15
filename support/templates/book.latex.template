@@ -46,10 +46,8 @@
 \pagestyle{headings}
 %=================================================================
 \author{
-        Damien Cassou\quad \\
-        St\'ephane Ducasse\quad Luc Fabresse\\ Johan Fabry
-     	Sven Van Caekenberghe}
-\title{\Huge\bf Enterprise Pharo}
+        Damien Cassou,\\ St\'ephane Ducasse,\\ Luc Fabresse,\\ Johan Fabry,\\ Sven Van Caekenberghe}
+\title{\Huge\bf Enterprise Pharo:\\a Web Perspective}
 \isodate
 \date{\emph{Version of \today}}
 \maketitle
@@ -64,12 +62,30 @@
 
 {{{content}}}
 
+
+\backmatter
+
 % another try
 % \printglossary
 \bibliographystyle{jurabib}
 \bibliography{scg}
 
-\printindex
+% \printindex
+\appendix
+
+\chapter{Authors}
+
+List of authors sorted alphabetically:
+\begin{tabular}{l}
+Cassou Damien \\	 
+Ducasse St\'ephane \\
+Fabresse Luc 	\\	
+Fabry Johan \\
+Van Caekenberghe Sven\\
+\end{tabular}
+
+
+
 
 \end{document}
 
