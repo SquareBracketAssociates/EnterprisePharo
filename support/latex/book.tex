@@ -1,41 +1,27 @@
-%!TEX TS-program = lualatex
-% -*- mode: LaTeX; -*-
-
-\documentclass[a4paper,10pt,twoside]{book}
-\usepackage[
-        papersize={6.13in,9.21in},
-        hmargin={.75in,.75in},
-        vmargin={.75in,1in},
-        ignoreheadfoot
-]{geometry}
-\input{../support/latex/common.tex}
-\setboolean{lulu}{true}
 %=================================================================
 % Add the path for the figures of each chapter here:
 \graphicspath{
-	{../figures/}
-  	{../Copyright/}	
-  	{../PillarChap/}
-  	{../Artefact/}
-	{../Zinc-HTTP-Client/}
-	{../Zinc-HTTP-Server/}
-	{../Zinc-Encoding-Meta/}
-	{../Zinc-REST/}
-	{../Fuel/}
-	{../STON/}
-	{../Voyage/}
-	{../WebApp/}
-	{../WebSockets/}
-	{../NeoJSON/}
-	{../RenoirST/}
-	{../NeoCSV/}
-	{../Teapot/}
-	{../Mustache/}
+        {../figures/}
+        {../Copyright/}
+        {../PillarChap/}
+        {../Artefact/}
+        {../Zinc-HTTP-Client/}
+        {../Zinc-HTTP-Server/}
+        {../Zinc-Encoding-Meta/}
+        {../Zinc-REST/}
+        {../Fuel/}
+        {../STON/}
+        {../Voyage/}
+        {../WebApp/}
+        {../WebSockets/}
+        {../NeoJSON/}
+        {../RenoirST/}
+        {../NeoCSV/}
+        {../Teapot/}
+        {../Mustache/}
 }
 %=================================================================
 \let\wholebook=\relax
-\makeindex
-\makeglossary
 %=================================================================
 \renewcommand{\nnbb}[2]{} % Disable editorial comments
 %=================================================================
@@ -61,7 +47,7 @@
 \mainmatter
 
 \input{../Copyright/License.tex}
- 
+
 \part{Simple Web applications}
 
 \input{../Teapot/Teapot.tex}
@@ -109,9 +95,9 @@
 List of authors sorted alphabetically:
 
 \begin{tabular}{l}
-Cassou Damien \\	 
+Cassou Damien \\
 Ducasse St\'ephane \\
-Fabresse Luc 	\\	
+Fabresse Luc    \\
 Fabry Johan \\
 Van Caekenberghe Sven\\
 \end{tabular}
@@ -120,12 +106,3 @@ Van Caekenberghe Sven\\
 
 
 \end{document}
-
-%=================================================================
-%%% Local Variables:
-%%% coding: utf-8
-%%% mode: latex
-%%% TeX-master: t
-%%% TeX-PDF-mode: t
-%%% ispell-local-dictionary: "english"
-%%% End:

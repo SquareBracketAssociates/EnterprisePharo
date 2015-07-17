@@ -12,10 +12,8 @@ if hash "pillar" 2>/dev/null; then
 fi
 
 function pillar_all() {
-  $PILLAR_COMMAND export --to='LaTeX whole book'
   $PILLAR_COMMAND export --to='LaTeX by chapter'
   $PILLAR_COMMAND export --to='HTML by chapter'
-  $PILLAR_COMMAND export --to='Markdown by chapter'
 }
 
 function pillar_one() {
@@ -74,8 +72,10 @@ function compile_latex_book() {
   echo =========================================================
   echo COMPILING Book
   echo =========================================================
+  cp EnterprisePharo-*.tex book-result/
   cd book-result
-  produce_pdf . EnterprisePharo
+  produce_pdf . EnterprisePharo-A4
+  produce_pdf . EnterprisePharo-Lulu
 }
 
 function latex_enabled() {
