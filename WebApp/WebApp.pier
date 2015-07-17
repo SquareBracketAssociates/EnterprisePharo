@@ -65,7 +65,7 @@ If so, we create and return an OK response (code 200) with a simple text entity 
 
 Now we define the method ==value:== to make it an alias of ==handleRequest:== as follows:
 
-[[[
+[[[language=smalltalk
 MyFirstWebApp>>value: request
     ^ self handleRequest: request
 ]]]
@@ -73,7 +73,7 @@ MyFirstWebApp>>value: request
 This is needed so our Web app object can be used more flexibly.
 To test our Web app, we'll add it as one of the pages of the default server, like this:
 
-[[[
+[[[language=smalltalk
 ZnServer startDefaultOn: 8080.
 ZnServer default delegate map: #image to: MyFirstWebApp new.
 ]]]
@@ -108,7 +108,7 @@ HTML generation and/or using templates can be done with some of the higher level
 Here we'll manually compose our HTML to focus on the Web app building and deployment.
 Go ahead and add a new method named ==html== and slightly modify a previous one.
 
-[[[
+[[[language=smalltalk
 MyFirstWebApp>>html
   ^ '<html><head><title>Image</title>
   <body>
@@ -138,7 +138,7 @@ bytes together with a mime type.
 
 To simplify our app, we will arrange things so that we always start with a default image, then we always have something to show. Let's add a little helper: the ==downloadPharoLogo== method:
 
-[[[
+[[[language=smalltalk
 MyFirstWebApp>>downloadPharoLogo
   ^ ZnClient new
       beOneShot;
@@ -150,7 +150,7 @@ Quickly test the code by selecting the method body (not including the name) and 
 You should get an image entity back.
 Now add the accessor ==image== defined as follow:
 
-[[[
+[[[language=smalltalk
 MyFirstWebApp>>image
     ^ image ifNil: [ image := self downloadPharoLogo ]
 ]]]
@@ -162,7 +162,7 @@ Select the option to automatically declare a new instance variable and we are go
 Remember that we decided we were going to serve the raw image itself using a query variable, like ==/image?raw=true==.
 Make the following modification to existing methods and add a new one as below.
 
-[[[
+[[[language=smalltalk
 MyFirstWebApp>>html
   ^ '<html><head><title>Image</title>
   <body>
@@ -195,7 +195,7 @@ Interaction is what differentiates a Web site from a Web application.
 We will now add the ability for users to upload a new image to change the one on the server.
 To add this ability we need to use an HTML form. Let's change our HTML one final time.
 
-[[[
+[[[language=smalltalk
 MyFirstWebApp>>html
   ^ '<html><head><title>Image</title>
   <body>
@@ -218,7 +218,7 @@ With the above change, you will be able to see the form, it just won't work, yet
 In our request handling, we have to distinguish between GET and POST requests.
 Change ==handleRequest:== to its final form.
 
-[[[
+[[[language=smalltalk
 MyFirstWebApp>>handleRequest: request
   request uri path = #image
     ifTrue: [
@@ -231,7 +231,7 @@ MyFirstWebApp>>handleRequest: request
 
 Now we have to add an implementation of ==handlePostRequest:== to accept the uploaded image and change the current one.
 
-[[[
+[[[language=smalltalk
 MyFirstWebApp>>handlePostRequest: request
    | part newImage |
    part := request entity partNamed: #file.
@@ -250,7 +250,7 @@ Nevertheless, we have taken a bit of a shortcut in the code above.
 It is pretty dangerous to just accept what is coming in from the internet without doing some checking.
 Here is a version that does that.
 
-[[[
+[[[language=smalltalk
 MyFirstWebApp>>handlePostRequest: request
   | part newImage badRequest |
   badRequest := [ ^ ZnResponse badRequest: request ].
@@ -284,7 +284,7 @@ You can learn an awful lot from looking at live objects.
 Let's make a deliberate error in our code.
 Change ==handlePostRequest:== so that the last line reads like:
 
-[[[
+[[[language=smalltalk
 ^ ZnResponse redirectTo: #image
 ]]]
 
@@ -298,7 +298,7 @@ MessageNotUnderstood: ZnResponse class>>redirectTo:
 
 But, we can do better and activate the debug mode of the server. Let's stop and restart our Web app using:
 
-[[[
+[[[language=smalltalk
 ZnServer stopDefault.
 (ZnServer startDefaultOn: 8080) debugMode: true.
 ZnServer default delegate map: #image to: MyFirstWebApp new.
@@ -340,7 +340,7 @@ look at it while debugging. Turns out this is quite easy. Are you ready for some
 The Pharo object that represents images is called a form. There are objects called ==GIFReadWriter==, ==PNGReadWriter== and ==JPEGReadWriter== that can parse
 bytes into forms. Add two helper methods, ==formForImageEntity:== and ==form==.
 
-[[[
+[[[language=smalltalk
 MyFirstWebApp>>formForImageEntity: imageEntity
     | imageType parserClassName parserClass parser |
     imageType := imageEntity contentType sub.
@@ -358,14 +358,14 @@ What we do is use the sub type of the mime type, like "png" in image/png, to fin
 actual bytes and invoke the parser with sending ==nextImage==, which will return a form. The ==form== method makes it easy to invoke all this logic on our current image.
 
 Now we can have a look at, for example, the default image like this:
-[[[
+[[[language=smalltalk
 MyFirstWebApp new form asMorph openInWindow.
 ]]]
 
 Obviously you can do this while debugging too. We can also use the image parsing logic to improve our error checking even further. Here is the final version of ==handlePostRequest:==
 
 
-[[[
+[[[language=smalltalk
 MyFirstWebApp>>handlePostRequest: request
     | part newImage badRequest |
     badRequest := [ ^ ZnResponse badRequest: request ].
@@ -404,7 +404,7 @@ But the Pharo browser helps you here using the "Jump to test class" in the conte
 
 Add now the following helper method on ==MyFirstWebAppTest==:
 
-[[[
+[[[language=smalltalk
 MyFirstWebAppTest>>withServerDo: block
     | server |
     server := ZnServer on: 1700 + 10 atRandom.
@@ -420,7 +420,7 @@ Since we will need a configured server instance with our Web app as delegate for
 Now we are ready for our first test.
 
 
-[[[
+[[[language=smalltalk
 MyFirstWebAppTest>>testMainPage
     self withServerDo: [ :server |
       | client |
@@ -441,7 +441,7 @@ In ==testMainPage== we do a request for the main page, ==/image==, and assert th
 
 Let's try to write a test for the actual raw image being served.
 
-[[[
+[[[language=smalltalk
 MyFirstWebAppTest>>testDefaultImage
     self withServerDo: [ :server |
       | client |
@@ -459,7 +459,7 @@ Note how we can actually test for equality between the served image and the one 
 Our final test will actually do an image upload and check if the served image did actually change to what we uploaded. Here we define the method ==image== that
 returns a new image.
 
-[[[
+[[[language=smalltalk
 MyFirstWebAppTest>>image
     ^ ZnClient new
         beOneShot;
@@ -529,7 +529,7 @@ Before accepting, fill in your user(name) and password (between the single quote
 
 +Adding a Smalltalkhub repository in Monticello for your project.>file://figures/22-AddRepoInMC.jpg|width=80|label=AddRepoInMC+
 
-% [[[
+% [[[language=smalltalk
 % MCHttpRepository
 %     location: 'http://www.smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main'
 %     user: ''
@@ -602,7 +602,7 @@ Open Monticello and click on the \+Config button to add a configuration named ==
 With a right click on it, you can "Browse configuration" which open a Nautilus browser on this newly created class.
 We are now going to define three methods: one defining a baseline for our configuration, one defining concrete package versions for that baseline, and one declaring that version as the stable released version. Here is the code (if you would be working in Pharo 3.0 you will notice that ==MetacelloConfigTemplate== contains some extra template methods, remove any baseline or version related ones and overwrite ==stable:==)
 
-[[[
+[[[language=smalltalk
 ConfigurationOfMyFirstWebApp>>baseline1: spec
     <version: '1-baseline'>
     spec for: #common do: [
@@ -623,7 +623,7 @@ ConfigurationOfMyFirstWebApp>>stable: spec
 
 Once you committed the project (that consists in both the Metacello configuration and the Monticello package 'MyFirstWebApp'), you can test your configuration by trying to load it.
 
-[[[
+[[[language=smalltalk
 ConfigurationOfMyFirstWebApp load.
 ]]]
 
@@ -731,7 +731,7 @@ Loading 1 of ConfigurationOfMyFirstWebApp...
 After loading all necessary code, the config option will also save our image so that it now permanently includes our code. Although we could try to write a
 (long) one line expression to start our Web app in a server and pass it to the eval option, it is better to write a small script. Create a file called ‘run.st’ with the following contents:
 
-[[[
+[[[language=smalltalk
 ZnServer defaultOn: 8080.
   ZnServer default logToTranscript.
   ZnServer default delegate
@@ -797,7 +797,7 @@ If you found it difficult to find the right methods, have a look at the followin
 
 Here are 3 new methods that are part of the solution.
 
-[[[
+[[[language=smalltalk
 pngImageEntityForForm: form
     ^ ZnByteArrayEntity
         with: (ByteArray streamContents: [ :out |
@@ -820,7 +820,7 @@ updatePreviousImage
 !!Solution, part 2, changed methods
 
 Here are the changes to 3 existing methods for the complete solution.
-[[[
+[[[language=smalltalk
   html
     ^ '<html><head><title>Image</title>
     <body>
@@ -868,7 +868,7 @@ Here are the changes to 3 existing methods for the complete solution.
 
 To update our configuration, add 1 method and change 1 method.
 
-[[[
+[[[language=smalltalk
 version2: spec
    <version: '2' imports: #('1-baseline')>
    spec for: #common do: [
@@ -897,7 +897,7 @@ You can also find the code, including the tests and the Metacello configuration,
 MyFirstWebApp project here: *http://smalltalkhub.com/#!/~SvenVanCaekenberghe/MyFirstWebApp*.
 A similar example is also included in the Zinc HTTP Components project itself, under the name ==ZnImageExampleDelegate==[Tests].
 
-[[[
+[[[language=smalltalk
 Object subclass: #MyFirstWebApp
   instanceVariableNames: ''
   classVariableNames: ''
@@ -905,7 +905,7 @@ Object subclass: #MyFirstWebApp
   category: 'MyFirstWebApp'
 ]]]
 
-[[[
+[[[language=smalltalk
 handleRequest: request
   request uri path = #image
     ifTrue: [
@@ -917,19 +917,19 @@ handleRequest: request
 ]]]
 
 
-[[[
+[[[language=smalltalk
 value: request
   ^ self handleRequest: request
 ]]]
 
-[[[
+[[[language=smalltalk
 handleGetRequest: request
   ^ (request uri queryAt: #raw ifAbsent: [ nil ])
       ifNil: [ ZnResponse ok: (ZnEntity html: self html) ]
       ifNotNil: [ ZnResponse ok: self image ]
 ]]]
 
-[[[
+[[[language=smalltalk
 handlePostRequest: request
    | part newImage badRequest |
    badRequest := [ ^ ZnResponse badRequest: request ].
@@ -950,7 +950,7 @@ handlePostRequest: request
    ^ ZnResponse redirect: #image
 ]]]
 
-[[[
+[[[language=smalltalk
 html
   ^ '<html><head><title>Image</title>
   <body>
@@ -965,7 +965,7 @@ html
   </body></html>'
 ]]]
 
-[[[
+[[[language=smalltalk
 downloadPharoLogo
   ^ ZnClient new
       beOneShot;
@@ -973,13 +973,13 @@ downloadPharoLogo
       entity
 ]]]
 
-[[[
+[[[language=smalltalk
 image
   ^ image ifNil: [ image := self downloadPharoLogo ]
 ]]]
 
 
-[[[
+[[[language=smalltalk
 formForImageEntity: imageEntity
   | imageType parserClassName parserClass parser |
   imageType := imageEntity contentType sub.
@@ -989,7 +989,7 @@ formForImageEntity: imageEntity
     ^ parser nextImage
 ]]]
 
-[[[
+[[[language=smalltalk
 form
   ^ self formForImageEntity: self image
 ]]]
