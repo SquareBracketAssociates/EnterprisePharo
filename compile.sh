@@ -50,7 +50,7 @@ function produce_pdf() {
 
   cd "$dir"         # e.g., cd Zinc/
   mypdflatex "$pillar_file" && mypdflatex "$pillar_file"
-  cd ..
+  cd -
 }
 
 function compile_chapters() {
