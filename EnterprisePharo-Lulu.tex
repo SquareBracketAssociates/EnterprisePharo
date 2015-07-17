@@ -3,9 +3,13 @@
 
 \documentclass[10pt,twoside]{book}
 \usepackage[
-        papersize={15.593cm,23.389cm},
-        hmargin={.75in,.75in},
-        vmargin={.75in,1in},
+        % http://connect.lulu.com/t5/Mise-en-page-du-corpus/Comment-faire-pour-que-mon-contenu-s-%C3%A9tale-jusqu-aux-bords-de-la/ta-p/33461
+        % book size: papersize={15.593cm,23.389cm},
+        % the PDF size must be 0,635 cm larger on every slide
+        papersize={16.228cm,24.024cm},
+        % Lulu wants margins of 1.27cm
+        hmargin={1,27cm,1,27cm},
+        vmargin={1,27cm,1,27cm},
         ignoreheadfoot
 ]{geometry}
 \input{../support/latex/common.tex}
