@@ -1,4 +1,6 @@
-{{title: Pillar}}
+{
+	"title": "Pillar"
+}
 
 !Documenting your Project with Pillar
 @cha:pillar
