@@ -255,8 +255,8 @@ Here is an improved version.
 MyFirstWebApp>>handlePostRequest: request
   | part newImage badRequest |
   badRequest := [ ^ ZnResponse badRequest: request ].
-  (request hasEntity
-       and: [ request contentType matches: ZnMimeType multiPartFormData ])
+  request hasEntity ifFalse: badRequest.
+  (request contentType matches: ZnMimeType multiPartFormData)
     ifFalse: badRequest.
   part := request entity
             partNamed: #file
