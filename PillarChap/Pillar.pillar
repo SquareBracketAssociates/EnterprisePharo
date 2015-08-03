@@ -5,7 +5,7 @@
 !Documenting your Project with Pillar
 @cha:pillar
 
-This documentation describe the version 0.59 of Pillar.
+This documentation describe the version 0.60 of Pillar.
 
 !!Introduction
 
@@ -254,12 +254,16 @@ In this section we show how to write Pillar documents by presenting the Pillar s
 
 !!!Meta-information
 
-Meta-information of a particular file is written at the start of the file between 2 curly braces. A meta-information starts with a word acting as a key, is 
-followed by a colon ==:==, and finishes with a string acting as the value. For example, the following file,
+Meta-information of a particular file is written at the start of the file between curly braces using the STON syntax (see Chapter *: STON>../STON/STON.pillar@cha:ston*). 
+A meta-information starts with a word between quotation marks acting as a key, is followed by a colon ==:==, and finishes with a string between quotation marks acting as the value. 
+For example, the following file,
 
 [[[language=pillar
-{{title: My first document while reading the 5 minutes Pillar tutorial}}
-{{author: Damien Cassou}}
+{ 
+	"title": "My first document while reading the 5 minutes Pillar tutorial",
+	"author": "Damien Cassou"
+}
+
 !Hello World
 ]]]
 
@@ -283,7 +287,7 @@ invisible and links will be rendered as: *@chapterAndSections*.
 
 An empty line starts a new paragraph.
 
-An annotated paragraph starts a line with ==\@@== followed by either ==todo== or ==note==. For example,
+An annotated paragraph starts a line with ==\@@== followed by a key word as ==todo== or ==note==. For example,
 
 [[[
 @@note this is a note annotation.
@@ -445,13 +449,13 @@ let the cell become a table heading.
 The contents of cells can be aligned left, centered or aligned right by using ==|{==, ==||== or ==|}== respectively.
 
 [[[
-||centered||centered||centered
+||centered||!centered header||centered
 |{ left |} right || center
 ]]]
 
 generates
 
-||centered||centered||centered
+||centered||!centered header||centered
 |{ left |} right || center
 
 !!!Links
@@ -512,6 +516,7 @@ self foo bar
 This script can then be referenced with ==\*@script1\*== (produces *@script1*).
 
 !!!! Syntax highlighting
+@sec:syntaxHighlighting
 
 You have the possibility to add a parameter call ==language==. This will give you syntax highlighting.
 For example on *@script1* we used the ==smalltalk== value for the ==language== parameter.
@@ -547,6 +552,39 @@ line 45, instead of copy/paste the code you can use:
 = ]]]
 
 The ==firstLine== and ==lastLine== parameters are optional. 
+
+!!!! Generate a part of your document with a script
+
+If you want you can also evaluate a script to generate a part of your file.
+For example if you write a documentation and you give the number of classes on your project you do not want to update this number at each version of your project. You can just write a script one time that will generate a part of your document.
+
+= [[[eval=true
+= 	| packages classes|
+= 	packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
+= 	classes := OrderedCollection new.
+= 	(packages do: [ :each | each classes do: [ :class | classes add: class ] ]).
+=  	stream nextPutAll: 'The Pillar project contains:' , String lf, '- ==';
+= 		nextPutAll: packages size asString;
+= 		nextPutAll: ' packages==.' , String lf, '- ==';
+= 		nextPutAll: classes size asString;
+= 		nextPutAll:  'classes=='.
+= ]]]
+
+will generate:
+
+[[[eval=true
+	| packages classes|
+	packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
+	classes := OrderedCollection new.
+	(packages do: [ :each | each classes do: [ :class | classes add: class ] ]).
+	stream nextPutAll: 'The Pillar project contains:' , String lf, '- ==';
+		nextPutAll: packages size asString;
+		nextPutAll: ' packages==.' , String lf, '- ==';
+		nextPutAll: classes size asString;
+		nextPutAll:  'classes=='.
+]]]
+
+For example the Section *@sec:syntaxHighlighting* or the Section *@configParameters* are generated from the Pillar image.
 
 !!!Raw
 
