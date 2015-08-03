@@ -646,6 +646,7 @@ Here some examples:
 ]]]
 
 !!!! Slide annotation
+@sec:slide
 
 This annotation is used to create a slide structure for a ==beamer== or a ==deck.js== export.
 The first parameter, ""title"", is a required parameter to give a title at your slide. If you want a slide without title just let a space. 
@@ -697,6 +698,55 @@ To create a preformatted block, begin each line with ==\===. A preformatted bloc
 !!!Commented lines
 
 Lines that start with a ==%== are considered comments and will not be rendered in the resulting document, except during a Pillar export.
+
+!! Write a presentation
+@sec:presentationPillar
+
+Since the version 0.59 you have the possibility to write presentations with Pillar.
+For now you can export a Pillar file as a ==beamer== or a ==deck.js== file.
+
+With the default te;plate you can provide some meta-informations to generate the first slide.
+For example:
+
+[[[
+{
+	"title":"Booleans and Conditions",
+	"subtitle":"",
+	"author":"Stephane Ducasse and Damien Cassou",
+	"complement":"http://stephane.ducasse.free.fr/ stephane.ducasse@inria.fr"
+}
+]]] 
+
+In a presentation export the headers create the structure of your presentation. Each title create a slide with the text in it. 
+You can disable this inside the configuration with the parameter ==renderStructureAsSlide==.
+
+To create a new slide you can use the ==slide== annotation (see Section *@sec:slide* ). 
+A slide end at the beginning of an other slide or at the end of the document.
+
+Example of a slide:
+
+[[[
+${slide: Pillar}$
+
+${columns}$
+
+${column:45}$
+
+- One input, many outputs
+-- ''HTML''
+-- ''LaTeX''
+-- ''Text''
+-- ''Markdown''
+
+- Textual syntax
+-- No need for a specific editor
+
+${column:55}$
+
++ Figure !>file://path.png|width=80+
+
+${endColumns}$
+]]]
 
 !! Configuring your output
 @configuring
@@ -927,14 +977,14 @@ Now we have our document. In order to export it we need to create a new instance
 In order to export with a configuration you need to create a new configuration. To see all possible parameters, you may refer to *@configParameters*.
 
 [[[language=smalltalk
-	PRCocoonConfiguration new
-		templateStream: PRHTMLWriter defaultTemplate;
-		configurations: Dictionary new;
-		inputFiles: {'foo.pillar', 'bar.pillar'};
-		outputType: PRHTMLWriter;
-		separateOutputFiles: false;
-		outputFile: 'test.html' asFileReference ;
-		export
+(PRCocoonConfiguration newFromString:'
+{
+	"inputFiles": [ "foo.pillar", "bar.pillar"],
+	"outputType": #html,
+	"separateOutputFiles": false,
+	"outputFile": "test.html" 
+}
+') export
 ]]]
 
 !! Pillar on Windows
