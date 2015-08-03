@@ -625,19 +625,17 @@ On Pillar you can use some annotation in order to do some things.
 An annotation have this syntax:
 
 [[[
-${name:parameter=value|parameter2=value2}$
+${tag:parameter=value|parameter2=value2}$
 ]]]
 
-For now Pillar only have the inputFile annotation.
-
-!!!!InputFile annotation
+!!!! InputFile annotation
 
 This annotation allow you to include a file into your pillar file. We recommend you to add files at the root of your document, we still may need some 
 improvement in order to include file into a paragraph of in other structure.
 
-This annotation takes only 1 parameter, the path of your file from the baseDirectory (if you don't change the base directory, it's your working directory).
+This annotation takes only 1 parameter, the path of your file from the ==baseDirectory== (if you don't change the base directory, it's your working directory).
 
-Here some example:
+Here some examples:
 
 [[[
 	${inputFile:test.pillar}$
@@ -645,6 +643,48 @@ Here some example:
 	${inputFile:value=test.pillar}$
 	
 	${inputFile:chapter2/test.pillar}$
+]]]
+
+!!!! Slide annotation
+
+This annotation is used to create a slide structure for a ==beamer== or a ==deck.js== export.
+The first parameter, ""title"", is a required parameter to give a title at your slide. If you want a slide without title just let a space. 
+In a future version of Pillar this  parameter should be optional if you do not want to have a title.
+You can also add a ""label"" to be able to create an internal link to your slide.
+
+Here some examples:
+
+[[[
+	${slide: My slide}$
+	
+	${slide:title= My slide}$
+	
+	${slide: My slide |label=sld:mySlide}$
+]]]
+
+!!!! Columns
+
+/!\ The column annotations works only for the beamer export on the version 0.60 of Pillar.
+
+You have the possibility to create columns inside your document.
+In order to do that you have to create a columns environment with the ==columns== and the ==endColumns== annotations.
+Then you can create columns with the ==column== annotation. 
+The column annotation takes 1 required parameter: the width of the column.
+
+Here some examples:
+
+[[[
+	${columns}$
+	
+	${column:width=60}$
+	
+	bla
+	
+	${column:40}$
+	
+	bla
+	
+	${endColumns}$
 ]]]
 
 !!!Preformatted (less used)
