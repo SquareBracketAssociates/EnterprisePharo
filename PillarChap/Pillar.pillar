@@ -664,7 +664,7 @@ Here some examples:
 
 !!!! Columns
 
-/!\ The column annotations works only for the beamer export on the version 0.60 of Pillar.
+/!\\ The column annotations works only for the beamer export on the version 0.60 of Pillar.
 
 You have the possibility to create columns inside your document.
 In order to do that you have to create a columns environment with the ==columns== and the ==endColumns== annotations.
@@ -696,10 +696,9 @@ To create a preformatted block, begin each line with ==\===. A preformatted bloc
 
 !!!Commented lines
 
-Lines that start with a ==%== are considered comments and will not be rendered in the resulting document.
+Lines that start with a ==%== are considered comments and will not be rendered in the resulting document, except during a Pillar export.
 
 !! Configuring your output
-
 @configuring
 
 In this section we show how to configure the export from the Pillar files.
@@ -761,8 +760,15 @@ template configuration parameter (see *@sec:confParam:template*).
 
 In this section we show how to use the ==pillar== command-line interface.
 
+One of the basic use of the command line is:
+
 [[[language=bash
 $ ./pillar export --to=latex PharoSound.pier > PharoSound.tex
+]]]
+
+You can define an export type with the parameter ==to==. The possible exports are:
+[[[eval=true
+	PRDocumentWriter allSubclasses do: [ :subclass | subclass isAbstract ifFalse: [ stream nextPut: $-; nextPutAll: subclass writerName; lf ] ]
 ]]]
 
 !! Pillar from Pharo
