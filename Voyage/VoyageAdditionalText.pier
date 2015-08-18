@@ -1,16 +1,241 @@
-This file is a place to add section about Voyage that will be moved to the main voyage chapter when ready.
 
 
+!! To be edited in the main document
 
-!! How to handle loop/cycles in your domain objects
+Page 2 please change my name from Knöfel to Manaa
+Page 6 after “For MongoDB this can be done through the mongo command line interface, or a GUI tool such as RoboMongo (Multi-Platform) or MongoHub (for Mac). ” add: “Since Pharo 4, you can also use the Mongo Browser. (World->Tools->Mongo Browser)”
 
-Often you objects do not form a simple tree but a graph with cycles....
+ !! A few words concerning OID
+The ObjectId (OID) is a unique field that acts as a primary key in mongo. It is a  BSON type, according to the mongo documentation constructed using:
+
+a 4-byte value representing the seconds since the Unix epoch,
+a 3-byte machine identifier,
+a 2-byte process id, and
+a 3-byte counter, starting with a random value.
+
+Objects which are added into a mongo root collection (==isVoyageRoot==), get a unique id, instance of ==OID==. If you create such an object and then ask it for its OID by sending ==voyageID==,  (see chapter 4), you get the OID. The value of the OID is a LargePositiveInteger.
+
+It is possible to create and use your own implementation of OID and put these objects into mongo database but keep in mind that you possibly not be longer be able to query this objects by its OID (by voyageID), because mongo expects a certain format. So it is not recommended to do that. If you do, you should check your format by querying for it in the mongo console. If you get the result Error: invalid object id: length, then you will not be able to query this object by id.
 
 [[[
-repository := VOMemoryRepository new
+> db.Trips.find({"person.__id" : ObjectId("190372")})
+Mon Aug 17 14:21:10.815 Error: invalid object id: length
+]]]
+
+Advantage of the OID in the mongo format is that they are ordered by creation date and time and you have an indexed (there is a non deletable index on the _id field) "creationDateAndTime" field for free. 
+
+!!!How to query for an object by id?    
+
+If you know the _id value, you initialize an OID with this and query for it.
+[[[	
+Person selectOne: {('_id' -> (OID value: 16r55CDD2B6E9A87A520F000001))} asDictionary.
+]]]
+
+Note that both are equivalent:
+[[[
+OID value: 26555050698940995562836590593. "dec"
+OID value: 16r55CDD2B6E9A87A520F000001. "hex"
+]]]
+
+Or you have an instance (in this example of ==Person==) which is in a root collection, then you ask it for its voyageId and use it in your query. The following assumes that you have a ==Trips== root collection and a ==Persons== root collection. The trip has an embedded ==receipts== collection. Receipts have a ==description==.  The query asks for all trips of the given person with at least one receipt with the description ==aString==.
+
+[[[
+ Trip
+		selectMany:
+			{('receipts.description' -> aString).
+			('person.__id' -> aPerson voyageId)} asDictionary
+
+]]]
+
+!!! Not yet supported mongo commands
+
+!!!!Indexes
+It is not yet possible to create and remove indexes from voyage, but you can use OSProcess.
+
+Assume you have a database named ==myDB== with a collection named ==Trips==. 
+The trips have an embedded collection with receipts. The receipts have an attribute named ==description==.
+Then you can create an index on description with
+
+[[[
+OSProcess command:
+'/{pathToMongoDB}/MongoDB/bin/mongo --eval "db.getSiblingDB(''myDB'').Trips.createIndex({''receipts.description'':1})"'
 ]]]
 
 
-% Local Variables:
-% eval: (flyspell-mode 1)
-% End:
+Remove all indexes on the Trips collection with:
+[[[
+OSProcess command:
+'/{pathToMongoDB}/MongoDB/bin/mongo --eval "db.getSiblingDB(''myDB'').Trips.dropIndexes()"'
+]]]
+
+!!!!Backup
+It is not yet possible to create backup from voyage, so use 
+
+[[[
+OSProcess command:
+ '/{pathToMongoDB}/MongoDB/bin/mongodump  --out {BackupPath}'
+]]]
+
+Please see the mongo documentation for mongo commands, especially the ==--eval== command.
+
+!!!Useful mongo commands
+
+Use “.explain()” in the mongo console to ensure that your query indeed uses the index.
+
+Example:
+
+Create an index on an embedded attribute (==description==):
+[[[
+> db.Trips.createIndex({"receipts.description":1})
+]]]
+
+Query for it and call explain. We see, that only 2 documents were scanned.
+> db.Trips.find({"receipts.description":"a"}).explain("executionStats")
+{
+	"cursor" : "BtreeCursor receipts.receiptDescription_1",
+	"isMultiKey" : true,
+	"n" : 2,
+	"nscannedObjects" : 2,
+	"nscanned" : 2,
+	"nscannedObjectsAllPlans" : 2,
+	"nscannedAllPlans" : 2,
+	"scanAndOrder" : false,
+	"indexOnly" : false,
+	"nYields" : 0,
+	"nChunkSkips" : 0,
+	"millis" : 0,
+	"indexBounds" : {
+		"receipts.receiptDescription" : [
+			[
+				"a",
+				"a"
+			]
+		]
+	},
+	"allPlans" : [
+		{
+			"cursor" : "BtreeCursor receipts.receiptDescription_1",
+			"n" : 2,
+			"nscannedObjects" : 2,
+			"nscanned" : 2,
+			"indexBounds" : {
+				"receipts.receiptDescription" : [
+					[
+						"a",
+						"a"
+					]
+				]
+			}
+		}
+	],
+	"server" : "MacBook-Pro-Sabine.local:27017"
+}
+]]]
+
+Now, remove the index
+[[[
+> db.Trips.dropIndexes()
+{
+	"nIndexesWas" : 2,
+	"msg" : "non-_id indexes dropped for collection",
+	"ok" : 1
+}
+]]]
+
+Query again, all documents were scanned.
+
+[[[
+> db.Trips.find({"receipts.receiptDescription":"a"}).explain("executionStats")
+{
+	"cursor" : "BasicCursor",
+	"isMultiKey" : false,
+	"n" : 2,
+	"nscannedObjects" : 246,
+	"nscanned" : 246,
+	"nscannedObjectsAllPlans" : 246,
+	"nscannedAllPlans" : 246,
+	"scanAndOrder" : false,
+	"indexOnly" : false,
+	"nYields" : 0,
+	"nChunkSkips" : 0,
+	"millis" : 1,
+	"indexBounds" : {
+		
+	},
+	"allPlans" : [
+		{
+			"cursor" : "BasicCursor",
+			"n" : 2,
+			"nscannedObjects" : 246,
+			"nscanned" : 246,
+			"indexBounds" : {
+				
+			}
+		}
+	],
+	"server" : "MacBook-Pro-Sabine.local:27017"
+}
+]]]
+
+
+
+!!!Storing instances of Date in Mongo
+A known issue of mongo is Mongo that it does not difference between Date and DateAndTime, so even if you commit a Date, you will get back a DateAndTime. 
+You have to transform it back to Date manually when materializing the object.
+
+!!Database design
+Often you objects do not form a simple tree but a graph with cycles. For example you could have persons which are pointing to their trips and each trip knows about its person (==Person <->>Trip==). If you create a root Collection with Persons and a Root collection with Trips, you avoid endless loops to be generated (see chapter 1.2).
+
+This is an example for a ==trip== pointing to a ==person== which is in another root collection and another root collection, ==paymentMethod==. Note that the receipt also points back to the trip, which does not create a loop.
+
+[[[
+Trip
+{
+ "_id" : ObjectId("55cf2bc73c9b0fe702000008"), 
+"#version" : 876079653, 
+"person" : { 
+	"#collection" : "Persons", 
+	"__id" : ObjectId("55cf2bbb3c9b0fe702000007") }, 
+"receipts" : [ 	
+	{ "currency" : "EUR", 	
+	"date" : { "#instanceOf" : "ZTimestamp", "jdn" : 2457249, "secs" : 0 }, 	
+	"exchangeRate" : 1, 	
+	"paymentMethod" : {
+		"#collection" : "PaymentMethods", 	
+		"__id" : ObjectId("55cf2bbb3c9b0fe702000003") }, 
+	"receiptDescription" : "Taxi zum Hotel", 	
+	"receiptNumber" : 1, 	
+	"trip" : { 
+		"#collection" : "Trips", 	
+		"__id" : ObjectId("55cf2bc73c9b0fe702000008") } } ], 
+	"startPlace" : "Österreich",    
+	"tripName" : "asdf", 
+	"tripNumber" : 1 }
+
+]]]
+
+The corresponding ==person== points to all its ==trips== and to its ==company==.
+Person
+{ "#version" : 714221829, 
+"_id" : ObjectId("55cf2bbb3c9b0fe702000007"), 
+"bankName" : "",
+ "company" : { 
+"#collection" : "Companies", 
+"__id" : ObjectId("55cf2bbb3c9b0fe702000002") },
+"email" : "bb@spesenfuchs.de", 
+"firstName" : "Berta",
+"lastName" : "Block",  
+"roles" : [  "user" ], 
+"tableOfAccounts" : "SKR03", 
+"translator" : "German", 
+"trips" : [ 	
+{
+"#collection" : "Trips", 	
+"__id" : ObjectId("55cf2bc73c9b0fe702000008") } ] }
+
+
+If your domain has strictly delimited areas, e.g. clients, you could think about creating one repository per area (client). 
+
+
+
+
