@@ -12,9 +12,10 @@
         vmargin={1,27cm,1,27cm},
         ignoreheadfoot
 ]{geometry}
-\input{../support/latex/common.tex}
+\usepackage{import}
+\subimport{../support/latex/}{common.tex}
 \setboolean{lulu}{true}
-\input{../support/latex/book.tex}
+\subimport{../support/latex/}{book.tex}
 %=================================================================
 %%% Local Variables:
 %%% coding: utf-8

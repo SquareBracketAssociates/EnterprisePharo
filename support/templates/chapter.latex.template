@@ -9,7 +9,8 @@
 		vmargin={.75in,1in},
 		ignoreheadfoot
 	]{geometry}
-	\input{../support/latex/common.tex}
+    \usepackage{import}
+	\subimport{root/support/latex/}{common.tex}
 	\setboolean{lulu}{true}
 % --------------------------------------------
 % A4:
