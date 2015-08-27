@@ -1,3 +1,4 @@
+{{{latex:
 %=================================================================
 % Add the path for the figures of each chapter here:
 \graphicspath{
@@ -45,41 +46,43 @@
 % \lstlistoflistings
 \sloppy % To avoid LaTeX's annoying habit of letting lines stick over the margins!
 \mainmatter
+}}}
 
-\input{../Copyright/License.tex}
+${inputFile:Copyright/License.pier}$
 
-\part{Simple Web applications}
+{{{latex:\part{Simple Web applications} }}}
 
-\input{../Teapot/Teapot.tex}
-\input{../WebApp/WebApp.tex}
+${inputFile:Teapot/Teapot.pillar}$
+${inputFile:WebApp/WebApp.pier}$
 
-\part{HTTP}
+{{{latex:\part{HTTP} }}}
 
-\input{../Zinc-Encoding-Meta/Zinc-Encoding-Meta.tex}
-\input{../Zinc-HTTP-Client/Zinc-HTTP-Client.tex}
-\input{../Zinc-HTTP-Server/Zinc-HTTP-Server.tex}
-\input{../Zinc-REST/Zinc-REST.tex}
-\input{../WebSockets/WebSockets.tex}
+${inputFile:Zinc-Encoding-Meta/Zinc-Encoding-Meta.pillar}$
+${inputFile:Zinc-HTTP-Client/Zinc-HTTP-Client.pillar}$
+${inputFile:Zinc-HTTP-Server/Zinc-HTTP-Server.pillar}$
+${inputFile:Zinc-REST/Zinc-REST.pillar}$
+${inputFile:WebSockets/WebSockets.pier}$
 
-\part{Data}
+{{{latex:\part{Data} }}}
 
-\input{../NeoCSV/NeoCSV.tex}
-\input{../NeoJSON/NeoJSON.tex}
-\input{../STON/STON.tex}
-\input{../Fuel/Fuel.tex}
-\input{../Voyage/Voyage.tex}
+${inputFile:NeoCSV/NeoCSV.pier}$
+${inputFile:NeoJSON/NeoJSON.pier}$
+${inputFile:STON/STON.pillar}$
+${inputFile:Fuel/Fuel.pillar}$
+${inputFile:Voyage/Voyage.pier}$
 
-\part{Presentation}
+{{{latex:\part{Presentation} }}}
 
-\input{../Mustache/Mustache.tex}
-\input{../RenoirST/RenoirST.tex}
-\input{../PillarChap/Pillar.tex}
-\input{../Artefact/Artefact.tex}
+${inputFile:Mustache/Mustache.pillar}$
+${inputFile:RenoirST/RenoirST.pier}$
+${inputFile:PillarChap/Pillar.pillar}$
+${inputFile:Artefact/Artefact.pillar}$
 
-\part{Deployment}
+{{{latex:\part{Deployment} }}}
 
-\input{../DeploymentWeb/DeployForProduction.tex}
+${inputFile:DeploymentWeb/DeployForProduction.pillar}$
 
+{{{latex:
 \appendix
 
 \part{Appendix}
@@ -98,5 +101,5 @@ Van Caekenberghe Sven\\
 
 \backmatter
 
-
 \end{document}
+}}}
