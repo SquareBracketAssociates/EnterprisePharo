@@ -1,0 +1,33 @@
+${inputFile:Copyright/License.pier}$
+
+{{{latex:\part{Simple Web applications} }}}
+
+${inputFile:Teapot/Teapot.pillar}$
+${inputFile:WebApp/WebApp.pier}$
+
+{{{latex:\part{HTTP} }}}
+
+${inputFile:Zinc-Encoding-Meta/Zinc-Encoding-Meta.pillar}$
+${inputFile:Zinc-HTTP-Client/Zinc-HTTP-Client.pillar}$
+${inputFile:Zinc-HTTP-Server/Zinc-HTTP-Server.pillar}$
+${inputFile:Zinc-REST/Zinc-REST.pillar}$
+${inputFile:WebSockets/WebSockets.pier}$
+
+{{{latex:\part{Data} }}}
+
+${inputFile:NeoCSV/NeoCSV.pier}$
+${inputFile:NeoJSON/NeoJSON.pier}$
+${inputFile:STON/STON.pillar}$
+${inputFile:Fuel/Fuel.pillar}$
+${inputFile:Voyage/Voyage.pier}$
+
+{{{latex:\part{Presentation} }}}
+
+${inputFile:Mustache/Mustache.pillar}$
+${inputFile:RenoirST/RenoirST.pier}$
+${inputFile:PillarChap/Pillar.pillar}$
+${inputFile:Artefact/Artefact.pillar}$
+
+{{{latex:\part{Deployment} }}}
+
+${inputFile:DeploymentWeb/DeployForProduction.pillar}$
