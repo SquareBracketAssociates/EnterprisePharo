@@ -1,0 +1,16 @@
+This file is a place to add section about Voyage that will be moved to the main voyage chapter when ready.
+
+
+
+!! How to handle loop/cycles in your domain objects
+
+Often you objects do not form a simple tree but a graph with cycles....
+
+[[[
+repository := VOMemoryRepository new
+]]]
+
+
+% Local Variables:
+% eval: (flyspell-mode 1)
+% End:
