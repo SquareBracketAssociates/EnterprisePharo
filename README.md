@@ -10,7 +10,7 @@ This book is written in Pillar markup. If you are not familiar with it please ch
 
 First of all you have to run `./download.sh` to obtain the Pillar executable that does all the job.
 
-To generate your book execute `./pillar export` then `bash pillarPostExport.sh` or simply `./compile.sh`. If you want to generate only one chapter run `./pillar export Example/Example.pillar` then `bash pillarPostExport`. If you have `lualatex` installed and available in your system's `PATH`, the script will also generate pdf files.
+To generate your book execute `./pillar export` then `bash pillarPostExport.sh` or simply `./compile.sh`. If you want to generate only one chapter run `./pillar export Example/Example.pillar` then `bash pillarPostExport.sh`. If you have `lualatex` installed and available in your system's `PATH`, the script will also generate pdf files.
 
 ###Adding a chapter
 
@@ -20,7 +20,7 @@ Add your chapter to:
 
 * `pillar.conf` in the `inputFiles` array as: `"Example/Example.pillar"`
 * `support/latex/book.tex` in `\graphicspath` as `{Example/}`
-* `support/templates/book*.latex.template` as `${inputFile:Example/Example.pillar}$`
+* `EnterprisePharo.pillar` as `${inputFile:Example/Example.pillar}$`
 
 ###Caveats
 
