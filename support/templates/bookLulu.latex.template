@@ -15,11 +15,8 @@
 \usepackage{import}
 \subimport{root/support/latex/}{common.tex}
 \setboolean{lulu}{true}
-\subimport{root/support/latex/}{book-begining.tex}
 
 {{{content}}}
-
-\subimport{root/support/latex/}{book-ending.tex}
 
 %=================================================================
 %%% Local Variables:

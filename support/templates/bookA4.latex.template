@@ -8,9 +8,7 @@
 \usepackage{import}
 \subimport{root/support/latex/}{common.tex}
 \setboolean{lulu}{false}
-\subimport{root/support/latex/}{book-begining.tex}
 
 {{{content}}}
 
-\subimport{root/support/latex/}{book-ending.tex}
 
