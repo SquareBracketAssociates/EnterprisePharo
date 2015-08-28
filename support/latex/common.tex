@@ -29,39 +29,18 @@
 \usepackage{theorem}
 \usepackage{polyglossia}
 \setdefaultlanguage{english}
-% ON: pdfsync breaks the use of p{width} for tabular columns!
-\ifdefined\usepdfsync\usepackage{pdfsync}\fi % Requires texlive 2007
-%=============================================================
-%:More packages
-%Stef should check which ones are used!
-%\usepackage{picinpar}
-%\usepackage{layout}
-%\usepackage{color}
-%\usepackage{enum}
-%\usepackage{a4wide}
-% \usepackage{fancyhdr}
 \usepackage{ifthen}
 \usepackage{float}
 \usepackage{longtable}
-\usepackage{makeidx}
-\usepackage[nottoc]{tocbibind}
 \usepackage{multicol}
 \usepackage{booktabs}	% book-style tables
-\usepackage{topcapt}	% enables \topcaption
 \usepackage{multirow}
 \usepackage{tabularx}
-%\usepackage[bottom]{footmisc}
 \usepackage{xspace}
 \usepackage{alltt}
 \usepackage{amssymb,textcomp}
 \usepackage[usenames,dvipsnames]{color}
-%\usepackage{colortbl}
-\usepackage[hang]{subfigure}\makeatletter\def\p@subfigure{\thefigure\,}\makeatother
-\usepackage{rotating}
-\usepackage{enumitem}	% apb: allows more control over tags in enumerations
-\usepackage{verbatim}     % for comment environment
 \usepackage{varioref}	% for page references that work
-\labelformat{footnote}{\thechapter--#1} % to distinguish citations from jurabib
 \usepackage{needspace}
 \usepackage{isodateo} % enable \isodate
 \usepackage[newparttoc,pagestyles]{titlesec}
@@ -96,22 +75,6 @@
 \newboolean{lulu}
 \setboolean{lulu}{false}
 \newcommand{\ifluluelse}[2]{\ifthenelse{\boolean{lulu}}{#1}{#2}}
-%=============================================================
-%:Names
-\newcommand{\SUnit}{SUnit\xspace}
-\newcommand{\sunit}{SUnit\xspace}
-\newcommand{\xUnit}{$x$Unit\xspace}
-\newcommand{\JUnit}{JUnit\xspace}
-\newcommand{\st}{Smalltalk\xspace}
-\newcommand{\pharo}{Pharo\xspace} % Use this, not \Pharo
-%\newcommand{\sqmap}{SqueakMap\xspace}
-\newcommand{\squeak}{Squeak\xspace} % use this, not \Squeak or \sq
-\newcommand{\sqsrc}{SqueakSource\xspace}
-\newcommand{\sbe}{\url{http://SqueakByExample.org}\xspace}
-\newcommand{\pharoweb}{\url{http://pharo-project.org}\xspace}
-\newcommand{\pbe}{\url{http://PharoByExample.org}\xspace}
-\newcommand{\sba}{\url{http://SquareBracketAssociates.org}\xspace}
-\newcommand{\bam}{\lct{Bounc\-ing\-Atoms\-Morph}\xspace}
 %=============================================================
 %:Markup macros for proof-reading
 \usepackage[normalem]{ulem} % for \sout
@@ -409,7 +372,7 @@ Damien Pollet},
     {CARET}{\^}1
     {UNDERSCORE}{\_}1
     {\\st}{Smalltalk}9 % convenience -- in case \st occurs in code
-    % {'}{{\textquotesingle}}1 % replaced by upquote=true in \lstset
+    {'}{{\textquotesingle}}1 % replaced by upquote=true in \lstset
     %{_}{{$\leftarrow$}}1
     {>>>}{{\sep}}1
     %{^}{{$\uparrow$}}1
