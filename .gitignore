@@ -38,3 +38,4 @@ stdout
 *.pdf
 *.tex
 */figures/Thumbs.db
+/pillarPostExport.sh
