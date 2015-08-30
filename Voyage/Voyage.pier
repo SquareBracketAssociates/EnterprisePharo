@@ -81,7 +81,7 @@ operations. To use Singleton mode, execute:
 repository enableSingleton.
 ]]]
 
-@@note Pay attention: Only one repository can be the singleton, hence executing this line will remove any other existing repositories from Singleton mode!
+@@note Only one repository can be the singleton, hence executing this line will remove any other existing repositories from Singleton mode!
 
 @@note In this document, we are going to cover Voyage in Singleton mode, but using it in Instance mode is straightforward as well. See the ==persistence== protocol of ==VORepository== for more information.
 
@@ -286,6 +286,11 @@ rectangle. To do this, either the label or the text must be declared as a Voyage
 An alternative solution to break cycles, avoiding the declaration of new voyage roots, is to declare some fields of objects as transient and define how the 
 graph must be reconstructed at load time. This will be discussed in the following section.
 
+!!!Storing instances of Date in Mongo
+
+A known issue of mongo is that it does not make a difference between ==Date== and ==DateAndTime==, so even if you store a ==Date== instance, you will retrieve a ==DateAndTime== instance. You will have to transform it back to ==Date== manually when materializing the object.
+
+
 !! Enhancing Storage
 @enhancing
 
@@ -413,6 +418,35 @@ database. This may also be used to break cycles in the stored object graph. It h
 contain these objects will be set to ==nil==. To address this, a post-load action can be specified for the attribute descriptor or the container descriptor, to 
 set these attributes to the correct values.
 
+!!! A few words concerning the OID
+
+The mongo ObjectId (OID) is a unique field that acts as a primary key in mongo. It is a 12-byte BSON type, constructed using:
+
+- a 4-byte value representing seconds passed since the Unix epoch,
+- a 3-byte machine identifier,
+- a 2-byte process id,
+- a 3-byte counter, starting with a random value.
+
+Objects which are added into a mongo root collection get a unique id,
+instance of ==OID==. If you create such an object and then ask it for
+its OID by sending it ==voyageId==, you get the OID. The instance
+variable ==value== of the OID contains a ==LargePositiveInteger== that
+corresponds to the mongo ObjectId.
+
+It is possible to create and use your own implementation of OIDs and
+put these objects into the mongo database. But this is not recommended as you
+possibly may no longer be able to query these objects by their OID (by
+using ==voyageId==), since mongo expects a certain format. If you do, you should check your format by querying for it in the mongo console, for example as below. If you get the ==result Error: invalid object id: length==, then you will not be able to query this object by id.
+
+[[[
+> db.Trips.find({"person.__id" : ObjectId("190372")})
+Fri Aug 28 14:21:10.815 Error: invalid object id: length
+]]]
+
+An extra advantage of the OID in the mongo format is that these are
+ordered by creation date and time and as a result you have an indexed
+"creationDateAndTime" attribute for free (since there is a non deletable
+index on the field of the OID ==_id==). 
 
 !! Querying in Voyage
 
@@ -506,6 +540,7 @@ More complete documentation about the use of ==$where== is in the
 *MongoDB where documentation>http://docs.mongodb.org/manual/reference/operator/where/#op._S_where*.
 
 
+
 !!!Using JSON queries
 
 When MongoQueries is not powerful enough to express your query, you can use a JSON query instead. JSON queries are the MongoDB query internal representation, and 
@@ -535,6 +570,21 @@ To construct the "greater than" statement, a new dictionary needs to be created 
 relation. For the list of available query selectors we refer to the 
 *MongoDB Query Selectors documentation>http://docs.mongodb.org/manual/reference/operator/query/#query-selectors*.
 
+!!!! Querying for an object by OID   
+
+If you know the ObjectId for a document, you can create an OID instance with this value
+and query for it.
+[[[	
+{('_id' -> (OID value: 16r55CDD2B6E9A87A520F000001))} asDictionary.
+]]]
+
+Note that both of the following are equivalent:
+[[[
+OID value: 26555050698940995562836590593. "dec"
+OID value: 16r55CDD2B6E9A87A520F000001. "hex"
+]]]
+
+@@note If you have an instance which is in a root collection, then you can ask it for its ==voyageId== and use that ObjectId in your query.
 
 !!!!Using dot notation to access embedded documents
 
@@ -625,11 +675,69 @@ The second customization that can be performed is to sort the results. To use th
 - ==selectMany:sortBy:limit:offset:== Provides for specifying a limit and offset to the above query.
 
 
+!! Creating and removing indexes
+
+There are a number of useful features in MongoDB that are not present in Voyage but still can be performed from within Pharo, the most important one being the management of indexes.
+
+!!!Creating indexes by using OSProcess
+It is not yet possible to create and remove indexes from Voyage, but this can nonetheless be done by using OSProcess.
+
+For example, assume there is a database named ==myDB== with a collection named ==Trips==. 
+The trips have an embedded collection with receipts. The receipts have an attribute named ==description==. The following creates an index on ==description==:
+
+[[[
+OSProcess command:
+'/{pathToMongoDB}/MongoDB/bin/mongo --eval "db.getSiblingDB(''myDB'').Trips.createIndex({''receipts.description'':1})"'
+]]]
+
+Removing all indexes on the Trips collection can be done as follows:
+[[[
+OSProcess command:
+'/{pathToMongoDB}/MongoDB/bin/mongo --eval "db.getSiblingDB(''myDB'').Trips.dropIndexes()"'
+]]]
+
+!!!Verifying the use of an index
+
+To ensure that a query indeed uses the index, “.explain()” can be used in the mongo console. For example, if we add the index on ==description== as above, run a query and add ==.explain()== we see, that only a subset of documents were scanned.
+
+[[[
+> db.Trips.find({"receipts.description":"a"}).explain("executionStats")
+{
+	"cursor" : "BtreeCursor receipts.receiptDescription_1",
+	"isMultiKey" : true,
+	"n" : 2,
+	"nscannedObjects" : 2,
+	"nscanned" : 2,
+	"nscannedObjectsAllPlans" : 2,
+	"nscannedAllPlans" : 2,
+
+  [...]
+}
+]]]
+
+After removing the index, all documents are scanned (in this example there are 246):
+
+[[[
+> db.Trips.find({"receipts.receiptDescription":"a"}).explain("executionStats")
+{
+	"cursor" : "BasicCursor",
+	"isMultiKey" : false,
+	"n" : 2,
+	"nscannedObjects" : 246,
+	"nscanned" : 246,
+	"nscannedObjectsAllPlans" : 246,
+	"nscannedAllPlans" : 246,
+
+  [...]
+}
+]]]
+
+
 !! Conclusion
 
 In this chapter we presented Voyage, a persistence framework whose strength is the presence of a basic object-document mapper and a back-end to the MongoDB 
 database. We have shown how to store objects in, and remove object from the database, and how to optimise the storage format. This was followed by a discussion 
-of querying the database; showing the two ways in which queries can be constructed and detailing how queries are ran.
+of querying the database; showing the two ways in which queries can be constructed and detailing how queries are ran. We ended this chapter by presenting how we can construct indexes in MongoDB databases, even though Voyage does not provide direct support for it.
 
 
 % Local Variables:
