@@ -5,7 +5,7 @@
 !Documenting your Project with Pillar
 @cha:pillar
 
-This documentation describes the version 0.60 of Pillar.
+This documentation describes the version 0.61 of Pillar.
 
 !!Introduction
 
@@ -38,7 +38,7 @@ Pillar has also:
 
 The original author of Pillar and current main contributor is *Damien Cassou>http://damiencassou.seasidehosting.st*.
 
-The past contributors are Ben Coman, Stéphane Ducasse, Guillermo Polito, Lukas Renggli (original author of Pier from which Pillar has been extracted) and Benjamin van Ryseghem.
+The past contributors are Ben Coman, Stéphane Ducasse, Guillermo Polito, Lukas Renggli (original author of Pier from which Pillar has been extracted), Benjamin van Ryseghem and Cyril Ferlicot-Delbecque.
 
 +This project is sponsored by ESUG: *http://www.esug.org*>file://figures/esug-logo.jpg|width=20|label=esugsponsoring+
 
@@ -59,6 +59,7 @@ Pillar is used in several projects. You can have a look at these projects for re
 
 - *the Enterprise Pharo book>https://ci.inria.fr/pharo-contribution/job/PharoForTheEnterprise/*
 - *the Updated Pharo by Example>https://github.com/SquareBracketAssociates/UpdatedPharoByExample*
+- *the Pharo MOOC>https://github.com/SquareBracketAssociates/PharoMooc*
 - *the Pharo Laser Game Tutorial>https://github.com/SquareBracketAssociates/PharoLaserGameTutorial*
 - *the Pharo Web Stack>https://github.com/SquareBracketAssociates/PharoWebStack*
 - *the Marina CMS>https://github.com/tide-framework/marina*
@@ -80,10 +81,11 @@ cd mydocument
 
 !!!Installing and exporting your first document
 
-If you're a Windows user, please see section *@sec:windowsusers* to install and use pillar.
-
 You first need to get Pillar. For that, I recommend 
-*downloading executing this script>https://raw.githubusercontent.com/pillar-markup/book-skeleton/master/download.sh* in the base directory.
+*downloading executing this script>https://raw.githubusercontent.com/pillar-markup/book-skeleton/master/download.sh* in the base directory if you are on an Unix environment.
+
+If you are on Windows you can get a new Pillar image by extracting the archive build by the *Continuous Integration>https://ci.inria.fr/pharo-contribution/job/Pillar/PHARO=40,VERSION=stable,VM=vm/lastSuccessfulBuild/artifact/Pillar.zip*.
+Then you can get a Pharo *Virtual Machine for windows>http://files.pharo.org/get-files/40/pharo-win-stable.zip*.
 
 Then, you can check everything is working fine by creating a ==first.pillar== file with this content:
 
@@ -94,10 +96,16 @@ Then, you can check everything is working fine by creating a ==first.pillar== fi
 And finally compiling it from a terminal (see Section *@commandLineInterface* for more information about the command-line interface):
 
 [[[language=bash|caption=Compile your first document.|label=scr:compileDocument
-./pillar export --to='html' 'first.pillar' > first.html
+./pillar export --to=html first.pillar
 ]]]
 
-This should generate a ==first.html== file you can open in a web browser. This content of this file will be something like:
+Or in windows open a new sehll (==Windows key + r== then type ==cmd==) then run:
+
+[[[language=bash
+Pharo.exe Pillar.image pillar export --to=html first.pillar
+]]]
+
+This should generate a ''output.html'' file you can open in a web browser. This content of this file will be something like:
 
 [[[language=html
 <!DOCTYPE html>
@@ -117,8 +125,8 @@ This should generate a ==first.html== file you can open in a web browser. This c
 
 !!!Configuring a document
 
-As you can see, there is no title in the generated ==first.html== file. This is because we did not specify any. To specify a title, we have to add it with a configuration
-at the beginning of the ==first.pillar== file:
+As you can see, there is no title in the generated ''output.html'' file. This is because we did not specify any. To specify a title, we have to add it with a configuration
+at the beginning of the ''output.html'' file:
 
 [[[language=pillar|caption=Add a meta data in a configuration at the beginning of your file.|label=scr:configurationFile
 {
@@ -131,7 +139,13 @@ at the beginning of the ==first.pillar== file:
 When you compile using the same command line,
 
 [[[language=bash
-./pillar export --to=html first.pillar > first.html
+./pillar export --to=html first.pillar
+]]]
+
+or
+
+[[[language=bash
+Pharo.exe Pillar.image pillar export --to=html first.pillar
 ]]]
 
 you should now get a web page with a title:
@@ -155,6 +169,85 @@ first ==pillar.conf== file:
 ]]]
 
 Meta-information specified in Pillar files take precedence over configuration in the ==pillar.conf== file.
+
+!!!Output and multi files
+
+When you export files you have the possibility to export all your files into a specific directory.
+In order to do that you have to add a parameter into your configuration.
+
+[[[language=ston|caption=Export into a specific folder|label=scr:outputDirectory
+{
+  "title" : "My first document while reading the 5 minutes Pillar tutorial",
+  "outputDirectory" : "result"
+}
+]]]
+
+But during an export into an other directory Pillar will copy some files we might need.
+For that you can add a parameter ''support'' on your configuration with a list of files (on this list you have the possibility match files with '\*' or '\*\*' as ==\*\*/Figures== or ==\*.css==).
+We don't have any support file so we can give an empty list.
+
+[[[language=ston|caption=Export into a specific folder|label=scr:outputDirectory
+{
+  "title" : "My first document while reading the 5 minutes Pillar tutorial",
+  "outputDirectory" : "result",
+  "support" : []
+}
+]]]
+
+
+If you export you will have a file ''result/output.html''.
+
+You have two way to export files:
+- separate output files
+- same output file
+
+By default we export all the input files as one.
+If you create a file ''second.pillar'' that contains ==I am a second file== you can add a parameter ''inputFiles'' to your configuration.
+
+[[[language=ston|caption=Export into a specific folder|label=scr:outputDirectory
+{
+  "title" : "My first document while reading the 5 minutes Pillar tutorial",
+  "outputDirectory" : "result",
+  "support" : [],
+  "inputFiles" : [ "first.pillar", "second.pillar" ]
+}
+]]]
+
+If you export this with the command:
+
+
+[[[language=bash
+./pillar export --to=html 
+
+#Or in windows:
+
+Pharo.exe Pillar.image pillar export --to=html
+]]]
+
+You will get a file ''result/output.html'' that contains:
+
+[[[language=html
+<h1>I.  Hello World</h1>
+<p>
+I am a second file
+</p>
+]]]
+
+If you want to change the name of the file you can use the parameter ''outputFile'' as we used ''outputDirectory''.
+
+If you want separate files you can add a parameter:
+
+[[[language=ston|caption=Export into a specific folder|label=scr:outputDirectory
+{
+  "title" : "My first document while reading the 5 minutes Pillar tutorial",
+  "outputDirectory" : "result",
+  "support" : [],
+  "inputFiles" : [ "first.pillar", "second.pillar" ],
+  "separateOutputFiles" : true
+}
+]]]
+
+You will get a file ''result/first.html'' and a file ''result/second.html''.
 
 !!!Exporting a different content using a template
 
@@ -185,6 +278,7 @@ Then, you need to reference this template from your configuration file. So, edit
   "year" : 2014,
   "configurations" : {
     "html": {
+      "outputType" : #html,
       "template" : "myhtml.template"
     }
   }
@@ -216,10 +310,14 @@ Now, add your name to ==first.pillar== :
 Finally, compile ==first.pillar== one last time
 
 [[[language=bash
-./pillar export --to=html first.pillar > first.html
+./pillar export --to=html first.pillar
+
+#Or in windows:
+
+Pharo.exe Pillar.image pillar export --to=html first.pillar
 ]]]
 
-to generate a ==first.html== that will contain:
+to generate a ==output.html== that will contain:
 
 [[[language=html
 <!DOCTYPE html>
