@@ -912,12 +912,48 @@ In this section we show how to use the ==pillar== command-line interface.
 One of the basic use of the command line is:
 
 [[[language=bash
-$ ./pillar export --to=latex PharoSound.pier > PharoSound.tex
+$ ./pillar export --to=latex PharoSound.pier
+# or in Windows
+$ Pharo.exe Pillar.image pillar export --to=latex
 ]]]
 
 You can define an export type with the parameter ==to==. The possible exports are:
 [[[eval=true
   PRDocumentWriter allSubclasses do: [ :subclass | subclass isAbstract ifFalse: [ stream nextPut: $-; nextPutAll: subclass writerName; lf ] ]
+]]]
+
+In the case of a ''LaTeX'' or ''Beamer'' export Pillar will generate a script (''pillarPostExport.sh'') in order to launch the compilation of all the Tex files. During the compilation the script will create a symbolic link to the output directory root named ""root"" into the directory that contains the Tex file.
+You can use this symbolic link for relatives path.
+You can customize the LaTeX command with the ==latexCommand== parameter of the configuration.
+For example for ""Enterprise Pharo"" we use:
+
+[[[language=ston
+  "latexCommand" : "lualatex --file-line-error --interaction=batchmode {fileName} 2>&1 1>/dev/null
+ret=$?
+if [[ $ret -ne 0 ]]; then
+  cat {fileNameWithoutExtension}.log
+  echo \"Can't generate the PDF!\"
+  exit 1
+fi"
+]]]
+
+For now the script is only generated for an Unix shell. Windows users must have ''MinGW'' or ''Cygwin'' in order to launch it.
+
+!!! Multiple Exports
+
+You also have the possibility to launch multiple export with the ==defaultExporters== parameter.
+For example you can add this to the ''pillar.conf'':
+
+[[[
+    "defaultExporters" : [ "html", "latex", "text" ]
+]]]
+
+Then launch:
+
+[[[language=bash
+$ ./pillar export
+# or in Windows
+$ Pharo.exe Pillar.image pillar export
 ]]]
 
 !! Pillar from Pharo
@@ -1085,47 +1121,5 @@ In order to export with a configuration you need to create a new configuration. 
 }
 ') export
 ]]]
-
-!! Pillar on Windows
-@sec:windowsusers
-
-In this section i'll explain how to use pillar on widows.
-
-First we need to install pillar.
-
-!!! Installing pillar on windows.
-
-To use pillar create a new basic directory.
-
-You need the image of pillar. You can download it from 
-*https://ci.inria.fr/pharo-contribution/job/Pillar/PHARO=30,VERSION=stable,VM=vm/lastSuccessfulBuild/artifact/Pillar.zip>https://ci.inria.fr/pharo-contribution/job/Pillar/PHARO=30,VERSION=stable,VM=vm/lastSuccessfulBuild/artifact/Pillar.zip*
-
-Unzip it on your pillar directory. 
-
-Then create a directory named "pharo-vm" and unzip the VM for windows that you can get on 
-*the pharo website (windows virtual machine)>http://pharo.org/download* .
-
-Add the sources of the VM on the pharo-vm's directory. (You can get them on the pharo website too: Pharo 3 sources).
-
-Now we'll see how to export file on windows.
-
-!!! Exporting your pillar file.
-To export a pillar file on windows you'll need to install *MsysGit>https://msysgit.github.io/* .
-This will allow you tu use unix commands on windows.
-
-Install it and run a msysGit bash. Go to your directory and use this command :
-
-[[[
-pharo-vm/pharo ./Pharo.image pillar export --to='html' first.pillar
-]]]
-
-and close Pharo.
-
-This will put the content of your file on the stdout file. We need to move it to our real file now. Use :
-
-[[[
-mv stdout first.html
-]]]
-
 
 
