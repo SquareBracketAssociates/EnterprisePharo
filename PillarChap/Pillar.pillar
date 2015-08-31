@@ -5,7 +5,7 @@
 !Documenting your Project with Pillar
 @cha:pillar
 
-This documentation describes the version 0.62 of Pillar.
+This documentation describes the version 1.0.0 of Pillar.
 
 !!Introduction
 
@@ -17,13 +17,13 @@ screenshot below (see Figure *@voyageDocExample*) shows a part of the
 +An example Pillar output>file://figures/voyageDocExample-small.png|label=voyageDocExample|width=30+
 
 Pillar has many features:
-- simple markup syntax with references, tables, pictures, captions...)
-- export to HTML, LaTeX, Markdown and Pillar itself
-- export presentations to Beamer and Deck.js
-- customization of the export through a dedicated *STON>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/STON* configuration file
-- support of templates using the *Mustache>http://smalltalkhub.com/#!/~NorbertHartl/Mustache* templating engine
-- syntax-highlighting of generated code blocks (not yet in LaTeX)
-- configurable numbering of section titles and figures
+- simple markup syntax with references, tables, pictures, captions...);
+- export to HTML, LaTeX, Markdown and Pillar itself;
+- export presentations to Beamer and Deck.js;
+- customization of the export through a dedicated *STON>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/STON* configuration file;
+- support of templates using the *Mustache>http://smalltalkhub.com/#!/~NorbertHartl/Mustache* templating engine;
+- syntax-highlighting of generated code blocks (not yet in LaTeX);
+- configurable numbering of section titles and figures;
 - ...
 
 Pillar has also:
@@ -126,7 +126,7 @@ This should generate a ''output.html'' file you can open in a web browser. This 
 !!!Configuring a document
 
 As you can see, there is no title in the generated ''output.html'' file. This is because we did not specify any. To specify a title, we have to add it with a configuration
-at the beginning of the ''output.html'' file:
+at the beginning of the ''first.pillar'' file:
 
 [[[language=pillar|caption=Add a meta data in a configuration at the beginning of your file.|label=scr:configurationFile
 {
@@ -754,7 +754,7 @@ Here some examples:
 
 !!!! Columns
 
-@@note The column annotations currently works only for the beamer, HTML and Deck.js export on the version 0.62 of Pillar.
+@@note The column annotations currently works only for the beamer, HTML and Deck.js export on the version 1.0.0 of Pillar.
 
 You have the possibility to create columns.
 In order to do that you have to create a columns environment with the ==columns== and the ==endColumns== annotations.
