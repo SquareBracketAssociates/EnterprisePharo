@@ -5,7 +5,7 @@
 !Documenting your Project with Pillar
 @cha:pillar
 
-This documentation describes the version 0.61 of Pillar.
+This documentation describes the version 0.62 of Pillar.
 
 !!Introduction
 
@@ -99,7 +99,7 @@ And finally compiling it from a terminal (see Section *@commandLineInterface* fo
 ./pillar export --to=html first.pillar
 ]]]
 
-Or in windows open a new sehll (==Windows key + r== then type ==cmd==) then run:
+Or in windows open a new shell (==Windows key + r== then type ==cmd==) then run:
 
 [[[language=bash
 Pharo.exe Pillar.image pillar export --to=html first.pillar
@@ -182,7 +182,8 @@ In order to do that you have to add a parameter into your configuration.
 }
 ]]]
 
-But during an export into an other directory Pillar will copy some files we might need.
+If you launch an export with this configuration you will see that Pillar copy all the files (except the Pharo image and virtual machine) into the output directory.
+You might want to copy only some specific files (for example only some figures and css files)  or no files at all.
 For that you can add a parameter ''support'' on your configuration with a list of files (on this list you have the possibility match files with '\*' or '\*\*' as ==\*\*/Figures== or ==\*.css==).
 We don't have any support file so we can give an empty list.
 
@@ -199,7 +200,7 @@ If you export you will have a file ''result/output.html''.
 
 You have two way to export files:
 - separate output files
-- same output file
+- as one output file
 
 By default we export all the input files as one.
 If you create a file ''second.pillar'' that contains ==I am a second file== you can add a parameter ''inputFiles'' to your configuration.
@@ -284,17 +285,6 @@ Then, you need to reference this template from your configuration file. So, edit
   }
 }
 ]]]
-
-You could also create this configuration file: 
-
-[[[language=ston
-{
-  "year" : 2014,
-  "template" : "myhtml.template"
-}
-]]]
-
-But be careful because with this configuration you will have ==myhtml.template== as template for all your exports. Even for the ''LaTeX'' export.
 
 Now, add your name to ==first.pillar== :
 
@@ -721,7 +711,7 @@ this will confuse the parser. So, don't write --==\{{{\\begin{scriptsize}}}}==--
 !!!Annotations
 
 On Pillar you can use some annotation in order to do some things.
-An annotation have this syntax:
+An annotation has this syntax:
 
 [[[
 ${tag:parameter=value|parameter2=value2}$
@@ -734,7 +724,7 @@ improvement in order to include file into a paragraph of in other structure.
 
 This annotation takes only 1 parameter, the path of your file from the ==baseDirectory== (if you don't change the base directory, it's your working directory).
 
-Here some examples:
+Here are some examples:
 
 [[[
   ${inputFile:test.pillar}$
@@ -764,9 +754,9 @@ Here some examples:
 
 !!!! Columns
 
-/!\\ The column annotations works only for the beamer export on the version 0.60 of Pillar.
+@@note The column annotations currently works only for the beamer, HTML and Deck.js export on the version 0.62 of Pillar.
 
-You have the possibility to create columns inside your document.
+You have the possibility to create columns.
 In order to do that you have to create a columns environment with the ==columns== and the ==endColumns== annotations.
 Then you can create columns with the ==column== annotation. 
 The column annotation takes 1 required parameter: the width of the column.
@@ -796,7 +786,7 @@ To create a preformatted block, begin each line with ==\===. A preformatted bloc
 
 !!!Commented lines
 
-Lines that start with a ==%== are considered comments and will not be rendered in the resulting document, except during a Pillar export.
+Lines that start with a ==%== are considered comments and will not be rendered in the resulting document, except during a Pillar export (except during export to the Pillar format itself).
 
 !! Write a presentation
 @sec:presentationPillar
@@ -804,22 +794,23 @@ Lines that start with a ==%== are considered comments and will not be rendered i
 Since the version 0.59 you have the possibility to write presentations with Pillar.
 For now you can export a Pillar file as a ==beamer== or a ==deck.js== file.
 
-With the default te;plate you can provide some meta-informations to generate the first slide.
+With the default template you can provide some meta-informations to generate the first slide.
 For example:
 
 [[[
 {
-  "title":"Booleans and Conditions",
+  "title":"Pillar's presentation",
   "subtitle":"",
-  "author":"Stephane Ducasse and Damien Cassou",
-  "complement":"http://stephane.ducasse.free.fr/ stephane.ducasse@inria.fr"
+  "author":"Cyril Ferlicot-Delbecque",
+  "complement":"cyril.ferlicot@gmail.com"
 }
 ]]] 
 
-In a presentation export the headers create the structure of your presentation. Each title create a slide with the text in it. 
+In a presentation, Pillar headers (using the ==! Title== syntax) generate the structure of the presentation (sections and subsections).
+Each definition of a section generates a slide with the section title.
 You can disable this inside the configuration with the parameter ==renderStructureAsSlide==.
 
-To create a new slide you can use the ==slide== annotation (see Section *@sec:slide* ). 
+To create a new slide you should use the ==slide== annotation (see Section *@sec:slide* ). 
 A slide end at the beginning of an other slide or at the end of the document.
 
 Example of a slide:
@@ -909,7 +900,7 @@ template configuration parameter (see *@sec:confParam:template*).
 
 In this section we show how to use the ==pillar== command-line interface.
 
-One of the basic use of the command line is:
+One of the basic uses of the command line is:
 
 [[[language=bash
 $ ./pillar export --to=latex PharoSound.pier
@@ -923,7 +914,7 @@ You can define an export type with the parameter ==to==. The possible exports ar
 ]]]
 
 In the case of a ''LaTeX'' or ''Beamer'' export Pillar will generate a script (''pillarPostExport.sh'') in order to launch the compilation of all the Tex files. During the compilation the script will create a symbolic link to the output directory root named ""root"" into the directory that contains the Tex file.
-You can use this symbolic link for relatives path.
+You can use this symbolic link for relatives paths.
 You can customize the LaTeX command with the ==latexCommand== parameter of the configuration.
 For example for ""Enterprise Pharo"" we use:
 
@@ -945,7 +936,8 @@ You also have the possibility to launch multiple export with the ==defaultExport
 For example you can add this to the ''pillar.conf'':
 
 [[[
-    "defaultExporters" : [ "html", "latex", "text" ]
+    "defaultExporters" : [ "html", "latex", "text" ],
+    "inputFiles" : [ "doc.pillar" ]
 ]]]
 
 Then launch:
@@ -955,6 +947,8 @@ $ ./pillar export
 # or in Windows
 $ Pharo.exe Pillar.image pillar export
 ]]]
+
+If you do an export with this configuration you will get three files ==doc.html==, ==doc.tex== and ==doc.txt== (and you will also get a script to generate a PDF).
 
 !! Pillar from Pharo
 
@@ -1014,77 +1008,14 @@ a paragraph with an illustration
   ^ document
 ]]]
 
-A document usually contains many different Items.
-
-!!!!! PRText
+A document usually contains many different Items as ==PRText==
 
 [[[language=smalltalk
   | item |
   item := PRText content: 'foo'
 ]]]
 
-!!!!! PRRaw
-
-[[[language=smalltalk
-  | item |
-  item := PRRaw content: 'foo' type: 'html'
-]]]
-
-!!!!! PRScript
-
-[[[language=smalltalk
-  | item item2 |
-  item := (PRScript content: '')
-    language: PRSmalltalkScriptLanguage default;
-    eval: false;
-    lineNumber: true;
-    fromFile: 'test.st';
-    firstLine: 12;
-    lastLine: 16
-  item2 := (PRScript content: 'myScript')
-    language: PRSmalltalkScriptLanguage default;
-    eval: false	
-]]]
-
-!!!!! PRFigure
-
-[[[language=smalltalk
-  | item |
-  item := PRFigure new
-    add: (PRText content: 'Alias');
-    reference: 'file://test.png';
-    embedded: true
-]]]
-
-!!!!! PRInternalLink
-
-[[[language=smalltalk
-  | item |
-  item := PRInternalLink new
-    reference: 'Page';
-    anchor: 'Anchor';
-    embedded: true
-]]]
-
-!!!!! PRExternalLink
-
-[[[language=smalltalk
-  | item |
-  item := PRExternalLink new
-    reference: 'http://myPage.html'
-]]]
-
-!!!!! PRParagraph
-
-[[[language=smalltalk
-  | item |
-  item := PRParagraph new
-    add: (PRText content: 'Lorem ipsum dolor sit amet.')
-]]]
-
-!!!!! Other Items
-
-You can add other items as well, such as lists, annotations, tables etc... You can find how to implement all of  them in the unit-tests.
+You can find how to implement all of  them in the unit-tests of Pillar.
 
 !!! How to write a Document
   
