@@ -1,5 +1,5 @@
 !Zinc HTTP: The server side
-@ch:zinc-server
+@cha:zinc-server
 
 Zinc is both a client and server HTTP library written and maintained by Sven van Caekenberghe. HTTP clients and servers are each others' mirror: An HTTP client sends
 a request and receives a response. An HTTP server receives a request
@@ -8,7 +8,7 @@ and sends a response. Hence the fundamental Zn framework objects are used to imp
 This chapter focuses on the server-side features of Zinc and
 demonstrates through small, elegant and robust examples some
 possibilities of this powerful library. The client side is described
-in Chapter *Zinc Client side>../Zinc-HTTP-Client/Zinc-HTTP-Client.pillar@ch:zinc-client*
+in Chapter *Zinc Client side>../Zinc-HTTP-Client/Zinc-HTTP-Client.pillar@cha:zinc-client*
 
 !!Running a simple HTTP server
 
@@ -490,7 +490,7 @@ The service will allow arbitrary *JSON>http://www.json.org/* objects to be store
 !!!The server code
 
 A proper implementation should best use a couple of classes. However for brevity, the following implementation is written in a workspace, not using any classes. It requires STON (see 
-Chapter *STON>../STON/STON.pillar@ch:ston*) and starts by creating one global variable to hold the stored objects. It is a standard dictionary mapping string URIs to objects.
+Chapter *STON>../STON/STON.pillar@cha:ston*) and starts by creating one global variable to hold the stored objects. It is a standard dictionary mapping string URIs to objects.
 
 [[[
 JSONStore := Dictionary new.

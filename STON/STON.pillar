@@ -1,5 +1,5 @@
 !STON: a Smalltalk Object Notation
-@ch:ston
+@cha:ston
 
 Smalltalk Object Notation (STON) is a lightweight, text-based, human-readable data interchange format. It has been developed by Sven Van Caekenberghe. STON can 
 be used to serialize domain level objects, either for persistency or for network transport.
@@ -136,7 +136,7 @@ TestDomainObject {
 !!!! A large example: an HTTP response
 
 Here is a more complex example:  a ZnResponse object. It is the result of serializing the result of the following HTTP request (using Zinc, see 
-Chapters *Zinc Client>../Zinc-HTTP-Client/Zinc-HTTP-Client.pier@ch:zinc-client* and *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pier@ch:zinc-server*). It also shows that curly 
+Chapters *Zinc Client>../Zinc-HTTP-Client/Zinc-HTTP-Client.pier@cha:zinc-client* and *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pier@cha:zinc-server*). It also shows that curly 
 braces are for dictionaries and square brackets are for lists.
 
 [[[
