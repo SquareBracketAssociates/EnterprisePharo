@@ -606,7 +606,7 @@ This script can then be referenced with ==\*@script1\*== (produces *@script1*).
 !!!! Syntax highlighting
 @sec:syntaxHighlighting
 
-You have the possibility to add a parameter call ==language==. This will give you syntax highlighting.
+To specify the syntax a script is written in, you need to use the ==language== parameter.
 For example on *@script1* we used the ==smalltalk== value for the ==language== parameter.
 
 Here is a list of the supported languages:
@@ -615,8 +615,10 @@ Here is a list of the supported languages:
     PRDocGeneratorAboutScriptLanguage on: stream.
 ]]]
 
+If you don't want syntax highlighting, specify ==no language== as value to the ==language== parameter.
+
 !!!! Script with line numbers
- 
+
 If you need to explain a long piece of code you may want the script to have line numbers you can use the ==lineNumber== parameter like this :
 
 = [[[language=smalltalk|lineNumber=true
