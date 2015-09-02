@@ -33,7 +33,7 @@ Visiting *http://localhost:1701* with a browser yields the Zn welcome
 page. The Transcript produces output related to the server's
 activities, for example:
 
-[[[language=
+[[[language=no language
 2015-06-11 18:06:31 001 565881 Server Socket Bound 0.0.0.0:1701
 2015-06-11 18:06:31 002 275888 Started ZnManagingMultiThreadedServer HTTP port 1701
 2015-06-11 18:06:35 003 565881 Connection Accepted 127.0.0.1
@@ -63,7 +63,7 @@ ease interactive experimentation. The server object is obtained by:
 ==ZnServer default==.  The default server also survives image save
 and restart cycles and needs to be stopped with ==ZnServer stopDefault.== The Transcript output will confirm what happens:
 
-[[[language=
+[[[language=no language
 2015-06-11 18:11:07 018 565881 Server Socket Released 0.0.0.0:1701
 2015-06-11 18:11:07 019 275888 Stopped ZnManagingMultiThreadedServer HTTP port 1701
 ]]]
@@ -160,7 +160,7 @@ ZnEasy get: 'http://localhost:1701' username: 'admin' password: 'secret'.
 
 Log output consists of a log message preceded by a number of fixed fields. Here is an example of a server log.
 
-[[[language=
+[[[language=no language
 2015-06-11 10:19:59 001 220937 Server Socket Bound 0.0.0.0:1701
 2015-06-11 10:19:59 002 233075 Started ZnManagingMultiThreadedServer HTTP port 1701
 2015-06-11 10:25:36 003 220937 Connection Accepted 127.0.0.1
@@ -215,7 +215,7 @@ ZnLogEvent announcer when: ZnLogEvent do: [ :event | loggerStream lf; print: eve
 The class side of ==ZnServer== is actually a factory to instantiate a particular concrete ==ZnServer== subclass, as can be seen in ==defaultServerClass==. The 
 hierarchy looks as follows.
 
-[[[language=
+[[[language=no language
 ZnServer
   + ZnSingleThreadedServer
      + ZnMultiThreadedServer
