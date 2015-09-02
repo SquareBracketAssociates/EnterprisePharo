@@ -2,5 +2,6 @@
 
 set -e
 
+rm -rf book-result
 ./pillar export
 bash pillarPostExport.sh
