@@ -1,8 +1,7 @@
 !Building and deploying your first Web application with Pharo
 @cha:webApp
 
-% -First version: July 10, 2012 by Sven Van Caekenberghe
-% -Second version: September 10, 2012 by Stéphane Ducasse
+Authors: Luc Fabresse, Sven Van Caekenberghe
 
 This chapter details the whole development process of a Web application in Pharo through a detailed example.
 Of course, there are an infinite number of ways to make a Web application.

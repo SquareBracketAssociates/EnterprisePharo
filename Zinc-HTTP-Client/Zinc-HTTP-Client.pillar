@@ -1,6 +1,8 @@
 !Zinc HTTP: The Client-side
 @ch:zinc-client
 
+Author: Sven Van Caekenberghe
+
 HTTP is arguably the most important application level network protocol for what we consider to be the Internet. It is the protocol that allows web browsers and 
 web servers to communicate. It is also becoming the most popular protocol for implementing web services.
 

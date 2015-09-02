@@ -1,6 +1,8 @@
 ! Serializing Complex Objects with Fuel
 @ch:fuel
 
+Authors: Martín Dias, Stéphane Ducasse
+
 Fuel is a fast open-source general-purpose binary object serialization
 framework developed by Mariano Martinez-Peck, Martìn Dias and Max
 Leske. It is robust and used in many industrial cases. A fundamental

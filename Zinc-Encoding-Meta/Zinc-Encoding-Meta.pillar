@@ -1,5 +1,7 @@
-! Character Encoding and Resource Meta Description
+!Character Encoding and Resource Meta Description
 @cha:zincEncoding
+
+Author: Sven Van Caekenberghe
 
 The rise of the Internet and of Open Standards resulted in the adoption of a number of fundamental mechanisms to enable communication and collaboration between 
 different systems.

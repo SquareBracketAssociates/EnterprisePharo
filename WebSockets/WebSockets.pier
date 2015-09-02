@@ -1,10 +1,7 @@
 !WebSockets
 @cha:webSockets
 
-% Sven Van Caekenberghe
-
-% September 2012 - Updated January 2013
-% (This is a draft)
+Author: Sven Van Caekenberghe
 
 The WebSocket protocol defines a full-duplex single socket connection over which messages can be sent between a client and a server. It simplifies much of the complexity around bi-directional web communication and connection management. 
 WebSocket represents the next evolutionary step in Web communication compared to Comet and Ajax.

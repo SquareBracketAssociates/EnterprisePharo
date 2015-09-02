@@ -1,6 +1,8 @@
 !Zinc HTTP: The server side
 @ch:zinc-server
 
+Author: Sven Van Caekenberghe
+
 Zinc is both a client and server HTTP library written and maintained by Sven van Caekenberghe. HTTP clients and servers are each others' mirror: An HTTP client sends
 a request and receives a response. An HTTP server receives a request
 and sends a response. Hence the fundamental Zn framework objects are used to implement both clients and servers.

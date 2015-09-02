@@ -1,6 +1,8 @@
 !Cascading Style Sheets with RenoirSt
 @cha:renoirst
 
+Author: Gabriel Cotelli
+
 RenoirST is a DSL enabling programmatic cascading style sheet generation for Pharo developed by Gabriel Omar Cotelli.
 
 The goals of RenoirST are to improve CSS integration with existing web frameworks

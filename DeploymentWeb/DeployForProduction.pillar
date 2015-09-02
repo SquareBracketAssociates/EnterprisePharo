@@ -1,5 +1,7 @@
 !Deploying a Pharo web application in production
 
+Author: Christophe Demarey
+
 In the previous chapters we discussed several frameworks and libraries to facilitate the development of web application. In this chapter, we will focus on deploying such a web application. While doing so, we will try to answer some questions such as: which operating system should I use, how do I run my application, how do I ensure my application will be restarted after a reboot or a crash, and how do I log data.
 
 !!Where to host your application?

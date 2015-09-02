@@ -1,7 +1,7 @@
 !Teapot
 @cha:teapot
 
-Author(s): Attila Magyar
+Author: Attila Magyar
 
 Teapot is a ''micro'' web framework on top of the Zinc HTTP web server described in Chapter  *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pillar@ch:zinc-server*. Teapot focuses on simplicity and ease of use. It's around 600 lines of code, not counting unit tests. Teapot is developed by Attila Magyar and this chapter is heavily inspired from the original documentation of Teapot. 
 

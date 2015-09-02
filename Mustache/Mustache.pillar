@@ -1,6 +1,8 @@
 !Mustache Templates for Pharo
 @cha:mustache
 
+Authors: Stéphane Ducasse, Norbert Hartl
+
 Mustache is a framework-agnostic, logic-free templating format that "emphasizes separating logic from presentation: it is impossible to embed application logic in this template language". It is supported in many programming languages, as shown at *http://mustache.github.io*. The full syntax documentation is available online at *http://mustache.github.io/mustache.5.html*.
 
 Mustache is simple and versatile, its syntax is small and covers a
@@ -9,7 +11,7 @@ engine for HTML pages it is useful in different areas.
 
 Norbert Hartl developed a Mustache package for Pharo. This chapter is an introduction to this package and a mini tutorial to get started with Mustache. This text is based on the original blog entries written by Norbert and extended to offer a larger covering of the Mustache features.
 
-!! Getting started
+!!Getting started
 
 To install Mustache, execute the following expression in a workspace:
 
