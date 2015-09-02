@@ -76,7 +76,7 @@ OSProcess command:
  '/{pathToMongoDB}/MongoDB/bin/mongodump  --out {BackupPath}'
 ]]]
 
-Please see the mongo documentation for mongo commands, especially the ==--eval== command.
+Please see the mongo documentation for mongo commands, especially the ==-\-eval== command.
 
 !!!Useful mongo commands
 
