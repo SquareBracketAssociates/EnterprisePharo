@@ -1,5 +1,5 @@
 ! Serializing Complex Objects with Fuel
-@ch:fuel
+@cha:fuel
 
 Authors: Martín Dias, Stéphane Ducasse
 
@@ -9,7 +9,7 @@ Leske. It is robust and used in many industrial cases. A fundamental
 reason for the creation of Fuel was speed: while there is a plethora
 of frameworks to serialize objects based on recursive parsing of the
 object graphs in textual format as XML, JSON, or STON, these
-approaches are often slow. (For JSON and STON see also Chapters  *STON>../STON/STON.pillar@ch:ston* and *NeoJSON>../NeoJSON/NeoJSON.pillar@cha:JSON*.)
+approaches are often slow. (For JSON and STON see also Chapters  *STON>../STON/STON.pillar@cha:ston* and *NeoJSON>../NeoJSON/NeoJSON.pillar@cha:JSON*.)
 
 Part of the speed of Fuel comes from the idea that objects are loaded more often than stored. This makes it worth to spend more time while storing to yield 
 faster loading. Also, its storage scheme is based on the pickle format that puts similar objects into groups for efficiency and performance. As a result, Fuel 
@@ -117,7 +117,7 @@ materializedString := FLMaterializer materializeFromFileNamed: 'demo.fuel'.
 Fuel also provides the messages ==serializeToByteArray:== and
 ==materializeFromByteArray:== for storing into a ==ByteArray==. This
 can be interesting, for example, for serializing an object graph as a
-blob of data into a database when using Voyage (see Chapter *Voyage>../Voyage/Voyage.pillar@ch:voyage*).
+blob of data into a database when using Voyage (see Chapter *Voyage>../Voyage/Voyage.pillar@cha:voyage*).
 
 [[[language=Smalltalk
 anArray := FLSerializer serializeToByteArray: 'stringToSerialize'. 

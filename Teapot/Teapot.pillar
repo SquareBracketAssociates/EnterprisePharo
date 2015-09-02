@@ -3,7 +3,7 @@
 
 Author: Attila Magyar
 
-Teapot is a ''micro'' web framework on top of the Zinc HTTP web server described in Chapter  *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pillar@ch:zinc-server*. Teapot focuses on simplicity and ease of use. It's around 600 lines of code, not counting unit tests. Teapot is developed by Attila Magyar and this chapter is heavily inspired from the original documentation of Teapot. 
+Teapot is a ''micro'' web framework on top of the Zinc HTTP web server described in Chapter  *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pillar@cha:zinc-server*. Teapot focuses on simplicity and ease of use. It's around 600 lines of code, not counting unit tests. Teapot is developed by Attila Magyar and this chapter is heavily inspired from the original documentation of Teapot. 
 
 
 !!Getting Started
@@ -99,7 +99,7 @@ A wildcard character ==(*)==, as in the last route, matches to one URL path segm
 The second route shows that the action block optionally takes the HTTP request. The third route is an example of a message send, by using the ==Send== class. The selector of the message can take maximum 2 arguments, which will be instances of 
  a ==TeaRequest== and ==TeaResponse==. 
 
-It is also possible to use the Zinc client (see  Chapter *Zinc Client Side>../Zinc-HTTP-Client/Zinc-HTTP-Client.pillar@ch:zinc-client*) to query the server. The example below illustrates the use of parameters, which we discuss next.
+It is also possible to use the Zinc client (see  Chapter *Zinc Client Side>../Zinc-HTTP-Client/Zinc-HTTP-Client.pillar@cha:zinc-client*) to query the server. The example below illustrates the use of parameters, which we discuss next.
 
 [[[language=smalltalk
 (ZnEasy get: 'http://localhost:1701/hi/user1') entity string. 

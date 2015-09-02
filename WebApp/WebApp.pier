@@ -100,7 +100,7 @@ Or you can look into the actual request and response objects as shown in Figure 
 Note how Pharo is a live environment: you can change the behavior of the application in the debugger window (such as changing the response's text) and the change is immediately used.
 
 You can leave the server running.
-If you want you can enable logging, or switch to debug mode and inspect the server instance as explained in Chapter *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pillar@ch:zinc-server* .
+If you want you can enable logging, or switch to debug mode and inspect the server instance as explained in Chapter *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pillar@cha:zinc-server*.
 Don't forget to remove any breakpoints you set before continuing.
 
 !!Serving an HTML Page

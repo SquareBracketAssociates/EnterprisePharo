@@ -72,7 +72,7 @@ name. In this chapter we use Dictionaries for brevity.
 Tags can be of different types: The first and simplest type is ''variable''. 
 We explain its working with an example: a =={{age}}== tag in a basic template tries to find the 
 ==age== key in the current context. If there is no ==age== key, the parent contexts are looked up recursively. If the top context is reached and the ==age== 
-key is still not found, nothing will be rendered. For example, In the following example ==age== is not defined, therefore nothing is present in the output (included below after the ==-->==).
+key is still not found, nothing will be rendered. For example, In the following example ==age== is not defined, therefore nothing is present in the output (included below after the ==-\->==).
 
 [[[
 '* {{name}}
@@ -90,7 +90,7 @@ key is still not found, nothing will be rendered. For example, In the following 
 
 The last line above shows that all variables are HTML escaped by default, e.g. if a binding for that variable contains a ==<== character it will be converted to ==&lt;== . To return unescaped HTML, the 
 triple mustache expression must be used: ==\{{{name\}}}==. Also, the character ==&== can be used to unescape a variable as in =={{& name}}==. This can be useful when changing delimiters, which is discussed later in this chapter.
-The template below shows the different ways in which ==company== is escaped in the output (included below after the ==-->==).
+The template below shows the different ways in which ==company== is escaped in the output (included below after the ==-\->==).
 
 [[[
 '* {{name}}

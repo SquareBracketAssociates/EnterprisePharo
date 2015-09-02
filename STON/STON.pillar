@@ -1,5 +1,5 @@
 !STON: a Smalltalk Object Notation
-@ch:ston
+@cha:ston
 
 Author: Sven Van Caekenberghe
 
@@ -65,12 +65,13 @@ We now show how to serialize and materialize objects, starting with a simple rec
 !!!!Serializing a rectangle 
 
 To generate a STON representation for an object, STON provides two messages ==toString:== and ==toStringPretty:==. The first message generates a compact version 
-and the second displays the serialized version in a more readable way.  For example (where ==-->== precedes the output of a print-it of the expression):
+and the second displays the serialized version in a more readable way.  For example (where ==-\->== precedes the output of a print-it of the expression):
 
 [[[
 STON toString: (Rectangle origin: 10@10 corner: 100@50)
    --> 'Rectangle{#origin:Point[10,10],#corner:Point[100,50]}'
 ]]]
+
 [[[
 STON toStringPretty: (Rectangle origin: 10@10 corner: 100@50) 
    --> 'Rectangle {
@@ -138,7 +139,7 @@ TestDomainObject {
 !!!! A large example: an HTTP response
 
 Here is a more complex example:  a ZnResponse object. It is the result of serializing the result of the following HTTP request (using Zinc, see 
-Chapters *Zinc Client>../Zinc-HTTP-Client/Zinc-HTTP-Client.pier@ch:zinc-client* and *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pier@ch:zinc-server*). It also shows that curly 
+Chapters *Zinc Client>../Zinc-HTTP-Client/Zinc-HTTP-Client.pier@cha:zinc-client* and *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pier@cha:zinc-server*). It also shows that curly 
 braces are for dictionaries and square brackets are for lists.
 
 [[[
@@ -186,7 +187,7 @@ We will now go into detail on how the notation encodes Smalltalk values. Values 
 !!! Primitive Values
 
 The kinds of values which are considered as primitives are numbers, strings, symbols, booleans and ==nil==. We talk about each of these next, and we show an 
-example of their encoding. ==-->== precedes the output of a print-it of the expression.
+example of their encoding. ==-\->== precedes the output of a print-it of the expression.
 
 !!!!Numbers
 Numbers are either integers or floats.
