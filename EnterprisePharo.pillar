@@ -89,13 +89,24 @@ ${inputFile:DeploymentWeb/DeployForProduction.pillar}$
 
 \chapter{Authors}
 
-List of authors sorted alphabetically:
+This book is a collective work and here the list of all authors sorted alphabetically:
 
 \begin{tabular}{l}
-Cassou Damien \\
-Ducasse St\'ephane \\
-Fabresse Luc    \\
-Fabry Johan \\
+Auverlot Olivier  \\
+Cassou Damien\\
+Cotelli Gabriel\\
+Demarey Christophe\\
+Dias Martín\\
+Ducasse Stéphane\\
+Fabresse Luc\\
+Fabry Johan\\
+Ferlicot Delbecque Cyril\\
+Hartl Norbert\\
+Larcheveque Guillaume\\
+Leske Max\\
+Lorenzano Esteban\\
+Magyar Attila\\
+Martinez-Peck Mariano\\
 Van Caekenberghe Sven\\
 \end{tabular}
 
