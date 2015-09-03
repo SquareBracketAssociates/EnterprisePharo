@@ -1,7 +1,7 @@
 !Generate PDF documents with Artefact
 @cha:artefact
 
-Author: Olivier Auverlot, Guillaume Larcheveque
+Authors: Olivier Auverlot and Guillaume Larcheveque
 
 The Adobe PDF format is probably one of the most widespread electronic document formats. Used daily, it is the basis for the production of exchangeable 
 documents that contain both text and graphics. If you receive a bill, follow a purchase on a web site, download a report, a book or an administrative form, 

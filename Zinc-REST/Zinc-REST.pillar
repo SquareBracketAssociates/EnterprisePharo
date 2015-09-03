@@ -1,7 +1,7 @@
 !Scripting a REST Web Service with Zinc
 @cha:zinc-rest
 
-Author: Sven Van Caekenberghe
+Authors: Sven Van Caekenberghe with Luc Fabresse
 
 Zinc HTTP Components is well suited to the implementation of REST web services, both the client and the server parts. REST or 
 *Representational State Transfer>http://en.wikipedia.org/wiki/Representational_state_transfer* is an architectural style most easily described as using HTTP 

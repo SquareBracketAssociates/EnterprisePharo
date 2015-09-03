@@ -1,7 +1,7 @@
 !STON: a Smalltalk Object Notation
 @cha:ston
 
-Author: Sven Van Caekenberghe
+Authors: Sven Van Caekenberghe with Stéphane Ducasse and Johan Fabry
 
 Smalltalk Object Notation (STON) is a lightweight, text-based, human-readable data interchange format. It has been developed by Sven Van Caekenberghe. STON can 
 be used to serialize domain level objects, either for persistency or for network transport.
