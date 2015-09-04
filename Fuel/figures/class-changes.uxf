@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>40</x>
+      <y>290</y>
+      <w>160</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*Point*
+v.1
+--
+x
+y</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>260</x>
+      <y>290</y>
+      <w>160</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*Point*
+v.2
+--
+x
+y
+distanceToZero</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>470</x>
+      <y>290</y>
+      <w>160</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*Point*
+v.3
+--
+posX
+posY</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>690</x>
+      <y>290</y>
+      <w>160</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*Coordinate*
+v.4
+--
+posX
+posY</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

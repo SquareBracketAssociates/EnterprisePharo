@@ -829,3 +829,7 @@ start by browsing the ==proxy== method category of ==ZnNetworkingUtils==.
 Zinc is a solid and very flexible HTTP library. This chapter only presented the client-side of Zinc i.e. how to use it to send HTTP requests and receive 
 responses back. Through several code examples, we demonstrated some of the possibilities of Zinc and also its simplicity. Zinc relies on a very good 
 object-centric decomposition of the HTTP concepts. It results is an easy to understand and extensible library.
+
+% Local Variables:
+% compile-command: "cd .. && ./pillar export --to=\"LaTeX by chapter\" Zinc-HTTP-Client/Zinc-HTTP-Client.pillar && bash pillarPostExport.sh"
+% End:

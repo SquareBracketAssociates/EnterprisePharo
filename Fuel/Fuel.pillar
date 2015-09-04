@@ -778,3 +778,7 @@ Materialized at 2015-05-24T22:39:37-03:00
 !! Conclusion
 
 Fuel is a fast and stable binary object serializer for Pharo and is available by default in Pharo since 2.0. It can serialize to and materialize from any stream and the graph of objects to be serialized can be customized in multiple ways. It can serialize nearly any object in the system. For example, cases are known of an error occurring in a deployed application, the full stack being serialized and later materialized on a development machine for debugging.
+
+% Local Variables:
+% compile-command: "cd .. && ./pillar export --to=\"HTML by chapter\" Fuel/Fuel.pier"
+% End:

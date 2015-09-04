@@ -22,7 +22,7 @@ The Web application that we are going to build will show a picture and allow use
 Because we want to focus on the basic mechanics, the fundamentals as well as the build and deploy process, there are some simplifications. There will be one
 picture for all users, no login and we will store the picture in memory.
 
-+A simple Web application>file://figures/image-web-app.jpg|width=80|label=imageweb+
++A simple Web application>file://figures/image-web-app.png|width=60|label=imageweb+
 
 In our implementation, ==/image== will serve an HTML page containing the image and a form. To serve the raw image itself, we'll add a parameter, like
 ==/image?raw=true==. These will be GET HTTP requests. The form will submit its data to ==/image== as a POST request.
@@ -993,3 +993,7 @@ formForImageEntity: imageEntity
 form
   ^ self formForImageEntity: self image
 ]]]
+
+% Local Variables:
+% compile-command: "cd .. && ./pillar export --to=\"HTML by chapter\" WebApp/WebApp.pier"
+% End:

@@ -568,12 +568,12 @@ To create links to externals resources, use the ==\*Pharo>http://pharo-project.o
 To include a picture, use the syntax ==\+caption>file://filename|parameters+==:
 
 [[[
-+Caption of the picture>file://figures/pier-logo.png|width=50|label=pierLogo+
++Caption of the picture>file://figures/pharo-logo.png|width=50|label=pharoLogo+
 ]]]
 
-generates Figure *@pierLogo* (this reference has been generated using ==\*@pierLogo*==).
+generates Figure *@pharoLogo* (this reference has been generated using ==\*@pharoLogo*==).
 
-+This is the caption of the picture>file://figures/pier-logo.png|width=50|label=pierLogo+
++This is the caption of the picture>file://figures/pharo-logo.png|width=50|label=pharoLogo+
 
 !!!Scripts
 
@@ -681,7 +681,7 @@ For example the Section *@sec:syntaxHighlighting* and the Section *@configParame
 
 !!!Raw
 
-If you want to include raw text into a page you must enclose it in =={{{== and ==}}}==, otherwise Pier ensures that text appears as you type it.
+If you want to include raw text into a page you must enclose it in =={{{== and ==}}}==, otherwise Pillar ensures that text appears as you type it.
 
 A good practice is to always specify for which kind of export the raw text must be outputted by starting the block with =={{{latex:== or =={{{html:== (for now 
 only LaTeX, HTML and Markdown are supported). For example, the following shows a formula, either using LaTeX or an image depending on the kind of export.
@@ -1058,3 +1058,7 @@ In order to export with a configuration you need to create a new configuration. 
 ]]]
 
 
+
+% Local Variables:
+% compile-command: "cd .. && ./pillar export --to=\"LaTeX by chapter\" PillarChap/Pillar.pillar && bash pillarPostExport.sh"
+% End:
