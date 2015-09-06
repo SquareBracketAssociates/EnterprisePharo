@@ -39,3 +39,4 @@ stdout
 *.tex
 */figures/Thumbs.db
 /pillarPostExport.sh
+/play-cache
