@@ -184,34 +184,19 @@ In order to do that you have to add a parameter into your configuration.
 }
 ]]]
 
-If you launch an export with this configuration you will see that Pillar copy all the files (except the Pharo image and virtual machine) into the output directory.
-You might want to copy only some specific files (for example only some figures and css files)  or no files at all.
-For that you can add a parameter ''support'' on your configuration with a list of files (on this list you have the possibility match files with '\*' or '\*\*' as ==\*\*/Figures== or ==\*.css==).
-We don't have any support file so we can give an empty list.
-
-[[[language=ston|caption=Export into a specific folder|label=scr:outputDirectory
-{
-  "title" : "My first document while reading the 5 minutes Pillar tutorial",
-  "outputDirectory" : "result",
-  "support" : []
-}
-]]]
-
-
 If you export you will have a file ''result/output.html''.
 
-You have two way to export files:
-- separate output files
-- as one output file
+You have two ways to export files:
+# separate output files
+# as one output file
 
-By default we export all the input files as one.
+By default Pillar export all the input files as one.
 If you create a file ''second.pillar'' that contains ==I am a second file== you can add a parameter ''inputFiles'' to your configuration.
 
 [[[language=ston|caption=Export into a specific folder|label=scr:outputDirectory
 {
   "title" : "My first document while reading the 5 minutes Pillar tutorial",
   "outputDirectory" : "result",
-  "support" : [],
   "inputFiles" : [ "first.pillar", "second.pillar" ]
 }
 ]]]
@@ -244,7 +229,6 @@ If you want separate files you can add a parameter:
 {
   "title" : "My first document while reading the 5 minutes Pillar tutorial",
   "outputDirectory" : "result",
-  "support" : [],
   "inputFiles" : [ "first.pillar", "second.pillar" ],
   "separateOutputFiles" : true
 }
