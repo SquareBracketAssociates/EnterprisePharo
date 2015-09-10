@@ -497,13 +497,13 @@ generates
 !!!Formatting
 There is some sugar for font formatting:
 
--To make something ""bold"", write ==\""bold""== (with 2 double quotes)
--To make something ''italic'', write ==\''italic''== (with 2 single quotes)
--To make something ==monospaced==, write ==\==monospaced=\===
--To make something --strikethrough--, write ==\--strikethrough--==
--To make something @@subscript@@, write ==\@@subscript@@==
--To make something ^^superscript^^, write ==\^^superscript^^==
--To make something __underlined__, write ==\__underlined__==
+-To make something ""bold"", write ==\""bold\""== (with 2 double quotes)
+-To make something ''italic'', write ==\''italic\''== (with 2 single quotes)
+-To make something ==monospaced==, write ==\=\=monospaced\=\===
+-To make something --strikethrough--, write ==\--strikethrough\--==
+-To make something @@subscript@@, write ==\@@subscript\@@==
+-To make something ^^superscript^^, write ==\^^superscript\^^==
+-To make something __underlined__, write ==\__underlined\__==
 
 !!!Tables
 To create a table, start off the lines with ==|== and separate the elements with ==|==s. Each new line represents a new row of the table. Add a single ==!== to 
