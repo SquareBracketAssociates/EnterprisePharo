@@ -667,7 +667,7 @@ For example the Section *@sec:syntaxHighlighting* and the Section *@configParame
 
 If you want to include raw text into a page you must enclose it in =={{{== and ==}}}==, otherwise Pillar ensures that text appears as you type it.
 
-A good practice is to always specify for which kind of export the raw text must be outputted by starting the block with =={{{latex:== or =={{{html:== (for now 
+A good practice is to always specify for which kind of export the raw text must be outputted by starting the block with ==\{{{latex:== or ==\{{{html:== (for now 
 only LaTeX, HTML and Markdown are supported). For example, the following shows a formula, either using LaTeX or an image depending on the kind of export.
 
 = {{{latex:
