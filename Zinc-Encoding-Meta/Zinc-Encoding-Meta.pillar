@@ -533,7 +533,7 @@ ZnMimeType textPlain matches: 'text/plain' asZnMimeType.
 
 The charset=UTF-8 that is part of what ==ZnMimeType textPlain== returns is not taken into account in the second set of comparisons.
 
-The main or sub types can be a wildcard, indicated by a ==*==. This allows for matching. Obviously, everything matches ==\*/\*== (==ZnMimeType any==). Otherwise, 
+The main or sub types can be a wildcard, indicated by a ==\*==. This allows for matching. Obviously, everything matches ==\*/\*== (==ZnMimeType any==). Otherwise, 
 when the sub type is ==\*==, the main types must be equal. Here is an example.
 
 [[[
