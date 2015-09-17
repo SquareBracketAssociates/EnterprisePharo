@@ -1,7 +1,7 @@
 %!TEX TS-program = lualatex
 % -*- mode: LaTeX; -*-
 
-\documentclass[10pt,twoside]{book}
+\documentclass[10pt,twoside]{support/latex/sbabook}
 \usepackage[
         % http://connect.lulu.com/t5/Mise-en-page-du-corpus/Comment-faire-pour-que-mon-contenu-s-%C3%A9tale-jusqu-aux-bords-de-la/ta-p/33461
         % book size: papersize={15.593cm,23.389cm},
@@ -14,7 +14,7 @@
 ]{geometry}
 \usepackage{import}
 \subimport{root/support/latex/}{common.tex}
-\setboolean{lulu}{true}
+\subimport{root/support/latex/}{tmphacks.tex}
 
 {{{content}}}
 
