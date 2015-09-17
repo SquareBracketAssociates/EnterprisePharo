@@ -24,17 +24,11 @@
 %=================================================================
 \let\wholebook=\relax
 %=================================================================
-\renewcommand{\nnbb}[2]{} % Disable editorial comments
-%=================================================================
 \begin{document}
 \frontmatter
 %=================================================================
-\setcounter{page}{1}
-\pagestyle{headings}
-%=================================================================
-\author{
-        Damien Cassou,\\ St\'ephane Ducasse,\\ Luc Fabresse,\\ Johan Fabry,\\ Sven Van Caekenberghe}
-\title{\Huge\bf Enterprise Pharo:\\a Web Perspective}
+\author{Damien Cassou, Stéphane Ducasse, Luc Fabresse, Johan Fabry, Sven Van Caekenberghe}
+\title{Enterprise Pharo: a Web Perspective}
 \isodate
 \date{\emph{Version of \today}}
 \maketitle
