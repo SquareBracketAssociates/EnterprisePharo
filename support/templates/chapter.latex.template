@@ -13,10 +13,13 @@
 
 	\begin{document}
 \fi
+
+{{=« »=}}
+\chapter{«title»}
+\chapterprecis{«attribution»}
+
 \sloppy
-
-
-{{{content}}}
+«content»
 
 
 \ifx\wholebook\relax\else
