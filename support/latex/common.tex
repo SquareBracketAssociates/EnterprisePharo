@@ -6,31 +6,32 @@
 \usepackage{listings}
 \usepackage{lstsmalltalk}
 
-\usepackage[
-	super,
-	citefull=first,
-	authorformat={allreversed,and},
-	titleformat={commasep,italic}
-]{jurabib} % citations as footnotes
+\usepackage[% citations as footnotes
+  super,
+  citefull=first,
+  authorformat={allreversed,and},
+  titleformat={commasep,italic}
+]{jurabib}
 
-\usepackage[ % make hyperlinks look like normal text
-	colorlinks=true,
-	linkcolor=black,
-	urlcolor=black,
-	citecolor=black
+\usepackage[% make hyperlinks look like normal text
+  colorlinks=true,
+  linkcolor=black,
+  urlcolor=black,
+  citecolor=black
 ]{hyperref}
 
 % Lulu only supports PDF format version 1.3
 \pdfminorversion=3
 
+\usepackage{listings}
+\usepackage{lstsmalltalk}
+
 % showing code, inline and as blocks
 \newcommand\code[1]{\texttt{\textup{#1}}}
 \lstnewenvironment{listing}{%
-	\lstset{%
-		frame=single,
-		framerule=0pt,
-		mathescape=false
-	}
+  \lstset{%
+    frame=none,
+    mathescape=false,
+    tabsize=2
+  }%
 }{}
-
-% \lstset{language=Smalltalk}
