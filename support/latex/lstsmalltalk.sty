@@ -2,50 +2,13 @@
     [2009/07/03 0.2 listings Smalltalk definitions file]
 %
 \RequirePackage{listings}%
-\RequirePackage{ifthen}
-% \RequirePackage{graphicx}%
-% \RequirePackage{stmaryrd}%
-%
-\newboolean{quickdefs}\setboolean{quickdefs}{true}
-\DeclareOption{nodefs}{\setboolean{quickdefs}{false}}
-\ProcessOptions\relax
-
-\ifthenelse{\boolean{quickdefs}}
-    {\lstset{
-        basicstyle=\ttfamily,
-        stringstyle=\itshape,
-        escapeinside={_}{_},
-        columns=fullflexible,
-        % frame=tb,
-        floatplacement=htb}}
-    {}
-
-\lstnewenvironment{smalltalk}[1][]
-    {\lstset{language=Smalltalk,#1}}
-    {}
-\newcommand{\st}[1]{{\lstset{language=Smalltalk}\lstinline{#1}}}
-
 
 \lstdefinelanguage{Smalltalk}{
-  morekeywords={self,super,true,false,nil,thisContext},
-  morestring=[d]',
-  morecomment=[s]{"}{"},
+  keywords={self,super,true,false,nil,thisContext},
+  otherkeywords={^,:=,->,==,~=},
   alsoletter={\#:},
-  upquote=true,
-  showstringspaces=false,
-  literate=
-%     {.}{{\bfseries .}}1
-%     {;}{{\bfseries ;}}1
-%     {[}{{\bfseries [}}1
-%     {]}{{\bfseries ]}}1
-%     {:}{{\bfseries :}}1
-% %    {|}{{\ttfamily\textbar{}}}1
-%     {\#}{{\ttfamily \#}}1
-%     {\$}{{\ttfamily \$}}1
-%     {:=}{{$\mathrel{\mathop:}=$\ }}2%$\shortleftarrow$\ }}2
-%     {^}{{\raisebox{0.5ex}{$\wedge$}}}1%\raisebox{1.5ex}{\scalebox{1}[-1]{$\lightning$}}\,}}2%\textuparrow\ }}2
-    {>>}{{\,>>\ }}3,
-  tabsize=4
+  string=[d]',
+  comment=[s]{"}{"},
 }[keywords,comments,strings]%
 \endinput
 %%%
