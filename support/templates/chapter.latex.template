@@ -19,7 +19,9 @@
 \chapterprecis{«attribution»}
 
 \sloppy
-«content»
+
+«! the '&' below prevents HTML escaping. »
+«& content»
 
 
 \ifx\wholebook\relax\else
