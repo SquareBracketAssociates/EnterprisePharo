@@ -384,7 +384,7 @@ The lazy conversion for proper Unicode WideStrings will give unexpected results:
 
 This 'conversion' does not correspond to any known encoding. It is the result of writing 4-byte Unicode code points as Integers.
 
-@@note Using this is a bug no matter how you look at it. In this century you will look silly for not implementing proper support for all languages. When converting from strings to bytes  -- and vice versa -- use a proper, explicit encoding.
+@@note Using this is a bug no matter how you look at it. In this century you will look silly for not implementing proper support for all languages. When converting between strings and bytes, use a proper, explicit encoding.
 
 
 !!! Strict and lenient encoding
