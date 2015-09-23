@@ -1,7 +1,9 @@
-!Character Encoding and Resource Meta Description
+{
+    "title": "Character Encoding and Resource Meta Description",
+    "attribution": "Sven Van Caekenberghe with Luc Fabresse and Johan Fabry"
+}
 @cha:zincEncoding
 
-Authors: Sven Van Caekenberghe with Luc Fabresse and Johan Fabry
 
 The rise of the Internet and of Open Standards resulted in the adoption of a number of fundamental mechanisms to enable communication and collaboration between 
 different systems.
