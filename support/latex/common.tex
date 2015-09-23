@@ -32,6 +32,8 @@
 \lstdefinelanguage{plain}{% verbatim, plain text
 }
 \lstalias{CSS}{plain}
+\lstalias{STON}{plain}
+\lstalias{Javascript}{plain}
 
 \lstset{language=smalltalk}
 \newcommand\code[1]{\texttt{\textup{#1}}}
@@ -50,4 +52,8 @@
 % highlighted paragraphs
 \newenvironment{note}{%
   \begin{leftbar}\textbf{Note}\quad
+}{\end{leftbar}}
+
+\newenvironment{todo}{%
+  \begin{leftbar}\textbf{To do}\quad
 }{\end{leftbar}}
