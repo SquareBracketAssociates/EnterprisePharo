@@ -4,8 +4,6 @@
 
 \usepackage[normalem]{ulem} % for strikeout text (\sout{...})
 \usepackage{graphicx}
-\usepackage{listings}
-\usepackage{lstsmalltalk}
 
 \usepackage[% citations as footnotes
   super,
@@ -28,12 +26,17 @@
 \usepackage{lstsmalltalk}
 
 % showing code, inline and as blocks
+\usepackage{listings}
+\usepackage{lstsmalltalk}
+\lstset{language=smalltalk}
 \newcommand\code[1]{\texttt{\textup{#1}}}
-\lstnewenvironment{listing}{%
+\lstnewenvironment{listing}[1][]{%
   \lstset{%
     frame=none,
     mathescape=false,
-    tabsize=2
+    tabsize=2,
+    keywordstyle={},
+    #1
   }%
 }{}
 
