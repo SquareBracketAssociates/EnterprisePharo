@@ -31,6 +31,7 @@
 \usepackage{lsthttp}
 \lstdefinelanguage{plain}{% verbatim, plain text
 }
+\lstalias{CSS}{plain}
 
 \lstset{language=smalltalk}
 \newcommand\code[1]{\texttt{\textup{#1}}}
@@ -40,6 +41,8 @@
     mathescape=false,
     tabsize=2,
     keywordstyle={},
+    stringstyle={},
+    commentstyle={},
     #1
   }%
 }{}

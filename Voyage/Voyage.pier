@@ -164,7 +164,7 @@ anAssociation save.
 
 This will generate a collection in the database containing a document of the following structure: 
 
-[[[
+[[[language=plain
 {
   "_id" : ObjectId("a05feb630000000000000000"),
   "#instanceOf" : "Association",
