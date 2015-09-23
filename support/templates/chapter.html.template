@@ -29,7 +29,12 @@
   <body>
 
     <div class="container text-justify">
-      {{{content}}}
+      <section>
+        <h1>{{{title}}}</h1>
+        <div class="attribution">{{{attribution}}}</div>
+
+        {{{content}}}
+      </section>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
