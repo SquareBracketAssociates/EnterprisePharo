@@ -166,7 +166,7 @@ ZnClient new
 
 This will print out some information on the Transcript, as shown below.
 
-[[[language=no language
+[[[language=plain
 2015-03-26 20:32:30 001 Connection Established zn.stfx.eu:80 46.137.113.215 223ms 
 2015-03-26 20:32:30 002 Request Written a ZnRequest(GET /zn/small.html) 0ms
 2015-03-26 20:32:30 003 Response Read a ZnResponse(200 OK text/html;charset=utf-8 113B) 223ms
