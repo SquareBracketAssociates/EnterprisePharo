@@ -1,7 +1,9 @@
-!Handling CSV with NeoCSV
+{
+    "title": "Handling CSV with NeoCSV",
+    "attribution": "Sven Van Caekenberghe with Damien Cassou and Stéphane Ducasse"
+}
 @cha:neoCSV
 
-Authors: Sven Van Caekenberghe with Damien Cassou and Stéphane Ducasse
 
 CSV (Comma Separated Values) is a popular data-interchange format. This chapter presents NeoCSV, a library to parse and export CSV files.
 This chapter has originally been written by Sven Van Caekenberghe the author of NeoCSV and many other nicely designed Pharo libraries.

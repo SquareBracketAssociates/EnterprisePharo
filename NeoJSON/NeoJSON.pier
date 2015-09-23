@@ -1,7 +1,9 @@
-! JSON
+{
+    "title": "JSON",
+    "attribution": "Sven Van Caekenberghe with Damien Cassou and Stéphane Ducasse"
+}
 @cha:JSON
 
-Authors: Sven Van Caekenberghe with Damien Cassou and Stéphane Ducasse
 
 JSON (JavaScript Object Notation) is a popular data-interchange format. NeoJSON is an elegant and efficient standalone Smalltalk library to read and write 
 JSON converting to and from Smalltalk objects. The library is developed and actively maintained by Sven Van Caekenberghe.

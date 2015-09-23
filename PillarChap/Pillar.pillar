@@ -1,11 +1,9 @@
 {
-	"title": "Pillar"
+    "title": "Documenting your Project with Pillar",
+    "attribution": "Damien Cassou and Cyril Ferlicot Delbecque"
 }
-
-!Documenting your Project with Pillar
 @cha:pillar
 
-Authors: Damien Cassou and Cyril Ferlicot Delbecque
 
 This documentation describes the version 1.0.0 of Pillar.
 

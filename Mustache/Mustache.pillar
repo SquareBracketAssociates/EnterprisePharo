@@ -1,7 +1,9 @@
-!Mustache Templates for Pharo
+{
+    "title": "Mustache Templates for Pharo",
+    "attribution": "Stéphane Ducasse and Norbert Hartl"
+}
 @cha:mustache
 
-Authors: Stéphane Ducasse and Norbert Hartl
 
 Mustache is a framework-agnostic, logic-free templating format that "emphasizes separating logic from presentation: it is impossible to embed application logic in this template language". It is supported in many programming languages, as shown at *http://mustache.github.io*. The full syntax documentation is available online at *http://mustache.github.io/mustache.5.html*.
 

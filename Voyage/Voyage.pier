@@ -1,7 +1,9 @@
-!Persisting Objects with Voyage
+{
+    "title": "Persisting Objects with Voyage",
+    "attribution": "Johan Fabry and Esteban Lorenzano with Damien Cassou and Norbert Hartl"
+}
 @cha:voyage
 
-Authors: Johan Fabry and Esteban Lorenzano with Damien Cassou and Norbert Hartl
 
 Voyage is a small persistence framework developed by Esteban Lorenzano, constructed as a small layer between the objects and a persistency mechanism. It is 
 purely object-oriented and has as a goal to present a minimal API to most common development usages. Voyage is a common layer for different backends but 

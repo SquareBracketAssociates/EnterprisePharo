@@ -1,7 +1,9 @@
-!Zinc HTTP: The server side
+{
+    "title": "Zinc HTTP: The server side",
+    "attribution": "Sven Van Caekenberghe with Luc Fabresse and Johan Fabry"
+}
 @cha:zinc-server
 
-Authors: Sven Van Caekenberghe with Luc Fabresse and Johan Fabry
 
 Zinc is both a client and server HTTP library written and maintained by Sven van Caekenberghe. HTTP clients and servers are each others' mirror: An HTTP client sends
 a request and receives a response. An HTTP server receives a request
