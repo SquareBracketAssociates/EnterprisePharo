@@ -15,8 +15,8 @@
 \fi
 
 {{=« »=}}
-\chapter{«title»}
-\chapterprecis{«attribution»}
+\chapter{«& title»}
+\chapterprecis{«& attribution»}
 
 \sloppy
 
