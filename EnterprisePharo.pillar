@@ -29,8 +29,6 @@
 %=================================================================
 \author{Damien Cassou, Stéphane Ducasse, Luc Fabresse, Johan Fabry, Sven Van Caekenberghe}
 \title{Enterprise Pharo: a Web Perspective}
-\isodate
-\date{\emph{Version of \today}}
 \maketitle
 %=================================================================
 \tableofcontents
