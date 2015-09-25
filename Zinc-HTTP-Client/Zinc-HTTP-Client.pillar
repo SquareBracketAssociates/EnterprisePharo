@@ -629,7 +629,7 @@ sending ==asZnMimeType== to a ==String==.
 'text/html;charset=utf-8' asZnMimeType.
 ]]]
 
-The subtype can be a wildcard, indicated by a ==*==. This allows for matching.
+The subtype can be a wildcard, indicated by a ==\*==. This allows for matching.
 
 [[[
 ZnMimeType textHtml matches: ZnMimeType text.
