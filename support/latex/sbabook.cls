@@ -50,6 +50,14 @@
   BoldFont = *zi4-Bold,
   StylisticSet = 3,
 }
+\defaultfontfeatures[Open Sans]{
+  Extension = .ttf,
+  UprightFont = OpenSans-Regular,
+  ItalicFont = OpenSans-Italic,
+  BoldFont = OpenSans-Bold,
+  BoldItalicFont = OpenSans-BoldItalic,
+}
+
 \setmainfont[Numbers=OldStyle]{Gentium Basic}
 \setsansfont[Scale=MatchLowercase,Numbers=OldStyle]{Open Sans}
 \setmonofont[Scale=MatchLowercase]{Inconsolata}
