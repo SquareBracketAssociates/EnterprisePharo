@@ -132,7 +132,6 @@
   %   \par\@afterheading\m@mindentafterchapter}
   }
 
-\chapterstyle{sba}
 % \renewcommand\chapterprecishere[1]{%
 %     \prevgraf0
 %     \prechapterprecis #1\postchapterprecis
@@ -161,23 +160,39 @@
     \ifnum\count0 >0 \vspace*{\count0 \dimen0}\fi}}
 
 
-%% sections & below
-\setsecheadstyle      {\LARGE\sffamily\bfseries}
-\setsubsecheadstyle   {\Large\sffamily\bfseries}
-\setsubsubsecheadstyle{\Large\sffamily}
-\setparaheadstyle     {\sffamily\bfseries}
-\setsubparaheadstyle  {\sffamily}
-\setsecnumformat{%
+\makeheadstyles{sba}{%
+  \renewcommand*{\booknamefont} {\normalfont\huge\sffamily}
+  \renewcommand*{\booknumfont}  {\normalfont\huge\sffamily}
+  \renewcommand*{\booktitlefont}{\normalfont\Huge\sffamily}
+  \renewcommand*{\partnamefont} {\normalfont\huge\sffamily}
+  \renewcommand*{\partnumfont}  {\normalfont\huge\sffamily}
+  \renewcommand*{\parttitlefont}{\normalfont\Huge\sffamily}
+  \chapterstyle{sba}
+  \setsecheadstyle      {\LARGE\sffamily\bfseries}
+  \setsubsecheadstyle   {\Large\sffamily\bfseries}
+  \setsubsubsecheadstyle{\Large\sffamily}
+  \setparaheadstyle     {\sffamily\bfseries}
+  \setsubparaheadstyle  {\sffamily}
+  \setsecnumformat{%
     \llap{\mdseries
-        \csname the#1\endcsname
-        \quad}}
+      \csname the##1\endcsname
+      \quad}}
+}
 
+\headstyles{sba}
 \setsecnumdepth{section}
 \settocdepth{section}
+
 
 %%%
 %%% Table of contents etc
 %%%
+\renewcommand\cftpartfont{\sffamily\large\bfseries}
+\let\cftpartpagefont\cftpartfont% unused, but for coherence
+\renewcommand\cftpartleader{}
+\renewcommand\cftpartafterpnum{\cftparfillskip}
+\cftpagenumbersoff{part}
+
 \renewcommand\cftchapterfont{\sffamily\bfseries}
 \let\cftchapterpagefont\cftchapterfont
 \renewcommand\precistocfont{\normalfont\sffamily\itshape\small}
@@ -185,11 +200,15 @@
     \hyphenpenalty=5000
     \tolerance=1000
     \noindent\narrowragged}
+
 % TODO balance precis in TOC
 \renewcommand\cftsectionfont{\sffamily}
 \let\cftsectionpagefont\cftsectionfont
 \renewcommand\cftsubsectionfont{\sffamily\itshape}
 \let\cftsubsectionpagefont\cftsectionfont
+\cftsetindents{part}{0pt}{0em}
+\renewcommand{\cftpartpresnum}{\hspace{-4em}\hfill}
+\renewcommand{\cftpartaftersnum}{\quad}
 \cftsetindents{chapter}{0pt}{0em}
 \renewcommand{\cftchapterpresnum}{\hspace{-4em}\hfill}
 \renewcommand{\cftchapteraftersnum}{\quad}
@@ -275,7 +294,7 @@
         mathescape=false,
     }
 }{}
- 
+
 %% verbatim setup
 \bvtopandtail % \bvsides
 \setlength{\bvboxsep}{.25em}
