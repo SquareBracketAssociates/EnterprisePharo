@@ -24,13 +24,26 @@
 %=================================================================
 \let\wholebook=\relax
 %=================================================================
-\begin{document}
-\frontmatter
-%=================================================================
-\author{Damien Cassou, Stéphane Ducasse, Luc Fabresse, Johan Fabry, Sven Van Caekenberghe}
 \title{Enterprise Pharo: a Web Perspective}
-\maketitle
+\author{
+    Damien Cassou \and
+    Stéphane Ducasse \and
+    Luc Fabresse \and
+    Johan Fabry \and
+    Sven Van Caekenberghe}
+
+\begin{document}
+\begin{titlingpage}
+    \setlength\droptitle{5cm}
+    \pretitle{\begin{flushright}\HUGE\sffamily}
+    \posttitle{\par\end{flushright}\vskip 1cm}
+    \preauthor{\large\begin{tabular}[t]{r}}
+    \postauthor{\end{tabular}\par}
+    \maketitle
+\end{titlingpage}
+
 %=================================================================
+\frontmatter
 \tableofcontents
 % \listoffigures
 % \listoftables
