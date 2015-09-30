@@ -1,7 +1,7 @@
 %!TEX TS-program = lualatex
 % -*- mode: LaTeX; -*-
 
-\documentclass[10pt,twoside]{root/support/latex/sbabook}
+\documentclass[10pt,twoside]{support/latex/sbabook}
 \usepackage[
         % http://connect.lulu.com/t5/Mise-en-page-du-corpus/Comment-faire-pour-que-mon-contenu-s-%C3%A9tale-jusqu-aux-bords-de-la/ta-p/33461
         % book size: papersize={15.593cm,23.389cm},
@@ -13,7 +13,7 @@
         ignoreheadfoot
 ]{geometry}
 \usepackage{import}
-\subimport{root/support/latex/}{common.tex}
+\subimport{support/latex/}{common.tex}
 
 %=================================================================
 % Add the path for the figures of each chapter here:
@@ -52,91 +52,91 @@
 \sloppy % To avoid LaTeX's annoying habit of letting lines stick over the margins!
 \mainmatter
 
-\input{Copyright/License.pier}
+\input{Copyright/License}
 
 \part{Simple Web applications}
 
 \chapter{Teapot}
 \chapterprecis{Attila Magyar}
-\input{Teapot/Teapot.pillar}
+\input{Teapot/Teapot}
 
 
 \chapter{Building and deploying your first Web application with Pharo}
 \chapterprecis{Sven Van Caekenberghe with Luc Fabresse}
 
-\input{WebApp/WebApp.pier}
+\input{WebApp/WebApp}
 
 \part{HTTP}
 
 \chapter{Character Encoding and Resource Meta Description}
 \chapterprecis{Sven Van Caekenberghe with Luc Fabresse and Johan Fabry}
-\input{Zinc-Encoding-Meta/Zinc-Encoding-Meta.pillar}
+\input{Zinc-Encoding-Meta/Zinc-Encoding-Meta}
 
 
 
 \chapter{Zinc HTTP: The Client-side}
 \chapterprecis{Sven Van Caekenberghe with Luc Fabresse and Johan Fabry}
-\input{Zinc-HTTP-Client/Zinc-HTTP-Client.pillar}
+\input{Zinc-HTTP-Client/Zinc-HTTP-Client}
 
 \chapter{Zinc HTTP: The server side}
 \chapterprecis{Sven Van Caekenberghe with Luc Fabresse and Johan Fabry}
-\input{Zinc-HTTP-Server/Zinc-HTTP-Server.pillar}
+\input{Zinc-HTTP-Server/Zinc-HTTP-Server}
 
 \chapter{Scripting a REST Web Service with Zinc}
 \chapterprecis{Sven Van Caekenberghe with Luc Fabresse}
-\input{Zinc-REST/Zinc-REST.pillar}
+\input{Zinc-REST/Zinc-REST}
 
 \chapter{WebSockets}
 \chapterprecis{Sven Van Caekenberghe with Luc Fabresse}
-\input{WebSockets/WebSockets.pier}
+\input{WebSockets/WebSockets}
 
 
 \part{Data}
 
 \chapter{Handling CSV with NeoCSV}
 \chapterprecis{Sven Van Caekenberghe with Damien Cassou and Stéphane Ducasse}
-\input{NeoCSV/NeoCSV.pier}
+\input{NeoCSV/NeoCSV}
 
 \chapter{JSON}
 \chapterprecis{Sven Van Caekenberghe with Damien Cassou and Stéphane Ducasse}
-\input{NeoJSON/NeoJSON.pier}
+\input{NeoJSON/NeoJSON}
 
 \chapter{STON: a Smalltalk Object Notation}
 \chapterprecis{Sven Van Caekenberghe with Stéphane Ducasse and Johan Fabry}
-\input{STON/STON.pillar}
+\input{STON/STON}
 
 \chapter{Serializing Complex Objects with Fuel}
 \chapterprecis{Martín Dias, Mariano Martinez Peck and Max Leske with Stéphane Ducasse}
-\input{Fuel/Fuel.pillar}
+\input{Fuel/Fuel}
 
 \chapter{Persisting Objects with Voyage}
 \chapterprecis{Johan Fabry and Esteban Lorenzano with Damien Cassou and Norbert Hartl}
-\input{Voyage/Voyage.pier}
+\input{Voyage/Voyage}
 
 \part{Presentation}
 
 \chapter{Mustache Templates for Pharo}
 \chapterprecis{Stéphane Ducasse and Norbert Hartl}
-\input{Mustache/Mustache.pillar}
+\input{Mustache/Mustache}
 
 \chapter{Cascading Style Sheets with RenoirSt}
 \chapterprecis{Gabriel Cotelli with Damien Cassou}
-\input{RenoirST/RenoirST.pier}
+\input{RenoirST/RenoirST}
 
 \chapter{Documenting your Project with Pillar}
 \chapterprecis{Damien Cassou and Cyril Ferlicot Delbecque}
-\input{PillarChap/Pillar.pillar}
+\input{PillarChap/Pillar}
 
 
 \chapter{Generate PDF documents with Artefact}
 \chapterprecis{Olivier Auverlot and Guillaume Larchevêque}
-\input{Artefact/Artefact.pillar}
+\input{Artefact/Artefact}
 
 \part{Deployment}
 
 \chapter{Deploying a Pharo web application in production}
 \chapterprecis{Christophe Demarey}
-\input{DeploymentWeb/DeployForProduction.pillar}
+\input{DeploymentWeb/DeployForProduction}
 
 \appendix
 
