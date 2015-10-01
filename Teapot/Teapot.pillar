@@ -95,7 +95,7 @@ Teapot on
 	GET: '/say/hi/*' -> (Send message: #greet: to: greeter); start.
 ]]]	
 
-A wildcard character ==(*)==, as in the last route, matches to one URL path segment. A wildcard terminated pattern is a greedy match; for example, 
+A wildcard character (==\*==), as in the last route, matches to one URL path segment. A wildcard terminated pattern is a greedy match; for example,
 =='/foo/*'== matches to =='/foo/bar'== and =='/foo/bar/baz'== too.
 
 The second route shows that the action block optionally takes the HTTP request. The third route is an example of a message send, by using the ==Send== class. The selector of the message can take maximum 2 arguments, which will be instances of 
