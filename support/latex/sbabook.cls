@@ -41,8 +41,8 @@
 \RequirePackage{fontspec}
 \defaultfontfeatures[Gentium Basic]{
   Extension = .ttf,
-  UprightFont = GenBasR,
-  ItalicFont = GenBasI,
+  UprightFont = GenBkBasR,
+  ItalicFont = GenBkBasI,
   BoldFont = GenBasB,
   BoldItalicFont = GenBasBI,
 }
