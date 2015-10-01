@@ -9,14 +9,11 @@
 \fi
 
 {{=« »=}}
+«! the '&' below prevents HTML escaping. »
 \chapter{«& title»}
 \chapterprecis{«& attribution»}
 
-\sloppy
-
-«! the '&' below prevents HTML escaping. »
 «& content»
-
 
 \ifx\wholebook\relax\else
 \end{document}
