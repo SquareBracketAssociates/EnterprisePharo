@@ -67,6 +67,7 @@
 
 \noindentafterchapter
 \setlength{\parindent}{1.5em}
+\nonzeroparskip
 
 %% XeLaTeX support not there yet…
 %% http://tex.stackexchange.com/questions/2986/margin-kerning-in-xelatex-for-texlive-2010-how-to-enable
