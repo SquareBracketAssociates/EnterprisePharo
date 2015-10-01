@@ -22,9 +22,3 @@
 
 «! the '&' below prevents HTML escaping. »
 «& content»
-
-
-\ifx\wholebook\relax\else
-   \bibliographystyle{jurabib}
-   \nobibliography{scg}\end{document}
-\fi
