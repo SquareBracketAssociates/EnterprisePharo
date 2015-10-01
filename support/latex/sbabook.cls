@@ -89,6 +89,27 @@
 % \setmpjustification{\RaggedLeft}{\Raggedright} % this is for margin floats
 
 %%%
+%%% Title page
+%%%
+\setlength\droptitle{5cm}
+\pretitle{\begin{flushright}\HUGE\sffamily}
+\posttitle{\par\end{flushright}\vskip 1cm}
+\preauthor{\begin{flushright}
+    \large\sffamily
+    \begin{tabular}[t]{r@{}}}
+\postauthor{\end{tabular}\par\end{flushright}}
+\predate{\begin{flushright}\large\sffamily}
+\postdate{\par\end{flushright}}
+
+% place authors on separate lines
+% memoir provides \andnext, and normally \\ is used to add data under the
+% author's name, like affiliation, email…
+\renewcommand\and{\\}
+
+% line break in title, hopefully without polluting PDF metadata etc
+\newcommand\titlebreak[2][]{\texorpdfstring{#1\protect\\}{#2}}
+
+%%%
 %%% Sectioning
 %%%
 
