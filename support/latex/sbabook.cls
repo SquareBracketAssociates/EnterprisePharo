@@ -94,7 +94,6 @@
 
 %% chapter heading
 \newlength{\chapnumheight}\setlength{\chapnumheight}{18mm}
-\newlength{\chapbarwidth}\setlength{\chapbarwidth}{11mm}
 \makechapterstyle{sba}{%
     \renewcommand{\chapnamefont}{%
         \LARGE\sffamily\bfseries
@@ -107,15 +106,11 @@
     \renewcommand*{\chapterheadstart}{}
     \renewcommand*{\chapternamenum}{}
     \renewcommand*{\afterchapternum}{\par\nobreak\vskip 25pt}
-    \setlength{\midchapskip}{\paperwidth}
-    \addtolength{\midchapskip}{-\textwidth}
-    \addtolength{\midchapskip}{-\spinemargin}
-    \addtolength{\midchapskip}{-\chapbarwidth}
     \renewcommand*{\printchapternum}{%
-        \resizebox{!}{\chapnumheight}{\chapnumfont \,\thechapter\,}%
-        \makebox[-\midchapskip][l]{%
-            \rule{1.5\chapbarwidth}{\chapnumheight}%
-        }}
+        \resizebox{!}{\chapnumheight}{\chapnumfont \,\thechapter}%
+        \rlap{%
+          \kern .3\chapnumheight
+          \rule{\foremargin}{\chapnumheight}}}
     \setlength{\afterchapskip}{8\baselineskip}
     %% chapter precis
     \renewcommand\precisfont{\normalfont\sffamily\RaggedLeft\small}
@@ -188,6 +183,7 @@
 %%%
 %%% Table of contents etc
 %%%
+\addtodef\tableofcontents{\clearforchapter}{}
 \renewcommand\cftpartfont{\sffamily\large\bfseries}
 \let\cftpartpagefont\cftpartfont% unused, but for coherence
 \renewcommand\cftpartleader{}
