@@ -4,5 +4,4 @@ set -e
 
 cp EnterprisePharo.tex book-result/
 cd book-result
-lualatex EnterprisePharo
-lualatex EnterprisePharo
+latexmk EnterprisePharo
