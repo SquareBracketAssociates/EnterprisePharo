@@ -1,13 +1,7 @@
 % -*- mode: latex; -*-
 \ifx\wholebook\relax\else
 
-	\documentclass[10pt,twoside]{root/support/latex/sbabook}
-	\usepackage[% Lulu dimensions
-		papersize={6.13in,9.21in},
-		hmargin={.75in,.75in},
-		vmargin={.75in,1in},
-		ignoreheadfoot
-	]{geometry}
+	\documentclass[10pt,twoside,ustradelulu]{root/support/latex/sbabook}
   \usepackage{import}
   \subimport{root/support/latex/}{common.tex}
 

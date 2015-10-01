@@ -1,17 +1,9 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{sbabook}[2013/03/08]
 
-\DeclareOption{showtrims}{%
-    \PassOptionsToClass{showtrims}{memoir}}
-\DeclareOption{openany}{%
-    \PassOptionsToClass{openany}{memoir}}
-
-\ProcessOptions\relax
-\LoadClass[
-    10pt,
-    twoside,
-    smallroyalvopaper
-]{memoir}
+% \ExecuteOptions{a4paper,11pt,twoside}
+\ProcessOptions*
+\LoadClassWithOptions{memoir}
 
 \RequirePackage{graphicx}
 \RequirePackage{xcolor}
@@ -20,18 +12,27 @@
 %%%
 %%% Page layout
 %%%
+\newcommand\stockustrade{\setstocksize{9in}{6in}}
+\newcommand\setbleed[1]{%
+    \settrimmedsize{\stockheight}{\stockwidth}{*}%
+    \settrims{#1}{#1}%
+    \advance\stockheight 2\trimtop
+    \advance\stockwidth  2\trimedge}
+
 \settypeoutlayoutunit{mm}
-\setlrmarginsandblock{1in}{*}{*}
-\setulmarginsandblock{.75in}{.75in}{*}
-\ifshowtrims % use the showtrims option to switch to A4 paper + blue trimlines
-    \stockaiv
-    \trimFrame
-    \setlength{\trimtop}{.5\stockheight}
-    \addtolength{\trimtop}{-.5\paperheight}
-    \setlength{\trimedge}{.5\stockwidth}
-    \addtolength{\trimedge}{-.5\paperwidth}
-\else\fi
-\checkandfixthelayout
+% \setlrmarginsandblock{1in}{*}{*}
+% \setulmarginsandblock{.75in}{.75in}{*}
+% \ifshowtrims % use the showtrims option to switch to A4 paper + blue trimlines
+%     \stockaiv
+%     \trimFrame
+%     \setlength{\trimtop}{.5\stockheight}
+%     \addtolength{\trimtop}{-.5\paperheight}
+%     \setlength{\trimedge}{.5\stockwidth}
+%     \addtolength{\trimedge}{-.5\paperwidth}
+% \else\fi
+
+% \checkandfixthelayout
+
 \raggedbottom
 
 %%%
