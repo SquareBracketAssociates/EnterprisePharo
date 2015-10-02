@@ -2,6 +2,7 @@
 
 set -e
 
-cp EnterprisePharo.tex book-result/
 cd book-result
+cp ../EnterprisePharo.tex .
+../gitinfo2.sh > gitHeadInfo.gin
 latexmk EnterprisePharo

@@ -6,18 +6,37 @@
 \typeoutlayout
 
 \usepackage{polyglossia}
-\setdefaultlanguage{english}
-\usepackage[english,iso]{isodate}
+% \setdefaultlanguage{english}
+\usepackage[useregional]{datetime2}
+
+% extract info from git commit
+% We override gitinfo2.sty's constant because we don't use the git hooks;
+% instead the compile script extracts the info
+\makeatletter\newcommand{\GI@githeadinfo@file}{gitHeadInfo.gin}\makeatother
+\usepackage[dirty=*]{gitinfo2}
+% a couple extensions...
+\makeatletter
+\newcommand\gitCommitInfo{%
+  \IfEq{\gitRel}{}
+    {commit \gitAbbrevHash\gitDirty}
+    {\IfEq{\gitRoff}{0}
+      {release \gitRel}
+      {modified since release \gitRel{} --- commit \gitAbbrevHash\gitDirty}}}
+% gitinfo2 only defines \gitdate for datetime.sty, not datetime2
+\@ifpackageloaded{datetime2}{%
+    \IfEq{\gitAuthorDate}{\gitInf@missing}{%
+        \DTMsavenoparsedate{gitdate}{\THEYEAR}{\THEMONTH}{\THEDAY}{-1}
+    }{%
+        \StrCut{\gitAuthorDate}{-}{\gitInf@year}{\gitInf@md}
+        \StrCut{\gitInf@md}{-}{\gitInf@month}{\gitInf@day}
+        \DTMsavenoparsedate{gitdate}{\gitInf@year}{\gitInf@month}{\gitInf@day}{-1}
+    }
+    \newcommand\gitdate{\DTMusedate{gitdate}}
+}{}%
+\makeatother
 
 \usepackage[normalem]{ulem} % for strikeout text (\sout{...})
 \usepackage{graphicx}
-
-\usepackage[% citations as footnotes
-  super,
-  citefull=first,
-  authorformat={allreversed,and},
-  titleformat={commasep,italic}
-]{jurabib}
 
 \usepackage[% make hyperlinks look like normal text
   colorlinks=true,
