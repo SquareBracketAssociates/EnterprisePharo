@@ -49,6 +49,15 @@
 % Lulu only supports PDF format version 1.3
 \pdfminorversion=3
 
+\usepackage{multicol}
+
+% a nice horizontal separator
+\newcommand{\sectionline}{%
+  \begin{center}\nointerlineskip
+    \rule{0.233\linewidth}{.7pt}%
+  \end{center}
+}
+
 % showing code, inline and as blocks
 \usepackage{listings}
 \usepackage{lstsmalltalk}
