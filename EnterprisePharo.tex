@@ -39,12 +39,11 @@
 \date{\gitdate\titlebreak[\smallskip]{ -- }\protect\gitCommitInfo}
 %=================================================================
 \begin{document}
-\begin{titlingpage}
-  \let\cleardoublepage\clearpage % to place colophon on verso of title
-  \maketitle
-\end{titlingpage}
+\pagestyle{titlingpage}
 
-\pagestyle{empty}
+\maketitle
+\cleartoverso
+
 {\small
 
   Copyright 2015 by Damien Cassou, Stéphane Ducasse, Luc Fabresse, Johan Fabry
