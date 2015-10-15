@@ -1,7 +1,7 @@
 % -*- mode: latex; -*-
 \ifx\wholebook\relax\else
 
-	\documentclass[10pt,twoside,ustradelulu]{root/support/latex/sbabook}
+	\documentclass[10pt,twoside,ustradelulu]{root/support/latex/sbabook/sbabook}
   \usepackage{import}
   \subimport{root/support/latex/}{common.tex}
 
