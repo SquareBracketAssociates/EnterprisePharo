@@ -39,12 +39,15 @@
 \date{\gitdate\titlebreak[\smallskip]{ -- }\protect\gitCommitInfo}
 %=================================================================
 \begin{document}
-\pagestyle{titlingpage}
 
-\maketitle
-\cleartoverso
+{% Title page and colophon on verso
+  \pagestyle{titlingpage}
 
-{\small
+  \maketitle
+
+  % Colophon
+  \cleartoverso
+  \small
 
   Copyright 2015 by Damien Cassou, Stéphane Ducasse, Luc Fabresse, Johan Fabry
   and Sven Van Caekenberghe.
