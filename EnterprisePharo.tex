@@ -40,14 +40,13 @@
 %=================================================================
 \begin{document}
 
-{% Title page and colophon on verso
-  \pagestyle{titlingpage}
+% Title page and colophon on verso
+\maketitle
+\pagestyle{titlingpage}
+\thispagestyle{titlingpage} % \pagestyle does not work on the first one…
 
-  \maketitle
-
-  % Colophon
-  \cleartoverso
-  \small
+\cleartoverso
+{\small
 
   Copyright 2015 by Damien Cassou, Stéphane Ducasse, Luc Fabresse, Johan Fabry,
   and Sven Van Caekenberghe.
@@ -102,6 +101,9 @@
 
 
 \frontmatter
+\pagestyle{plain}
+
+
 \chapter*{About this book}
 
 \emph{Enterprise Pharo} is the third volume of the series, following \emph{Pharo
