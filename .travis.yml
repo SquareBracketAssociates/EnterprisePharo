@@ -14,3 +14,4 @@ install:
 
 script:
   - PATH=/tmp/texlive/CURRENT/bin/x86_64-linux:$PATH ./compile.sh
+  - PATH=/tmp/texlive/CURRENT/bin/x86_64-linux:$PATH ./compileBook.sh
