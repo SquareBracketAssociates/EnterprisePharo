@@ -18,10 +18,10 @@
 \makeatletter
 \newcommand\gitCommitInfo{%
   \IfEq{\gitRel}{}
-    {commit \gitAbbrevHash\gitDirty}
+    {commit \texttt{\gitAbbrevHash\gitDirty}}
     {\IfEq{\gitRoff}{0}
       {release \gitRel}
-      {modified since release \gitRel{} --- commit \gitAbbrevHash\gitDirty}}}
+      {modified since release \gitRel{} --- commit \texttt{\gitAbbrevHash\gitDirty}}}}
 % gitinfo2 only defines \gitdate for datetime.sty, not datetime2
 \@ifpackageloaded{datetime2}{%
     \IfEq{\gitAuthorDate}{\gitInf@missing}{%
