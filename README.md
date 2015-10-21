@@ -6,15 +6,49 @@ How to write a book
 
 This book is written in Pillar markup. If you are not familiar with it please check the [pillar-documentation](https://github.com/pillar-markup/pillar-documentation).
 
+###Prerequisites
+
+####Install LaTeX
+
+The book requires [TeX Live 2015](http://tug.org/texlive/) to generate the PDFs.
+
+Mac OS X users: download and install [MacTeX](http://tug.org/mactex/)
+(the 2.4Gb `MacTeX.pkg` file), and add its binaries to your system path
+(don't forget to start a new terminal session, for the path changes to take
+effect):
+
+```
+echo /usr/texbin > TeX
+sudo mv TeX /etc/paths.d
+```
+
+####Download Pillar
+
+Run `./download.sh` to obtain the required Pillar executable. This will also
+download the required Pharo image and VM and install it locally in the book's
+directory.
+
 ###Generating the book
 
-First of all you have to run `./download.sh` to obtain the Pillar executable that does all the job.
+To generate the individual book chapters, execute `./compile.sh`. This will
+place the rendered chapters in `book-result/`.
 
-To generate your book execute `./pillar export` then `bash pillarPostExport.sh` or simply `./compile.sh`. If you want to generate only one chapter run `./pillar export Example/Example.pillar` then `bash pillarPostExport.sh`. If you have `lualatex` installed and available in your system's `PATH`, the script will also generate pdf files.
+To compose the chapters into the full book, after running `./compile.sh`,
+execute `./compileBook.sh`.
+
+To generate a single chapter (for example, the `Teapot` chapter):
+
+```
+./pillar export Teapot/Teapot.pillar
+bash pillarPostExport.sh
+```
 
 ###Adding a chapter
 
-To add a chapter create a directory for it (named, e.g., `Example`) and put there a `.pillar` file (named, e.g., `Example.pillar`) which will contain the chapter itself. Put images in the `figures` subdirectory of the new chapter directory.
+To add a chapter create a directory for it (named, e.g., `Example`) and put
+there a `.pillar` file (named, e.g., `Example.pillar`) which will contain the
+chapter itself. Put images in the `figures` subdirectory of the new chapter
+directory.
 
 Add your chapter to:
 
