@@ -4,7 +4,7 @@
 }
 @cha:teapot
 
-We begin the book in this first chapter by showing how basic web applications can be written using just a few lines of code. In the second chapter we will treat the construction of more fully-featured web applications as well as key elements of the development cycle such as debugging and version management. But we start keeping it simple, which is possible thanks to Teapot.
+We begin the book in this first chapter by showing how basic web applications can be written using just a few lines of code. In the second chapter we will treat the construction of web applications more in depth, also touching on the fundamentals of web application building. But we start by keeping it simple, which is possible thanks to Teapot.
 
 Teapot is a ''micro'' web framework on top of the Zinc HTTP web server described in Chapter  *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pillar@cha:zinc-server*. It focuses on simplicity and ease of use and is itself small: around 600 lines of code, not counting unit tests. Teapot is developed by Attila Magyar and this chapter is heavily inspired from the original documentation. 
 
