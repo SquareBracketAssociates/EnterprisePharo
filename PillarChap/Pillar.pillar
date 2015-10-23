@@ -128,7 +128,7 @@ This should generate a ''output.html'' file you can open in a web browser. This 
 As you can see, there is no title in the generated ''output.html'' file. This is because we did not specify any. To specify a title, we have to add it with a configuration
 at the beginning of the ''first.pillar'' file:
 
-[[[language=pillar|caption=Add a meta data in a configuration at the beginning of your file.|label=scr:configurationFile
+[[[language=pillar|caption=Add a meta data in a configuration at the beginning of your file.
 {
   "title": "My first document while reading the 5 minutes Pillar tutorial"
 }
@@ -162,7 +162,7 @@ Another way to achieve the same is to use a dedicated configuration file. This c
 *STON>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/STON* format (see Section *@configuring* for more information about the configuration file). Create your 
 first ==pillar.conf== file:
 
-[[[language=ston|caption=Create your own configuration file.|label=scr:configurationFile
+[[[language=ston|caption=Create your own configuration file.
 {
   "title" : "My first document while reading the 5 minutes Pillar tutorial"
 }
@@ -175,7 +175,7 @@ Meta-information specified in Pillar files take precedence over configuration in
 When you export files you have the possibility to export all your files into a specific directory.
 In order to do that you have to add a parameter into your configuration.
 
-[[[language=ston|caption=Export into a specific folder|label=scr:outputDirectory
+[[[language=ston|caption=Export into a specific folder
 {
   "title" : "My first document while reading the 5 minutes Pillar tutorial",
   "outputDirectory" : "result"
@@ -191,7 +191,7 @@ You have two ways to export files:
 By default Pillar export all the input files as one.
 If you create a file ''second.pillar'' that contains ==I am a second file== you can add a parameter ''inputFiles'' to your configuration.
 
-[[[language=ston|caption=Export into a specific folder|label=scr:outputDirectory
+[[[language=ston|caption=Export into a specific folder
 {
   "title" : "My first document while reading the 5 minutes Pillar tutorial",
   "outputDirectory" : "result",
@@ -223,7 +223,7 @@ If you want to change the name of the file you can use the parameter ''outputFil
 
 If you want separate files you can add a parameter:
 
-[[[language=ston|caption=Export into a specific folder|label=scr:outputDirectory
+[[[language=ston|caption=Export into a specific folder
 {
   "title" : "My first document while reading the 5 minutes Pillar tutorial",
   "outputDirectory" : "result",
