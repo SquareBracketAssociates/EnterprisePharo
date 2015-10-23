@@ -5,4 +5,4 @@ set -e
 cd book-result
 cp ../EnterprisePharo.tex .
 ../gitinfo2.sh > gitHeadInfo.gin
-latexmk EnterprisePharo
+texfot latexmk EnterprisePharo
