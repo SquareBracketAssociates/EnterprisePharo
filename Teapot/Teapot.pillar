@@ -14,20 +14,20 @@ To get started,  execute the following code snippet, it will load the latest sta
 
 [[[language=smalltalk
 Gofer it
-	smalltalkhubUser: 'zeroflag' project: 'Teapot'; configuration;
-	loadStable.
+   smalltalkhubUser: 'zeroflag' project: 'Teapot'; configuration;
+   loadStable.
 ]]]
 
 It is straightforward to launch Teapot and add a page:
 
 [[[language=smalltalk
-	Teapot on
-		GET: '/welcome' -> 'Hello World!'; start.
+   Teapot on
+      GET: '/welcome' -> 'Hello World!'; start.
 ]]]
 
 Opening a browser on *http://localhost:1701/welcome* results in the following:
 
-+Go to the Teapot welcome at *http://localhost:1701/welcome*>file://figures/TeapotWelcome.png|width=50|label=TeapotWelcome+
++Go to the Teapot welcome at *http://localhost:1701/welcome*>file://figures/TeapotWelcome.png|width=70|label=TeapotWelcome+
 	
 
 !!!Differences between Teapot and other web frameworks
@@ -44,29 +44,29 @@ Teapot is not a singleton and doesn't hold any global state. You can run multipl
 
 Before getting into the details of Teapot. Here is a simple example for managing books. With the following code, we can list books, add a book and delete a book.
 
-[[[language=smalltalk
+[[[
 | books teapot |
 books := Dictionary new.
-teapot := Teapot configure: {#defaultOutput -> #json. #port -> 8080. #debugMode -> true }.
+teapot := Teapot configure: { #defaultOutput -> #json. #port -> 8080. 
+                                 #debugMode -> true }.
 teapot
    GET: '/books' -> books;
-   PUT: '/books/<id>' ->
-      [ :req | | book |
-         book := {'author' -> (req at: #author). 'title' -> (req at: #title)} asDictionary.
-         books at: (req at: #id) put: book];
-   DELETE: '/books/<id>' -> [ :req | books removeKey: (req at: #id)]; 
+   PUT: '/books/<id>' -> [ :req | | book |
+      book := {'author' -> (req at: #author). 
+      'title' -> (req at: #title)} asDictionary.
+      books at: (req at: #id) put: book ];
+   DELETE: '/books/<id>' -> [ :req | books removeKey: (req at: #id) ]; 
    exception: KeyNotFound -> (TeaResponse notFound body: 'No such book');
    start.
 ]]]
 
 Now you can create a book with ZNClient or your web client as follows: 
 
-[[[language=smalltalk
+[[[
 ZnClient new
    url: 'http://localhost:8080/books/1';
    formAt: 'author' put: 'SquareBracketAssociates'; 
-   formAt: 'title' put: 'Pharo For The Enterprise'; 
-   put
+   formAt: 'title' put: 'Pharo For The Enterprise'; put
 ]]]
 
 You can also list the contents using *http://localhost:1701/books* 
@@ -79,7 +79,7 @@ Now that you get the general feel of Teapot, let us see the key concepts.
 The most important concept of Teapot is the Route. The template for route definitions is as follows:
 
 [[[language=smalltalk
-	Method : '/url/*/pattern/<param>' -> Action
+   Method : '/url/*/pattern/<param>' -> Action
 ]]]
 
 A route has three parts:
@@ -91,9 +91,9 @@ Here is another example:
 
 [[[language=smalltalk
 Teapot on
-	GET: '/hi' -> 'Bonjour!';
-	GET: '/hi/<user>' -> [:req | 'Hello ', (req at: #user)];
-	GET: '/say/hi/*' -> (Send message: #greet: to: greeter); start.
+   GET: '/hi' -> 'Bonjour!';
+   GET: '/hi/<user>' -> [:req | 'Hello ', (req at: #user)];
+   GET: '/say/hi/*' -> (Send message: #greet: to: greeter); start.
 ]]]	
 
 A wildcard character (==\*==), as in the last route, matches to one URL path segment. A wildcard terminated pattern is a greedy match; for example,
@@ -117,9 +117,9 @@ Query parameters and Form parameters can be accessed the same way as path parame
 
 [[[language=smalltalk
 Teapot on
-	GET: '/user/<id:IsInteger>' -> [ :req | users findById: (req at: #id)]; 
-	output: #ston;
-	start.
+   GET: '/user/<id:IsInteger>' -> [ :req | 
+      users findById: (req at: #id) ]; 
+   output: #ston; start.
 ]]]
 
 - ==IsInteger== matches digits (negative or positive) only and converts the value to an Integer.
@@ -136,8 +136,9 @@ The following example matches any ==/hi/user== followed by two digits.
 
 [[[language=smalltalk
 Teapot on
-	GET: '/hi/([a-z]+\d\d)' asRegex -> [ :req | 'Hello ', (req at: 1)]; start.
-	
+   GET: '/hi/([a-z]+\d\d)' asRegex -> [ :req | 'Hello ', (req at: 1)];
+   start.
+
 (ZnEasy get: 'http://localhost:1701/hi/user01') entity string. 
  --> "Hello user01" 
 ZnEasy get: 'http://localhost:1701/hi/user'
@@ -161,9 +162,8 @@ An ==abort:== message sent to the request object immediately stops a request (by
 
 [[[language=smalltalk
 Teapot on
-	GET: '/secure/*' -> [ :req | req abort: TeaResponse unauthorized];
-	GET: '/unauthorized' -> [ :req | req abort: 'go away' ];
-	start.
+   GET: '/secure/*' -> [ :req | req abort: TeaResponse unauthorized];
+   GET: '/unauthorized' -> [ :req | req abort: 'go away' ]; start.
 ]]]
 
 !!Transforming output from actions
@@ -199,14 +199,15 @@ For example, with the following configuration:
 
 [[[language=smalltalk
 Teapot on
-	GET: '/jsonlist' -> #(1 2 3 4); output: #json;
-	GET: '/sometext' -> 'this is text plain'; output: #text;
-	GET: '/download' -> ['/tmp/afile' asFileReference readStream]; output: #stream; start.
+   GET: '/jsonlist' -> #(1 2 3 4); output: #json;
+   GET: '/sometext' -> 'this is text plain'; output: #text;
+   GET: '/download' -> ['/tmp/afile' asFileReference readStream];
+   output: #stream; start.
 ]]]
 
 Figure *@plainText* shows the result for the ==/sometext== route.
 
-+Teapot producing plain text *http://localhost:1701/sometext*.>file://figures/plainText.png|width=50|label=plainText+
++Teapot producing plain text *http://localhost:1701/sometext*.>file://figures/plainText.png|width=70|label=plainText+
 
 If the NeoJSON package is loaded (See 
 chapter  *NeoJSON>../NeoJSON/NeoJSON.pillar@cha:JSON*.) the ==jsonlist== transformer will return a JSON array:
@@ -227,8 +228,8 @@ If Mustache is installed  (See chapter  *Mustache>../Mustache/Mustache.pillar@ch
 
 [[[language=smalltalk
 Teapot on
-	GET: '/greet' -> {'phrase' -> 'Hello'. 'name' -> 'World'};
-	output: (TeaOutput mustacheHtml: '<b>{{phrase}}</b> <i>{{name}}</i>!'); start.
+   GET: '/greet' -> {'phrase' -> 'Hello'. 'name' -> 'World'};
+   output: (TeaOutput mustacheHtml: '<b>{{phrase}}</b> <i>{{name}}</i>!'); start.
 ]]]
 
 !!Before and After Filters
@@ -251,7 +252,8 @@ Teapot on
 After filters are evaluated after each request and can read the request and modify the response.
 [[[language=smalltalk
 Teapot on
-   after: '/*' -> [ :req :resp | resp headers at: 'X-Foo' put: 'set by after filter']; 
+   after: '/*' -> [ :req :resp | 
+      resp headers at: 'X-Foo' put: 'set by after filter']; 
    start.
 ]]]
 
@@ -261,10 +263,11 @@ The following example illustrates how the errors raised in actions can be captur
 
 [[[language=smalltalk
 Teapot on
-	GET: '/divide/<a>/<b>' -> [ :req | (req at: #a) / (req at: #b)];
-	GET: '/at/<key>' -> [ :req | dict at: (req at: #key)];
-	exception: ZeroDivide -> [ :ex :req | TeaResponse badRequest ];
-	exception: KeyNotFound -> {#result -> 'error'. #code -> 42}; output: #json; start.
+   GET: '/divide/<a>/<b>' -> [ :req | (req at: #a) / (req at: #b)];
+   GET: '/at/<key>' -> [ :req | dict at: (req at: #key)];
+   exception: ZeroDivide -> [ :ex :req | TeaResponse badRequest ];
+   exception: KeyNotFound -> {#result -> 'error'. #code -> 42}; 
+   output: #json; start.
 ]]]
 
 The request ==/div/6/3== succeeds and returns 2. The request ==/div/6/0== raises an error and it is caught and returns
@@ -292,7 +295,7 @@ Teapot can straightforwardly serve static files. The following example serves th
 
 [[[language=smalltalk
 Teapot on
-	serveStatic: '/static' from: '/var/www/htdocs'; start.
+   serveStatic: '/static' from: '/var/www/htdocs'; start.
 ]]]
 
 !!Conclusion
