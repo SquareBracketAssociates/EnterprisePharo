@@ -66,8 +66,10 @@ repository := VOMongoRepository
   database: 'databaseName'.
 ]]]
 
-Alternatively, the port to connect to is specified by using the message ==host:port:database:==. Lastly, if authentication is required, the message 
-==host:database:username:password:== or ==host:port:database:username:password:== needs to be used.
+Alternatively, using the message ==host:port:database:== allows to
+specify the port to connect to. Lastly, if authentication is required,
+this can be done using the message
+==host:database:username:password:== or the message ==host:port:database:username:password:==.
 
 !!! Singleton Mode and Instance Mode
 
@@ -87,7 +89,7 @@ repository enableSingleton.
 
 @@note Only one repository can be the singleton, hence executing this line will remove any other existing repositories from Singleton mode!
 
-@@note In this document, we are going to cover Voyage in Singleton mode, but using it in Instance mode is straightforward as well. See the ==persistence== protocol of ==VORepository== for more information.
+@@note In this document, we are going to cover Voyage in Singleton mode, but using it in Instance mode is straightforward as well. See the protocol ==persistence== of ==VORepository== for more information.
 
 !!! Voyage API
 
@@ -191,7 +193,7 @@ such as *RoboMongo>http://robomongo.org* (Multi-Platform) or *MongoHub>http://mo
 
 Objects can be as simple as associations of literals or more complex: objects can contain other objects, leading to a tree of objects. Saving such objects is as 
 simple as sending the ==save== message to them. For example, let's say that we want to store rectangles and that each rectangle contains two points. To achieve 
-this, we specify that the ==Rectangle== class is a document root:
+this, we specify that the ==Rectangle== class is a document root as follows:
 
 [[[
 Rectangle class>>isVoyageRoot
@@ -312,9 +314,11 @@ Consider that, continuing with the rectangle example but using embedded points, 
 
 To implement this, we use Magritte descriptions with specific pragmas to declare properties of a class and to describe both the ==origin== and ==corner== attributes.
 
-The method ==mongoContainer== is defined as follows: First it uses the ==<mongoContainer>== pragma to state that it describes the container to be used for this 
+The method ==mongoContainer== is defined as follows: First it uses the pragma ==<mongoContainer>== to state that it describes the container to be used for this 
 class. Second it returns a specific ==VOMongoContainer== instance. This instance is configured such that it uses the ==rectanglesForTest== collection in the 
-database, and that it will only store ==Rectangle== instances. Note that it is not required to specify both configuration lines. It is equally valid to only 
+database, and that it will only store ==Rectangle== instances.
+
+Note that it is not required to specify both configuration lines. It is equally valid to only 
 declare that the collection to be used is ==rectanglesForTest==, or only specify that the collection contains just ==Rectangle== instances.
 
 [[[
@@ -654,7 +658,7 @@ that all queries in this section can be written either as MongoQueries or as JSO
 The following methods provide basic object retrieval.
 
 - ""==selectAll=="" Retrieves all documents in the corresponding database collection. For example, ==Point selectAll== will return all Points.
-- ""==selectOne:=="" Retrieves one document matching the query. This maps to a ==detect:== method and takes as argument a query specification (either a MongoQuery or a JSON Query). For example, ==Point selectOne: [:each | each x = 42] == or ==Point selectOne: { 'x' -> 42 } asDictionary==
+- ""==selectOne:=="" Retrieves one document matching the query. This maps to a ==detect:== method and takes as argument a query specification (either a MongoQuery or a JSON Query). For example, ==Point selectOne: [:each | each x = 42] == or alternatively ==Point selectOne: { 'x' -> 42 } asDictionary==.
 - ""==selectMany:=="" Retrieves all the documents matching the query. This maps to a ==select:== method and takes as argument a query specification, like above.
 
 !!!!Limiting object retrieval and sorting
@@ -669,13 +673,13 @@ returned that starts at the index that is given as argument. This can be used to
 smaller blocks to avoid out of memory issues in the Pharo image.
 
 
-- ==selectMany:limit:== Retrieves a collection of objects from the database that match the query, up to the given limit. For example, ==Point selectMany: [:each | each x = 42] limit: 10 ==
+- ==selectMany:limit:== Retrieves a collection of objects from the database that match the query, up to the given limit. An example of this is ==Point selectMany: [:each | each x = 42] limit: 10 ==
 - ==selectMany:limit:offset:== Retrieves a collection of objects from the database that match the query. The first object retrieved will be at the ==offset== position plus one of the results of the query, and up to ==limit== objects will be returned. For example, if the above example matched 25 points, the last 15 points will be returned by the query ==Point selectMany: [:each | each x = 42] limit: 20 offset: 10== (any ==limit== argument greater than 15 will do for this example).
 
 The second customization that can be performed is to sort the results. To use this, the class ==VOOrder== provides constants to specify ==ascending== or ==descending== sort order.
 
 - ==selectAllSortBy:== Retrieves all documents, sorted by the specification in the argument, which needs to be a JSON query. For example, == Point selectAllSortBy: { #x -> VOOrder ascending} asDictionary == returns the points in ascending x order.
-- ==selectMany:sortBy:== Retrieves all the documents matching the query and sorts them. For example, ==Point selectMany: { 'x' -> 42 } asDictionary sortBy: { #y -> VOOrder descending } asDictionary == returns the points where ==x== is 42, in descending ==y== order.
+- ==selectMany:sortBy:== Retrieves all the documents matching the query and sorts them. For example to return the points where ==x== is 42, in descending ==y== order: ==Point selectMany: { 'x' -> 42 } asDictionary sortBy: { #y -> VOOrder descending } asDictionary==.
 - ==selectMany:sortBy:limit:offset:== Provides for specifying a limit and offset to the above query.
 
 
@@ -691,18 +695,21 @@ The trips have an embedded collection with receipts. The receipts have an attrib
 
 [[[
 OSProcess command:
-'/{pathToMongoDB}/MongoDB/bin/mongo --eval "db.getSiblingDB(''myDB'').Trips.createIndex({''receipts.description'':1})"'
+   '/{pathToMongoDB}/MongoDB/bin/mongo --eval ',
+   '"db.getSiblingDB(''myDB'').Trips.',
+   'createIndex({''receipts.description'':1})"'
 ]]]
 
 Removing all indexes on the Trips collection can be done as follows:
 [[[
 OSProcess command:
-'/{pathToMongoDB}/MongoDB/bin/mongo --eval "db.getSiblingDB(''myDB'').Trips.dropIndexes()"'
+   '/{pathToMongoDB}/MongoDB/bin/mongo --eval ',
+   '"db.getSiblingDB(''myDB'').Trips.dropIndexes()"'
 ]]]
 
 !!!Verifying the use of an index
 
-To ensure that a query indeed uses the index, “.explain()” can be used in the mongo console. For example, if we add the index on ==description== as above, run a query and add ==.explain()== we see, that only a subset of documents were scanned.
+To ensure that a query indeed uses the index, ==“.explain()”== can be used in the mongo console. For example, if we add the index on ==description== as above, run a query and add ==.explain()== we see, that only a subset of documents were scanned.
 
 [[[
 > db.Trips.find({"receipts.description":"a"}).explain("executionStats")
@@ -722,7 +729,7 @@ To ensure that a query indeed uses the index, “.explain()” can be used in th
 After removing the index, all documents are scanned (in this example there are 246):
 
 [[[
-> db.Trips.find({"receipts.receiptDescription":"a"}).explain("executionStats")
+> db.Trips.find({"receipts.description":"a"}).explain("executionStats")
 {
 	"cursor" : "BasicCursor",
 	"isMultiKey" : false,
