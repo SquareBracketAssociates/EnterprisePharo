@@ -774,6 +774,18 @@ To create a preformatted block, begin each line with ==\===. A preformatted bloc
 
 Lines that start with a ==%== are considered comments and will not be rendered in the resulting document, except during a Pillar export (except during export to the Pillar format itself).
 
+!!!Escaping characters
+
+Special characters (e.g., ==\+== and ==\*==) must be escaped with a backslash: to get a ==\+==, you actually have to write ==\\\+==. The list of characters to escape is:
+
+[[[eval=true
+| characters |
+characters := (PRPillarGrammar markups inject: Set new into: [ :chars :markup | chars addAll: markup. chars]) copyWithout: Character space.
+stream nextPutAll: '[[['; cr.
+characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: ', ' ].
+stream cr; nextPutAll: ']]]'; cr.
+]]]
+
 !! Write a presentation
 @sec:presentationPillar
 
