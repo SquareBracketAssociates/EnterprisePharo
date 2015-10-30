@@ -4,7 +4,7 @@ Enterprise Pharo (english version) [![Build Status](https://ci.inria.fr/pharo-co
 How to write a book
 -------------------
 
-This book is written in Pillar markup. If you are not familiar with it please check the [pillar-documentation](https://github.com/pillar-markup/pillar-documentation).
+This book is written in Pillar markup. If you are not familiar with it please read the [Pillar chapter](https://ci.inria.fr/pharo-contribution/job/EnterprisePharoBook/lastSuccessfulBuild/artifact/book-result/PillarChap/Pillar.html).
 
 ###Prerequisites
 
