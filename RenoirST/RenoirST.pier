@@ -1,6 +1,6 @@
 {
     "title": "Cascading Style Sheets with RenoirSt",
-    "attribution": "Gabriel Cotelli with Damien Cassou"
+    "attribution": "Gabriel Omar Cotelli with Damien Cassou"
 }
 @cha:renoirst
 
@@ -9,9 +9,9 @@ RenoirST is a DSL enabling programmatic cascading style sheet generation for Pha
 
 The goals of RenoirST are to improve CSS integration with existing web frameworks
 and to be able to write and refactor code in Pharo and deploy to CSS. Renoir features are:
-common properties declaration, CSS3 selector support, important rules and media queries support.
+common properties declaration, CSS3 selector support, important rules, font face rules and media queries support.
 In this tutorial we will present the key features of RenoirSt with a large set of examples.
-This tutorial assumes some knowledge of CSS and Pharo Smalltalk. For a little introduction about CSS you can read the 
+This tutorial assumes some knowledge of CSS and Pharo. For a little introduction about CSS you can read the 
 *Seaside's book CSS chapter>http://book.seaside.st/book/fundamentals/css*.
 
 !!Getting started
@@ -19,13 +19,13 @@ This tutorial assumes some knowledge of CSS and Pharo Smalltalk. For a little in
 To load the library in your image, evaluate:
 
 [[[
-Gofer it
-  url: 'http://smalltalkhub.com/mc/gcotelli/RenoirSt/main';
-  configurationOf: 'RenoirSt';
-  loadStable
+Metacello new
+	configuration: 'RenoirSt';
+	githubUser: 'gcotelli' project: 'RenoirSt' commitish: 'master' path: 'source';
+	load
 ]]]
 
-or download a ready to use image from the *Pharo contribution CI Server>https://ci.inria.fr/pharo-contribution/job/RenoirSt*.
+download a ready to use image from the *Pharo contribution CI Server>https://ci.inria.fr/pharo-contribution/job/RenoirSt* or intall it using the Catalog/Configuration Browser.
 
 
 The main entry point for the library is the class ==CascadingStyleSheetBuilder==. In a workspace, inspect the result of the following expression:
@@ -143,8 +143,7 @@ div
 }
 ]]]
 
-@@note In a real scenario you should avoid hard coding colors as in the examples. It is recommended to put colors in objects representing a theme or something 
-that gives them a name related to your application.
+@@note In a real scenario you should avoid hard coding colors as in the examples. It is recommended to put colors in objects representing a theme or something that gives them a name related to your application.
 
 RGB-Colors also support percentage values:
 
@@ -210,7 +209,7 @@ div
 
 !!!!URLs
 
-==ZnUrl== instances can be used as the value for properties requiring an URI. Both relative and absolute URLs are accepted.
+==ZnUrl== instances can be used as the value for properties requiring an URI. Both relative and absolute URLs are accepted. A relative URL is considered by default relative to the site root.
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -224,12 +223,28 @@ Evaluates to:
 [[[language=css
 div.logo
 {
-    background-image: url("images/logo.png");
+    background-image: url("/images/logo.png");
 }
 
 div.logo
 {
     background-image: url("http://www.example.com/images/logo.png");
+}
+]]]
+
+To use a URL relative to the style sheet, end to it the message ==relativeToStyleSheet==.
+
+[[[language=smalltalk
+CascadingStyleSheetBuilder new
+  declareRuleSetFor: [ :selector | selector div class: 'logo' ]
+  with: [ :style | style backgroundImage: 'images/logo.png' asZnUrl relativeToStyleSheet];
+  build
+]]]
+Evaluates to: 
+[[[language=css
+div.logo
+{
+    background-image: url("images/logo.png");
 }
 ]]]
 
@@ -318,7 +333,7 @@ ul ul
 
 The ==attr()== function is allowed as a component value in properties applied to an element or pseudo-element. The function returns the value of an attribute on 
 the element. If used on a pseudo-element, it returns the value of the attribute on the pseudo-element's originating element. This function is supported using 
-the ==CssAttributeReference== abstraction. This function can be used simply providing an attribute name:
+the ==CssAttributeReference== abstraction and can be used simply providing an attribute name:
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -342,7 +357,7 @@ CascadingStyleSheetBuilder new
   with: [ :style |
     style width: (CssAttributeReference
       toAttributeNamed: 'height'
-      ofType: CssLengthUnits pixels) ];
+      ofType: CssLengthUnits pixel) ];
   build
 ]]]
 
@@ -362,9 +377,9 @@ CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div before ]
   with: [ :style |
     style content: (CssAttributeReference
-      toAttributeNamed: 'title'
-      ofType: 'string'
-      withFallback: '"Missing title"') ];
+	  toStringAttributeNamed: 'title' 
+	  withFallback: 'Missing title')
+	];
   build
 ]]]
 
@@ -518,6 +533,34 @@ renders as:
 repeating-radial-gradient(yellow, green);
 ]]]
 
+!!!!Box Shadows
+
+Box Shadows are supported with ==CssBoxShadow== abstraction. This abstraction simplifies the use of the ==box-shadow== property. 
+
+[[[language=smalltalk
+CssBoxShadow 
+  horizontalOffset: 64 px 
+  verticalOffset: 64 px 
+  blurRadius: 12 px  
+  spreadDistance: 40 px 
+  color: (CssSVGColors black newWithAlpha: 0.4)
+]]]
+evaluates to:
+[[[language=css
+64px 64px 12px 40px rgba(0,0,0,0.4)
+]]]
+
+Several shadows can be combined:
+[[[language=smalltalk
+(CssBoxShadow horizontalOffset: 64 px verticalOffset: 64 px blurRadius: 12 px  spreadDistance: 40 px color: (CssSVGColors black newWithAlpha: 0.4)) , 
+(CssBoxShadow horizontalOffset: 12 px verticalOffset: 11 px blurRadius: 0 px  spreadDistance: 8 px color: (CssSVGColors black newWithAlpha: 0.4)) beInset
+]]]
+
+Evaluates to:
+[[[language=css
+64px 64px 12px 40px rgba(0,0,0,0.4), inset 12px 11px 0px 8px rgba(0,0,0,0.4)
+]]]
+
 !!Defining the selectors
 
 So far our focus was on the ''style'' part of the rule. Let's focus now on the available ''selectors''. Remember that a CSS selector represents a structure used to match elements in the document tree. This chapter asume some familiarity with the CSS selectors and will not go in detail about the exact meaning of each one. For more details you can take a look at *CSS3 selector documentation>http://www.w3.org/TR/css3-selectors*.
@@ -550,6 +593,8 @@ ol
 }
 ]]]
 
+To get a list of the supported type selectors evaluate ==CssSelector selectorsInProtocol: '*RenoirSt-HTML'==.
+
 !!! Combinators
 
 Selectors can be combined to represent complex queries. One of the most common use cases is the ''descendant combinator'':
@@ -571,7 +616,7 @@ div ol
 
 This only matches if an ==ol== element is a descendant (direct or not) of a ==div== element.
 
-This ''child combinator'' only matches when an element is a direct child of an other one:
+The ''child combinator'' only matches when an element is a direct child of another one:
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -632,6 +677,111 @@ evaluates to:
 p, div
 {
   ...
+}
+]]]
+
+!!! Attribute Selectors
+
+Attribute selectors are useful to match an element if that element has an attribute that matches the attribute represented by the selectors.
+
+The ''attribute presence'' selector matches an element having an attribute (without considering the value of the attribute):
+
+[[[language=smalltalk
+CascadingStyleSheetBuilder new 
+  declareRuleSetFor: [:selector | selector h1 havingAttribute: 'title' ]
+  with: [:style | style color: CssSVGColors blue ];
+  build
+]]]
+evaluates to:
+[[[language=css
+h1[title]
+{
+	color: blue;
+}
+]]]
+
+The ''attribute value exact matching'' selectors matches an element having an attribute with a specific value:
+
+[[[language=smalltalk
+CascadingStyleSheetBuilder new 
+  declareRuleSetFor: [:selector | selector span withAttribute: 'class' equalTo: 'example' ]
+  with: [:style | style color: CssSVGColors blue ];
+  build
+]]]
+evaluates to:
+[[[language=css
+span[class="example"]
+{
+	color: blue;
+}
+]]]
+
+The ''attribute value inclusion'' selector matches an element having an attribute with a value including as a word the matching term:
+
+[[[language=smalltalk
+CascadingStyleSheetBuilder new 
+  declareRuleSetFor: [:selector | selector anchor attribute: 'rel' includes: 'copyright' ]
+  with: [:style | style color: CssSVGColors blue ];
+  build
+]]]
+[[[language=css
+a[rel~="copyright"]
+{
+	color: blue;
+}
+]]]
+
+Other attribute selectors are used for substring matching:
+
+[[[language=smalltalk
+CascadingStyleSheetBuilder new 
+  declareRuleSetFor: [:selector | selector anchor firstValueOfAttribute: 'hreflang' beginsWith: 'en' ]
+  with: [:style | style color: CssSVGColors blue ];
+  build
+]]]
+[[[language=css
+a[hreflang|="en"]
+{
+	color: blue;
+}
+]]]
+
+[[[language=smalltalk
+CascadingStyleSheetBuilder new 
+  declareRuleSetFor: [:selector | selector anchor attribute: 'type' beginsWith: 'image/' ]
+  with: [:style | style color: CssSVGColors blue ];
+  build
+]]]
+[[[language=css
+a[type^="image/"]
+{
+	color: blue;
+}
+]]]
+
+[[[language=smalltalk
+CascadingStyleSheetBuilder new 
+  declareRuleSetFor: [:selector | selector anchor attribute: 'type' endsWith: '.html' ]
+  with: [:style | style color: CssSVGColors blue ];
+  build
+]]]
+[[[language=css
+a[type$=".html"]
+{
+	color: blue;
+}
+]]]
+
+[[[language=smalltalk
+CascadingStyleSheetBuilder new 
+  declareRuleSetFor: [:selector | selector paragraph attribute: 'title' includesSubstring: 'hello' ]
+  with: [:style | style color: CssSVGColors blue ];
+  build
+]]]
+[[[language=css
+p[title*="hello"]
+{
+	color: blue;
 }
 ]]]
 
@@ -701,6 +851,24 @@ evaluates to:
 :lang(es) > div
 {
     quotes: "«" "»";
+}
+]]]
+
+!!!! Negation Pseudo-class:
+
+The negation pseudo-class, ==:not(X)==, is a functional notation taking a simple selector (excluding the negation pseudo-class itself) as an argument. It represents an element that is not represented by its argument. For more information take a look at the CSS spec.
+
+This selector is supported sending the message ==not:== 
+[[[language=smalltalk
+CascadingStyleSheetBuilder new 
+  declareRuleSetFor: [:selector | selector button not: (selector havingAttribute: 'DISABLED') ]
+  with: [:style | style color: CssSVGColors blue ];
+  build
+]]]
+[[[language=css
+button:not([DISABLED])
+{
+	color: blue;
 }
 ]]]
 
@@ -880,8 +1048,6 @@ p
 ]]]
 Note that the important properties must be created by sending the messages to the inner argument ==importantStyle== instead of the outer argument ==style==.
 
-@@note References: *http://www.w3.org/TR/CSS2/cascade.html#important-rules*
-
 !! Media Queries
 
 A ==@media== rule specifies the target media types of a set of statements. The ==@media== construct allows style sheet rules that apply to various media in the 
@@ -911,7 +1077,7 @@ evaluates to:
 }
 ]]]
 
-To use media queries in the library just send the message ==declare:forMediaMatching:== to the builder. The first closure is evaluated with an instance of a 
+To use media queries in the library just send the message ==declare:forMediaMatching:== to the builder. The first block is evaluated with an instance of a 
 ==CascadingStyleSheetBuilder== and the second one with a builder of media queries.
 
 The media query builder will match any media type by default. To specify a media type just send it the message ==type:== with the corresponding media type. The 
@@ -960,8 +1126,6 @@ evaluates to:
 }
 ]]]
 
-@@note References: *http://www.w3.org/TR/CSS2/media.html* and *http://www.w3.org/TR/css3-mediaqueries/*.
-
 !! Vendor-specific extensions
 
 The library doesn't provide out of the box support for non standard properties. Nevertheless, the message ==vendorPropertyAt:put:== is available to ease the creation of this kind of properties by the end user:
@@ -988,6 +1152,52 @@ div
 
 @@note If you really want to use a vendor specific extension, It's better to create an extension method sending the ==vendorPropertyAt:put:== message.
 
+!! Font Face Rules
+
+The ==@font-face== rule allows for linking to fonts that are automatically fetched and activated when needed. This allows authors to select a font that closely matches the design goals for a given page rather than limiting the font choice to a set of fonts available on a given platform. A set of font descriptors define the location of a font resource, either locally or externally, along with the style characteristics of an individual face.
+
+This support is implemented in the builder:
+[[[language=smalltalk
+CascadingStyleSheetBuilder new
+	declareFontFaceRuleWith: [ :style | 
+		style
+			fontFamily: 'Gentium';
+			src: 'http://example.com/fonts/gentium.woff' asZnUrl ];
+	build
+]]]
+evaluates to:
+[[[language=css
+@font-face
+{
+	font-family: Gentium;
+	src: url("http://example.com/fonts/gentium.woff");
+}
+]]]
+
+This kind of rule allows for multiple ==src== definitions specifying the resources containing the data. This resources can be external (fonts fetched from a URL) or local (available in the user system). This kind of resources are supported using ==CssLocalFontReference== and ==CssExternalFontReference== abstractions:
+
+[[[language=smalltalk
+CascadingStyleSheetBuilder new
+	declareFontFaceRuleWith:
+		[ :style | 
+		style
+			fontFamily: 'MainText';
+			src: (CssExternalFontReference locatedAt: 'gentium.eat' asZnUrl relativeToStyleSheet);
+			src: (CssLocalFontReference toFontNamed: 'Gentium')	, (CssExternalFontReference locatedAt: 'gentium.woff' asZnUrl relativeToStyleSheet withFormat: CssFontConstants woff);
+			src: (CssExternalFontReference svgFontLocatedAt: 'fonts.svg' asZnUrl relativeToStyleSheet withId: 'simple') ];
+	build
+]]]
+
+[[[language=css
+@font-face
+{
+	font-family: MainText;
+	src: url("gentium.eat");
+	src: local(Gentium), url("gentium.woff") format("woff");
+	src: url("fonts.svg#simple") format("svg");
+}
+]]]
+
 !! Interaction with other frameworks and libraries
 
 !!! Units
@@ -997,7 +1207,7 @@ The ==Units== package (available using the ConfigurationBrowser in Pharo) includ
 
 !!! Seaside
 
-RenoirST includes an optional configuration named ==ConfigurationOfRenoirtStPlusSeaside== including some Seaside-related useful extensions. The *Seaside>http://www.seaside.st* framework includes its own class modeling URLs: when this configuration is loaded the instances of ==WAUrl== can be used in the properties requiring an URI:
+RenoirSt includes an optional group including some useful extensions. The *Seaside>http://www.seaside.st* framework includes its own class modeling URLs: when this group is loaded the instances of ==WAUrl== can be used in the properties requiring an URI:
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -1011,17 +1221,26 @@ evaluates to:
 [[[language=css
 div.logo
 {
-    background-image: url("images/logo.png");
+    background-image: url("/images/logo.png");
 }
 ]]]
 
-This optional configuration also loads extensions to ==CssDeclarationBlock== so it can be used as a ==JSObject== in plugins requiring some style parameter.
+This optional group also loads extensions to ==CssDeclarationBlock== so it can be used as a ==JSObject== in plugins requiring some style parameter or as the argument in a component ==style:== method.
 
-To load this extensions use the Configuration Browser or use:
+To load this extensions you need to load (in an image with Seaside already loaded) the group ==Deployment-Seaside-Extensions== or ==Development-Seaside-Extensions== (if you want the test cases):
 
 [[[language=smalltalk
-Gofer it
-    url: 'http://smalltalkhub.com/mc/gcotelli/RenoirSt/main';
-    configurationOf: 'RenoirStPlusSeaside';
-    loadStable
+Metacello new
+  baseline: 'RenoirSt';
+  repository: 'github://gcotelli/RenoirSt:stable-pharo-50/source';
+  load: 'Deployment-Seaside-Extensions'
+]]]
+
+or 
+
+[[[language=smalltalk
+Metacello new
+  baseline: 'RenoirSt';
+  repository: 'github://gcotelli/RenoirSt:stable-pharo-40/source';
+  load: 'Deployment-Seaside-Extensions'
 ]]]
