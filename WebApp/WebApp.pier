@@ -1,6 +1,6 @@
 {
     "title": "Building and Deploying a Small Web application",
-    "attribution": "Sven Van Caekenberghe with Luc Fabresse"
+    "attribution": "Sven Van Caekenberghe with Luc Fabresse and Johan Fabry"
 }
 @cha:webApp
 
@@ -15,12 +15,7 @@ You will also discover that using nice objects abstracting each concept in HTTP 
 The dynamic, interactive nature of Pharo combined with its rich IDE and library will allow us to do things that are nearly impossible using other technology stacks.
 By chronologically following the development process, you will see the app growing from something trivial to the final result. Finally, we will save our source code in a repository and deploy for real in the cloud.
 
-Let's get started.
-
-
-!!The Web App
-
-The Web application that we are going to build will show a picture and allow users to change the picture by uploading a new one as shown by Figure *@imageweb*.
+The Web application that we are going to build will show a picture and allow users to change the picture by uploading a new one as shown in Figure *@imageweb*.
 Because we want to focus on the basic mechanics, the fundamentals as well as the build and deploy process, there are some simplifications. There will be one
 picture for all users, no login and we will store the picture in memory.
 
@@ -90,7 +85,7 @@ Note how we are not even serving HTML, just plain text.
 Try changing the text.
 
 
-!!Debugging our Web App
+!!!Debugging our Web App
 
 Try putting a breakpoint in ==MyFirstWebApp>>handleRequest:== (by inserting ==self halt== in the method source code).
 Then, if you refresh the page from the web browser, a debugger will open in Pharo allowing you to inspect things.
@@ -105,7 +100,7 @@ You can leave the server running.
 If you want you can enable logging, or switch to debug mode and inspect the server instance as explained in Chapter *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pillar@cha:zinc-server*.
 Don't forget to remove any breakpoints you set before continuing.
 
-!!Serving an HTML Page
+!!Serving an HTML Page With an Image
 
 HTML generation can be done with some of existing high-level Pharo frameworks such as Mustache (see Chapter *Mustache>../Mustache/Mustache.pillar@cha:mustache*).
 In the following, we manually compose the HTML to focus on app building and deployment.
@@ -137,7 +132,7 @@ This is an indication that we have no class comment, which is not good: document
 Click the ==Comments== button and write some documentation.
 You can also use the class comment as a notepad for yourself, saving useful expressions that you can later execute in place such as the two expressions above to start the server.
 
-!!Serving an Image
+!!!Serving an Image
 
 For the purpose of our Web app, images can be any of three types: GIF, JPEG and PNG. The application will store them in memory as an object wrapping the actual bytes together with a MIME type.
 
@@ -193,7 +188,7 @@ When you refresh the page in the web browser, you should now see an image as in 
 
 +Serving the Pharo logo>file://figures/13-servingPharoLogo.jpg|width=100|label=servingPharoLogo+
 
-!!Uploading a New Image
+!!Allowing Users to Upload an Image
 
 Interaction is what differentiates a Web site from a Web application.
 We will now add the ability for users to upload a new image to change the one on the server.
@@ -549,12 +544,10 @@ By clicking on the 'Changes' button, you see what has locally changed (or force 
 You should get a browser showing all the changes that you made.
 Since this is the first version, all your changes are additions.
 
-!!!The Changes/Diff Browser
-
-OK, we're almost done. Go back to the Monticello Browser and click the 'Save' button (with your package and repository selected). Leave the version name,
-something like MyFirstWebApp-SvenVanCaekenberghe.1 alone, write a nice commit message in the second pane and press Accept to save your code to SmalltalkHub.
-
 !!!Committing to SmalltalkHub
+
+Go back to the Monticello Browser and click the 'Save' button (with your package and repository selected). Leave the version name,
+something like MyFirstWebApp-SvenVanCaekenberghe.1 alone, write a nice commit message in the second pane and press Accept to save your code to SmalltalkHub.
 
 When all goes well, you will see an upload progress bar and finally a version window that confirms the commit. You can close it later on.
 
@@ -567,20 +560,16 @@ Name: MyFirstWebApp-SvenVanCaekenberghe.1
   First check in of our Web app, following 'Building and deploying your first Web a
 ]]]
 
-!!!Confirmation Version Window
-
 If something goes wrong, you probably made a typo in your repository specification. You can edit it by right-clicking on it in the Monticello Browser and
 selecting ‘Edit repository info’. If a save fails, you will get a Version Window after some error message. Don’t close the Version Window. Your code now lives
 in your local package cache. Click the ‘Copy’ button and select your SmalltalkHub repository to try saving again.
 
 You can now browse back to Smalltalkhub.com to confirm that your code arrived there.
 
-!!!Looking at our commit on SmalltalkHub
-
 After a successful commit, it is a good idea to save your image.
 In any case, your package should now no longer be dirty, and there should be no more differences between the local version and the one on SmalltalkHub.
 
-!!Defining a project configuration
+!!!Defining a project configuration
 
 Real software consists of several packages and will depend on extra external libraries and frameworks. In practice, software configuration management, including
 the management of dependencies and versions, is thus a necessity.
@@ -652,20 +641,15 @@ The entry level server there, which is more than powerful enough for our experim
 If you stop and remove the server after a couple of days, you will only pay cents.
 Go ahead and make yourself an account and register a credit card.
 
-!!!First part of the Create Droplet form
+!!!Create a Droplet
 
 A server instance is called a Droplet. Click the ‘Create Droplet’ button and fill in the form. Pick a hostname, select the smallest size, pick a region close
 to you. As operating system image, we’ll be using a 32-bit Ubuntu Linux, version 13.04 x32. You can optionally use an SSH key pair to log in - it is a good idea,
 see How to Use SSH Keys with DigitalOcean Droplets - just skip this option for now if you are uncomfortable with it, it is not necessary for this tutorial.
 Finally click the ‘Create Droplet’ button.
 
-
-!!! Second part of the Create Droplet form
-
 In less than a minute, your new server instance will be ready. Your root password will be emailed to you. If you look at your droplets, you should see your new
 server in the list. Click on it to see its details.
-
-!!!Looking at your Droplet
 
 The important step now is to get SSH command line access to your new server, preferably using a normal terminal. With the IP address from the control panel and
 the root password emailed to you, try to log in.
@@ -697,7 +681,7 @@ Let's quickly test the stock HTTP server that comes with Pharo, like we did in t
 This command will block. Now access your new HTTP server at *http://82.196.12.54:8080* after substituting your own IP address of course. You should see the Zinc
 HTTP Components welcome page. If this works, you can press ctrl-C in the terminal to end our test.
 
-!!Deploying for production
+!!!Deploy for production
 
 We now have a running server. It can run Pharo too, but it is currently using a generic image. How do we get our code deployed? To do this we use the Metacello
 configuration. But first, we are going to make a copy of the stock Pharo.image that we downloaded. We want to keep the original clean while we make changes to the copy.
@@ -796,7 +780,7 @@ If you found it difficult to find the right methods, have a look at the followin
 -==ByteArray class>>streamContents:==
 -==ZnByteArrayEntity class>>with:type:==
 
-!!Solution, part 1, new methods
+!!!Solution, part 1, new methods
 
 Here are 3 new methods that are part of the solution.
 
@@ -820,7 +804,7 @@ updatePreviousImage
     previousImage := self pngImageEntityForForm: scaled
 ]]]
 
-!!Solution, part 2, changed methods
+!!!Solution, part 2, changed methods
 
 Here are the changes to 3 existing methods for the complete solution.
 [[[language=smalltalk
@@ -867,7 +851,7 @@ Here are the changes to 3 existing methods for the complete solution.
         ^ ZnResponse redirect: #image
 ]]]
 
-!!Solution, part 3, updated configuration
+!!!Solution, part 3, updated configuration
 
 To update our configuration, add 1 method and change 1 method.
 
