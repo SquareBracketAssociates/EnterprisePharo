@@ -57,7 +57,8 @@ MCHttpRepository
 	password: ''
 ]]]
 
-Dale Henrichs did a port to Gemstone *http://gemtalksystems.com/products/* that is available at *https://github.com/dalehenrich/ston* .
+A Gemstone (*http://gemtalksystems.com/products/*) port implemented by
+Dale Henrichs is available at *https://github.com/dalehenrich/ston* .
 
 !!! Serializing and materializing objects
 
@@ -166,7 +167,9 @@ ZnResponse {
             }
          },
          #contentLength : 113,
-         #string : '<html>\n<head><title>Small</title></head>\n<body><h1>Small</h1><p>This is a small HTML document</p></body>\n</html>\n',
+         #string :
+'<html>\n<head><title>Small</title></head>\n<body><h1>Small</h1>
+<p>This is a small HTML document</p></body>\n</html>\n',
          #encoder : ZnUTF8Encoder { }
        },
     #statusLine : ZnStatusLine {
@@ -311,7 +314,7 @@ maps, for example as below:
 [[[
 STON toStringPretty: (Dictionary new at: #blue put: 'bluish' ; at: #green put: 'greenish' ; yourself) 
    --> '{
-		#green : ''greenish'',
+        	#green : ''greenish'',
         	#blue : ''bluish''
         }'
 ]]]
@@ -340,13 +343,13 @@ Collection classes are encoded using a list of their values.
 For the list like collection subclass ==Array==, the class tag is optional, given a list representation. The following pairs are thus equivalent:
 
 [[[
-	[1, 2, 3]  =  Array [1, 2, 3]
+[1, 2, 3]  =  Array [1, 2, 3]
 ]]]
 
 Also, for the map like collection subclass ==Dictionary== the class tag is optional, given a map representation:
 
 [[[
-    {#a : 1, #b : 2} = Dictionary {#a : 1, #b : 2}
+{#a : 1, #b : 2} = Dictionary {#a : 1, #b : 2}
 ]]]
 
 !!!! References
@@ -477,12 +480,13 @@ the instance is the responsibility of the ==fromSton:==  method, e.g. as in ==By
 
 During encoding, classes can output a one-line representation of themselves by sending either the ==#writeObject:listSingleton:== or 
 ==#writeObject:streamShortList:== message to ==STONWriter==. The first argument of the message should be ==self== and the second argument a single element, or a 
-collection of elements respectively. Examples of this are below:
+collection of elements respectively. 
+
+Examples of this are below:
 
 [[[
 Date >> stonOn: stonWriter
 	"Use an ISO style YYYYMMDD representation"
-	
 	stonWriter writeObject: self listSingleton: self yyyymmdd
 ]]]
 
@@ -515,17 +519,20 @@ using the reader or writer directly is perfectly fine, and offers some more opti
 Parsing is the simplest operation, use either the ==fromString:== or ==fromStream:== method, like this:
 
 [[[
-    STON fromString: 'Rectangle { #origin : Point [ -40, -15 ], #corner : Point [ 60, 35 ]}'.
+STON fromString: 'Rectangle { #origin : Point [ -40, -15 ],
+    #corner : Point [ 60, 35 ]}'.
 ]]]
 [[[
-    '/Users/sven/Desktop/foo.ston' asReference fileStreamDo: [ :stream | STON fromStream: stream ].
+'/Users/sven/Desktop/foo.ston' asReference
+     fileStreamDo: [ :stream | STON fromStream: stream ].
 ]]]
 
 Invoking the reader (parser) directly goes like this:
 
 [[[
-    (STON reader on: 'Rectangle{#origin:Point[0,0],#corner:Point[1440,846]}' readStream) 
-        next.
+(STON reader on:
+      'Rectangle{#origin:Point[0,0],#corner:Point[1440,846]}'
+           readStream) next.
 ]]]
 
 Writing has two variants: the regular compact representation or the pretty printed one.
@@ -533,18 +540,18 @@ The methods to use are ==toString:== and ==toStringPretty:==
 or ==put:onStream:== and ==put:onStreamPretty:==, like this:
 
 [[[
-    STON toString: World bounds.
+STON toString: World bounds.
 ]]]
 [[[
-    STON toStringPretty: World bounds.
+STON toStringPretty: World bounds.
 ]]]
 [[[
-    '/Users/sven/Desktop/bounds.ston' asReference 
-        fileStreamDo: [ :stream |  STON put: World bounds onStream: stream ].
+'/Users/sven/Desktop/bounds.ston' asReference 
+    fileStreamDo: [ :str |  STON put: World bounds onStream: str ].
 ]]]
 [[[
-    '/Users/sven/Desktop/bounds.ston' asReference 
-        fileStreamDo: [ :stream | STON put: World bounds onStreamPretty: stream ].
+'/Users/sven/Desktop/bounds.ston' asReference 
+    fileStreamDo: [ :str | STON put: World bounds onStreamPretty: str ].
 ]]]
 
 
@@ -554,8 +561,9 @@ However, STON offers the possibility to handle comments using a special stream n
 The following snippets illustrate two ways to use this stream:
 
 [[[
-STON fromStream: (STONCStyleCommentsSkipStream on: 'Point[/* this is X*/ 1, /* this is Y*/ 2] // Nice huh ?' readStream).
-	=> 1@2
+STON fromStream: (STONCStyleCommentsSkipStream on:
+    'Point[/* this is X*/ 1, /* this is Y*/ 2] // Nice huh ?' readStream).
+	--> 1@2
 ]]]
 
 [[[
@@ -566,7 +574,7 @@ Point[
 	// this is Y
 	2 ] 
 // Nice huh ?'.
-	=> 1@2
+	--> 1@2
 ]]]
 
 This helper class is useable in other contexts too, like for NeoJSON.
@@ -578,8 +586,8 @@ it just adds some functionality on top.
 
 The writer can be created explicitly as follows:
 [[[
-    String streamContents: [ :stream |
-        (STON writer on: stream)  nextPut: World bounds ].
+String streamContents: [ :stream |
+    (STON writer on: stream)  nextPut: World bounds ].
 ]]]
 
 When created, the reference policy of the writer can be set.
@@ -612,24 +620,28 @@ compatibility. Also, as JSON does not understand non-primitive values outside of
 Next is an example of how to use the STON writer to generate JSON output.
 
 [[[
-    | bounds json |
-    bounds := World bounds.
-    json := Dictionary
-        with: #origin -> (Dictionary with: #x -> bounds origin x with: #y -> bounds origin y)
-        with: #corner -> (Dictionary with: #x -> bounds corner x with: #y -> bounds corner y).
-    String streamContents: [ :stream |
-        (STON writer on: stream)
-            prettyPrint: true;
-            jsonMode: true;
-            referencePolicy: #error;
-            nextPut: json ].
+| bounds json |
+bounds := World bounds.
+json := Dictionary
+    with: #origin -> (Dictionary
+            with: #x -> bounds origin x
+            with: #y -> bounds origin y)
+    with: #corner -> (Dictionary
+            with: #x -> bounds corner x
+            with: #y -> bounds corner y).
+String streamContents: [ :stream |
+    (STON writer on: stream)
+        prettyPrint: true;
+        jsonMode: true;
+        referencePolicy: #error;
+        nextPut: json ].
 ]]]
 
 !! Handling CR, LF inside Strings
 
 STON also supports the conversion or not of CR, LF, or CRLF characters inside strings and symbols as one chosen canonical newLine.
 
-The messages ==STONReader>>convertNewLines: aBoolean== and ==STONReader>>newLine: aCharacter== read and convert CR, LF, or CRLF inside strings and symbols as 
+The message ==STONReader>>convertNewLines: aBoolean== and the message ==STONReader>>newLine: aCharacter== read and convert CR, LF, or CRLF inside strings and symbols as 
 one chosen canonical newLine. When true, any newline CR, LF or CRLF read unescaped inside strings or symbols will be converted to the newline convention chosen, 
 see ==newLine:==. The default is false, not doing any convertions.
 
@@ -656,8 +668,10 @@ Any CR, LF or CRLF inside any String will no longer be written as ==\\r==, ==\\n
 
 
 !! Conclusion
-STON is a practical and simple text-based object serializer. It is handy to exchange information and from that perspective it is complementary
-to Fuel. 
+STON is a practical and simple text-based object serializer based on
+JSON (see also Chapter *NeoJSON>../NeoJSON/NeoJSON.pillar@cha:JSON*).
+We have shown how to use it, how values are encoded and how to define
+a custom representation for a given class. 
 
 
 !! Appendix: BNF
@@ -674,6 +688,7 @@ to Fuel.
 	  false
 	  symbol
 	  string
+
 	object-value
 	  object
 	  map
