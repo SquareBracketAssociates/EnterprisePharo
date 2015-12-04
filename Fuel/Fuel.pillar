@@ -88,15 +88,16 @@ Transcript
 	show: 'The global value Transcript is the same: ';
 	show: arrayToSerialize second == materializedArray second;
 	cr.
+
 materializedArray third 
 	value: 'The materialized block closure can be properly evaluated.'.
 ]]]
 
 !!! Some Links
 
-- The home page of Fuel is *http://rmod.lille.inria.fr/web/software/Fuel*.
-- Fuel's source code is stored at *http://smalltalkhub.com/#!/~Pharo/Fuel*.
-- Fuel is built automatically at *https://ci.inria.fr/pharo-contribution/job/Fuel-Stable/*.
+- The home page is *http://rmod.lille.inria.fr/web/software/Fuel*.
+- The source code is at *http://smalltalkhub.com/#!/~Pharo/Fuel*.
+- The CI job is at *https://ci.inria.fr/pharo-contribution/job/Fuel-Stable/*.
 
 
 
@@ -107,16 +108,17 @@ materializedArray third
 @GettingStarted
 
 !!!Basic Examples
-Fuel offers some class-side messages to ease more common uses of serialization (==serialize:toFileNamed:==)
-and materialization (==materializeFromFileNamed:==). The next example writes to and reads from a file:
+Fuel offers some class-side messages to ease more common uses of
+serialization  (the ==serialize:toFileNamed:== message )
+and materialization (the message ==materializeFromFileNamed:==). The next example writes to and reads from a file:
 
 [[[language=Smalltalk
 FLSerializer serialize: 'stringToSerialize' toFileNamed: 'demo.fuel'. 
 materializedString := FLMaterializer materializeFromFileNamed: 'demo.fuel'.
 ]]]
 
-Fuel also provides the messages ==serializeToByteArray:== and
-==materializeFromByteArray:== for storing into a ==ByteArray==. This
+Fuel also provides messages for storing into a ==ByteArray==, namely
+the messages ==serializeToByteArray:== and ==materializeFromByteArray:==. This
 can be interesting, for example, for serializing an object graph as a
 blob of data into a database when using Voyage (see Chapter *Voyage>../Voyage/Voyage.pillar@cha:voyage*).
 
@@ -140,8 +142,10 @@ In the following example we work with file streams. Note that the stream needs t
 		materializeFrom: aStream binary) root ].
 ]]]
 
-In this example, we are no longer using the class-side messages. Now, for both ==FLSerializer== and ==FLMaterializer==, we first create instances with 
-==newDefault== and then perform the desired operations. As we will see in the next example, creating the instances allows for more flexibility on serialization 
+In this example, we are no longer using the class-side messages. Now,
+for both ==FLSerializer== and ==FLMaterializer==, we first create
+instances by sending the 
+==newDefault== message and then perform the desired operations. As we will see in the next example, creating the instances allows for more flexibility on serialization 
 and materialization.
 
 !!!Compression 
@@ -320,8 +324,8 @@ User class >> fuelIgnoredInstanceVariableNames
 
 !!!Post-Materialization Action
 
-When materialized, ignored instance variables will contain ==nil==. To re-initialize and set values to those instance variables, the message 
-==fuelAfterMaterialization==  can be used.
+When materialized, ignored instance variables will contain ==nil==. To re-initialize and set values to those instance variables, the 
+==fuelAfterMaterialization==  message can be used.
 
 The message ==fuelAfterMaterialization== lets you execute some action once an object has been materialized. For example, let's say we would like to set back the 
 instance variable =='accumulatedLogins'== during materialization. We can implement:
@@ -493,7 +497,7 @@ As most classes of Fuel, they have class comments that explain their purpose:
 : I represent an error produced during Fuel operation.
 
 ; FLSerializationError
-: I represent an error happened during serialization.
+: I represent a serialization error.
 
 ; FLNotSerializable
 : I represent an error which may happen while tracing in the graph an object that is forbidden of being serialized.
@@ -505,7 +509,7 @@ As most classes of Fuel, they have class comments that explain their purpose:
 : I am an error produced during serialization, signaled when trying to serialize an obsolete class as global. It is a prevention, because such class is likely to be absent during materialization.
 
 ; FLMaterializationError
-: I represent an error happened during materialization.
+: I represent a materialization error.
 
 ; FLBadSignature
 : I represent an error produced during materialization when the serialized signature doesn't match the materializer's signature (accessible via ==FLMaterializer>>signature==). A signature is a byte prefix that should prefix a well-serialized stream.
@@ -548,8 +552,9 @@ FLMaterializer newDefault
 	variables: {'x' -> 'posX'. 'y' -> 'posY'}.
 ]]]
 
-The last change that can happen is a ""class rename"". Again the Fuel materializer provides a way to handle this case, using the message 
-==migrateClassNamed:toClass:== and an example of its use is shown below:
+The last change that can happen is a ""class rename"". Again the Fuel
+materializer provides a way to handle this: the 
+==migrateClassNamed:toClass:== message, and an example of its use is shown below:
 
 [[[language=Smalltalk
 FLMaterializer newDefault
@@ -583,7 +588,8 @@ fileNames := #('a.fuel' 'b.fuel' 'c.fuel' 'd.fuel' 'e.fuel').
 objectsByFileName := Dictionary new.
 
 (ConfigurationOfFuel project version: oldVersion) load.
-"Need to do it like this otherwise the class is decided at compile time."
+"Need to do it like this otherwise
+  the class is decided at compile time."
 materializerClass := Smalltalk at: #FLMaterializer.
 
 fileNames do: [ :fileName | 
@@ -591,8 +597,10 @@ fileNames do: [ :fileName |
 		at: fileName 
 		put: (materializerClass materializeFromFileNamed: fileName) ].
 
+
 (ConfigurationOfFuel project version: newVersion) load.
-"Need to do it like this otherwise the class is decided at compile time."
+"Need to do it like this otherwise
+  the class is decided at compile time."
 serializerClass := Smalltalk at: #FLSerializer.
 
 objectsByFileName keysAndValuesDo: [ :fileName :objects |
@@ -725,7 +733,7 @@ We assume in this example that the number of objects to migrate can be materiali
 
 It can be useful to store additional information with the serialized graph or perform pre and post materialization actions. To achieve this, Fuel supports the possibility to customize the header, an instance of ==FLHeader==.
 
-The following example shows these features: first we add a property called timestamp to the header using the message ==at:putAdditionalObject:==. We then define some pre and post actions using ==addPreMaterializationAction:== and ==addPostMaterializationAction:==, respectively. In the latter we show how we can retrieve the property value by using the message ==additionalObjectAt:== 
+The following example shows these features: first we add a property called timestamp to the header using the message ==at:putAdditionalObject:==. We then define some pre and post actions using ==addPreMaterializationAction:== and ==addPostMaterializationAction:==, respectively. In the latter we show how we can retrieve the property value by using the ==additionalObjectAt:== message.
  
 [[[language=Smalltalk
 | serializer |
@@ -743,8 +751,8 @@ serializer header
 	addPostMaterializationAction: [ :materialization | 
 		Transcript 
 			show: 'Serialized at ';
-			show: (materialization additionalObjectAt: #timestamp); 
-			cr;
+			show: (materialization additionalObjectAt: #timestamp).
+		Transcript cr;
 			show: 'Materialized at ';
 			show: DateAndTime now rounded; 
 			cr ].
