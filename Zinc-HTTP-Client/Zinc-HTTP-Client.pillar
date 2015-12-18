@@ -24,8 +24,9 @@ the communication lies with the client. In HTTP parlance, the client requests a 
 collection of bytes and a mime-type. A simple text resource will consist of bytes encoding the string in some encoding, for example UTF-8, and the mime-type 
 ==text/plain;charset=utf-8==, in contrast, an HTML resource will have a mime-type like ==text/html;charset=utf-8==.
 
-To specify which resource you want, a URL (Uniform Resource Locator) is used. Web addresses are the most common form of URL. For example, 
-*http://pharo.org/files/pharo-logo-small.png*, is a URL that refers to a PNG image resource on a specific server.
+To specify which resource you want, a URL (Uniform Resource Locator)
+is used. Web addresses are the most common form of URL. Consider for example 
+*http://pharo.org/files/pharo-logo-small.png* : it is a URL that refers to a PNG image resource on a specific server.
 
 The reliable transport connection between an HTTP client and server is used bidirectionally: both to send the request as well as to receive the response. It can 
 be used for just one request/response cycle, as was the case for HTTP version 1.0, or it can be reused for multiple request/response cycles, as is the default 
@@ -57,7 +58,7 @@ Let's get started with the simplest possible usage.
 ZnClient new get: 'http://zn.stfx.eu/zn/small.html'.
 ]]]
 
-Select the above expression and inspect or print it. If all goes well, you'll get a ==String== back containing a very small HTML document. The ==get:== method 
+Select the expression and inspect or print it. If all goes well, you'll get a ==String== back containing a very small HTML document. The ==get:== method 
 belongs to the convenience API. Let's use a more general API to be a bit more explicit about what happened.
 
 [[[
@@ -77,8 +78,8 @@ using ==response==. The above returns a ==ZnResponse== object. Of course you can
 The status line says HTTP/1.1 200 OK, which means the request was successful. This can be tested by sending ==isSuccess== to either the response object or the 
 client itself. The headers contain meta data related to the response, including:
 
-- the content-type (a mime-type), accessible with the message ==contentType==
-- the content-length (a byte count), accessible with the message ==contentLength==
+- the content-type (a mime-type), accessible with the ==contentType== message
+- the content-length (a byte count), accessible with the ==contentLength== message
 - the date the response was generated
 - the server that generated the response
 
@@ -188,12 +189,14 @@ The result is always a ==ZnResponse== object. Apart from basic authentication, t
 direct ways to ask for image resources as ready to use Forms.
 
 [[[
-ZnEasy getGif: 'http://esug.org/data/Logos+Graphics/ESUG-Logo/2006/gif/esug-Logo-Version3.3.-13092006.gif'.
+ZnEasy getGif:
+   'http://esug.org/data/Logos+Graphics/ESUG-Logo/2006/gif/',
+   'esug-Logo-Version3.3.-13092006.gif'.
 ZnEasy getJpeg: 'http://caretaker.wolf359.be/sun-fire-x2100.jpg'.
 ZnEasy getPng: 'http://pharo.org/files/pharo.png'.
 
 (ZnEasy getPng: 'http://chart.googleapis.com/chart?cht=tx&chl=',
-  'a^2+b^2=c^2') asMorph openInHand.
+    'a^2+b^2=c^2') asMorph openInHand.
 ]]]
 
 When you explore the implementation, you will notice that ==ZnEasy== uses a ==ZnClient== object internally.
@@ -235,8 +238,7 @@ goes wrong. Together, this allows the above code to be rewritten as follows.
 [[[
 ZnClient new
   enforceHttpSuccess: true;
-  ifFail: [ :exception |
-              self inform: 'Cannot get numbers: ', exception printString ];
+  ifFail: [ :ex | self inform: 'Cannot get numbers: ', ex printString ];
   get: 'http://zn.stfx.eu/zn/numbers.txt'.
 ]]]
 
@@ -404,7 +406,8 @@ The code to submit this form would then be as follows.
 [[[
 ZnClient new
   url: 'http://www.search-engine.com/search-handler';
-  addPart: (ZnMimePart fieldName: 'search-field' value: 'Pharo Smalltalk');
+  addPart: (ZnMimePart fieldName: 'search-field'
+                  value: 'Pharo Smalltalk');
   post.
 ]]]
 
@@ -422,7 +425,8 @@ This would be the way to do the upload programmatically.
 [[[
 ZnClient new
   url: 'http://www.search-engine.com/upload-handler';
-  addPart: (ZnMimePart fieldName: 'photo-file' fileNamed: '/Pictures/cat.jpg');
+  addPart: (ZnMimePart fieldName: 'photo-file'
+                   fileNamed: '/Pictures/cat.jpg');
   post.
 ]]]
 
@@ -440,7 +444,7 @@ ZnClient new
   get: 'http://www.example.com/secret.txt'.
 ]]]
 
-That is all there is to it. If you want to understand how this works, look at the implementation of ==ZnRequest>>#setBasicAuthenticationUsername:password:==.
+That is all there is to it. If you want to understand how this works, look at how ==ZnRequest>>#setBasicAuthenticationUsername:password:== is implemented.
 
 Basic authentication over plain HTTP is insecure because it transfers the username/password combination obfuscated by encoding it using the trivial Base64 encoding. 
 When used over HTTPS, basic authentication is secure though. Note that when sending multiple requests while reusing the same client, authentication is reset for 
@@ -457,8 +461,8 @@ Cookies are basically key/value pairs connected to a specific server domain. Usi
 of a cookie for a domain. On subsequent requests to the same domain, the client will use a special header to present the cookie and its value back to the server. 
 Semantically, the server manages a key/value pair on the client.
 
-As we saw before, a ==ZnClient== instance is essentially stateful. It not only tries to reuse a network connection but it also maintains a session using a 
-==ZnUserAgentSession== object. One of the main functions of this session object is to manage cookies, just like your browser does. ==ZnCookie== objects are held 
+As we saw before, a ==ZnClient== instance is essentially stateful. It not only tries to reuse a network connection but it also maintains a 
+==ZnUserAgentSession== object, which represents the session. One of the main functions of this session object is to manage cookies, just like your browser does. ==ZnCookie== objects are held 
 in a ==ZnCookieJar== object inside the session object.
 
 Cookie handling will happen automatically. This is a hypothetical example of how this might work, assuming a site where you have to log in before you are able 
@@ -487,7 +491,7 @@ custom headers as well.)
 
 HTTP provides for two methods (or verbs) to send information to a server. These are called PUT and POST. They both send an entity to the server in order to transfer data.
 
-In the subsection about submitting HTML forms we already saw how POST is used to send either a ==ZnApplicationFormUrlEncodedEntity== or ==ZnMultiPartFormDataEntity== containing structured data to a server.
+In the subsection about submitting HTML forms we already saw how POST is used to send either a ==ZnApplicationFormUrlEncodedEntity== or to send a ==ZnMultiPartFormDataEntity== containing structured data to a server.
 
 Apart from that, it is also possible to send a raw entity to a server. Of course, the server needs to be prepared to handle this kind of entity coming in. Here 
 are a couple of examples of doing a raw PUT and POST request.
@@ -507,7 +511,7 @@ ZnClient new
 ]]]
 
 In the last example we explicitly set the entity to be XML and do a POST. In the first two examples, the convenience contents system is used to automatically 
-create a ==ZnStringEntity== of type ==ZnMimeType textPlain== and a ==ZnByteArrayEntity== of type ==ZnMimeType applicationOctectStream==.
+create a ==ZnStringEntity== of the type ==ZnMimeType textPlain==, respectively a ==ZnByteArrayEntity== of the type ==ZnMimeType applicationOctectStream==.
 
 The difference between PUT and POST is semantic. POST is generally used to create a new resource inside an existing collection or container, or to initiate some 
 action or process. For this reason, the normal response to a POST request is to return the URL (or URI) of the newly created resource. Conventionally, the reponse 
@@ -590,16 +594,16 @@ the server will give a quick 304 Not Modified response without sending the resou
 This works both for regular requests as well as for downloads.
 
 [[[
-	ZnClient new
-	  url: 'http://zn.stfx.eu/zn/numbers.txt';
-	  setIfModifiedSince: (Date year: 2011 month: 1 day: 1);
-	  downloadTo: FileLocator imageDirectory.
+ZnClient new
+  url: 'http://zn.stfx.eu/zn/numbers.txt';
+  setIfModifiedSince: (Date year: 2011 month: 1 day: 1);
+  downloadTo: FileLocator imageDirectory.
 
-	ZnClient new
-	  url: 'http://zn.stfx.eu/zn/numbers.txt';
-	  setIfModifiedSince: (Date year: 2012 month: 1 day: 1);
-	  get;
-	  response.
+ZnClient new
+  url: 'http://zn.stfx.eu/zn/numbers.txt';
+  setIfModifiedSince: (Date year: 2012 month: 1 day: 1);
+  get;
+  response.
 ]]]
 
 For this to work, the server has to honor this particular protocol interaction, of course.
@@ -684,7 +688,8 @@ Once a request is executed, you can query the response headers like this:
 
 [[[
 client response isConnectionClose.
-(client response headers at: 'Connection' ifAbsent: [ '' ]) sameAs: 'close'.
+(client response headers at: 'Connection' ifAbsent: [ '' ])
+    sameAs: 'close'.
 ]]]
 
 
@@ -709,8 +714,10 @@ a buffer of a couple of tens of Kb. This is obviously more efficient. The limita
 Knowing that a ==ZnStringEntity== has a content type of XML or JSON is however not enough to interpret the data correctly. You might need a parser to convert the 
 representation to Smalltalk or a writer to convert Smalltalk into the proper representation. That is where the ==ZnClient== options ==contentReader== and ==contentWriter== are useful.
 
-If the content reader is nil (the default), ==contents== will return the ==contents== of the response object, usually a ==String== or ==ByteArray==. To customize 
-the content reader, you specify a block that will be given the incoming entity and that is then supposed to parse the incoming representation.
+If the content reader is nil (the default), ==contents== will return the ==contents== of the response object, usually a ==String== or ==ByteArray==.
+
+To customize 
+the content reader, you specify a block that will be given the incoming entity and that is then supposed to parse the incoming representation, for example as below:
 
 [[[
 ZnClient new
@@ -723,23 +730,27 @@ ZnClient new
   get.
 ]]]
 
-In the above example, ==get== (which returns ==contents==) will no longer return a ==String== but a collection of numbers. Note also that by using ==systemPolicy== 
+In this example, ==get== (which returns ==contents==) will no longer return a ==String== but a collection of numbers. Note also that by using ==systemPolicy== 
 in combination with an ==accept:== we handle most error cases before the content reader start doing its work, so it does no longer have to check for good incoming 
 data. In any case, when the ==contentReader== throws an exception, it can be caught by the ==ifFail:== block.
 
 If the content writer is nil (the default), ==contents:== will take a Smalltalk object and pass it to ==ZnEntity== class' ==with:== instance creation method. 
-This will create either a ==text/plain== ==String== entity or an ==application/octectstream== ==ByteArray== entity. You could further customize the entity by sending 
+This will create either a ==text/plain== ==String== entity or an ==application/octectstream== ==ByteArray== entity.
+
+You could further customize the entity by sending 
 ==contentType:== with another mime type. Or you could completely skip the ==contents:== mechanism and supply your own entity to ==entity:==.
 
-To customize the content writer, you specify a block that when given a Smalltalk object is then supposed to create and return an entity. Here is a theoretical example.
+To customize the content writer, you specify a block that when given a Smalltalk object is then supposed to create and return an entity. A theoretical example is given next.
 
 [[[
+
+
 ZnClient new
   url: 'http://internet-calculator.com/sum';
   contentWriter: [ :numberCollection |
-                      ZnEntity text:
-                        (Character space join:
-                           (numberCollection collect: [ :each | each asString ])) ];
+      ZnEntity text:
+        (Character space join:
+           (numberCollection collect: [ :each | each asString ])) ];
   contentReader: [ :entity | entity contents asNumber ];
   post.
 ]]]
@@ -763,8 +774,8 @@ a path string, designating either a file or a directory. When it is a directory,
 When it is a file, that file will be used as given. Additionally, the ==downloadTo:== operation will use streaming so that a large file will not be taken into 
 memory all at once, but will be copied in a loop using a buffer.
 
-The inverse, uploading the raw contents of file, is just as easy using the ==uploadEntityFrom:== convenience method. Given a file reference or a path string, it 
-will set the current request entity to be equal to a ==ZnStreamingEntity== reading bytes from the named file. The content type will be guessed based on the file 
+The inverse, uploading the raw contents of file, is just as easy thanks to the convenience method ==uploadEntityFrom:==. Given a file reference or a path string, it 
+will set the current request entity to a ==ZnStreamingEntity== reading bytes from the named file. The content type will be guessed based on the file 
 name extension. If needed you can next override that mime type using ==contentType:==. Here is a hypothetical example uploading the contents of the file 
 ==numbers.txt== using a POST to the URL specified, again using an efficient streaming copy.
 
@@ -781,22 +792,22 @@ interactive use, Pharo Smalltalk often indicates progress during operations that
 By default this is off. Here is an example.
 
 [[[
-	UIManager default informUserDuring: [ :bar |
-	  bar label: 'Downloading latest Pharo image...'.
-	  [ ^ ZnClient new
-	  			signalProgress: true;
-				url: 'http://files.pharo.org/image/stable/latest.zip';
-				downloadTo: FileLocator imageDirectory ]
-	    on: HTTPProgress
-	    do: [ :progress | 
-			bar label: progress printString.
-			progress isEmpty ifFalse: [ bar current: progress percentage ].
-		 	progress resume ] ]
+UIManager default informUserDuring: [ :bar |
+  bar label: 'Downloading latest Pharo image...'.
+  [ ^ ZnClient new
+             signalProgress: true;
+             url: 'http://files.pharo.org/image/stable/latest.zip';
+             downloadTo: FileLocator imageDirectory ]
+      on: HTTPProgress
+      do: [ :progress | 
+         bar label: progress printString.
+         progress isEmpty ifFalse: [ bar current: progress percentage ].
+         progress resume ] ]
 ]]]
 
 !!Client Options, Policies and Proxies
 
-To handle its large set of options, ==ZnClient== implements a uniform, generic option mechanism using the methods ==optionAt:put:== and ==optionAt:ifAbsent:== 
+To handle its large set of options, ==ZnClient== implements a uniform, generic option mechanism using the ==optionAt:put:== and ==optionAt:ifAbsent:== methods
 (this last one always defines an explicit default), storing them lazily in a dictionary. The method category ==options== includes all accessors to actual settings.
 
 Options are generally named after their accessor, a notable exception is ==beOneShot==. For example, the timeout option has a getter named ==timeout== and setter 
@@ -813,10 +824,10 @@ most useful one is called ==systemPolicy==. It specifies good practice behavior 
 
 [[[
 ZnClient>>systemPolicy
-	self
-	   enforceHttpSuccess: true;
-  	    enforceAcceptContentType: true;
-   		numberOfRetries: 2
+    self
+       enforceHttpSuccess: true;
+       enforceAcceptContentType: true;
+   	   numberOfRetries: 2
 ]]]
 
 Also, in some networks you do not talk to internet web servers directly, but indirectly via a proxy. Such a proxy controls and regulates traffic. A proxy can 
@@ -830,7 +841,7 @@ start by browsing the ==proxy== method category of ==ZnNetworkingUtils==.
 
 Zinc is a solid and very flexible HTTP library. This chapter only presented the client-side of Zinc i.e. how to use it to send HTTP requests and receive 
 responses back. Through several code examples, we demonstrated some of the possibilities of Zinc and also its simplicity. Zinc relies on a very good 
-object-centric decomposition of the HTTP concepts. It results is an easy to understand and extensible library.
+object-centric decomposition of the HTTP concepts. It results in an easy to understand and extensible library.
 
 % Local Variables:
 % compile-command: "cd .. && ./pillar export --to=\"LaTeX by chapter\" Zinc-HTTP-Client/Zinc-HTTP-Client.pillar && bash pillarPostExport.sh"
