@@ -25,10 +25,10 @@ Metacello new
 	load
 ]]]
 
-download a ready to use image from the *Pharo contribution CI Server>https://ci.inria.fr/pharo-contribution/job/RenoirSt* or intall it using the Catalog/Configuration Browser.
+download a ready to use image from the *Pharo contribution CI Server>https://ci.inria.fr/pharo-contribution/job/RenoirSt* or install it using the Catalog/Configuration Browser.
 
 
-The main entry point for the library is the class ==CascadingStyleSheetBuilder==. In a workspace, inspect the result of the following expression:
+The main entry point for the library is the class ==CascadingStyleSheetBuilder==. In a workspace or playground, inspect the result of the following expression:
 
 [[[
 CascadingStyleSheetBuilder new build
@@ -232,7 +232,7 @@ div.logo
 }
 ]]]
 
-To use a URL relative to the style sheet, end to it the message ==relativeToStyleSheet==.
+To use a URL relative to the style sheet, send to it the message ==relativeToStyleSheet==.
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -286,7 +286,7 @@ evaluates to:
 
 !!!Functional Notation
 
-A functional notation is a type of CSS component value that can represent complex types or invoke special processing. The mathematical expressions, toggling 
+A functional notation is a type of CSS component value that can represent complex types or invoke special processing. Mathematical expressions, toggling 
 between values, attribute references, and gradients are all supported in RenoirST.
 
 !!!!Mathematical Expressions
@@ -396,7 +396,7 @@ div::before
 
 A gradient is an image that smoothly fades from one color to another. Gradients are commonly used for subtle shading in background images, buttons, and many 
 other places. The gradient notations described in this section allow an author to specify such an image in a terse syntax. This notation is supported using 
-==CssLinearGradient== and ==CssRadialGradient== asbtractions.
+==CssLinearGradient== and ==CssRadialGradient== abstractions.
 
 To represent a simple linear gradient from a color to another, send the ==fading:== message to ==CssLinearGradient== with the two colors in an array as a parameter:
 
@@ -475,7 +475,7 @@ linear-gradient(to right, yellow, blue 30%);
 ]]]
 
 This results in a linear gradient from left to right with yellow at the left side and plain blue from 30% (of the horizontal line) to the right side. More than 
-two colors can be passed as argument to ==fading:==. This can be used to create rainbows for example:
+two colors can be passed as argument to ==fading:==. This can be used to create rainbows:
 
 [[[language=smalltalk
 CssLinearGradient
@@ -567,7 +567,7 @@ So far our focus was on the ''style'' part of the rule. Let's focus now on the a
 
 !!! Type selectors
 
-These selectors match a specific element type in the DOM. The library provides out-of-the-box support for HTML elements, mostly using the same names than the *Seaside>http://seaside.st* framework. One example is the ==div== selector used in the previous chapter:
+These selectors match a specific element type in the DOM. The library provides out-of-the-box support for HTML elements. One example is the ==div== selector used in the previous chapter:
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
