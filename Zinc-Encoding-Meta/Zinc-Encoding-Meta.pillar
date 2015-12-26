@@ -106,16 +106,18 @@ Yet code points are different to bytes, as will be shown below. Therefore we nee
 Character encoding is the standard way of converting a native Pharo string, i.e. a collection of Unicode code points, to a series of bytes. Character decoding is the reverse 
 process: interpreting a series of bytes as a collection of Unicode code points, to create a Pharo string.
 
-To implement character encoding or decoding, a concrete ==ZnCharacterEncoder== subclass like ==ZnUTF8Encoder== is used. Character encoders do the following:
+To implement character encoding or decoding, a concrete subclass of
+the class ==ZnCharacterEncoder== is used, e.g.  ==ZnUTF8Encoder==. Character encoders do the following:
 
 - encode a character (message ==nextPut:toStream:==) or string (message ==next:putAll:startingAt:toStream:==) onto a binary stream
-- convert a string (message ==encodeString:==) to a byte array
-- decode a binary stream to a character (message ==nextFromStream:==) or string (message ==readInto:startingAt:count:fromStream:==)
+- convert a string (==encodeString:==) to a byte array
+- decode a binary stream to a character (==nextFromStream:==) or string (==readInto:startingAt:count:fromStream:==)
 - convert a byte array to string (==decodeBytes:==)
-- compute the number of bytes needed to encode a character (message ==encodedByteCountFor:==) or string (message ==encodedByteCountForString:==)
-- move a binary stream backwards one character (message ==backOnStream:==)
+- compute the number of bytes that are needed to encode a character (==encodedByteCountFor:==) or string (==encodedByteCountForString:==)
+- move a binary stream backwards one character (==backOnStream:==)
 
-Character encoders do proper error handling, throwing ==ZnCharacterEncodingError== when something goes wrong. The strict/lenient setting controls some behavior in this respect, and this will be discussed later in this chapter.
+Character encoders do proper error handling, throwing an error of the
+class ==ZnCharacterEncodingError== when something goes wrong. The strict/lenient setting controls some behavior in this respect, and this will be discussed later in this chapter.
 
 The recommended encoding is the primary internet encoding: *UTF-8>http://en.wikipedia.org/wiki/UTF-8*.  It is a variable length encoding that is 
 optimized somewhat for ASCII and to a lesser degree for Latin1 and some other common European encodings. 
@@ -124,7 +126,7 @@ optimized somewhat for ASCII and to a lesser degree for Latin1 and some other co
 !!! Converting Strings and ByteArrays
 
 The first use of encoders is to convert Strings to ByteArrays and vice-versa.
-We however deal only indirectly with character encoders. ==String== and ==ByteArray== have some convenience methods to do encoding and decoding:
+We however deal only indirectly with character encoders. The classes ==String== and ==ByteArray== have some convenience methods to do encoding and decoding:
 
 [[[
 'Hello' utf8Encoded. 
@@ -230,19 +232,10 @@ The second primary use of encoders is when dealing with streams. More specifical
 Note that at their lowest level, all streams to and from the operating system or network are binary and thus need the use of an encoder when treating them as 
 character streams.
 
-To treat a binary write stream as a character write stream, it should be wrapped with a ==ZnCharacterWriteStream==. Similary, to treat a binary read stream as a 
-character stream,  it should be wrapped with a ==ZnCharacterReadStream==. Here are some examples:
+To treat a binary write stream as a character write stream, it should
+be wrapped with a ==ZnCharacterWriteStream==. Similary,  it should be wrapped with a ==ZnCharacterReadStream== to treat a binary read stream as a 
+character stream. Here is an example:
 
-[[[
-| array readStream |
-array := ByteArray streamContents: [ :out |
-  (ZnCharacterWriteStream on: out encoding: #iso88591)
-     nextPutAll: 'Les élèves français' ].
-readStream := array readStream.
-(ZnCharacterReadStream on: readStream encoding: #iso8859) 
-  upToEnd.
- ->  'Les élèves français' 
-]]]
 [[[
 'encoding-test.txt' asFileReference writeStreamDo: [ :out |
   (ZnCharacterWriteStream on: out binary encoding: #utf8)
@@ -334,7 +327,7 @@ What about doing the same mix up with elements ?
 
 This is more what we expect: we're not allowed to do this. We are mixing two types that are not equivalent, like ==Character== and ==Integer==. 
 
-So although it is true that some equivalence between ByteString and ByteArray exists, you should not mix up the two. It is an implementation detail that you 
+So although it is true that there is some equivalence between ByteString and ByteArray, you should not mix up the two. It is an implementation detail that you 
 should not rely upon.
 
 
@@ -450,13 +443,15 @@ Mime-types are modeled using ==ZnMimeType== objects, which have 3 components:
 # a sub type, for example ==plain== or ==html==, or ==jpeg==, ==png== or ==gif==, and 
 # a number of attributes, for example ==charset=utf-8==.
 
-The mime-type syntax is as follows: ==<main>/<sub>[;<param1>=<value1>[,<param2>=<value2>]*]==.
+The mime-type syntax is as follows:
+
+==<main>/<sub> [;<param1>=<value1>[,<param2>=<value2>]*]==.
 
 !!! Creating Mime-Types
 
 Instances of ==ZnMimeType== are created by explicitly specifying its components, through parsing a string or by accessing predefined values. In any case, a new instance is always created.
 
-The class side of ==ZnMimeType== has some convenience methods (in the ==convenience== protocol) for accessing well known mime-types, which is the recommended way for obtaining these mime-types:
+The class side of ==ZnMimeType== has some convenience methods (in the protocol ==convenience==) for accessing well known mime-types, which is the recommended way for obtaining these mime-types:
 
 [[[
 ZnMimeType textHtml.
@@ -491,7 +486,8 @@ ZnMimeType imagePng asZnMimeType = 'image/png' asZnMimeType
 ]]]
 
 Finally, ==ZnMimeType== also knows how to convert file name extensions to mime-types using the ==forFilenameExtension:== message. This mapping is based on the 
-Debian/Ubuntu ==/etc/mime.types== file, which is encoded into the ==mimeTypeFilenameExtensionsSpec== method.
+Debian/Ubuntu ==/etc/mime.types== file, which is encoded into the
+method ==mimeTypeFilenameExtensionsSpec==.
 
 [[[
 ZnMimeType forFilenameExtension: 'html'.
@@ -559,8 +555,8 @@ URLs (or URIs) are a way to name or identify an entity. Often, they also contain
 
 We will be using the terms URL (*Uniform Resource Locator>http://en.wikipedia.org/wiki/Uniform_resource_locator*) and URI 
 (*Uniform Resource Identifier>http://en.wikipedia.org/wiki/Uniform_resource_identifier*) interchangeably, as is most commonly done in practice. A URI is just a 
-name or identification, while a URL also contains information on how to find or access a resource. For example, the URI ==/documents/curriculum-vitae.html== 
-identifies and names a document, while the URL ==http://john-doe.com/documents/curriculum-vitae.html== also specifies that we can use HTTP to access this 
+name or identification, while a URL also contains information on how to find or access a resource. For example, the URI ==/documents/cv.html== 
+identifies and names a document, while the URL ==http://john-doe.com/documents/cv.html== also specifies that we can use HTTP to access this 
 resource on a specific server.
 
 By considering most parts of an URL as optional, we can use one abstraction to implement both URI and URL using one class. The class ==ZnUrl== models URLs (or URIs) and has the following components:
@@ -616,10 +612,10 @@ Some characters of parts of a URL are considered as illegal because including th
 
 [[[
 'http://www.google.com' 
-    addPathSegment: 'some encoding here';
-    queryAt: 'and some encoding' put: 'here, too';
+    addPathSegment: 'some encoding';
+    queryAt: 'and some more' put: 'here, too';
     yourself
-  -> http://www.google.com/some%20encoding%20here?and%20some%20encoding=here,%20too
+  -> http://www.google.com/some%20encoding?and%20some%20more=here,%20too
 ]]]
 
 The ZnUrl parser is somewhat forgiving and accepts some unencoded URLs as well, like most browsers would.
@@ -657,13 +653,14 @@ To add operations to URLs you could add an extension method to the ZnUrl class. 
 The first step for its use is defining a name for the operation. For example, the symbol ==#retrieveContents==. Second, one or more subclasses of 
 ==ZnUrlOperation== need to be defined, each defining the class side message ==operation== to return the name, ==#retrieveContents== in the example. Then all subclasses with the same operation form the group of applicable implementations. Third, these handler subclasses overwrite ==performOperation== to do the actual work.
 
-Given a ZnUrl instance, sending it ==performOperation:== or ==performOperation:with:== will send ==performOperation:with:on:== to ==ZnUrlOperation==. In turn, it 
+Given a ZnUrl instance, sending ==performOperation:== or
+==performOperation: with:== will send ==performOperation:with:on:== to ==ZnUrlOperation==. In turn, it 
 will look for an applicable handler subclass, instanciate and invoke it. 
 
 Each subclass will be sent ==handlesOperation:with:on:== to test if it can handle the named operation with an optional argument on a specific URL. The default implementation already covers the most common case: the operation name has to match and the scheme of the URL has to be part of the collection returned by ==schemes==.
 
-For our example, the message ==retrieveContents== on ZnUrl is implemented as an operation named ==#retrieveContents==. The handler class is either ==ZnHttpRetrieveContents== 
-for the schemes ==http== and ==https== or ==ZnFileRetrieveContents== for the scheme ==file==.
+For our example, the message ==retrieveContents== on ZnUrl is implemented as an operation named ==#retrieveContents==. The handler class is either the class  ==ZnHttpRetrieveContents== 
+for the schemes ==http== and ==https== or the class ==ZnFileRetrieveContents== for the scheme ==file==.
 
 This dispatching mechanism is more powerful than scheme specific ==ZnUrl== subclasses because other elements can be taken into account. It also addresses another issue with scheme specific ==ZnUrl== subclasses, which is that there are an infinite number of schemes which no hierarchy could cover.
 
