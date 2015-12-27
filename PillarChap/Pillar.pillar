@@ -635,14 +635,15 @@ You can just write a script one time that will generate a part of your document.
 
 = [[[eval=true
 =   | packages classes|
-=   packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
+=   packages := (RPackageOrganizer default packages 
+=                  select: [ :each | each name includesSubstring: 'Pillar' ] ).
 =   classes := OrderedCollection new.
 =   (packages do: [ :each | each classes do: [ :class | classes add: class ] ]).
 =   stream nextPutAll: 'The Pillar project contains:' , String lf, '- ==';
 =     nextPutAll: packages size asString;
 =     nextPutAll: ' packages==.' , String lf, '- ==';
 =     nextPutAll: classes size asString;
-=     nextPutAll:  'classes=='.
+=     nextPutAll:  ' classes=='.
 = ]]]
 
 will generate:
@@ -656,7 +657,7 @@ will generate:
     nextPutAll: packages size asString;
     nextPutAll: ' packages==.' , String lf, '- ==';
     nextPutAll: classes size asString;
-    nextPutAll:  'classes=='.
+    nextPutAll:  ' classes=='.
 ]]]
 
 For example the Section *@sec:syntaxHighlighting* and the Section *@configParameters* are generated.
@@ -865,14 +866,20 @@ your document. Here is an example (bootrap-based) HTML template using Mustache:
   <head>
     <title>{{{title}}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/
+bootstrap/3.0.3/css/bootstrap.min.css" 
+      rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/
+bootstrap/3.0.3/css/bootstrap-theme.min.css" 
+      rel="stylesheet">
     <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">
     <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
 
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+      <script src="https://oss.maxcdn.com/
+libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/
+libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
   </head>
   <body>
@@ -882,11 +889,11 @@ your document. Here is an example (bootrap-based) HTML template using Mustache:
     </div>
 
     <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/
+	bootstrap/3.0.3/js/bootstrap.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
   </body>
 </html>
-
 ]]]
 
 In this example, we can see the use of ==\{\{\{title\}\}\}== and ==\{\{\{content\}\}\}== to refer to the title of the document and its actual content (the one 
