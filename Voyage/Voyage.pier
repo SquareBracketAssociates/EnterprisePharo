@@ -682,6 +682,68 @@ The second customization that can be performed is to sort the results. To use th
 - ==selectMany:sortBy:== Retrieves all the documents matching the query and sorts them. For example to return the points where ==x== is 42, in descending ==y== order: ==Point selectMany: { 'x' -> 42 } asDictionary sortBy: { #y -> VOOrder descending } asDictionary==.
 - ==selectMany:sortBy:limit:offset:== Provides for specifying a limit and offset to the above query.
 
+!! A simple paginator
+
+Often you want to display or query not a full collection of objects but just a range. Here we present a simple paginator defining 
+such common behavior. 
+
+First we create a class named ==Paginator==.
+
+[[[
+Object subclass: #Paginator 
+   instanceVariableNames: 'collectionClass where pageCount'
+   classVariableNames: ''
+   package: 'DemoPaginator'
+]]]
+  
+[[[
+Paginator class >> on: aClass where: aCondition 
+   ^ self basicNew
+      initializeOn: aClass where: aCondition
+
+Paginator >> initializeOn: aClass where: aCondition 
+   self initialize.
+   collectionClass := aClass.
+   where := aCondition
+]]]
+
+Here the argument ==aClass== is a Voyage root. 
+
+!!! Counting pages
+
+Then we define the arithmetic to get pages from a page size and a given number of entities.
+
+[[[
+Paginator >> pageSize
+   ^ 20
+]]]
+
+[[[
+Paginator >> pageCount
+   ^ pageCount ifNil: [ pageCount := self calculatePageCount ]
+]]]
+
+[[[
+Paginator>>calculatePageCount
+   | count pages |
+   count := self collectionClass count: self where.
+   pages := count / self pageSize.
+   count \\ self pageSize > 0
+       ifTrue: [ pages := pages + 1].
+   ^ count
+]]]
+
+!!! Retrieving pages 
+
+Now we perform the query that retrives only the elements for a given page. 
+
+[[[
+Paginator >> page: aNumber 
+   ^ self collectionClass
+      selectMany: self where
+      limit: self pageSize
+      offset: (aNumber - 1) * self pageSize
+]]]
 
 !! Creating and removing indexes
 
