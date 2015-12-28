@@ -670,7 +670,7 @@ equivalent code in Pharo.
 
 The first refinement to the queries consist in limiting the amount of results that are returned. Of the collection of all the documents that match, a subset is 
 returned that starts at the index that is given as argument. This can be used to only retrieve the first N matches to a query, or go over the query results in 
-smaller blocks to avoid out of memory issues in the Pharo image.
+smaller blocks, as will be shown next in the simple paginator example.
 
 
 - ==selectMany:limit:== Retrieves a collection of objects from the database that match the query, up to the given limit. An example of this is ==Point selectMany: [:each | each x = 42] limit: 10 ==
@@ -682,24 +682,23 @@ The second customization that can be performed is to sort the results. To use th
 - ==selectMany:sortBy:== Retrieves all the documents matching the query and sorts them. For example to return the points where ==x== is 42, in descending ==y== order: ==Point selectMany: { 'x' -> 42 } asDictionary sortBy: { #y -> VOOrder descending } asDictionary==.
 - ==selectMany:sortBy:limit:offset:== Provides for specifying a limit and offset to the above query.
 
-!! A simple paginator
+!!!! A simple paginator example
 
-Often you want to display or query not a full collection of objects but just a range. Here we present a simple paginator defining 
-such common behavior. 
+Often you want to display just a range of objects that belong to the collection, e.g. the first 25, or from 25 to 50, and so on. Here we present a simple paginator that implements this behavior, using the ==selectMany:limit:offset:== method. 
 
-First we create a class named ==Paginator==.
+First we create a class named ==Paginator==. To instantiate it, a Voyage root (==aClass==) and a query (==aCondition==) need to be given. 
 
 [[[
 Object subclass: #Paginator 
    instanceVariableNames: 'collectionClass where pageCount'
    classVariableNames: ''
    package: 'DemoPaginator'
-]]]
-  
-[[[
+
+
 Paginator class >> on: aClass where: aCondition 
    ^ self basicNew
       initializeOn: aClass where: aCondition
+
 
 Paginator >> initializeOn: aClass where: aCondition 
    self initialize.
@@ -707,23 +706,15 @@ Paginator >> initializeOn: aClass where: aCondition
    where := aCondition
 ]]]
 
-Here the argument ==aClass== is a Voyage root. 
-
-!!! Counting pages
-
-Then we define the arithmetic to get pages from a page size and a given number of entities.
+Then we define the arithmetic to get the number of pages for a page size and a given number of entities.
 
 [[[
 Paginator >> pageSize
-   ^ 20
-]]]
+   ^ 25
 
-[[[
 Paginator >> pageCount
    ^ pageCount ifNil: [ pageCount := self calculatePageCount ]
-]]]
 
-[[[
 Paginator>>calculatePageCount
    | count pages |
    count := self collectionClass count: self where.
@@ -733,9 +724,7 @@ Paginator>>calculatePageCount
    ^ count
 ]]]
 
-!!! Retrieving pages 
-
-Now we perform the query that retrives only the elements for a given page. 
+The query that retrives only the elements for a given page is then implemented as follows:
 
 [[[
 Paginator >> page: aNumber 
