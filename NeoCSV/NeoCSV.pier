@@ -41,7 +41,7 @@ To load NeoJSON, evaluate the following or use the Configuration Browser:
 [[[language=smalltalk
 Gofer it
   smalltalkhubUser: 'SvenVanCaekenberghe' project: 'Neo';
-  configurationOf: 'NeoJSON';
+  configurationOf: 'NeoCSV';
   loadStable.
 ]]]
 
