@@ -9,10 +9,13 @@
 \usepackage[useregional]{datetime2}
 
 % extract info from git commit
-% We override gitinfo2.sty's constant because we don't use the git hooks;
-% instead the compile script extracts the info
-\makeatletter\newcommand{\GI@githeadinfo@file}{gitHeadInfo.gin}\makeatother
-\usepackage[dirty=*]{gitinfo2}
+% requires gitinfo2 2.0.7, and below fix needed until 2.0.8 released
+\makeatletter
+\let\THEDAY\@dtm@currentday
+\let\THEMONTH\@dtm@currentmonth
+\let\THEYEAR\@dtm@currentyear
+\makeatother
+\usepackage[local,dirty=*]{gitinfo2}
 \usepackage{xstring}% \IfEq and \StrCut
 % a couple extensions...
 \makeatletter
@@ -22,17 +25,7 @@
     {\IfEq{\gitRoff}{0}
       {release \gitRel}
       {modified since release \gitRel{} --- commit \texttt{\gitAbbrevHash\gitDirty}}}}
-% gitinfo2 only defines \gitdate for datetime.sty, not datetime2
-\@ifpackageloaded{datetime2}{%
-    \IfEq{\gitAuthorDate}{\gitInf@missing}{%
-        \DTMsavenoparsedate{gitdate}{\@dtm@currentyear}{\@dtm@currentmonth}{\@dtm@currentday}{\@dtm@currentdow}
-    }{%
-        \StrCut{\gitAuthorDate}{-}{\gitInf@year}{\gitInf@md}
-        \StrCut{\gitInf@md}{-}{\gitInf@month}{\gitInf@day}
-        \DTMsavenoparsedate{gitdate}{\gitInf@year}{\gitInf@month}{\gitInf@day}{-1}
-    }
-    \newcommand\gitdate{\DTMusedate{gitdate}}
-}{}%
+  \newcommand\gitdate{\DTMusedate{gitdate}}
 \makeatother
 
 \usepackage[normalem]{ulem} % for strikeout text (\sout{...})
