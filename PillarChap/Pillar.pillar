@@ -851,7 +851,7 @@ interchange format (similar to the popular *JSON>http://www.json.org*.
 @configParameters
 
 [[[language=smalltalk|eval=true
-    CCDocumentationGeneration of: PRCocoonConfiguration on: stream.
+    CCDocumentationGeneration of: PRPillarConfiguration on: stream.
 ]]]
 
 !! Templating
