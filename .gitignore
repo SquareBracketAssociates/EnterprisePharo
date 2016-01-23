@@ -19,3 +19,4 @@ stdout
 /play-cache
 /PharoDebug.log
 /auto
+.auctex/
