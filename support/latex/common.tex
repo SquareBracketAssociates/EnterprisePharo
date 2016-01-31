@@ -33,6 +33,8 @@
 \usepackage[listings,breakable,skins]{tcolorbox}
 \usepackage{tikz}
 \usetikzlibrary{calc}
+\tikzstyle{dashfade}=[
+  dash pattern = on 0.5pt off 1pt on 1pt off 1pt on 2pt off 1pt on \paperheight]
 
 \usepackage[% make hyperlinks look like normal text
   colorlinks=true,
@@ -86,22 +88,22 @@
   },
   skin first is subskin of = {emptyfirst}{%
     frame code = {
-      \draw[dash pattern = on 0.5pt off 1pt on 1pt off 1pt on 2pt off 1pt on 30cm]
+      \draw[dashfade]
       ([xshift=-4pt]frame.south west)
       |-([xshift=-2pt]frame.north west);
     }},
   skin middle is subskin of = {emptymiddle}{%
     frame code = {
-      \draw[dash pattern = on 0.5pt off 1pt on 1pt off 1pt on 2pt off 1pt on 30cm]
+      \draw[dashfade]
       ([xshift=-4pt]frame.south west)
       --($([xshift=-4pt]frame.south west)!.5!([xshift=-4pt]frame.north west)$);
-      \draw[dash pattern = on 0.5pt off 1pt on 1pt off 1pt on 2pt off 1pt on 30cm]
+      \draw[dashfade]
       ([xshift=-4pt]frame.north west)
       --($([xshift=-4pt]frame.south west)!.5!([xshift=-4pt]frame.north west)$);
     }},
   skin last is subskin of = {emptylast}{%
     frame code = {
-      \draw[dash pattern = on 0.5pt off 1pt on 1pt off 1pt on 2pt off 1pt on 30cm]
+      \draw[dashfade]
       ([xshift=-4pt]frame.north west)
       |-([xshift=-2pt]frame.south west);
     }},
