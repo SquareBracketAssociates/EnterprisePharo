@@ -30,6 +30,9 @@
 
 \usepackage[normalem]{ulem} % for strikeout text (\sout{...})
 \usepackage{graphicx}
+\usepackage[listings,breakable,skins]{tcolorbox}
+\usepackage{tikz}
+\usetikzlibrary{calc}
 
 \usepackage[% make hyperlinks look like normal text
   colorlinks=true,
@@ -66,14 +69,48 @@
 
 \lstset{language=smalltalk}
 \newcommand\code[1]{\texttt{\textup{#1}}}
-\lstnewenvironment{listing}[1][]{%
-  \lstset{%
+\newtcblisting{listing}[1][]{
+  empty,
+  breakable,
+  size = minimal,
+  % boxrule = 0pt, leftrule = 0.6pt,
+  % arc=0pt, outer arc=1.2pt, arc is angular,
+  % left = 5pt, grow to left by = 5pt,
+  %
+  frame style = {fill = none},
+  frame code = {\draw
+    ([xshift=-2pt]frame.south west)
+    --([xshift=-4pt]frame.south west)
+    --([xshift=-4pt]frame.north west)
+    --([xshift=-2pt]frame.north west);
+  },
+  skin first is subskin of = {emptyfirst}{%
+    frame code = {
+      \draw[dash pattern = on 0.5pt off 1pt on 1pt off 1pt on 2pt off 1pt on 30cm]
+      ([xshift=-4pt]frame.south west)
+      |-([xshift=-2pt]frame.north west);
+    }},
+  skin middle is subskin of = {emptymiddle}{%
+    frame code = {
+      \draw[dash pattern = on 0.5pt off 1pt on 1pt off 1pt on 2pt off 1pt on 30cm]
+      ([xshift=-4pt]frame.south west)
+      --($([xshift=-4pt]frame.south west)!.5!([xshift=-4pt]frame.north west)$);
+      \draw[dash pattern = on 0.5pt off 1pt on 1pt off 1pt on 2pt off 1pt on 30cm]
+      ([xshift=-4pt]frame.north west)
+      --($([xshift=-4pt]frame.south west)!.5!([xshift=-4pt]frame.north west)$);
+    }},
+  skin last is subskin of = {emptylast}{%
+    frame code = {
+      \draw[dash pattern = on 0.5pt off 1pt on 1pt off 1pt on 2pt off 1pt on 30cm]
+      ([xshift=-4pt]frame.north west)
+      |-([xshift=-2pt]frame.south west);
+    }},
+  %
+  colback = white,
+  listing only, listing options = {
     inputencoding=utf8,
     columns=fullflexible,
-    frameshape={rnnnnnnnn}{nny}{nnn}{rnnnnnnnn},
-    framexleftmargin=3pt,
-    framesep=0pt,
-    rulesep=0pt,
+    aboveskip=0pt, belowskip=0pt,
     mathescape=false,
     tabsize=2,
     keywordstyle={},
@@ -83,8 +120,8 @@
     breaklines=true,
     breakatwhitespace=true,
     #1
-  }%
-}{}
+  }
+}
 
 % highlighted paragraphs
 \newenvironment{note}{%
