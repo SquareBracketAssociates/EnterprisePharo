@@ -73,13 +73,9 @@
 \lstset{language=smalltalk}
 \newcommand\code[1]{\texttt{\textup{#1}}}
 \newtcblisting{listing}[1][]{
-  empty,
   breakable,
-  size = minimal,
-  % boxrule = 0pt, leftrule = 0.6pt,
-  % arc=0pt, outer arc=1.2pt, arc is angular,
-  % left = 5pt, grow to left by = 5pt,
-  %
+  empty, size = minimal,
+  colback = white,
   frame style = {fill = none},
   frame code = {\draw
     ([xshift=-2pt]frame.south west)
@@ -89,27 +85,20 @@
   },
   skin first is subskin of = {emptyfirst}{%
     frame code = {
-      \draw[dashfade]
-      ([xshift=-4pt]frame.south west)
-      |-([xshift=-2pt]frame.north west);
+      \draw[dashfade] ([xshift=-4pt]frame.south west) |- ([xshift=-2pt]frame.north west);
     }},
   skin middle is subskin of = {emptymiddle}{%
     frame code = {
-      \draw[dashfade]
-      ([xshift=-4pt]frame.south west)
+      \draw[dashfade] ([xshift=-4pt]frame.south west)
       --($([xshift=-4pt]frame.south west)!.5!([xshift=-4pt]frame.north west)$);
-      \draw[dashfade]
-      ([xshift=-4pt]frame.north west)
+      \draw[dashfade] ([xshift=-4pt]frame.north west)
       --($([xshift=-4pt]frame.south west)!.5!([xshift=-4pt]frame.north west)$);
     }},
   skin last is subskin of = {emptylast}{%
     frame code = {
-      \draw[dashfade]
-      ([xshift=-4pt]frame.north west)
-      |-([xshift=-2pt]frame.south west);
+      \draw[dashfade] ([xshift=-4pt]frame.north west) |- ([xshift=-2pt]frame.south west);
     }},
   %
-  colback = white,
   listing only, listing options = {
     inputencoding=utf8,
     columns=fullflexible,
