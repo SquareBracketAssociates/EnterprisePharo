@@ -65,15 +65,16 @@
 \usepackage{lsthttp}
 \lstdefinelanguage{plain}{% verbatim, plain text
 }
+\lstalias{Pillar}{plain}
 \lstalias{CSS}{plain}
 \lstalias{JSON}{plain}
 \lstalias{STON}{plain}
 \lstalias{Javascript}{plain}
-\lstalias{shellcommands}{plain}
+\lstalias{ShellCommands}{plain}
 
 \lstset{language=smalltalk}
 \newcommand\code[1]{\texttt{\textup{#1}}}
-\newtcblisting{listing}[1][]{
+\newtcblisting{listing}[1][language=plain]{
   breakable,
   empty, size = minimal,
   colback = white,
