@@ -743,8 +743,6 @@ You could further customize the entity by sending
 To customize the content writer, you specify a block that when given a Smalltalk object is then supposed to create and return an entity. A theoretical example is given next.
 
 [[[
-
-
 ZnClient new
   url: 'http://internet-calculator.com/sum';
   contentWriter: [ :numberCollection |
