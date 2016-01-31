@@ -361,7 +361,7 @@ An empty line starts a new paragraph.
 
 An annotated paragraph starts a line with ==\@@== followed by a keyword such as ==todo== or ==note==. For example,
 
-[[[
+[[[language=pillar
 @@note this is a note annotation.
 ]]]
 
@@ -371,7 +371,7 @@ generates
 
 And,
 
-[[[
+[[[language=pillar
 @@todo this is a todo annotation
 ]]]
 
@@ -434,7 +434,7 @@ Above code will prepend the titles "Note" and "To do" to the ==@@note== and ==@@
 
 !!!!Unordered lists
 
-[[[
+[[[language=pillar
 -A block of lines,
 -where each line starts with ==-==
 -is transformed to a bulleted list
@@ -448,7 +448,7 @@ generates
 
 !!!!Ordered lists
 
-[[[
+[[[language=pillar
 #A block of lines,
 #where each line starts with ==#==
 #is transformed to an ordered list
@@ -464,7 +464,7 @@ generates
 
 Definition lists (''aka.'' description lists) are lists with labels:
 
-[[[
+[[[language=pillar
 ;blue
 :color of the sky
 ;red
@@ -480,7 +480,7 @@ generates
 
 !!!!List nesting
 
-[[[
+[[[language=pillar
 -Lists can also be nested.
 -#Thus, a line starting with ==-#==
 -#is an element of a bulleted list that is part of an ordered list.
@@ -507,7 +507,7 @@ There is some sugar for font formatting:
 To create a table, start off the lines with ==|== and separate the elements with ==|==s. Each new line represents a new row of the table. Add a single ==!== to 
 let the cell become a table heading.
 
-[[[
+[[[language=pillar
 |!Language |!Coolness
 |Smalltalk | Hypra cool
 |Java | baaad
@@ -520,7 +520,7 @@ let the cell become a table heading.
 
 The contents of cells can be aligned left, centered or aligned right by using ==|{==, ==||== or ==|}== respectively.
 
-[[[
+[[[language=pillar
 ||centered||!centered header||centered
 |{ left |} right || center
 ]]]
@@ -549,7 +549,7 @@ To create links to externals resources, use the ==\*Pharo>http://pharo-project.o
 
 To include a picture, use the syntax ==\+caption>file://filename|parameters+==:
 
-[[[
+[[[language=pillar
 +Caption of the picture>file://figures/pharo-logo.png|width=50|label=pharoLogo+
 ]]]
 
@@ -596,7 +596,7 @@ For example on *@script1* we used the ==smalltalk== value for the ==language== p
 Here is a list of the supported languages:
 
 [[[language=smalltalk|eval=true
-    PRDocGeneratorAboutScriptLanguage on: stream.
+PRDocGeneratorAboutScriptLanguage on: stream.
 ]]]
 
 If you don't want syntax highlighting, specify ==no language== as value to the ==language== parameter.
@@ -700,7 +700,7 @@ this will confuse the parser. So, don't write --==\{{{\\begin{scriptsize}}}}==--
 On Pillar you can use some annotation in order to do some things.
 An annotation has this syntax:
 
-[[[
+[[[language=pillar
 ${tag:parameter=value|parameter2=value2}$
 ]]]
 
@@ -713,7 +713,7 @@ This annotation takes only 1 parameter, the path of your file from the ==baseDir
 
 Here are some examples:
 
-[[[
+[[[language=pillar
   ${inputFile:test.pillar}$
 	
   ${inputFile:value=test.pillar}$
@@ -731,7 +731,7 @@ You can also add a ""label"" to be able to create an internal link to your slide
 
 Here some examples:
 
-[[[
+[[[language=pillar
   ${slide: My slide}$
 	
   ${slide:title= My slide}$
@@ -750,7 +750,7 @@ The column annotation takes 1 required parameter: the width of the column.
 
 Here some examples:
 
-[[[
+[[[language=pillar
   ${columns}$
 	
   ${column:width=60}$
@@ -796,7 +796,7 @@ For now you can export a Pillar file as a ==beamer== or a ==deck.js== file.
 With the default template you can provide some meta-informations to generate the first slide.
 For example:
 
-[[[
+[[[language=ston
 {
   "title":"Pillar's presentation",
   "subtitle":"",
@@ -814,7 +814,7 @@ A slide end at the beginning of an other slide or at the end of the document.
 
 Example of a slide:
 
-[[[
+[[[language=pillar
 ${slide: Pillar}$
 
 ${columns}$
@@ -924,13 +924,13 @@ You can customize the LaTeX command with the ==latexCommand== parameter of the c
 For example for ""Enterprise Pharo"" we use:
 
 [[[language=ston
-  "latexCommand" : "lualatex --file-line-error --interaction=batchmode {fileName} 2>&1 1>/dev/null
-ret=$?
-if [[ $ret -ne 0 ]]; then
-  cat {fileNameWithoutExtension}.log
-  echo \"Can't generate the PDF!\"
-  exit 1
-fi"
+"latexCommand" : "lualatex --file-line-error --interaction=batchmode {fileName} 2>&1 1>/dev/null
+  ret=$?
+  if [[ $ret -ne 0 ]]; then
+    cat {fileNameWithoutExtension}.log
+    echo \"Can't generate the PDF!\"
+    exit 1
+  fi"
 ]]]
 
 For now the script is only generated for an Unix shell. Windows users must have ''MinGW'' or ''Cygwin'' in order to launch it.
@@ -940,9 +940,9 @@ For now the script is only generated for an Unix shell. Windows users must have 
 You also have the possibility to launch multiple export with the ==defaultExporters== parameter.
 For example you can add this to the ''pillar.conf'':
 
-[[[
-    "defaultExporters" : [ "html", "latex", "text" ],
-    "inputFiles" : [ "doc.pillar" ]
+[[[language=ston
+"defaultExporters" : [ "html", "latex", "text" ],
+"inputFiles" : [ "doc.pillar" ]
 ]]]
 
 Then launch:

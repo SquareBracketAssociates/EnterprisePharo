@@ -282,7 +282,7 @@ Keys can be strings, symbols or numbers, and values are arbitrary objects.
 Lists are delimited by ==[== and ==]==. Items are separated by a comma ==,==. 
 
 For example the following expression is a list with two numbers -40 and -15.
-[[[
+[[[language=ston
 [ -40, -15 ]
 ]]]
 
@@ -342,13 +342,13 @@ Collection classes are encoded using a list of their values.
 
 For the list like collection subclass ==Array==, the class tag is optional, given a list representation. The following pairs are thus equivalent:
 
-[[[
+[[[language=ston
 [1, 2, 3]  =  Array [1, 2, 3]
 ]]]
 
 Also, for the map like collection subclass ==Dictionary== the class tag is optional, given a map representation:
 
-[[[
+[[[language=ston
 {#a : 1, #b : 2} = Dictionary {#a : 1, #b : 2}
 ]]]
 
@@ -372,7 +372,7 @@ STON toString: ar
 
 A two element ==Array== that refers to itself in its second element will look like this:
 
-[[[
+[[[language=ston
 [ #foo, @1 ]
 ]]]
 
