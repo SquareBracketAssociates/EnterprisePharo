@@ -176,14 +176,14 @@ The reason is that the Greek letters are outside of the alphabet of Latin-1. Sti
 
 The reverse process, decoding, is equally simple:
 
-[[[
+[[[language=smalltalk
 #[72 101 108 108 111] utf8Decoded.
   -> 'Hello'
 
 #[72 101 108 108 111] decodeWith: #latin1.
   -> 'Hello'
 ]]]
-[[[
+[[[language=smalltalk
 #[76 101 115 32 195 169 108 195 168 118 101 115 
   32 102 114 97 110 195 167 97 105 115] utf8Decoded.
   -> 'Les élèves français'
@@ -196,7 +196,7 @@ The reverse process, decoding, is equally simple:
   32 102 114 97 110 231 97 105 115] utf8Decoded.
   -> ZnInvalidUTF8: 'Illegal continuation byte for utf-8 encoding'
 ]]]
-[[[
+[[[language=smalltalk
 #[76 101 115 32 233 108 232 118 101 115 
   32 102 114 97 110 231 97 105 115] decodeWith: #latin1.
   -> 'Les élèves français'
@@ -350,7 +350,7 @@ the conversion is possible for strings for which the following property holds:
 
 Now, even though the first two can be converted, they will not be using the same encoding. Here is a way to explicitly express this idea:
 
-[[[
+[[[language=smalltalk
 #(null ascii latin1 utf8) allSatisfy: [ :each | 
   ('Hello' encodeWith: each) = 'Hello' asByteArray ].
     -> true.
