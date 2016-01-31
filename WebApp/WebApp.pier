@@ -413,7 +413,7 @@ MyFirstWebAppTest>>withServerDo: block
     ] ensure: [ server stop ]
 ]]]
 
-Since we will need a configured server instance with our Web app as delegate for each of our tests, we move that logic into #withServerDo: and make sure the server is OK and properly stopped afterwards.
+Since we will need a configured server instance with our Web app as delegate for each of our tests, we move that logic into ==#withServerDo:== and make sure the server is OK and properly stopped afterwards.
 Now we are ready for our first test.
 
 +Running a test case.>file://figures/18-RunningTestCase.jpg|width=90|label=RunningTestCase+
@@ -651,28 +651,28 @@ server in the list. Click on it to see its details.
 
 The important step now is to get SSH command line access to your new server, preferably using a normal terminal. With the IP address from the control panel and
 the root password emailed to you, try to log in.
-[[[
-  $ ssh root@82.196.12.54
+[[[language=shellcommands
+$ ssh root@82.196.12.54
 ]]]
 
 Your server is freshly installed and includes only the most essential core packages. Now we have to install Pharo on it. One easy way to do this is using the
 functionality offered by *http://get.pharo.org*. The following command will install a fresh Pharo 2.0 image together with all other files needed.
 
-[[[
-  # curl get.pharo.org/40+vm | bash
+[[[language=shellcommands
+# curl get.pharo.org/40+vm | bash
 ]]]
 
 Make sure the VM\+image combination works by asking for the image version.
 
 
-[[[
+[[[language=shellcommands
 # ./pharo Pharo.image printVersion
 [version] 4.0 #40614
 ]]]
 
 Let's quickly test the stock HTTP server that comes with Pharo, like we did in the third section of this guide.
 
-[[[
+[[[language=shellcommands
 # ./pharo Pharo.image eval --no-quit 'ZnServer startDefaultOn: 8080'
 ]]]
 
@@ -684,14 +684,14 @@ HTTP Components welcome page. If this works, you can press ctrl-C in the termina
 We now have a running server. It can run Pharo too, but it is currently using a generic image. How do we get our code deployed? To do this we use the Metacello
 configuration. But first, we are going to make a copy of the stock Pharo.image that we downloaded. We want to keep the original clean while we make changes to the copy.
 
-[[[
+[[[language=shellcommands
 # ./pharo Pharo.image save myfirstwebapp
 ]]]
 
 We now have a new image (and changes) file called myfirstwebapp.image (and myfirstwebapp.changes). Through the config command line option we can load our
 Metacello configuration. Before actually loading anything, we will ask for all available versions to verify that we can access the repository.
 
-[[[
+[[[language=shellcommands
 # ./pharo myfirstwebapp.image config http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main ConfigurationOfMyFirstWebApp
 'Available versions for ConfigurationOfMyFirstWebApp'
 1
@@ -704,7 +704,7 @@ stable
 You should have only one version, all the above are equivalent references to the same version.
 Now we will load and install the stable version.
 
-[[[
+[[[language=shellcommands
 # ./pharo myfirstwebapp.image config http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main ConfigurationOfMyFirstWebApp --install=stable
 'Installing ConfigurationOfMyFirstWebApp stable'
 
@@ -728,7 +728,7 @@ ZnServer default start.
 
 We added a little twist here: we changed the default root (==/==) handler to redirect to our new ==/image== Web app. Test the startup script like this:
 
-[[[
+[[[language=shellcommands
 # ./pharo myfirstwebapp.image run.st
 
 2015-06-15 15:59:56 001 778091 Server Socket Bound 0.0.0.0:8080
@@ -738,7 +738,7 @@ We added a little twist here: we changed the default root (==/==) handler to red
 
 You can surf to the correct IP address and port to test you application. Note that ==/welcome==, ==/help== and ==/image== are still available too. Type ctrl-c to kill the server again. You can then put the server in background, running for real.
 
-[[[
+[[[language=shellcommands
 # nohup ./pharo myfirstwebapp.image run.st &
 ]]]
 
