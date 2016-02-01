@@ -30,11 +30,6 @@
 
 \usepackage[normalem]{ulem} % for strikeout text (\sout{...})
 \usepackage{graphicx}
-\usepackage[listings,breakable,skins]{tcolorbox}
-\usepackage{tikz}
-\usetikzlibrary{calc}
-\tikzstyle{dashfade}=[
-  dash pattern = on 0.5pt off 1pt on 1pt off 1pt on 2pt off 1pt on \paperheight]
 
 \usepackage[% make hyperlinks look like normal text
   colorlinks=true,
@@ -60,11 +55,10 @@
 \tightlists
 
 % showing code, inline and as blocks
-\usepackage{listings}
 \usepackage{lstsmalltalk}
 \usepackage{lsthttp}
-\lstdefinelanguage{plain}{% verbatim, plain text
-}
+\lstdefinelanguage{plain}{}% verbatim, plain text
+
 \lstalias{Pillar}{plain}
 \lstalias{CSS}{plain}
 \lstalias{JSON}{plain}
@@ -72,50 +66,11 @@
 \lstalias{Javascript}{plain}
 \lstalias{ShellCommands}{plain}
 
-\lstset{language=smalltalk}
-\newcommand\code[1]{\texttt{\textup{#1}}}
-\newtcblisting{listing}[1][language=plain]{
-  breakable,
-  empty, size = minimal,
-  colback = white,
-  frame style = {fill = none},
-  frame code = {\draw
-    ([xshift=-2pt]frame.south west)
-    --([xshift=-4pt]frame.south west)
-    --([xshift=-4pt]frame.north west)
-    --([xshift=-2pt]frame.north west);
-  },
-  skin first is subskin of = {emptyfirst}{%
-    frame code = {
-      \draw[dashfade] ([xshift=-4pt]frame.south west) |- ([xshift=-2pt]frame.north west);
-    }},
-  skin middle is subskin of = {emptymiddle}{%
-    frame code = {
-      \draw[dashfade] ([xshift=-4pt]frame.south west)
-      --($([xshift=-4pt]frame.south west)!.5!([xshift=-4pt]frame.north west)$);
-      \draw[dashfade] ([xshift=-4pt]frame.north west)
-      --($([xshift=-4pt]frame.south west)!.5!([xshift=-4pt]frame.north west)$);
-    }},
-  skin last is subskin of = {emptylast}{%
-    frame code = {
-      \draw[dashfade] ([xshift=-4pt]frame.north west) |- ([xshift=-2pt]frame.south west);
-    }},
-  %
-  listing only, listing options = {
-    inputencoding=utf8,
-    columns=fullflexible,
-    aboveskip=0pt, belowskip=0pt,
-    mathescape=false,
-    tabsize=2,
-    keywordstyle={},
-    stringstyle={},
-    commentstyle={},
-    showstringspaces=false,
-    breaklines=true,
-    breakatwhitespace=true,
-    #1
-  }
+\lstset{
+  language = smalltalk,
+  tabsize = 3
 }
+\newcommand\code[1]{\texttt{\textup{#1}}}
 
 % highlighted paragraphs
 \newenvironment{note}{%
