@@ -6,11 +6,11 @@
 
 We begin the book in this first chapter by showing how basic web applications can be written using just a few lines of code. In the second chapter we will treat the construction of web applications more in depth, also touching on the fundamentals of web application building. But we start by keeping it simple, which is possible thanks to Teapot.
 
-Teapot is a ''micro'' web framework on top of the Zinc HTTP web server described in Chapter  *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pillar@cha:zinc-server*. It focuses on simplicity and ease of use and is itself small: around 600 lines of code, not counting unit tests. Teapot is developed by Attila Magyar and this chapter is heavily inspired from the original documentation. 
+Teapot is a ''micro'' web framework on top of the Zinc HTTP web server described in Chapter  *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pillar@cha:zinc-server*. It focuses on simplicity and ease of use and is itself small: around 600 lines of code, not counting unit tests. Teapot is developed by Attila Magyar and this chapter is heavily inspired from the original documentation.
 
 
 !!Getting Started
-To get started,  execute the following code snippet, it will load the latest stable version of Teapot. 
+To get started,  execute the following code snippet, it will load the latest stable version of Teapot.
 
 [[[language=smalltalk
 Gofer it
@@ -21,14 +21,14 @@ Gofer it
 It is straightforward to launch Teapot and add a page:
 
 [[[language=smalltalk
-   Teapot on
-      GET: '/welcome' -> 'Hello World!'; start.
+Teapot on
+   GET: '/welcome' -> 'Hello World!'; start.
 ]]]
 
 Opening a browser on *http://localhost:1701/welcome* results in the following:
 
 +Go to the Teapot welcome at *http://localhost:1701/welcome*>file://figures/TeapotWelcome.png|width=70|label=TeapotWelcome+
-	
+
 
 !!!Differences between Teapot and other web frameworks
 
@@ -47,29 +47,30 @@ Before getting into the details of Teapot. Here is a simple example for managing
 [[[
 | books teapot |
 books := Dictionary new.
-teapot := Teapot configure: { #defaultOutput -> #json. #port -> 8080. 
-                                 #debugMode -> true }.
+teapot := Teapot configure: {
+   #defaultOutput -> #json. #port -> 8080. #debugMode -> true }.
 teapot
    GET: '/books' -> books;
    PUT: '/books/<id>' -> [ :req | | book |
-      book := {'author' -> (req at: #author). 
+      book := {'author' -> (req at: #author).
       'title' -> (req at: #title)} asDictionary.
       books at: (req at: #id) put: book ];
-   DELETE: '/books/<id>' -> [ :req | books removeKey: (req at: #id) ]; 
-   exception: KeyNotFound -> (TeaResponse notFound body: 'No such book');
+   DELETE: '/books/<id>' -> [ :req | books removeKey: (req at: #id) ];
+   exception:
+      KeyNotFound -> (TeaResponse notFound body: 'No such book');
    start.
 ]]]
 
-Now you can create a book with ZNClient or your web client as follows: 
+Now you can create a book with ZNClient or your web client as follows:
 
 [[[
 ZnClient new
    url: 'http://localhost:8080/books/1';
-   formAt: 'author' put: 'SquareBracketAssociates'; 
+   formAt: 'author' put: 'SquareBracketAssociates';
    formAt: 'title' put: 'Pharo For The Enterprise'; put
 ]]]
 
-You can also list the contents using *http://localhost:1701/books* 
+You can also list the contents using *http://localhost:1701/books*
 For a more complete example, study the 'Teapot-Library-Example' package.
 
 Now that you get the general feel of Teapot, let us see the key concepts.
@@ -79,7 +80,7 @@ Now that you get the general feel of Teapot, let us see the key concepts.
 The most important concept of Teapot is the Route. The template for route definitions is as follows:
 
 [[[language=smalltalk
-   Method : '/url/*/pattern/<param>' -> Action
+Method : '/url/*/pattern/<param>' -> Action
 ]]]
 
 A route has three parts:
@@ -87,25 +88,25 @@ A route has three parts:
 - an URL pattern (i.e. ==/hi==, ==/users/<name>==, ==/foo/\*/bar/\*==, or a regular expression),
 - an action (a block, message send or any object).
 
-Here is another example: 
+Here is another example:
 
 [[[language=smalltalk
 Teapot on
    GET: '/hi' -> 'Bonjour!';
    GET: '/hi/<user>' -> [:req | 'Hello ', (req at: #user)];
    GET: '/say/hi/*' -> (Send message: #greet: to: greeter); start.
-]]]	
+]]]
 
 A wildcard character (==\*==), as in the last route, matches to one URL path segment. A wildcard terminated pattern is a greedy match; for example,
 =='/foo/*'== matches to =='/foo/bar'== and =='/foo/bar/baz'== too.
 
-The second route shows that the action block optionally takes the HTTP request. The third route is an example of a message send, by using the ==Send== class. The selector of the message can take maximum 2 arguments, which will be instances of 
- a ==TeaRequest== and ==TeaResponse==. 
+The second route shows that the action block optionally takes the HTTP request. The third route is an example of a message send, by using the ==Send== class. The selector of the message can take maximum 2 arguments, which will be instances of
+ a ==TeaRequest== and ==TeaResponse==.
 
 It is also possible to use the Zinc client (see  Chapter *Zinc Client Side>../Zinc-HTTP-Client/Zinc-HTTP-Client.pillar@cha:zinc-client*) to query the server. The example below illustrates the use of parameters, which we discuss next.
 
 [[[language=smalltalk
-(ZnEasy get: 'http://localhost:1701/hi/user1') entity string. 
+(ZnEasy get: 'http://localhost:1701/hi/user1') entity string.
  --> "Hello user1"
 ]]]
 
@@ -117,8 +118,8 @@ Query parameters and Form parameters can be accessed the same way as path parame
 
 [[[language=smalltalk
 Teapot on
-   GET: '/user/<id:IsInteger>' -> [ :req | 
-      users findById: (req at: #id) ]; 
+   GET: '/user/<id:IsInteger>' -> [ :req |
+      users findById: (req at: #id) ];
    output: #ston; start.
 ]]]
 
@@ -129,7 +130,7 @@ See also the, ==IsInteger== and ==IsNumber== classes for information about intro
 
 !!!Using regular expressions
 
-Instead of ==<== and ==>== surrounded named parameters, the regexp pattern may contain subexpressions between parentheses whose values are accessible via the 
+Instead of ==<== and ==>== surrounded named parameters, the regexp pattern may contain subexpressions between parentheses whose values are accessible via the
 request object.
 
 The following example matches any ==/hi/user== followed by two digits.
@@ -139,8 +140,8 @@ Teapot on
    GET: '/hi/([a-z]+\d\d)' asRegex -> [ :req | 'Hello ', (req at: 1)];
    start.
 
-(ZnEasy get: 'http://localhost:1701/hi/user01') entity string. 
- --> "Hello user01" 
+(ZnEasy get: 'http://localhost:1701/hi/user01') entity string.
+ --> "Hello user01"
 ZnEasy get: 'http://localhost:1701/hi/user'
  --> not found
 ]]]
@@ -149,11 +150,11 @@ ZnEasy get: 'http://localhost:1701/hi/user'
 
 The routes are matched in the order in which they are defined.
 
-The first route that matches the request method and the URL is invoked. 
-- If a route matches but it returns a 404 error, the search will continue. 
+The first route that matches the request method and the URL is invoked.
+- If a route matches but it returns a 404 error, the search will continue.
 - If no route matches, the error 404 is returned.
 - If a route was invoked, its return value will be transformed to a HTTP response, e.g. if a string is returned it will be transformed to a response with the ==text/html== content-type.
-- If a route returns a ==ZnResponse==, no transformation will be performed. 
+- If a route returns a ==ZnResponse==, no transformation will be performed.
 - If a route has a response transformer defined (see below), the specified transformation will be performed.
 
 !!!Aborting
@@ -175,19 +176,19 @@ ZnRequest -> [Router] -> TeaRequest -> [Route] -> response -> [Resp.Transformer]
 ]]]
 
 The response returned by the action can be:
-- Any Object that will be transformed by the given response transformer (e.g., HTML, STON, JSON, Mustache, stream) to a HTTP response (==ZnResponse==). 
+- Any Object that will be transformed by the given response transformer (e.g., HTML, STON, JSON, Mustache, stream) to a HTTP response (==ZnResponse==).
 - A ==TeaResponse== that allows additional parameters to be added (response code, headers).
 - A ==ZnResponse== that will be handled directly by the ==ZnServer== without further transformation.
 
 For example, the following three routes produce the same output.
 
 [[[language=smalltalk
-   GET: '/greet' -> [:req | 'Hello World!' ]
-   GET: '/greet' -> [:req | TeaResponse ok body: 'Hello World!' ] 
-   GET: '/greet' -> [:req |
-      ZnResponse new 
-         statusLine: ZnStatusLine ok;
-         entity: (ZnEntity html: 'Hello World!'); yourself ]
+GET: '/greet' -> [:req | 'Hello World!' ]
+GET: '/greet' -> [:req | TeaResponse ok body: 'Hello World!' ]
+GET: '/greet' -> [:req |
+   ZnResponse new
+      statusLine: ZnStatusLine ok;
+      entity: (ZnEntity html: 'Hello World!'); yourself ]
 ]]]
 
 !!!Response transformers
@@ -209,11 +210,11 @@ Figure *@plainText* shows the result for the ==/sometext== route.
 
 +Teapot producing plain text *http://localhost:1701/sometext*.>file://figures/plainText.png|width=70|label=plainText+
 
-If the NeoJSON package is loaded (See 
+If the NeoJSON package is loaded (See
 chapter  *NeoJSON>../NeoJSON/NeoJSON.pillar@cha:JSON*.) the ==jsonlist== transformer will return a JSON array:
 
 [[[language=smalltalk
-(ZnEasy get: 'http://localhost:1701/jsonlist') entity string. 
+(ZnEasy get: 'http://localhost:1701/jsonlist') entity string.
  --> '[1,2,3,4]'"
 ]]]
 
@@ -234,7 +235,7 @@ Teapot on
 
 !!Before and After Filters
 
-Teapot also offers before and after filters. 
+Teapot also offers before and after filters.
 Before filters are evaluated before each request that matches the given URL pattern. Requests can also be aborted (by sending the ==abort:== message) in before and after filters.
 
 In the following example a before filter is used to enable authentication: if the session has no ==#user== attribute, the browser is redirected to a login page.
@@ -243,7 +244,7 @@ Teapot on
    before: '/secure/*' -> [ :req |
       req session
          attributeAt: #user
-         ifAbsent: [ req abort: (TeaResponse redirect location: '/loginpage')]]; 
+         ifAbsent: [ req abort: (TeaResponse redirect location: '/loginpage')]];
    before: '*' -> (Send message: #logRequest: to: auditor);
    GET: '/secure' -> 'I am a protected string';
    start.
@@ -252,8 +253,8 @@ Teapot on
 After filters are evaluated after each request and can read the request and modify the response.
 [[[language=smalltalk
 Teapot on
-   after: '/*' -> [ :req :resp | 
-      resp headers at: 'X-Foo' put: 'set by after filter']; 
+   after: '/*' -> [ :req :resp |
+      resp headers at: 'X-Foo' put: 'set by after filter'];
    start.
 ]]]
 
@@ -266,7 +267,7 @@ Teapot on
    GET: '/divide/<a>/<b>' -> [ :req | (req at: #a) / (req at: #b)];
    GET: '/at/<key>' -> [ :req | dict at: (req at: #key)];
    exception: ZeroDivide -> [ :ex :req | TeaResponse badRequest ];
-   exception: KeyNotFound -> {#result -> 'error'. #code -> 42}; 
+   exception: KeyNotFound -> {#result -> 'error'. #code -> 42};
    output: #json; start.
 ]]]
 
@@ -274,9 +275,9 @@ The request ==/div/6/3== succeeds and returns 2. The request ==/div/6/0== raises
 a bad request.
 
 [[[language=smalltalk
-(ZnEasy get: 'http://localhost:1701/div/6/3') entity string. 
+(ZnEasy get: 'http://localhost:1701/div/6/3') entity string.
  --> 2
-(ZnEasy get: 'http://localhost:1701/div/6/0').	
+(ZnEasy get: 'http://localhost:1701/div/6/0').
  --> "bad request"
 ]]]
 
@@ -299,8 +300,13 @@ Teapot on
 ]]]
 
 !!Conclusion
-Teapot is a powerful and simple web framework. It is based on the notion of routes and request transformations. It supports the definition of REST application. 
+Teapot is a powerful and simple web framework. It is based on the notion of routes and request transformations. It supports the definition of REST application.
 
 Now an important point: Where does the name come from? ''418 I'm a teapot (RFC 2324)'' is an HTTP status code.
-It was defined in 1998 as one of the traditional IETF April Fools' jokes, in RFC 2324, Hyper Text Coffee Pot Control Protocol, and is not expected to be 
+It was defined in 1998 as one of the traditional IETF April Fools' jokes, in RFC 2324, Hyper Text Coffee Pot Control Protocol, and is not expected to be
 implemented by actual HTTP servers.
+
+% Local Variables:
+% tab-width: 3
+% evil-shift-width: 3
+% End:
