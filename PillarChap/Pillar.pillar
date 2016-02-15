@@ -394,7 +394,7 @@ transformAnnotatedParagraphs("note", "Note");
 transformAnnotatedParagraphs("todo", "To do");
 ]]]
 
-Above code will prepend the titles "Note" and "To do" to the ==@@note== and ==@@todo== paragraphs. You can make that looks nice using a little bit of CSS:
+Above code will prepend the titles "Note" and "To do" to the ==@\@note== and ==@\@todo== paragraphs. You can make that looks nice using a little bit of CSS:
 
 [[[language=css
 .annotated-paragraph {
