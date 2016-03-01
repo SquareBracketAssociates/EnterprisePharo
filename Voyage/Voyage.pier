@@ -758,7 +758,7 @@ OSProcess command:
 
 !!!Verifying the use of an index
 
-To ensure that a query indeed uses the index, ==“.explain()”== can be used in the mongo console. For example, if we add the index on ==description== as above, run a query and add ==.explain()== we see, that only a subset of documents were scanned.
+To ensure that a query indeed uses the index, ==".explain()"== can be used in the mongo console. For example, if we add the index on ==description== as above, run a query and add ==.explain()== we see, that only a subset of documents were scanned.
 
 [[[language=javascript
 > db.Trips.find({"receipts.description":"a"}).explain("executionStats")
