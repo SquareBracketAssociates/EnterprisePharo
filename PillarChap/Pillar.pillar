@@ -18,7 +18,7 @@ screenshot below (see Figure *@voyageDocExample*) shows a part of the
 
 Pillar has many features:
 - simple markup syntax with references, tables, pictures, captions...);
-- export to HTML, LaTeX, Markdown and Pillar itself;
+- export to HTML, LaTeX, Markdown, AsciiDoc and Pillar itself;
 - export presentations to Beamer and Deck.js;
 - customization of the export through a dedicated *STON>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/STON* configuration file;
 - support of templates using the *Mustache>http://smalltalkhub.com/#!/~NorbertHartl/Mustache* templating engine;
