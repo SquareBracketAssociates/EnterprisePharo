@@ -488,11 +488,16 @@ the Zinc-REST-Server package, for example. Here we will implement a very small, 
 
 The service will allow arbitrary *JSON>http://www.json.org/* objects to be stored on the server, each identified by an URI allocated by the server. Here is the REST API exposed by the server:
 
-- ==GET /== - returns a list of all known stored object URIs
-- ==GET /n== - returns the JSON object known under URI ==/n==
-- ==POST /== - creates a new entry with JSON as contents, returns the new URI
-- ==PUT /n== - updates (replaces) the contents of an existing JSON object known under URI ==/n==
-- ==DELETE /n== - remove the JSON object known under URI ==/n==
+;==GET /==
+:Returns a list of all known stored object URIs;
+;==GET /n==
+:Returns the JSON object known under URI ==/n==;
+;==POST /==
+:Creates a new entry with JSON as contents, returns the new URI;
+;==PUT /n==
+:Updates (replaces) the contents of an existing JSON object known under URI ==/n==;
+;==DELETE /n==
+:Removes the JSON object known under URI ==/n==.
 
 !!!The server code
 
