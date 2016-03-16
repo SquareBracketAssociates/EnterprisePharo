@@ -27,8 +27,8 @@ better to enable logging, as follows:
 
 [[[
 (ZnServer defaultOn: 1701)
-  logToTranscript;
-  start.
+   logToTranscript;
+   start.
 ]]]
 
 This starts the default HTTP server, listening on port 1701. We use
