@@ -88,8 +88,8 @@ server behavior:
 
 [[[
 (ZnServer startDefaultOn: 1701)
-	onRequestRespond: [ :request |
-		ZnResponse ok: (ZnEntity text: 'Hello World!') ].
+   onRequestRespond: [ :request |
+      ZnResponse ok: (ZnEntity text: 'Hello World!') ].
 ]]]
 
 Now go to *http://localhost:1701* or do:
@@ -196,10 +196,10 @@ For example, a server receives a ==logConnectionAccepted:== message with the soc
 
 [[[
 logConnectionAccepted: socket
-	logLevel < 3 ifTrue: [ ^ nil ].
-	^ (self newLogEvent: ZnConnectionAcceptedEvent)
-		address: ([ socket remoteAddress ] on: Error do: [ nil ]);
-		emit
+   logLevel < 3 ifTrue: [ ^ nil ].
+   ^ (self newLogEvent: ZnConnectionAcceptedEvent)
+      address: ([ socket remoteAddress ] on: Error do: [ nil ]);
+      emit
 ]]]
 
 This logging mechnism can be easily customized by implementing subclasses of ==ZnLogEvent==. For example, ==ZnConnectionAcceptedEvent== is a subclass of ==ZnLogEvent== customized for connection acceptation. 
@@ -242,9 +242,9 @@ server will not respond to requests over its normal network, but only to request
 
 [[[
 (ZnServer defaultOn: 1701)
-	bindingAddress: #[127 0 0 1];
-	logToTranscript;
-	start.	
+   bindingAddress: #[127 0 0 1];
+   logToTranscript;
+   start.   
 ]]]
 
 !!Static file server
@@ -412,7 +412,7 @@ ZnClient new
  url: 'http://localhost:1701/echo';
  entity: (ZnEntity with: 'An der schönen blauen Donau'); 
  post.
-	
+   
 ZnClient new
  url: 'http://localhost:1701/echo';
  entity: (ZnEntity 
