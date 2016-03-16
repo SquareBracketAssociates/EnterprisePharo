@@ -171,10 +171,10 @@ ZnServer stopDefault.
 ZnServer startDefaultOn: 1701.
 ZnServer default delegate: (ZnWebSocketDelegate handler:
   [ :webSocket |
-        [	webSocket runWith: [ :message |
+        [ webSocket runWith: [ :message |
                 webSocket sendMessage: message ]
-        ]	on: ConnectionClosed
-            do: [ self crLog: 'Ignoring connection close, done' ] ]).
+        ] on: ConnectionClosed
+          do: [ self crLog: 'Ignoring connection close, done' ] ]).
 ]]]
 
 
