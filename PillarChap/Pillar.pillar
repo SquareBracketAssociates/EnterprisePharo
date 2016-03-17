@@ -635,11 +635,16 @@ You can just write a script one time that will generate a part of your document.
 
 = [[[eval=true
 =   | packages classes|
-=   packages := (RPackageOrganizer default packages 
-=                  select: [ :each | each name includesSubstring: 'Pillar' ] ).
+=   packages :=
+=      (RPackageOrganizer default packages
+=         select: [ :each | each name includesSubstring: 'Pillar' ] ).
 =   classes := OrderedCollection new.
-=   (packages do: [ :each | each classes do: [ :class | classes add: class ] ]).
-=   stream nextPutAll: 'The Pillar project contains:' , String lf, '- ==';
+=   packages
+=      do: [ :each |
+=         each classes
+=            do: [ :class | classes add: class ] ].
+=   stream
+=     nextPutAll: 'The Pillar project contains:' , String lf, '- ==';
 =     nextPutAll: packages size asString;
 =     nextPutAll: ' packages==.' , String lf, '- ==';
 =     nextPutAll: classes size asString;
@@ -652,7 +657,7 @@ will generate:
   | packages classes|
   packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
   classes := OrderedCollection new.
-  (packages do: [ :each | each classes do: [ :class | classes add: class ] ]).
+  packages do: [ :each | each classes do: [ :class | classes add: class ] ].
   stream nextPutAll: 'The Pillar project contains:' , String lf, '- ==';
     nextPutAll: packages size asString;
     nextPutAll: ' packages==.' , String lf, '- ==';
@@ -809,7 +814,7 @@ In a presentation, Pillar headers (using the ==! Title== syntax) generate the st
 Each definition of a section generates a slide with the section title.
 You can disable this inside the configuration with the parameter ==renderStructureAsSlide==.
 
-To create a new slide you should use the ==slide== annotation (see Section *@sec:slide* ). 
+To create a new slide you should use the ==slide== annotation (see Section *@sec:slide*).
 A slide end at the beginning of an other slide or at the end of the document.
 
 Example of a slide:

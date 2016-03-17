@@ -36,9 +36,9 @@ $ ./pharo Pharo.image save myapp
 Then, install your dependencies:
 [[[language=bash
 $ ./pharo myapp.image config http://www.smalltalkhub.com/mc/Me/MyApp/main ConfigurationOfMyApp --install=stable
-===============================================================================
+==========================================================
 Notice: Installing ConfigurationOfMyApp stable
-===============================================================================
+==========================================================
 [...]
 ]]]
 

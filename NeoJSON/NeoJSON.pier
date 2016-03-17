@@ -42,7 +42,7 @@ Gofer it
 ]]]
 
 
-The NeoJSON library contains a reader (==NeoJSONReader==) and a writer (==NeoJSONWriter==) to parse, respectively generate, JSON to and from Pharo objects. The goals of NeoJSON are:
+The NeoJSON library contains a reader (the class ==NeoJSONReader==) and a writer (the class ==NeoJSONWriter==) to parse, respectively generate, JSON to and from Pharo objects. The goals of NeoJSON are:
 
 -to be standalone (have no dependencies and little requirements);
 -to be small, elegant and understandable;
