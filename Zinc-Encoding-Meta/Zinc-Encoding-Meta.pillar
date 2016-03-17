@@ -171,7 +171,7 @@ Note how for Latin-1, and ""only"" for Latin-1 and ASCII, the Unicode code point
   -> ZnCharacterEncodingError: 'Character Unicode code point outside encoder range'
 ]]]
 
-Our greek string, 'Ελλάδα', gives an error when we try to encode it using Latin-1. 
+Our greek string, =='Ελλάδα'==, gives an error when we try to encode it using Latin-1. 
 The reason is that the Greek letters are outside of the alphabet of Latin-1. Still, UTF-8 manages to encode them using just two bytes.
 
 The reverse process, decoding, is equally simple:
@@ -232,8 +232,8 @@ The second primary use of encoders is when dealing with streams. More specifical
 Note that at their lowest level, all streams to and from the operating system or network are binary and thus need the use of an encoder when treating them as 
 character streams.
 
-To treat a binary write stream as a character write stream, it should
-be wrapped with a ==ZnCharacterWriteStream==. Similary,  it should be wrapped with a ==ZnCharacterReadStream== to treat a binary read stream as a 
+To treat a binary write stream as a character write stream, wrap it
+with a ==ZnCharacterWriteStream==. Similary, ==ZnCharacterReadStream== should be used to treat a binary read stream as a 
 character stream. Here is an example:
 
 [[[
@@ -290,7 +290,7 @@ In practice, the difference between ==ByteString== and ==WideString== should not
  -> WideString  
 ]]]
 
-As the above example shows, assigning a Unicode character, ==$α==, to a ==ByteString==, =='abc'== converts it to a ==WideString==. (This is actually done using a ==becomeForward:== message.) When benchmarking, this conversion might show up as taking significant time. If you know upfront that you will need WideStrings, it can be better to start with the right type.
+As the above example shows, in a ==ByteString== =='abc'== putting the Unicode character ==$α==, converts it to a ==WideString==. (This is actually done using a ==becomeForward:== message.) When benchmarking, this conversion might show up as taking significant time. If you know upfront that you will need WideStrings, it can be better to start with the right type.
 
 
 !!! ByteString and ByteArray equivalence is an implementation detail
@@ -555,7 +555,8 @@ URLs (or URIs) are a way to name or identify an entity. Often, they also contain
 
 We will be using the terms URL (*Uniform Resource Locator>http://en.wikipedia.org/wiki/Uniform_resource_locator*) and URI 
 (*Uniform Resource Identifier>http://en.wikipedia.org/wiki/Uniform_resource_identifier*) interchangeably, as is most commonly done in practice. A URI is just a 
-name or identification, while a URL also contains information on how to find or access a resource. For example, the URI ==/documents/cv.html== 
+name or identification, while a URL also contains information on how
+to find or access a resource. Consider the following example: the URI ==/documents/cv.html== 
 identifies and names a document, while the URL ==http://john-doe.com/documents/cv.html== also specifies that we can use HTTP to access this 
 resource on a specific server.
 
@@ -580,7 +581,6 @@ convenience message to a string.
 
 [[[
 ZnUrl fromString: 'http://www.google.com/search?q=Smalltalk'.
-
 'http://www.google.com/search?q=Smalltalk' asUrl.
 ]]]
 
@@ -612,10 +612,10 @@ Some characters of parts of a URL are considered as illegal because including th
 
 [[[
 'http://www.google.com' 
-    addPathSegment: 'some encoding';
-    queryAt: 'and some more' put: 'here, too';
+    addPathSegment: an encoding';
+    queryAt: 'and more' put: 'here, too';
     yourself
-  -> http://www.google.com/some%20encoding?and%20some%20more=here,%20too
+  -> http://www.google.com/an%20encoding?and%20more=here,%20too
 ]]]
 
 The ZnUrl parser is somewhat forgiving and accepts some unencoded URLs as well, like most browsers would.
@@ -653,8 +653,8 @@ To add operations to URLs you could add an extension method to the ZnUrl class. 
 The first step for its use is defining a name for the operation. For example, the symbol ==#retrieveContents==. Second, one or more subclasses of 
 ==ZnUrlOperation== need to be defined, each defining the class side message ==operation== to return the name, ==#retrieveContents== in the example. Then all subclasses with the same operation form the group of applicable implementations. Third, these handler subclasses overwrite ==performOperation== to do the actual work.
 
-Given a ZnUrl instance, sending ==performOperation:== or
-==performOperation: with:== will send ==performOperation:with:on:== to ==ZnUrlOperation==. In turn, it 
+Given a ZnUrl instance, sending the message ==performOperation:== or
+==performOperation:with:== will send the message ==performOperation:with:on:== to ==ZnUrlOperation==. In turn, it 
 will look for an applicable handler subclass, instanciate and invoke it. 
 
 Each subclass will be sent ==handlesOperation:with:on:== to test if it can handle the named operation with an optional argument on a specific URL. The default implementation already covers the most common case: the operation name has to match and the scheme of the URL has to be part of the collection returned by ==schemes==.
@@ -668,17 +668,15 @@ This dispatching mechanism is more powerful than scheme specific ==ZnUrl== subcl
 
 Sometimes, the combination of a host and port are referred to as authority, and this is accessable with the ==authority== message.
 
-There is a convenience method ==retrieveContents== to download the resource a ZnUrl points to:
+There are convenience methods to download the resource a ZnUrl points
+to: ==retrieveContents==  and ==saveContentsToFile==. The first retrieves the contents and returns it directly, while the expression saves the contents directly to a file.
 
 [[[
 'http://zn.stfx.eu/zn/numbers.txt' asZnUrl retrieveContents.
-
 'http://zn.stfx.eu/zn/numbers.txt' asZnUrl saveContentsToFile: 'numbers.txt'.
 ]]]
-
-The first expression retrieves the contents and returns it directly, while the second expression saves the contents directly to a file.
 
 ZnUrl can be used to handle file URLs. Use ==isFile== to test for this scheme.
 
 Given a file URL, it can be converted to a regular ==FileReference== using the ==asFileReference== message. In the other direction, you can get a file URL from a 
-==FileReference== using the ==asUrl== or ==asZnUrl== messages. Do keep in mind however that there is no such thing as a relative file URL, only absolute file URLs exist.
+==FileReference== using the ==asUrl== or ==asZnUrl== messages. Do keep in mind that there is no such thing as a relative file URL, only absolute file URLs exist.
