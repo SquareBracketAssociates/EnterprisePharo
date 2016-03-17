@@ -74,7 +74,7 @@ Pillar is used in several projects. You can have a look at these projects for re
 In this section we give the basic steps to get you started with your first Pillar document and exports. You first need to create a ''base directory'' inside 
 which we will put all your text, configuration files, and Pillar itself.
 
-[[[language=bash|caption=Create your base directory.|label=scr:createBaseDirectory
+[[[language=bash
 mkdir mydocument
 cd mydocument
 ]]]
@@ -89,13 +89,13 @@ Then you can get a Pharo *Virtual Machine for windows>http://files.pharo.org/get
 
 Then, you can check everything is working fine by creating a ==first.pillar== file with this content:
 
-[[[language=pillar|caption=Create your first pillar document.|label=scr:firstDocument
+[[[language=pillar
 !Hello World
 ]]]
 
 And finally compiling it from a terminal (see Section *@commandLineInterface* for more information about the command-line interface):
 
-[[[language=bash|caption=Compile your first document.|label=scr:compileDocument
+[[[language=bash
 ./pillar export --to=html first.pillar
 ]]]
 
@@ -128,7 +128,7 @@ This should generate a ''output.html'' file you can open in a web browser. This 
 As you can see, there is no title in the generated ''output.html'' file. This is because we did not specify any. To specify a title, we have to add it with a configuration
 at the beginning of the ''first.pillar'' file:
 
-[[[language=pillar|caption=Add a meta data in a configuration at the beginning of your file.
+[[[language=pillar
 {
   "title": "My first document while reading the 5 minutes Pillar tutorial"
 }
@@ -162,7 +162,7 @@ Another way to achieve the same is to use a dedicated configuration file. This c
 *STON>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/STON* format (see Section *@configuring* for more information about the configuration file). Create your 
 first ==pillar.conf== file:
 
-[[[language=ston|caption=Create your own configuration file.
+[[[language=ston
 {
   "title" : "My first document while reading the 5 minutes Pillar tutorial"
 }
@@ -175,7 +175,7 @@ Meta-information specified in Pillar files take precedence over configuration in
 When you export files you have the possibility to export all your files into a specific directory.
 In order to do that you have to add a parameter into your configuration.
 
-[[[language=ston|caption=Export into a specific folder
+[[[language=ston
 {
   "title" : "My first document while reading the 5 minutes Pillar tutorial",
   "outputDirectory" : "result"
@@ -191,7 +191,7 @@ You have two ways to export files:
 By default Pillar export all the input files as one.
 If you create a file ''second.pillar'' that contains ==I am a second file== you can add a parameter ''inputFiles'' to your configuration.
 
-[[[language=ston|caption=Export into a specific folder
+[[[language=ston
 {
   "title" : "My first document while reading the 5 minutes Pillar tutorial",
   "outputDirectory" : "result",
@@ -223,7 +223,7 @@ If you want to change the name of the file you can use the parameter ''outputFil
 
 If you want separate files you can add a parameter:
 
-[[[language=ston|caption=Export into a specific folder
+[[[language=ston
 {
   "title" : "My first document while reading the 5 minutes Pillar tutorial",
   "outputDirectory" : "result",
@@ -239,7 +239,7 @@ You will get a file ''result/first.html'' and a file ''result/second.html''.
 If you want to tweak the content of the exported file, for example to reference your CSS or to add a footer, you need to create your own template (see Section 
 *@templating* for more information about templating). You must write such template in its own file, e.g., ==myhtml.template==:
 
-[[[language=html|caption= Create your own template.|label=scr:createTemplate
+[[[language=html
 <!DOCTYPE html>
 <html lang="en">
   <head>
