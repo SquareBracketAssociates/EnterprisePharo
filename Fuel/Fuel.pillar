@@ -42,16 +42,14 @@ Before going into details we present the ideas behind Fuel and it's main feature
 
 ; Concrete
 : Fuel doesn't aspire to have a dialect-interchange format. This makes it possible to serialize special objects like contexts, block closures, exceptions, compiled methods and classes. Although there are ports to other dialects, most notably Squeak, Fuel development is Pharo-centric.
-
 ; Flexible
 : Depending on the context, there can be multiple ways of serializing the same object. For example, a class can be considered either a global or a regular object. In the former case, references to the class will be encoded by name and the class is expected to be part of the environment upon materialization; in the latter case, the class will be encoded in detail, with its method dictionary, etc.
-
 ; Fast
 : Fuel has been designed for performance. Fuel comes with a complete benchmark suite to help analyse the performance with diverse sample sets, as well as to compare it against other serializers. Fuel's pickling algorithm achieves outstanding materialization performance, as well as very good serialization performance, even when compared to other binary formats such as ImageSegment.
-
-; Object-Oriented Design
-: A requirement from the onset was to have a good object-oriented design and to avoid special support from the virtual machine. In addition, Fuel has a complete test suite (over 600 unit tests), with a high degree of code coverage. Fuel code is also well-commented, both for classes and methods.
-
+; Object-Oriented
+: A requirement from the onset was to have a good object-oriented design and to avoid special support from the virtual machine.
+; Maintainable
+: Fuel has a complete test suite (over 600 unit tests), with a high degree of code coverage. Fuel also has well-commented classes and methods.
 !!! Installation and Demo
 
 Fuel 1.9 is available by default in Pharo since version 2.0 of Pharo. Therefore you do not need to install it.
@@ -324,8 +322,8 @@ User class >> fuelIgnoredInstanceVariableNames
 
 !!!Post-Materialization Action
 
-When materialized, ignored instance variables will contain ==nil==. To re-initialize and set values to those instance variables, the 
-==fuelAfterMaterialization==  message can be used.
+When materialized, ignored instance variables will be ==nil==. To re-initialize and set values to those instance variables, send the
+==fuelAfterMaterialization== message.
 
 The message ==fuelAfterMaterialization== lets you execute some action once an object has been materialized. For example, let's say we would like to set back the 
 instance variable =='accumulatedLogins'== during materialization. We can implement:
