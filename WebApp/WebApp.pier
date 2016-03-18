@@ -537,10 +537,9 @@ Now, Monticello Browser shows you to select repositories to save your package as
 
 +Multiple repositories for a project in Monticello.>file://figures/23-StHubRepoInMc.jpg|width=90|label=StHubRepoInMc+
 
-You may have notice that there is an asterisk (==*==) in front of your package name.
-It indicates that the package is dirty, that it has uncommitted changes.
-By clicking on the 'Changes' button, you see what has locally changed (or force a change computation).
-You should get a browser showing all the changes that you made.
+You may have noticed that there is an asterisk (==*==) in front of your package name,
+indicating the package is dirty: i.e., it has uncommitted changes.
+By clicking on the 'Changes' button, Monticello will list everything that has changed or will tell you nothing has changed (this happens sometimes when Monticello gets out of sync). If Monticello finds actual changes, you will get a browser showing all the changes you made.
 Since this is the first version, all your changes are additions.
 
 !!!Committing to SmalltalkHub
@@ -588,30 +587,31 @@ our configuration, one defining concrete package versions for that
 baseline, and one declaring that version as the stable released
 version. Here is the code:
 
-[[[language=smalltalk
+[[[
 ConfigurationOfMyFirstWebApp>>baseline1: spec
-    <version: '1-baseline'>
-    spec for: #common do:[
+   <version: '1-baseline'>
+   spec for: #common do:[
       spec
-        blessing: #baseline;
-        repository:
-   'http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main'
-        package: 'MyFirstWebApp' ]
+         blessing: #baseline;
+         repository:
+  'http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main'
+         package: 'MyFirstWebApp' ]
 
 
 ConfigurationOfMyFirstWebApp>>version1: spec
-    <version: '1' imports: #('1-baseline')>
-    spec for: #common do: [
+   <version: '1' imports: #('1-baseline')>
+   spec for: #common do: [
       spec
-        blessing: #release;
-        package: 'MyFirstWebApp' with: 'MyFirstWebApp-SvenVanCaekenberghe.1' ]
+         blessing: #release;
+         package: 'MyFirstWebApp'
+         with: 'MyFirstWebApp-SvenVanCaekenberghe.1' ]
 
 ConfigurationOfMyFirstWebApp>>stable: spec
-    <symbolicVersion: #'stable'>
-    spec for: #common version: '1'
+   <symbolicVersion: #'stable'>
+   spec for: #common version: '1'
 ]]]
 
-Once you committed the project (that consists in both the Metacello configuration and the Monticello package 'MyFirstWebApp'), you can test your configuration by trying to load it.
+Once you committed the project (that consists in both the Metacello configuration and the Monticello package =='MyFirstWebApp'==), you can test your configuration by trying to load it.
 
 [[[language=smalltalk
 ConfigurationOfMyFirstWebApp load.
@@ -621,7 +621,7 @@ ConfigurationOfMyFirstWebApp load.
 Of course, not much will happen since you already have the specified version loaded.
 For some feedback, make sure the Transcript is open and inspect the above expression.
 
-Now add your SmalltalkHub repository to the ConfigurationOfMyFirstWebApp Monticello package. Double-check the changes in the Monticello Browser, remember we  copied a whole class. Now commit by saving to your SmalltalkHub repository. Use the Web interface to verify that all went well.
+Now add your SmalltalkHub repository to the ==ConfigurationOfMyFirstWebApp== Monticello package. Double-check the changes in the Monticello Browser, remember we  copied a whole class. Now commit by saving to your SmalltalkHub repository. Use the Web interface to verify that all went well.
 
 !!Running a real cloud server
 
@@ -649,7 +649,7 @@ Finally click the ‘Create Droplet’ button.
 In less than a minute, your new server instance will be ready. Your root password will be emailed to you. If you look at your droplets, you should see your new
 server in the list. Click on it to see its details.
 
-The important step now is to get SSH command line access to your new server, preferably using a normal terminal. With the IP address from the control panel and
+The important step now is to get SSH access to your new server, preferably through a terminal. With the IP address from the control panel and
 the root password emailed to you, try to log in.
 [[[language=shellcommands
 $ ssh root@82.196.12.54
@@ -682,17 +682,19 @@ HTTP Components welcome page. If this works, you can press ctrl-C in the termina
 !!!Deploy for production
 
 We now have a running server. It can run Pharo too, but it is currently using a generic image. How do we get our code deployed? To do this we use the Metacello
-configuration. But first, we are going to make a copy of the stock Pharo.image that we downloaded. We want to keep the original clean while we make changes to the copy.
+configuration. But first, we are going to make a copy of the stock ==Pharo.image== that we downloaded. We want to keep the original clean while we make changes to the copy.
 
 [[[language=shellcommands
 # ./pharo Pharo.image save myfirstwebapp
 ]]]
 
-We now have a new image (and changes) file called myfirstwebapp.image (and myfirstwebapp.changes). Through the config command line option we can load our
+We now have a new image (and changes) file called myfirstwebapp.image (and ==myfirstwebapp.changes==). Through the config command line option we can load our
 Metacello configuration. Before actually loading anything, we will ask for all available versions to verify that we can access the repository.
 
 [[[language=shellcommands
-# ./pharo myfirstwebapp.image config http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main ConfigurationOfMyFirstWebApp
+# ./pharo myfirstwebapp.image config \
+  http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main \
+  ConfigurationOfMyFirstWebApp
 'Available versions for ConfigurationOfMyFirstWebApp'
 1
 1-baseline
@@ -705,7 +707,9 @@ You should have only one version, all the above are equivalent references to the
 Now we will load and install the stable version.
 
 [[[language=shellcommands
-# ./pharo myfirstwebapp.image config http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main ConfigurationOfMyFirstWebApp --install=stable
+# ./pharo myfirstwebapp.image config \
+  http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main \
+  ConfigurationOfMyFirstWebApp --install=stable
 'Installing ConfigurationOfMyFirstWebApp stable'
 
 Loading 1 of ConfigurationOfMyFirstWebApp...
@@ -876,7 +880,7 @@ This guide was an introduction to writing Web applications using Pharo, touching
 couple of high level frameworks that offer more extensive support for writing Web applications. The three most important ones are Seaside, AIDAweb and Iliad.
 
 The code of the Web app, including tests and the Metacello
-configuration, is on SmalltalkHub: *http://smalltalkhub.com/#!/~SvenVanCaekenberghe/MyFirstWebApp*.
+configuration, is on *SmalltalkHub>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/MyFirstWebApp*.
 A similar example is also included in the Zinc HTTP Components project itself, under the name ==ZnImageExampleDelegate==[Tests].
 
 % Local Variables:
