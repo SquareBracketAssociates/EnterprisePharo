@@ -37,8 +37,8 @@ In this chapter we discuss Character encoding, MIME types and URL/URIs. They are
 
 !! Character encoding
 
-First we will show how to get Unicode from characters and strings within Pharo. 
-Second we will show how to decode and encode characters and strings from and to bytes. 
+We will first show how to get Unicode from characters and strings within Pharo.
+We will then show how to decode and encode characters and strings from and to bytes. 
 
 
 !!! Characters and Strings use Unicode internally
@@ -126,7 +126,7 @@ optimized somewhat for ASCII and to a lesser degree for Latin1 and some other co
 !!! Converting Strings and ByteArrays
 
 The first use of encoders is to convert Strings to ByteArrays and vice-versa.
-We however deal only indirectly with character encoders. The classes ==String== and ==ByteArray== have some convenience methods to do encoding and decoding:
+We however deal only indirectly with character encoders. The ==ByteArray== and  ==String== classes have some convenience methods to do encoding and decoding:
 
 [[[
 'Hello' utf8Encoded. 
