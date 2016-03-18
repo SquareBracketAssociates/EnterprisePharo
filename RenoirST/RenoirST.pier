@@ -7,8 +7,7 @@
 
 RenoirST is a DSL enabling programmatic cascading style sheet generation for Pharo developed by Gabriel Omar Cotelli.
 
-The goals of RenoirST are to improve CSS integration with existing web frameworks
-and to be able to write and refactor code in Pharo and deploy to CSS. Renoir features are:
+RenoirST aims to improve CSS integration with existing web frameworks. To do that, RenoirST generates CSS out of Pharo code. Renoir features are:
 common properties declaration, CSS3 selector support, important rules, font face rules and media queries support.
 In this tutorial we will present the key features of RenoirSt with a large set of examples.
 This tutorial assumes some knowledge of CSS and Pharo. For a little introduction about CSS you can read the 
@@ -895,9 +894,7 @@ evaluates to:
 The ==:nth-child(an+b)== pseudo-class notation represents an element that has ==an+b-1== siblings before it in the document tree, for any positive integer or 
 zero value of ==n==, and has a parent element. For values of ==a== and ==b== greater than zero, this effectively divides the element's children into groups of ==a== elements (the last group taking the remainder), and selecting the ==b==th element of each group. The ==a== and ==b== values must be integers (positive, negative, or zero). The index of the first child of an element is 1.
 
-In addition to this, ==:nth-child()== can take ==odd== and ==even== as arguments instead. The value ==odd== is equivalent to ==2n\+1==, whereas ==even== is equivalent to ==2n==.
-
-RenoirST supports an abstraction for this kind of formula (==CssLinealPolynomial==), or just an integer if ==n== is not required.
+In addition to this, ==:nth-child()== can take a number, ==odd== and ==even== as arguments. The value ==odd== is equivalent to ==2n\+1==, whereas ==even== is equivalent to ==2n==.
 
 [[[language=smalltalk
 CascadingStyleSheetBuilder new
@@ -1088,7 +1085,7 @@ The media query builder supports a variety of messages for additional conditions
 requirements of the output device.
 
 The following media feature messages are supported:
-- Accepting a ==CssMeasure== with length units: ==width:==, ==minWidth:==, ==maxWidht:==, ==height:==, ==minHeight:==, ==maxHeight:==, ==deviceWidth:==, ==minDeviceWidth:==, ==maxDeviceWidth:==, ==deviceHeight:==, ==minDeviceHeight:==, ==maxDeviceHeight:==;
+- Accepting a ==CssMeasure== with length units: ==width:==, ==minWidth:==, ==maxWidth:==, ==height:==, ==minHeight:==, ==maxHeight:==, ==deviceWidth:==, ==minDeviceWidth:==, ==maxDeviceWidth:==, ==deviceHeight:==, ==minDeviceHeight:==, ==maxDeviceHeight:==;
 - ==orientation:== accepting ==CssMediaQueryConstants portrait== or ==CssMediaQueryConstants landscape==;
 - Accepting fractions as aspect ratios: ==aspectRatio:==, ==minAspectRatio:==, ==maxAspectRatio:==, ==deviceAspectRatio:==, ==minDeviceAspectRatio:==, ==maxDeviceAspectRatio:==;
 - Accepting integers: ==color:== (the argument describes the number of bits per color component of the output device), ==minColor:==, ==maxColor:==, ==colorIndex:== (the argument describes the number of entries in the color lookup table of the output device), ==minColorIndex:==, ==maxColorIndex:==, ==monochrome:== (the argument describes the number of bits per pixel in a monochrome frame buffer), ==minMonochrome:==, ==maxMonochrome:==, ==grid:== (the argument must be 1 or 0);
