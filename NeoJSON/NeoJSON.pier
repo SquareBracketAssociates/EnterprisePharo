@@ -178,7 +178,7 @@ To define the schema of the elements in a list, write something like the followi
 
 The above expression returns an array of 2 points. As you can see, the argument to ==nextAs:== can be a class (as seen previously) be also any symbol, provided the mapper knows about it.
 
-To get an ==OrderedCollection== instead of an array as output, use the ==listOfType:== message:
+To get an ==OrderedCollection== instead of an array as output, you should use the ==listOfType:== message:
 
 [[[language=smalltalk
 (NeoJSONReader on: ' [ 1, 2 ] ' readStream)
