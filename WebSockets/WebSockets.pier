@@ -65,7 +65,7 @@ ws://www.example.com:8088/my-app
 Two new schemes are defined, ==ws://== for regular WebSockets and ==wss://== for the secure (TLS/SSL) variant. The ==host:port:== and path specification should be familiar.
 
 Zinc WebSockets supports the usage of client side WebSockets of both the regular and secure variants.
-Note that the secure variant requires loading the Zodiac TLS/SSL Pharo project *http://smalltalkhub.com/#!/~SvenVanCaekenberghe/Zodiac*.
+Note that the secure variant requires loading the XX *Zodiac TLS/SSL Pharo project>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/Zodiac*.
 Zinc WebSockets API is really simple, once you opened the socket, you use ==sendMessage:== and ==readMessage:== and finally ==close==.
 
 Here is a client side example taking to a public echo service:
@@ -192,7 +192,7 @@ ZnServer default
 The current process (thread) as spawned by the server can be used freely by the handler code, for as long as the web socket connection lasts.
 The responsibility for closing the connection lies with the handler, although a close from the other side will be handled correctly.
 
-To test our echo service, you could connect to it using a client side web socket, like we did in the previous subsection.
+To test the service, you can use a client-side web socket, like we did in the previous section.
 This is what the unit test ==ZnWebSocketTests>>testEcho== does.
 Another solution is to run some JavaScript code in a web browser.
 You can find the necessary HTML page containing JavaScript code invoking the echo service on the class side of ==ZnWebSocketEchoHandler==.
