@@ -12,10 +12,9 @@ currently it supports just two: an ''in-memory'' layer and a backend for the Mon
 The in-memory layer is useful to prototype applications quickly and for initial development without a database back-end, for example using the Smalltalk image 
 as the persistency mechanism.
 
-The MongoDB database backend stores the objects into MongoDB: a document-oriented database. In MongoDB each stored entity is a JSON-style document. This 
-document-centric nature allows for persisting complex object models in a fairly straightforward fashion. MongoDB is not an object database, like Gemstone, 
-Magma or Omnibase, so there still is a small gap to be bridged between objects and documents. To achieve this, Voyage contains an Object-Document mapper, i.e. 
-the document database equivalent to an Object-Relational Mapper or ORM. While this mapper does not solve all the known impedance mismatch issues when going from 
+The MongoDB database backend stores the objects in a document-oriented database. In MongoDB each stored entity is a JSON-style document. This
+document-centric nature allows for persisting complex object models in a fairly straightforward fashion. MongoDB is not an object database, like Gemstone,
+Magma or Omnibase, so there still is a small gap to be bridged between objects and documents. To bridge this gap, Voyage contains a mapper converting objects to and from documents. This mapper is equivalent to an Object-Relational Mapper (ORM) when using relational databases. While this mapper does not solve all the known impedance mismatch issues when going from 
 objects to a database, we find that using a document database fits better with the object world than a combination of a ORM and a relational database. This is 
 because document databases tend to provide better support for the dynamic nature of the object world.
 
@@ -428,7 +427,7 @@ set these attributes to the correct values.
 
 !!! A few words concerning the OID
 
-The mongo ObjectId (OID) is a unique field that acts as a primary key in mongo. It is a 12-byte BSON type, constructed using:
+The mongo ObjectId (OID) is a unique field acting as a primary key. It is a 12-byte BSON type, constructed using:
 
 - a 4-byte value representing seconds passed since the Unix epoch,
 - a 3-byte machine identifier,
@@ -761,7 +760,8 @@ OSProcess command:
 To ensure that a query indeed uses the index, ==".explain()"== can be used in the mongo console. For example, if we add the index on ==description== as above, run a query and add ==.explain()== we see, that only a subset of documents were scanned.
 
 [[[language=javascript
-> db.Trips.find({"receipts.description":"a"}).explain("executionStats")
+> db.Trips.find({"receipts.description":"a"})
+                   .explain("executionStats")
 {
 	"cursor" : "BtreeCursor receipts.receiptDescription_1",
 	"isMultiKey" : true,
@@ -778,7 +778,8 @@ To ensure that a query indeed uses the index, ==".explain()"== can be used in th
 After removing the index, all documents are scanned (in this example there are 246):
 
 [[[language=javascript
-> db.Trips.find({"receipts.description":"a"}).explain("executionStats")
+> db.Trips.find({"receipts.description":"a"}
+                 ..explain("executionStats")
 {
 	"cursor" : "BasicCursor",
 	"isMultiKey" : false,
@@ -795,8 +796,7 @@ After removing the index, all documents are scanned (in this example there are 2
 
 !! Conclusion
 
-In this chapter we presented Voyage, a persistence framework whose strength is the presence of a basic object-document mapper and a back-end to the MongoDB 
-database. We have shown how to store objects in, and remove object from the database, and how to optimise the storage format. This was followed by a discussion 
+In this chapter we presented Voyage, a persistence programming framework. The strength of Voyage lies in the presence of the object-document mapper and MongoDB back-end. We have shown how to store objects in, and remove object from the database, and how to optimise the storage format. This was followed by a discussion 
 of querying the database; showing the two ways in which queries can be constructed and detailing how queries are ran. We ended this chapter by presenting how we can construct indexes in MongoDB databases, even though Voyage does not provide direct support for it.
 
 
