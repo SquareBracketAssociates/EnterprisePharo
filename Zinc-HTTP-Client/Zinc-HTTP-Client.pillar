@@ -58,7 +58,7 @@ Let's get started with the simplest possible usage.
 ZnClient new get: 'http://zn.stfx.eu/zn/small.html'.
 ]]]
 
-Select the expression and inspect or print it. If all goes well, you'll get a ==String== back containing a very small HTML document. The ==get:== method 
+Select the expression and print its result. You should get a ==String== back containing a very small HTML document. The ==get:== method 
 belongs to the convenience API. Let's use a more general API to be a bit more explicit about what happened.
 
 [[[
@@ -247,8 +247,8 @@ elegant and more reliable at the same time.
 
 !!Dealing with networking reality
 
-As a network protocol, HTTP is much more complicated than an ordinary message send. The famous 
-*Fallacies of Distributed Computing>http://en.wikipedia.org/wiki/Fallacies_of_Distributed_Computing* paper by Deutsch et.al. eloquently list the issues involved:
+As a network protocol, HTTP is much more complicated than an ordinary message send. The famous
+*Fallacies of Distributed Computing>http://en.wikipedia.org/wiki/Fallacies_of_Distributed_Computing* paper by Deutsch et. al. eloquently lists the issues involved:
 
 - The network is reliable.
 - Latency is zero.
@@ -730,7 +730,7 @@ ZnClient new
   get.
 ]]]
 
-In this example, ==get== (which returns ==contents==) will no longer return a ==String== but a collection of numbers. Note also that by using ==systemPolicy== 
+In this example, ==get== (which returns the same as ==contents==) will no longer return a ==String== but a collection of numbers. Note also that by using ==systemPolicy== 
 in combination with an ==accept:== we handle most error cases before the content reader start doing its work, so it does no longer have to check for good incoming 
 data. In any case, when the ==contentReader== throws an exception, it can be caught by the ==ifFail:== block.
 
@@ -740,7 +740,7 @@ This will create either a ==text/plain== ==String== entity or an ==application/o
 You could further customize the entity by sending 
 ==contentType:== with another mime type. Or you could completely skip the ==contents:== mechanism and supply your own entity to ==entity:==.
 
-To customize the content writer, you specify a block that when given a Smalltalk object is then supposed to create and return an entity. A theoretical example is given next.
+To customize the content writer, you need to pass a one-argument block to the ==contentWriter:== message. The block should create and return an entity. A theoretical example is given next.
 
 [[[
 ZnClient new
