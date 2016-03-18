@@ -5,15 +5,15 @@
 @cha:ston
 
 
-Smalltalk Object Notation (STON) is a lightweight, text-based, human-readable data interchange format. It has been developed by Sven Van Caekenberghe. STON can 
+STON (for ''Smalltalk Object Notation'') is a lightweight, text-based, and human-readable data-interchange format. STON is developed by Sven Van Caekenberghe. STON can 
 be used to serialize domain level objects, either for persistency or for network transport.
 As its name suggests, it is based on JSON  (see also Chapter *NeoJSON>../NeoJSON/NeoJSON.pillar@cha:JSON*).  It adds symbols as a primitive value, and class tags for object 
 values and references. Implementations for Pharo Smalltalk, Squeak and Gemstone Smalltalk are available.
 
 
 !! Introduction
-JSON seems to have hit a sweet spot: it is very simple, yet just powerful enough to represent some of the most common data structures across many different 
-languages. JSON is very readable and relatively easy to type. If you have ever seen JSON *Javascript Object Notation>http://www.json.org*, you will be instantly 
+JSON is very simple, yet just powerful enough to represent some of the most common data structures across many different
+languages. JSON is very readable and relatively easy to type. If you have ever seen JSON *Javascript Object Notation>http://www.json.org*, you will be instantly
 familiar with STON as it uses similar primitive values, with the addition of a symbol type. Some details are slightly different though.
 
 Some of these differences are due to the fact that JSON knows only about lists and maps, which means that there is no concept of object types or classes. As a 
@@ -478,8 +478,8 @@ The former produces a STON representation of the object and the latter creates a
 instance side, STON will first create an instance of the object before calling ==fromSton:== e.g. as in ==Point==. If implemented at class side, the creation of 
 the instance is the responsibility of the ==fromSton:==  method, e.g. as in ==ByteArray==.
 
-During encoding, classes can output a one-line representation of themselves by sending either the ==#writeObject:listSingleton:== or 
-==#writeObject:streamShortList:== message to ==STONWriter==. The first argument of the message should be ==self== and the second argument a single element, or a 
+During encoding, classes can output a one-line representation of themselves by sending either the message ==#writeObject:listSingleton:== or
+the message ==#writeObject:streamShortList:== to an instance of ==STONWriter==. The first argument of the message should be ==self== and the second argument a single element, or a 
 collection of elements respectively. 
 
 Examples of this are below:
@@ -496,8 +496,7 @@ Point >> stonOn: stonWriter
 		array add: x; add: y ]
 ]]]
 
-==STONWriter== also understands the ==#writeObject:streamList:== and ==#writeObject:streamMap:== messages, which generate a multi-line representation. Also, 
-classes can use another external name by overriding ==Object class>>stonName==.
+An instance of ==STONWriter== also understands the ==#writeObject:streamList:== and ==#writeObject:streamMap:== messages, which generate a multi-line representation. Also, classes can use another external name by overriding ==Object class>>stonName==.
 
 STON offers a way to control which instance variables get written and the order in which they get written.
 This can be done by overwriting ==Object class>>#stonAllInstVarNames== to return an array of symbols. Each symbol is the name of a variable and the order of the 
