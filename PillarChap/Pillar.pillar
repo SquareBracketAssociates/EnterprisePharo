@@ -543,7 +543,7 @@ cases (for example if you have an inter-file link and you export in LaTeX, or if
 
 !!!!External Links
 
-To create links to external resources, use the ==\*Pharo>http://pharo-project.org/\*== syntax which is rendered as *Pharo>http://pharo-project.org/*. This also works for emails: write ==\*damien@cassou.me\*== to get *damien@cassou.me*.
+To create links to external resources, use the ==\*Pharo>http://pharo.org/\*== syntax which is rendered as *Pharo>http://pharo.org/*. The same syntax can also represent email addresses: write ==\*damien@cassou.me\*== to get *damien@cassou.me*.
 
 !!!Pictures
 
