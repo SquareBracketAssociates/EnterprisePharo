@@ -451,7 +451,7 @@ Zinc HTTP Components currently implements and enforces the following limits:
 
 Of course these values may be customized if one need to.
 
-Also, Zn implements two important techniques that are used by HTTP servers when they send entity bodies to clients: Gzip encoding and chunked transfer encoding. The
+Also, Zn implements two important techniques used by HTTP servers when they send entity bodies to clients: Gzip encoding and chunked transfer encoding. The
 first one adds compression. The second one is used when the size of an entity is not known up front. Instead chunks of certain sizes are sent until the entity is complete.
 
 All this is handled internally and invisibly. The main object dealing with content and transfer encoding is ==ZnEntityReader==. When necessary, the binary socket
@@ -523,64 +523,68 @@ jsonEntityBuilder := [ :object |
               type: ZnMimeType applicationJson ].
 ]]]
 
-The jsonEntityBuilder block helps in transforming Smalltalk objects to a JSON entity. We use the STON writer and reader here because they are backwards compatible with JSON. We
+The ==jsonEntityBuilder== block helps in transforming Smalltalk objects to a JSON entity. We use the STON writer and reader here because they are backwards compatible with JSON. We
 use linefeeds to improve compatibility with internet conventions as well as pretty printing to help human interpretation of the data.
 
 [[[
 mapper := {
-    [ :request |
-        request uri isSlash and: [ request method = #GET ] ]
+  [ :request |
+    request uri isSlash and: [ request method = #GET ] ]
     ->
-    [ :request |
-        ZnResponse ok: (jsonEntityBuilder value: JSONStore keys asArray) ].
-"----------------------------------------------------------------------"
-    [ :request |
-        (request uri hasPath and: [ request method = #GET ])
-            and: [ request uri pathSegments size = 1 ] ]
-    ->
-    [ :request | | uri |
-        uri := request uri pathPrintString.
+ [ :request |
+   ZnResponse
+     ok: (jsonEntityBuilder value: JSONStore keys asArray) ].
+"----------------------------------------------------------------"
+  [ :request |
+    (request uri hasPath and: [ request method = #GET ])
+      and: [ request uri pathSegments size = 1 ] ]
+  ->
+  [ :request | | uri |
+    uri := request uri pathPrintString.
+    JSONStore
+      at: uri
+      ifPresent: [ :object |
+        ZnResponse ok: (jsonEntityBuilder value: object) ]
+      ifAbsent: [ ZnResponse notFound: uri ] ].
+"----------------------------------------------------------------"
+  [ :request |
+    (request uri isSlash
+      and: [ request method = #POST ])
+      and: [ request contentType = ZnMimeType applicationJson ] ]
+  ->
+  [ :request | | uri |
+    uri := '/', (JSONStore size + 1) asString.
+    JSONStore at: uri put: (STON fromString: request contents).
+    (ZnResponse created: uri)
+      entity: (jsonEntityBuilder value: 'Created ', uri);
+      yourself ].
+"----------------------------------------------------------------"
+  [ :request |
+    ((request uri hasPath and: [ request method = #PUT ])
+      and: [ request uri pathSegments size = 1 ])
+      and: [ request contentType = ZnMimeType applicationJson ]]
+  ->
+  [ :request | | uri |
+    uri := request uri pathPrintString.
+    (JSONStore includesKey: uri)
+      ifTrue: [
         JSONStore
-            at: uri
-            ifPresent: [ :object |
-               ZnResponse ok: (jsonEntityBuilder value: object) ]
-            ifAbsent: [ ZnResponse notFound: uri ] ].
-"----------------------------------------------------------------------"
-    [ :request |
-        (request uri isSlash and: [ request method = #POST ])
-            and: [ request contentType = ZnMimeType applicationJson ] ]
-    ->
-    [ :request | | uri |
-        uri := '/', (JSONStore size + 1) asString.
-        JSONStore at: uri put: (STON fromString: request contents).
-        (ZnResponse created: uri)
-            entity: (jsonEntityBuilder value: 'Created ', uri);
-            yourself ].
-"----------------------------------------------------------------------"
-    [ :request |
-        ((request uri hasPath and: [ request method = #PUT ])
-            and: [ request uri pathSegments size = 1 ])
-                and: [ request contentType = ZnMimeType applicationJson ] ]
-    ->
-    [ :request | | uri |
-        uri := request uri pathPrintString.
-        (JSONStore includesKey: uri)
-            ifTrue: [
-                JSONStore at: uri
-                           put: (STON fromString: request contents).
-                ZnResponse ok: (jsonEntityBuilder value: 'Updated') ]
-            ifFalse: [ ZnResponse notFound: uri ] ].
-"----------------------------------------------------------------------"
-    [ :request |
-        (request uri hasPath and: [ request method = #DELETE ])
-            and: [ request uri pathSegments size = 1 ] ]
-    ->
-    [ :request | | uri |
-        uri := request uri pathPrintString.
-        (JSONStore removeKey: uri ifAbsent: [ nil ])
-            ifNil: [ ZnResponse notFound: uri ]
-            ifNotNil: [ ZnResponse ok:
-                    (jsonEntityBuilder value: 'Deleted') ] ].
+          at: uri
+          put: (STON fromString: request contents).
+        ZnResponse ok: (jsonEntityBuilder value: 'Updated') ]
+      ifFalse: [ ZnResponse notFound: uri ] ].
+"----------------------------------------------------------------"
+  [ :request |
+    (request uri hasPath
+      and: [ request method = #DELETE ])
+      and: [ request uri pathSegments size = 1 ] ]
+  ->
+  [ :request | | uri |
+    uri := request uri pathPrintString.
+    (JSONStore removeKey: uri ifAbsent: [ nil ])
+      ifNil: [ ZnResponse notFound: uri ]
+      ifNotNil: [
+        ZnResponse ok: (jsonEntityBuilder value: 'Deleted') ] ].
 }.
 ]]]
 
