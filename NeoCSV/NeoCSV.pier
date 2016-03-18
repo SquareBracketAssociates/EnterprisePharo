@@ -143,11 +143,11 @@ String streamContents: [ :stream |
 '
 ]]]
 
-Note how ==nextPut:== is used to first write the header (''i.e.'', the first line). After printing the header, the writer is customized: the ==addField:== and ==addFields:== methods arrange for the specified selectors (here ==x== and ==y==) to be sent on each incoming object to produce fields that will be written.
+Note how ==nextPut:== is used to first write the header (''i.e.'', the first line). After printing the header, the writer is customized: the messages ==addField:== and ==addFields:== arrange for the specified selectors (here ==x== and ==y==) to be sent on each incoming object to produce fields that will be written.
 
 To change the writing behavior for a specific field, you have to use ==addQuotedField:==, ==addRawField:== and ==addObjectField:==.
 
-To specify different field writers for an array (actually any ==SequenceableCollection== subclass), you can use the ==first==, ==second==, ==third==, etc. methods as selectors:
+To specify different field writers for an array (actually any subclass of ==SequenceableCollection==), you can use the ==first==, ==second==, ==third==, etc. methods as selectors:
 
 [[[
 String streamContents: [ :stream |
