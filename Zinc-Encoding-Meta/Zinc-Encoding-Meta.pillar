@@ -427,11 +427,7 @@ implementing them, the following encoders are available:
 - ==ZnByteEncoder==
 - ==ZnNullEncoder==
 
-Where ==ZnByteEncoder== groups a large number of encodings. This list is available as ==ZnByteEncoder knownEncodingIdentifiers==. Here is a list of all recognized, canonical names: windows874, windows1255, xcp1254, iso88594, iso885914, windows1256, xcp1255 greek, 
-iso88595, iso885915, windows1257, xcp1256, iso88593, iso88596, cp1250, iso885916, windows1258, maccyrillic, cp1251, koi8u, mac, xcp1258, iso88597, 
-cp1252, iso88598, cp874, xcp1257, koi8r, cp1253, iso88599, arabic, koi8, cp1254, macroman, cyrillic, cp1255, ibm866, latin1, cp1256,
- latin2, cp1257, cp866, macintosh, latin3, cp1258, latin4, xmaccyrillic, latin5, latin6, windows1250, ibm819, windows1251, xcp1250, iso885910, 
- windows1252, xcp1251, iso88591, iso885911, windows1253, xcp1252, hebrew, iso88592, windows1254, xcp1253, xmacroman, dos874 and iso885913. 
+Where ==ZnByteEncoder== groups a large number of encodings. This list is available as ==ZnByteEncoder knownEncodingIdentifiers==. Here is a list of all recognized, canonical names: arabic, cp1250, cp1251, cp1252, cp1253, cp1254, cp1255, cp1256, cp1257, cp1258, cp850, cp866, cp874, cyrillic, dos874, doslatin1, greek, hebrew, ibm819, ibm850, ibm866, iso885910, iso885911, iso885913, iso885914, iso885915, iso885916, iso88592, iso88593, iso88594, iso88595, iso88596, iso88597, iso88598, iso88599, koi8, koi8r, koi8u, latin2, latin3, latin4, latin5, latin6, mac, maccyrillic, macintosh, macroman, oem850, windows1250, windows1251, windows1252, windows1253, windows1254, windows1255, windows1256, windows1257, windows1258, windows874, xcp1250, xcp1251, xcp1252, xcp1253, xcp1254, xcp1255, xcp1256, xcp1257, xcp1258, xmaccyrillic and xmacroman.
 
 !! Mime-Types
 
