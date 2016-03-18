@@ -148,7 +148,7 @@ When the variable is set, the output depends on the contents of the variable and
 !!! With the variable value being a 'simple' object
 
 For values that are not collections nor blocks, the output will be present once.
-For example, below =='number'== is bound to ==true== which causes the =='Shown too'== text to be shown. The same will happen when ==number== is bound to another value, e.g. ==42==.
+For example, below ==number== is bound to ==true== which renders the text =='Shown too'==. The same will happen when ==number== is bound to another value, e.g. ==42==.
 
 [[[
 | templateString context |
@@ -157,7 +157,7 @@ templateString := 'Shown.
   Shown too!
 {{/number}}'.
 context := { 'number' -> true } asDictionary.
-(MustacheTemplate on: templateString) value: context 
+(MustacheTemplate on: templateString) value: context
 
  -->
 'Shown.
@@ -348,9 +348,9 @@ the value of this argument will be the section with subsituted variables.
 
 !!! Inverted Sections
 
-A last use of sections is inverted sections. These begin with a caret
-and ends with a slash, for example:  =={{^list}}== begins a ''list'' inverted section and =={{/list}}== ends it. While 
-sections are used to render text one or more times based on the value of the key, inverted sections may render text once based on the ''inverse'' value of the key. 
+A last use of sections is inverted sections. An inverted section begins with a caret
+and ends with a slash: for example,  =={{^list}}== begins a an inverted section and =={{/list}}== ends it. While
+sections are used to render text one or more times based on the value of the key, inverted sections may render text once based on the ''inverse'' value of the key.
 That is, they will be rendered if the key doesn't exist, is false, or is an empty collection:
 
 [[[
