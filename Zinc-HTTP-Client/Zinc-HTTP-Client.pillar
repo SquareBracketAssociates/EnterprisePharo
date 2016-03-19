@@ -45,7 +45,7 @@ The reference Zn implementation lives in several places:
 
 Installation or updating instructions can be found on *its web site>http://zn.stfx.eu/*.
 
-!!Doing a simple request
+!!Doing a Simple Request
 
 The key object to programmatically execute HTTP requests is called ==ZnClient==. You instantiate it, use its rich API to configure and execute an HTTP request 
 and access the response. ==ZnClient== is a stateful object that acts as a builder. 
@@ -176,7 +176,7 @@ This will print out some information on the Transcript, as shown below.
 
 In a later subsection about server logging, which uses the same mechanism, you will learn how to interpret and customize logging.
 
-!!! Simplified HTTP requests
+!!! Simplified HTTP Requests
 
 Although ==ZnClient== is absolutely the preferred object to deal with all the intricacies of HTTP, you sometimes wish you could to a quick HTTP request with an 
 absolute minimum amount of typing, especially during debugging. For these occasions there is ==ZnEasy==, a class side only API for quick HTTP requests.
@@ -245,7 +245,7 @@ ZnClient new
 Maybe it doesn't look like a big difference, but combined with some other options and features of ==ZnClient== that we'll see later on, the code does become more 
 elegant and more reliable at the same time.
 
-!!Dealing with networking reality
+!!Dealing with Networking Reality
 
 As a network protocol, HTTP is much more complicated than an ordinary message send. The famous
 *Fallacies of Distributed Computing>http://en.wikipedia.org/wiki/Fallacies_of_Distributed_Computing* paper by Deutsch et. al. eloquently lists the issues involved:
@@ -361,7 +361,7 @@ will take place. Please consult the class comment of ==ZnUrl== for a more detail
 
 
 
-!!Submitting HTML forms
+!!Submitting HTML Forms
 
 In many web applications HTML forms are used. Examples are forms to enter a search string, a form with a username and password to log in or complex registration 
 forms. In the classic and most common way, this is implemented by sending the data entered in the fields of a form to the server when a submit button is clicked. 
@@ -433,7 +433,7 @@ ZnClient new
 Sometimes, the form's submit method is GET instead of POST, just send ==get== instead of ==post== to the client. Note that this technique of sending form data to 
 a server is different than what happens with raw POST or PUT requests using a REST API. In a later subsection we will come back to this.
 
-!!Basic Authentication, Cookies and sessions
+!!Basic Authentication, Cookies and Sessions
 
 There are various techniques to add authentication, a mechanism to control who accesses which resources, to HTTP. This is orthogonal to HTTP itself. The simplest 
 and most common form of authentication is called 'Basic Authentication'.
@@ -481,13 +481,13 @@ After the ==post==, the server will presumably set a cookie to acknowledge a suc
 client presents the cookie to prove the login. The server knows it can send back the file because it recognizes the cookie as valid. By sending ==session== to 
 the client object, you can access the session object and then the remembered cookies.
 
-!!PUT, POST, DELETE and other HTTP methods
+!!PUT, POST, DELETE and other HTTP Methods
 
 A regular request for a resource is done using a GET request. A GET request does not send an entity to the server. The only way for a GET request to transfer 
 information to the server is by encoding it in the URL, either in the path or in query variables. (To be 100% correct we should add that data can be sent as 
 custom headers as well.)
 
-!!! PUT and POST methods
+!!! PUT and POST Methods
 
 HTTP provides for two methods (or verbs) to send information to a server. These are called PUT and POST. They both send an entity to the server in order to transfer data.
 
@@ -520,7 +520,7 @@ contains this URL both in the ==Location== header accessible via the message ==l
 When a POST successfully created the resource, its HTTP response will be 201 Created. PUT is generally used to update an existing resource of which you know the 
 exact URL (or URI). When a PUT is successful, its HTTP response will be just 200 OK and nothing else will be returned. When we will discuss REST Web Service APIs, we will come back to this.
 
-!!! DELETE and other methods
+!!! DELETE and other Methods
 
 The fourth member of the common set of HTTP methods is DELETE. It is very similar to both GET and PUT: you just specify an URL of the resource that you want to 
 delete or remove. When successful, the server will just reply with a 200 OK. That is all there is to it.
@@ -540,7 +540,7 @@ an extra meta data named ==Allow== which specifies the list of HTTP methods that
 
 !! Reusing Network Connections, Redirect Following and Checking for Newer Data
 
-!!! ZnClient lifecycle
+!!! ZnClient Lifecycle
 
 HTTP 1.1 defaults to keeping the client connection to a server open, and the server will do the same. This is useful and faster if you need to issue more than 
 one request. ==ZnClient== implements this behavior by default.
@@ -608,7 +608,7 @@ ZnClient new
 
 For this to work, the server has to honor this particular protocol interaction, of course.
 
-!!Content-types, mime-types and the accept header
+!!Content-Types, Mime-Types and the Accept Header
 
 Asking for a resource with a certain mime-type does not mean that the server will return something of this type. The extension at the end of a URL has no real 
 significance, and the server might have been reconfigured since last you asked for this resource. For example, asking for ==http://example.com/foo==, 
@@ -756,7 +756,7 @@ ZnClient new
 Assuming there is a web service at ==http://internet-calculator.com== where you can send numbers to, we send a whitespace separated list of numbers to its sum URI 
 and expect a number back. Exceptions occuring in the content writer can be caught with the ==ifFail:== block.
 
-!!Downloading, Uploading and Signalling progress
+!!Downloading, Uploading and Signalling Progress
 
 Often, you want to download a resource from some internet server and store its contents in a file. The well known curl and wget Unix utilities are often used to 
 do this in scripts. There is a handy convenience method in ==ZnClient== to do just that.

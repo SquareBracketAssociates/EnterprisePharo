@@ -21,7 +21,7 @@ result it is not easy to encode arbitrary objects, and some of the possible solu
 and/or an indirection to encode the object's contents is added. To address this, STON extends JSON by adding a primitive value, and 'class' tags for object 
 values and references, as we will see next.
 
-!!! STON features and limitations
+!!! STON Features and Limitations
 
 STON offers three main features: 
 
@@ -60,12 +60,12 @@ MCHttpRepository
 A Gemstone (*http://gemtalksystems.com/products/*) port implemented by
 Dale Henrichs is available at *https://github.com/dalehenrich/ston* .
 
-!!! Serializing and materializing objects
+!!! Serializing and Materializing Objects
 
 We now show how to serialize and materialize objects, starting with a simple rectangle and then continuing with more complex objects.
 
 
-!!!!Serializing a rectangle 
+!!!!Serializing a Rectangle 
 
 To generate a STON representation for an object, STON provides two messages ==toString:== and ==toStringPretty:==. The first message generates a compact version 
 and the second displays the serialized version in a more readable way.  For example (where ==-\->== precedes the output of a print-it of the expression):
@@ -86,7 +86,7 @@ STON toStringPretty: (Rectangle origin: 10@10 corner: 100@50)
 What is shown above follows the default representation scheme for objects. Each class can define its own custom representation, as discussed in section 
 *@customrepresentations*.
 
-!!!! Materializing a rectangle
+!!!! Materializing a Rectangle
  
 Once you have the textual representation of an object you can obtain the encoded objects using the ==STONReader== class
 as follows: 
@@ -111,7 +111,7 @@ Alternatively, you can also use the STON facade as follows
 
 
 
-!!!! Serialization of maps, lists and class tags
+!!!! Serialization of Maps, Lists and Class Tags
 
 This example shows how more complex data structures are represented in STON.
 Maps are represented by curly braces =={== and ==}==, with keys and values separated by a colon ==:== and items are separated by a comma ==,== . Lists are 
@@ -139,7 +139,7 @@ TestDomainObject {
 ]]]
 
 
-!!!! A large example: an HTTP response
+!!!! A Large Example: an HTTP Response
 
 Here is a more complex example:  a ZnResponse object. It is the result of serializing the result of the following HTTP request (using Zinc, see 
 Chapters *Zinc Client>../Zinc-HTTP-Client/Zinc-HTTP-Client.pier@cha:zinc-client* and *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pier@cha:zinc-server*). It also shows that curly 
