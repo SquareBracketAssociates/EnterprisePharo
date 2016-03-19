@@ -12,7 +12,7 @@ This chapter has originally been written by Sven Van Caekenberghe the author of 
 
 NeoCSV is an elegant and efficient standalone Pharo library to read (resp. write) CSV files converting to (resp. from) Pharo objects.
 
-!!!An introduction to CSV
+!!!An Introduction to CSV
 
 CSV is a lightweight text-based ''de facto'' standard for human-readable tabular data interchange. Essentially, the key characteristics are that CSV (or more generally, delimiter-separated text data):
 

@@ -388,7 +388,7 @@ the result, but we do want to reply with a bad request when the parsing has fail
 
 Once we have a form object, the possibilities are almost endless. You can query a form for its size, depth and other elements. You can manipulate the form in various ways: scaling, resizing, rotating, flipping, cropping, compositing. And you can do all this in an interactive and dynamic environment.
 
-!!Adding tests
+!!Adding Tests
 
 We all know that testing is good, but how do we actually test a Web app?
 Writing some basic tests is actually not difficult, since Zinc HTTP Components covers both the client and the server side with the same objects.
@@ -481,7 +481,7 @@ MyFirstWebAppTest>>testUpload
 The HTTP client object is pretty powerful. It can do a correct multi-part form-data POST, just like a browser. Furthermore, once configured, it can be reused,
 like for the second GET request.
 
-!!Saving code to a repository
+!!Saving Code to a Repository
 
 If all is well, you now have a package called ==MyFirstWebApp== containing two classes, ==MyFirstWebApp== and ==MyFirstWebAppTest==. The first one should have
 9 methods, the second 5. If you are unsure about your code, you can double check with the full listing at the end of this document. Our Web app should now work
@@ -558,7 +558,7 @@ You can now browse back to Smalltalkhub.com to confirm that your code arrived th
 After a successful commit, it is a good idea to save your image.
 In any case, your package should now no longer be dirty, and there should be no more differences between the local version and the one on SmalltalkHub.
 
-!!!Defining a project configuration
+!!!Defining a Project Configuration
 
 Real software consists of several packages and will depend on extra external libraries and frameworks. In practice, software configuration management, including
 the management of dependencies and versions, is thus a necessity.
@@ -623,7 +623,7 @@ For some feedback, make sure the Transcript is open and inspect the above expres
 
 Now add your SmalltalkHub repository to the ==ConfigurationOfMyFirstWebApp== Monticello package. Double-check the changes in the Monticello Browser, remember we  copied a whole class. Now commit by saving to your SmalltalkHub repository. Use the Web interface to verify that all went well.
 
-!!Running a real cloud server
+!!Running a Real Cloud Server
 
 So we created our first Web app and tested it locally.
 We stored our source code in the SmalltalkHub repository and created a Metacello configuration for it.
@@ -679,7 +679,7 @@ Let's quickly test the stock HTTP server that comes with Pharo, like we did in t
 This command will block. Now access your new HTTP server. You should see the Zinc
 HTTP Components welcome page. If this works, you can press ctrl-C in the terminal to end our test.
 
-!!!Deploy for production
+!!!Deploy for Production
 
 We now have a running server. It can run Pharo too, but it is currently using a generic image. How do we get our code deployed? To do this we use the Metacello
 configuration. But first, we are going to make a copy of the stock ==Pharo.image== that we downloaded. We want to keep the original clean while we make changes to the copy.
@@ -749,7 +749,7 @@ You can surf to the correct IP address and port to test you application. Note th
 Figure *@runningOnCloud9* shows how the deployment looks like on cloud9.
 +Our Web app running in the cloud.>file://figures/24-runningOnCloud9.jpg|width=90|label=runningOnCloud9+
 
-!!Have fun extending this Web app
+!!Have Fun Extending this Web App
 
 Did you like the example so far? Would you like to take one more step?
 Here is a little extension left as an exercise.
@@ -782,7 +782,7 @@ If you found it difficult to find the right methods, have a look at the followin
 -==ByteArray class>>streamContents:==
 -==ZnByteArrayEntity class>>with:type:==
 
-!!!Solution, part 1, new methods
+!!!Solution, Part 1, New Methods
 
 Here are 3 new methods that are part of the solution.
 
@@ -806,7 +806,7 @@ updatePreviousImage
     previousImage := self pngImageEntityForForm: scaled
 ]]]
 
-!!!Solution, part 2, changed methods
+!!!Solution, Part 2, Changed Methods
 
 Here are the changes to 3 existing methods for the complete solution.
 [[[language=smalltalk
@@ -853,7 +853,7 @@ Here are the changes to 3 existing methods for the complete solution.
         ^ ZnResponse redirect: #image
 ]]]
 
-!!!Solution, part 3, updated configuration
+!!!Solution, Part 3, Updated Configuration
 
 To update our configuration, add 1 method and change 1 method.
 

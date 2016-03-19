@@ -5,7 +5,7 @@
 
 In the previous chapters we discussed several frameworks and libraries to facilitate the development of web application. In this chapter, we will focus on deploying such a web application. While doing so, we will try to answer some questions such as: which operating system should I use, how do I run my application, how do I ensure my application will be restarted after a reboot or a crash, and how do I log data.
 
-!!Where to host your application?
+!!Where to Host your Application?
 
 The easiest (and fastest) way to host your application is to host it in the cloud.
 
@@ -23,7 +23,7 @@ A lot of pharo developers use Mac OS X to develop their applications but it is n
 
 There are many Linux distributions you can choose from. If you restrict your choice to well-known open-source distributions, competitors are *Centos>http://www.centos.org*, *Debian>http://www.debian.org* and *Ubuntu>http://www.ubuntu.com*. Most distribution will do the job, choose the most appropriate for you. A long-term support (''aka.'', LTS) version is welcomed if you do not want to update your operating system too often. The Pharo Virtual Machine (VM) comes pre-packaged for some distributions. For other distributions, you will have to compile the VM sources yourself. Pay attention that the Pharo VM is still 32bits as of 2015 and you will have to install 32-bit libraries on your 64-bit Operating System.
 
-!!Build your image
+!!Build your Image
 
 The best option to obtain a clean image to deploy is to start from a fresh *stable pharo image>http://files.pharo.org/image/stable/latest.zip* and to install required packages through your application's Metacello configuration and the command line handler. The configuration has to explicitely describes all dependencies used in your application.
 

@@ -13,7 +13,7 @@ engine for HTML pages it is useful in different areas.
 
 Norbert Hartl developed a Mustache package for Pharo. This chapter is an introduction to this package and a mini tutorial to get started with Mustache. This text is based on the original blog entries written by Norbert and extended to offer a larger covering of the Mustache features.
 
-!!Getting started
+!!Getting Started
 
 To install Mustache, execute the following expression in a workspace:
 
@@ -145,7 +145,7 @@ context := { 'foo' -> 'true' } asDictionary.
 
 When the variable is set, the output depends on the contents of the variable and there are three distinct cases, as we discuss next.
 
-!!! With the variable value being a 'simple' object
+!!! With the Variable Value being a 'simple' Object
 
 For values that are not collections nor blocks, the output will be present once.
 For example, below ==number== is bound to ==true== which renders the text =='Shown too'==. The same will happen when ==number== is bound to another value, e.g. ==42==.
@@ -183,7 +183,7 @@ context := { 'number' -> false } asDictionary.
 ]]]
 
 
-!!! With the variable value being a collection
+!!! With the Variable Value being a Collection
 
 We can use collections to create loop constructs in templates. If a
 section key is present in the context and it has a collection as a
@@ -320,7 +320,7 @@ With such behavior we can easily generate menus and lists in html, for example:
 
 
 
-!!! With the variable value being a block
+!!! With the Variable Value being a Block
 
 We can use Pharo blocks in context objects as well. They are evaluated at the time the template is filled out. For example, 
 
@@ -508,7 +508,7 @@ After that it is just as simple as in the following example:
 % 		]]
 % ]]]
 
-!! Templates made easy
+!! Templates made Easy
 
 Mustache can make template dependent tasks very easy from a simple token replacement up to nested structures to create HTML pages. We use them e.g., for 
 generating SOAP templates. The strength of Mustache lays in the syntax and the combination of context objects. So, there is more for you to find what can be 
