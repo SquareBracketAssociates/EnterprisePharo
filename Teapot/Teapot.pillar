@@ -30,7 +30,7 @@ Opening a browser on *http://localhost:1701/welcome* results in the following:
 +Go to the Teapot welcome at *http://localhost:1701/welcome*>file://figures/TeapotWelcome.png|width=70|label=TeapotWelcome+
 
 
-!!!Differences between Teapot and other web frameworks
+!!!Differences between Teapot and other Web Frameworks
 
 Teapot is not a singleton and doesn't hold any global state. You can run multiple Teapot servers inside the same image with their state being isolated from each other.
 
@@ -40,7 +40,7 @@ Teapot is not a singleton and doesn't hold any global state. You can run multipl
 
 
 
-!!A REST example, showing some CRUD operations
+!!A REST Example, Showing some CRUD Operations
 
 Before getting into the details of Teapot. Here is a simple example for managing books. With the following code, we can list books, add a book and delete a book.
 
@@ -127,7 +127,7 @@ Teapot on
 
 See also the, ==IsInteger== and ==IsNumber== classes for information about introducing user defined conversions.
 
-!!!Using regular expressions
+!!!Using Regular Expressions
 
 Instead of ==<== and ==>== surrounded named parameters, the regexp pattern may contain subexpressions between parentheses whose values are accessible via the
 request object.
@@ -145,7 +145,7 @@ ZnEasy get: 'http://localhost:1701/hi/user'
  --> not found
 ]]]
 
-!!!How are routes matched?
+!!!How are Routes Matched?
 
 The routes are matched in the order in which they are defined.
 
@@ -166,7 +166,7 @@ Teapot on
    GET: '/unauthorized' -> [ :req | req abort: 'go away' ]; start.
 ]]]
 
-!!Transforming output from actions
+!!Transforming Output from Actions
 
 The default output for Teapot is HTML: the output of an action is interpreted as a string and the content-type of the HTML response is set to ==text/html==. The output of an action may actually undergo any kind of transformations by a response transformer. Response Transformers heve the ultimate responsibility for constructing the outgoing HTTP response (an instance of the class ==ZnResponse==). To clarify, HTTP requests take the following path through Teapot:
 
@@ -190,7 +190,7 @@ GET: '/greet' -> [:req |
       entity: (ZnEntity html: 'Hello World!'); yourself ]
 ]]]
 
-!!!Response transformers
+!!!Response Transformers
 
 The responsibility of a response transformer is to convert the output of the action block to HTML and to set the content-type of the response.
 Some response transformers require external packages (e.g., NeoJSON, STON, Mustache). See the ==TeaOutput== class for more information, for example the HTML transformer is  ==TeaOutput html==.
@@ -257,7 +257,7 @@ Teapot on
    start.
 ]]]
 
-!!Error handlers
+!!Error Handlers
 Teapot also handles exceptions of a configured type(s) for all routes and before filters.
 The following example illustrates how the errors raised in actions can be captured by exception handlers.
 
@@ -289,7 +289,7 @@ exception: ZeroDivide, DomainError -> handler
 The same rules apply for the return values of the exception handler as were used for the Routes.
 
 
-!!Serving static files
+!!Serving Static Files
 
 Teapot can straightforwardly serve static files. The following example serves the files located on the file system at ==/var/www/htdocs== at the ==/static== URL.
 

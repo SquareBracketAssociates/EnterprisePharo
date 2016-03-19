@@ -14,7 +14,7 @@ demonstrates through small, elegant and robust examples some
 possibilities of this powerful library. The client side is described
 in Chapter *Zinc Client side>../Zinc-HTTP-Client/Zinc-HTTP-Client.pillar@cha:zinc-client*
 
-!!Running a simple HTTP server
+!!Running a Simple HTTP Server
 
 Getting an independent HTTP server up and running inside a Pharo image is surprisingly easy.
 
@@ -74,7 +74,7 @@ and restart cycles and needs to be stopped with ==ZnServer stopDefault.== The Tr
 
 @@note Due to its implementation, the server will print a debug notification: ==Wait for accept timed out==, every 5 minutes. Again, although it looks like an error, it is by design and normal, expected behavior.
 
-!!Server delegate, testing and debugging
+!!Server Delegate, Testing and Debugging
 
 The functional behavior of a ==ZnServer== is defined by an object called its delegate. A delegate implements the key method ==handleRequest:== which gets the
 incoming request as parameter and has to produce a response as
@@ -102,7 +102,7 @@ This server does not look at the incoming request. It always answers ==200 OK== 
 ==onRequestRespond:== method accepts a block that takes a request and that should produce a response. It is implemented using the helper object ==ZnValueDelegate==, which
 converts ==handleRequest:== to ==value:== on a wrapped block.
 
-!!! The default server delegate
+!!! The Default Server Delegate
 
 Out of the box, a ==ZnServer== will have a certain functionality that is related to testing and debugging. The
 ==ZnDefaultServerDelegate== object implements this behavior. Assuming a server is running locally on port 1701, this is the list of URLs that are available.
@@ -126,7 +126,7 @@ The random pattern consists of hexadecimal digits and ends with a linefeed. The 
 The bytes handler has a similar size option. Its output is in the form of a repeating BCDA pattern. When requesting equally sized byte patterns repeatably, some
 extra server side caching will improve performance.
 
-!!! Testing and debugging
+!!! Testing and Debugging
 
 The echo handler is used extensively by the unit tests. It not only lists the request headers as received by the server, but even the entity if there is one. In
 case of a non-binary entity, the textual contents will be included. This is really useful to debug PUT or POST requests.
@@ -140,7 +140,7 @@ because the server and its spawned handler subprocesses are different from the U
 When logging is enabled, the server will also keep track of the last request and response it processed. You can inspect these to find out what happened, even if
 there was no debugger raised.
 
-!!Server authenticator
+!!Server Authenticator
 
 Similar to the delegate, a ==ZnServer== also has an authenticator object whose function is to authenticate requests. An authenticator has to implement the
 ==authenticateRequest:do:== method whose first argument is the incoming request and second argument a block. This method has to produce a response, like
@@ -216,7 +216,7 @@ ZnLogEvent announcer when: ZnLogEvent
 (ZnServer defaultOn: 1701) start.
 ]]]
 
-!!Server variants and life cycle
+!!Server Variants and Life Cycle
 
 The class side of ==ZnServer== is actually a factory to instantiate a particular concrete ==ZnServer== subclass, as can be seen in ==defaultServerClass==. The
 hierarchy looks as follows.
@@ -247,7 +247,7 @@ server will not respond to requests over its normal network, but only to request
    start.
 ]]]
 
-!!Static file server
+!!Static File Server
 
 When most people think about a web server, they imagine what is technically called static file serving. There is a directory full of HTML, image, CSS, and other files, somewhere on a machine, and the web server serves
 these files over HTTP to web browser clients anywhere on the network. This is indeed what Apache does in its most basic form.
@@ -383,7 +383,7 @@ Another option is to use ==ZnDispatcherDelegate==.
 You configure the dispatcher using ==map:to:== methods. First argument is the prefix, second argument is a block taking two arguments: the incoming request and
 an already instantiated response.
 
-!!Character encoding
+!!Character Encoding
 
 Proper character encoding and decoding is crucial in today's international world. Pharo Smalltalk encodes characters and strings using Unicode. The primary
 internet encoding is UTF-8, but a couple of others are used as well. To translate between these two, a concrete ==ZnCharacterEncoding== subclass like ==ZnUTF8Encoder== is used.
@@ -438,7 +438,7 @@ ZnClient new
  yourself.
 ]]]
 
-!!Resource protection limits, content and transfer encoding
+!!Resource Protection Limits, Content and Transfer Encoding
 
 Internet facing HTTP servers will come under attack by malicious clients. Good security is thus important. The first step is a correct and safe implementation of
 the HTTP protocol. Another way a server protects itself is by implementing some resource limits.
@@ -458,7 +458,7 @@ All this is handled internally and invisibly. The main object dealing with conte
 stream is wrapped with either a ==ZnChunkedReadStream== and/or a ==GZipReadStream==. Zn also makes use of a ==ZnLimitedReadStream== to make sure there is no read
 beyond the boundaries of one single request's body, provided the content length is set.
 
-!!Seaside adaptor
+!!Seaside Adaptor
 
 *Seaside>http://www.seaside.st/* is a well known, cross platform, advanced Smalltalk web application framework. It does not provide its own HTTP server but
 relies on an existing one by means of an adaptor. It works well with Zn, through the use of a ==ZnZincServerAdaptor==. It comes already included with certain Seaside distributions and on Pharo Smalltalk it is the default.
@@ -499,7 +499,7 @@ The service will allow arbitrary *JSON>http://www.json.org/* objects to be store
 ;==DELETE /n==
 :Removes the JSON object known under URI ==/n==.
 
-!!!The server code
+!!!The Server Code
 
 A proper implementation should best use a couple of classes. However for brevity, the following implementation is written in a workspace, not using any classes. It requires STON (see
 Chapter *STON>../STON/STON.pillar@cha:ston*) and starts by creating one global variable to hold the stored objects. It is a standard dictionary mapping string URIs to objects.
@@ -606,7 +606,7 @@ The server logic thus becomes: find a matching entry in the mapper and invoke it
             ifNotNil: [ :handler | handler value value: request ] ].
 ]]]
 
-!!!Using the server
+!!!Using the Server
 
 Here is an example command line session using the Unix utility *curl>http://en.wikipedia.org/wiki/CURL*, interacting with the server.
 
@@ -655,7 +655,7 @@ $ curl http://localhost:1701/2
 Not Found /2
 ]]]
 
-!!!A Zinc client
+!!!A Zinc Client
 
 It is trivial to use ==ZnClient== to have the same interaction. But we can do better: using a contentWriter and contentReader, we can customise the client to do the JSON conversions automatically.
 

@@ -439,7 +439,7 @@ User >> fuelAccept: aGeneralMapper
 During serialization the admin user won't be serialized but instead its global name and selector are stored. Then, at materialization time, Fuel will send the 
 message ==admin== to the class ==User==, and use the returned value as the admin user of the materialized graph.
 
-!!!! Hooking Into Instance Creation
+!!!! Hooking into Instance Creation
 
 Fuel provides two hook methods to customise how instances are created: ==fuelNew== and ==fuelNew:==.
 

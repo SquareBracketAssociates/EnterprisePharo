@@ -8,7 +8,7 @@
 JSON (JavaScript Object Notation) is a popular data-interchange format. NeoJSON is an elegant and efficient standalone Smalltalk library to read and write 
 JSON converting to and from Smalltalk objects. The library is developed and actively maintained by Sven Van Caekenberghe.
 
-!!An introduction to JSON
+!!An Introduction to JSON
 
 JSON is a lightweight text-based open standard designed for human-readable data interchange. It was derived from the JavaScript scripting language for 
 representing simple data structures and associative arrays, called objects. Despite its relationship to JavaScript, it is language-independent, with parsers 
@@ -221,7 +221,7 @@ The above expression returns a string representing the current date and time.
 NeoJSON deals efficiently with mappings: the minimal amount of intermediary structures are created.
 On modern hardware, NeoJSON can write or read tens of thousands of small objects per second. Several benchmarks are included in the unit tests package.
 
-!!Emitting null values
+!!Emitting null Values
 
 For efficiency reasons, by default, ==NeoJSONWriter== does not write ==nil== values:
 
