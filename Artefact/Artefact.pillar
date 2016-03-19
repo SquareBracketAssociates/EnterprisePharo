@@ -65,13 +65,13 @@ execution platform (Microsoft Windows, Mac OS X, Linux, Android, IOS, etc.), Art
 
 !!!Installing  Artefact
 
-Artefact is hosted on SmalltalkHub: *http://smalltalkhub.com/#!/~RMoD/Artefact*. To install Artefact, execute the following expressions: 
+Artefact is hosted on *SmalltalkHub>http://smalltalkhub.com/#!/~RMoD/Artefact*. To install Artefact, execute the following expressions: 
 
 [[[
 Gofer new
-    smalltalkhubUser: '' project: 'RMoD/Artefact';
-    package: 'ConfigurationOfArtefact';
-    load.
+   smalltalkhubUser: '' project: 'RMoD/Artefact';
+   package: 'ConfigurationOfArtefact';
+   load.
 
 ConfigurationOfArtefact load
 ]]]
@@ -169,9 +169,9 @@ A PDFDocument can be configured with a specific format, orientation, compression
 
 !!!!Document format and orientation
 
-By default, a document is generated in the A4 format but this is not the only format that is available. The Package ==Artefact-Core-Formats== contains a list of 
-predefined formats that cover many needs. Examples are: A3 (==PDFA3Format==), letter size (==PDFLetterFormat==) and a format suitable for e-readers 
-(==PDFEbookFormat==). If you need a particular size, you can define it. A format is simply defined by the value returned by the message ==defaultSize==.
+By default, a document is generated in the A4 format but other formats are available. The Package ==Artefact-Core-Formats== contains a list of
+predefined formats covering many needs. Examples are: A3 (==PDFA3Format==), letter size (==PDFLetterFormat==) and a format suitable for e-readers
+(==PDFEbookFormat==). If you need a particular format, you can define it. A format is simply defined by the value returned by the message ==defaultSize==.
 
 A ==PDFDocument== accepts the message ==format:== to specify the format of all pages of the document. For each page, this value will be the default if not 
 redefined otherwise. Each page can specify a different format. The following example creates a document using the A3 format:
@@ -410,7 +410,7 @@ In addition, Artefact offers other constructors that fix the position and size o
 
 
 !!!! Element size
-Artefact offers two ways to set the size of a element: Using the message ==from:to:== or ==from:dimension:==.
+Artefact offers two ways to set the size of an element: either through the ==from:to:== message or through ==from:dimension:==.
 
 The message ==from:to:== takes as arguments the start and the end position.
 For example, the following code draws a rectangle whose origin is 15mm from the left and  30mm from the top and its end is at 90 mm from the left border and 80mm 
@@ -831,7 +831,7 @@ First create the class of your element and generate accessors for its variable =
 		category: 'Artefact-Tutorial'
 ]]]
 
-The two relevant methods for Artefact are ==getSubElementsWith:styleSheet:== and ==defaultStyle==. The first one must return a collection of ==PDFElements== 
+The two relevant methods for Artefact are ==defaultStyle== and ==getSubElementsWith:styleSheet:==. The first one must return a collection of ==PDFElements== 
 (basic or composites). The second one must return a symbol that associates the elements with a style definition. 
 However it's not necessary to define this style in your document, Artefact will use the default style instead.
 
