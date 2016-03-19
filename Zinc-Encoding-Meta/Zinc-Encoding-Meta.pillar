@@ -35,13 +35,13 @@ In this chapter we discuss Character encoding, MIME types and URL/URIs. They are
 % ]]]
 
 
-!! Character encoding
+!! Character Encoding
 
 We will first show how to get Unicode from characters and strings within Pharo.
 We will then show how to decode and encode characters and strings from and to bytes. 
 
 
-!!! Characters and Strings use Unicode internally
+!!! Characters and Strings use Unicode Internally
 
 Proper character encoding and decoding is crucial in today's international world. Internally, Pharo stores characters and strings using Unicode. 
 *Unicode>http://en.wikipedia.org/wiki/Unicode* is a very large internationally standardized collection of code points (integer numbers) representing all of the world 
@@ -254,7 +254,7 @@ We used the message ==on:encoding:== here, but there is also a plain message ==o
 Internally, the character streams will use an encoder instance to do the actual work. 
 
 
-!!! ByteStrings and WideStrings are concrete subclasses of String
+!!! ByteStrings and WideStrings are Concrete Subclasses of String
 
 
 Up until now we spoke about Strings as being a collection of Characters, each of which is represented as a Unicode code point. 
@@ -293,7 +293,7 @@ In practice, the difference between ==ByteString== and ==WideString== should not
 As the above example shows, in a ==ByteString== =='abc'== putting the Unicode character ==$α==, converts it to a ==WideString==. (This is actually done using a ==becomeForward:== message.) When benchmarking, this conversion might show up as taking significant time. If you know upfront that you will need WideStrings, it can be better to start with the right type.
 
 
-!!! ByteString and ByteArray equivalence is an implementation detail
+!!! ByteString and ByteArray Equivalence is an Implementation Detail
 
 There is another implementation detail worth mentioning: for the Pharo virtual machine, more specifically, for a number of primitives, ==ByteString== and ==ByteArray== instances are equivalent. Given what we now know, that makes sense. Consider the following code:
 
@@ -331,7 +331,7 @@ So although it is true that there is some equivalence between ByteString and Byt
 should not rely upon.
 
 
-!!! Beware of bogus conversions
+!!! Beware of Bogus Conversions
 
 Given a string, it is tempting to send it the message ==asByteArray== to convert it to bytes. Similary, it is tempting to convert a byte array by 
 sending it the message ==asString==. These are however bogus conversions that should not be used as for some strings they will work, but for others not. Success depends on the code points of the characters in the string. Basically 
@@ -380,7 +380,7 @@ This 'conversion' does not correspond to any known encoding. It is the result of
 @@note Using this is a bug no matter how you look at it. In this century you will look silly for not implementing proper support for all languages. When converting between strings and bytes, use a proper, explicit encoding.
 
 
-!!! Strict and lenient encoding
+!!! Strict and Lenient Encoding
 
 No encoding (or the null encoder) and Latin-1 encoding are in fact not completely the same. This is because there are 'holes' in the table: some byte 
 values are undefined, which a strict encoder won't allow, and the default encoder is strict. 

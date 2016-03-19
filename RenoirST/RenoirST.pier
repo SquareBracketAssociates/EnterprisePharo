@@ -13,7 +13,7 @@ In this tutorial we will present the key features of RenoirSt with a large set o
 This tutorial assumes some knowledge of CSS and Pharo. For a little introduction about CSS you can read the 
 *Seaside's book CSS chapter>http://book.seaside.st/book/fundamentals/css*.
 
-!!Getting started
+!!Getting Started
 
 To load the library in your image, evaluate:
 
@@ -63,7 +63,7 @@ The properties API is mostly defined following this rules:
 - Properties without dashes in the name are directly mapped: the margin CSS property is mapped to a ==margin:== message send.
 - Properties with one or more dashes are mapped using camel case: the margin-top CSS property is mapped to the ==marginTop:== message send.
 
-!!Defining the rules
+!!Defining the Rules
 
 We now present how the various CSS rules can be expressed with RenoirSt. RenoirSt supports many CSS types, comments, and even functional notation.
 
@@ -564,7 +564,7 @@ Evaluates to:
 
 So far our focus was on the ''style'' part of the rule. Let's focus now on the available ''selectors''. Remember that a CSS selector represents a structure used to match elements in the document tree. This chapter asume some familiarity with the CSS selectors and will not go in detail about the exact meaning of each one. For more details you can take a look at *CSS3 selector documentation>http://www.w3.org/TR/css3-selectors*.
 
-!!! Type selectors
+!!! Type Selectors
 
 These selectors match a specific element type in the DOM. The library provides out-of-the-box support for HTML elements. One example is the ==div== selector used in the previous chapter:
 
@@ -833,7 +833,7 @@ input:checked
 }
 ]]]
 
-!!!! Language Pseudo-class:
+!!!! Language Pseudo-Class:
 
 The ==:lang(C)== pseudo-class can be used by sending the message ==lang:==:
 
@@ -853,7 +853,7 @@ evaluates to:
 }
 ]]]
 
-!!!! Negation Pseudo-class:
+!!!! Negation Pseudo-Class:
 
 The negation pseudo-class, ==:not(X)==, is a functional notation taking a simple selector (excluding the negation pseudo-class itself) as an argument. It represents an element that is not represented by its argument. For more information take a look at the CSS spec.
 
@@ -871,7 +871,7 @@ button:not([DISABLED])
 }
 ]]]
 
-!!!! Structural Pseudo-classes
+!!!! Structural Pseudo-Classes
 These selectors allow selection based on extra information that lies in the document tree but cannot be represented by other simpler selectors nor combinators.
 
 The ==:root== pseudo-class represents an element that is the root of the document. To build this kind of selector just send the message ==root== to another selector:
@@ -1123,7 +1123,7 @@ evaluates to:
 }
 ]]]
 
-!! Vendor-specific extensions
+!! Vendor-Specific Extensions
 
 The library doesn't provide out of the box support for non standard properties. Nevertheless, the message ==vendorPropertyAt:put:== is available to ease the creation of this kind of properties by the end user:
 
@@ -1195,7 +1195,7 @@ CascadingStyleSheetBuilder new
 }
 ]]]
 
-!! Interaction with other frameworks and libraries
+!! Interaction with other Frameworks and Libraries
 
 !!! Units
 
