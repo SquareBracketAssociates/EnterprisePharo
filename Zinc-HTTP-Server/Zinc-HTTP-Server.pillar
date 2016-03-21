@@ -546,8 +546,7 @@ mapper := {
          ok: (jsonEntityBuilder value: JSONStore keys asArray) ].
 "----------------------------------------------------------------"
    [ :request |
-      (request uri hasPath and: [ request method = #GET ])
-         and: [ request uri pathSegments size = 1 ] ]
+      request uri pathSegments size = 1 and: [ request method = #GET ] ]
    ->
    [ :request | | uri |
       uri := request uri pathPrintString.
@@ -570,9 +569,9 @@ mapper := {
          yourself ].
 "----------------------------------------------------------------"
    [ :request |
-      ((request uri hasPath and: [ request method = #PUT ])
-      and: [ request uri pathSegments size = 1 ])
-      and: [ request contentType = ZnMimeType applicationJson ]]
+      (request uri pathSegments size = 1
+         and: [ request method = #PUT ])
+         and: [ request contentType = ZnMimeType applicationJson ]]
    ->
    [ :request | | uri |
       uri := request uri pathPrintString.
@@ -585,10 +584,9 @@ mapper := {
          ifFalse: [ ZnResponse notFound: uri ] ].
 "----------------------------------------------------------------"
    [ :request |
-      (request uri hasPath
-         and: [ request method = #DELETE ])
-         and: [ request uri pathSegments size = 1 ] ]
-  ->
+      request uri pathSegments size = 1
+         and: [ request method = #DELETE ] ]
+   ->
    [ :request | | uri |
       uri := request uri pathPrintString.
       (JSONStore removeKey: uri ifAbsent: [ nil ])
