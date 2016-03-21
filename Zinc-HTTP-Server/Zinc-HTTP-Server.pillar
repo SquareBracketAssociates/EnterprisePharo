@@ -456,7 +456,7 @@ Zinc HTTP Components currently implements and enforces the following limits:
 - maximumEntitySize (16Mb), the size of incoming entities
 - maximumNumberOfDictionaryEntries (256), which is used in headers, URLs and some entities
 
-Of course these values may be customized if one need to.
+Of course these values may be customized if one needs to.
 
 Also, Zn implements two important techniques used by HTTP servers when they send entity bodies to clients: Gzip encoding and chunked transfer encoding. The
 first one adds compression. The second one is used when the size of an entity is not known up front. Instead chunks of certain sizes are sent until the entity is complete.
@@ -718,4 +718,4 @@ Now we can hold the same conversation as above, only in this case in terms of re
 
 !!Conclusion
 
-Zinc HTTP Components was written with the explicit goal of allowing users to explore the implementation. The test suite contains many examples that can serve as learning material. This carefulness while writing Zinc HTTP Components code now enable users customize it to their need or build on top of it. Zinc is indeed an extremely malleable piece of software.
+Zinc HTTP Components was written with the explicit goal of allowing users to explore the implementation. The test suite contains many examples that can serve as learning material. This carefulness while writing Zinc HTTP Components code now enable users to customize it to their need or to build on top of it. Zinc is indeed an extremely malleable piece of software.
