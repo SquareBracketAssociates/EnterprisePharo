@@ -509,10 +509,11 @@ The service will allow arbitrary *JSON>http://www.json.org/* objects to be store
 !!!The Server Code
 
 A proper implementation should best use a couple of classes. However for brevity, the following implementation is written in a workspace, not using any classes. It requires STON (see
-Chapter *STON>../STON/STON.pillar@cha:ston*) and starts by creating one global variable to hold the stored objects. It is a standard dictionary mapping string URIs to objects.
+Chapter *STON>../STON/STON.pillar@cha:ston*) and starts by creating two global variables to hold the stored objects and the last ID used. The former is a standard dictionary mapping string URIs to objects.
 
 [[[
 JSONStore := Dictionary new.
+ServerLastId := 0.
 ]]]
 
 The server implementation uses two helper objects: a ==jsonEntityBuilder== and a ==mapper==. Both make use of block closures.
@@ -562,9 +563,9 @@ mapper := {
          and: [ request contentType = ZnMimeType applicationJson ] ]
    ->
    [ :request | | uri |
-      uri := '/', (JSONStore size + 1) asString.
+      uri := '/', (ServerLastId := ServerLastId + 1) asString.
       JSONStore at: uri put: (STON fromString: request contents).
-     (ZnResponse created: uri)
+      (ZnResponse created: uri)
          entity: (jsonEntityBuilder value: 'Created ', uri);
          yourself ].
 "----------------------------------------------------------------"
