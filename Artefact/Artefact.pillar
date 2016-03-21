@@ -715,7 +715,7 @@ The code below produces a gray piece of text:
 ]]]
 
 
-!!!!Drawing Thichness 
+!!!!Drawing Thickness 
 	
 The thickness of a line, a segment, or a border, is controlled by the message ==thickness:==, as shown below:
 
