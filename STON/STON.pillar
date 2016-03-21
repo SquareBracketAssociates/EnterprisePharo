@@ -43,18 +43,18 @@ STON is hosted on SmalltalkHub. To load STON, execute the following code snippet
 
 [[[
 Gofer new
-	smalltalkhubUser: 'SvenVanCaekenberghe' project: 'STON';
-	configurationOf: 'Ston';
-	loadStable.
+   smalltalkhubUser: 'SvenVanCaekenberghe' project: 'STON';
+   configurationOf: 'Ston';
+   loadStable.
 ]]]
 
 You can also add the following repository to your package browser:
 
 [[[
 MCHttpRepository
-	location: 'http://smalltalkhub.com/mc/SvenVanCaekenberghe/STON/main'
-	user: ''
-	password: ''
+   location: 'http://smalltalkhub.com/mc/SvenVanCaekenberghe/STON/main'
+   user: ''
+   password: ''
 ]]]
 
 A Gemstone (*http://gemtalksystems.com/products/*) port implemented by
