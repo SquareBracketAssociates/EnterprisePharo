@@ -17,8 +17,8 @@ and very flexible.
 
 With the arrival of advanced Web applications mimicking regular desktop applications with rich user interfaces, as well as mobile Web applications, it became clear that HTTP was not suitable or not a great fit for two use cases:
 
-- when the server wants to take the initiative and send the client a message. In the HTTP protocol, the server cannot take the initiative to send a message, the only workaround is for the client to do some form of polling.
-- when the client wants to send (many) (possibly asynchronous) short messages with little overhead. For short messages, the HTTP protocol adds quite a lot of overhead in the form of meta data headers. For many applications, the response (and the delay waiting for it) are not needed.
+- When the server wants to take the initiative and send the client a message. In the HTTP protocol, the server cannot take the initiative to send a message, the only workaround is for the client to do some form of polling.
+- When the client wants to send (many) (possibly asynchronous) short messages with little overhead. For short messages, the HTTP protocol adds quite a lot of overhead in the form of meta data headers. For many applications, the response (and the delay waiting for it) are not needed.
 
 Previously, Comet and Ajax were used as (partial) solutions to these use cases.
 The WebSocket protocol defines a reliable communication channel between two equal parties, typically, but not necessarily, a Web client and a Web server, over which asynchronous messages can be send with very little overhead.
@@ -250,7 +250,7 @@ ZnServer default delegate
   to: (ZnWebSocketDelegate map: 'ws-status' to: ZnWebSocketStatusHandler new).
 ]]]
 
-Visit *http://localhost:1701/ws-status-client* to see statistics (uptime, memory, ...) of your running Pharo lively refreshed in a Web page.
+Visit *http://localhost:1701/ws-status-client* to see statistics (uptime, memory...) of your running Pharo lively refreshed in a Web page.
 
 What happened is that your Web browser contacted the Zinc server on *http://localhost:1701/ws-status-client* and got back the HTML and Javascript code in ==ZnWebSocketStatusHandler class>>clientHtml==.
 The execution of this Javascript code by the Web browser sent an HTTP request to the Zinc server on *http://localhost:1701/ws-status* asking for an upgrade to up a Web socket connection. Then, the ==ZnWebSocketStatusHandler== object can send status updates through this Web socket connection directly to the Javascript code that refreshes the HTML page content.
@@ -300,7 +300,6 @@ ZnServer default delegate
 
 Visit *http://localhost:1701/ws-chat-client* to access your Web chat application.
 You can open multiple tabs on this same URL to simulate multiple users on the Chat.
-
 You can also send chat messages directly from Pharo, much like a moderator:
 
 [[[
@@ -318,20 +317,17 @@ The key methods are ==writeOn:== and ==readFrom:== as well as the instance creat
 ==ZnWebSocket== implements the protocol above frames, either from a server or a client perspective. The key methods are ==readMessage== and ==readFrame==, sending is quite simple.
 Client-side setup can be found on the class side of ==ZnWebSocket==.
 Server-side handling of the setup is implemented in ==ZnWebSocketDelegate==.
-
 Two exceptions, ==ZnWebSocketFailed== and ==ZnWebSocketClosed== and a shared ==ZnWebSocketUtils== class round out the core code.
 
 !!Live Demo
 
 There is a live demo available at *http://websocket.stfx.eu* with the basic Zinc-WebSocket demos: echo, status & chatroom.
-
 Have a look at ==ZnWebSocketDelegate class>>installExamplesInServer:== as a starting point to learn how these demos were set up.
+Setting up a production demo is complicated by the fact that most proxies and load balancers, most notably the market leader Apache, do not (yet) deal correctly with the WebSocket protocol. It is thus easier to organize things such that your client directly talk to your Smalltalk image.
 
-Setting up a production demo is complicated by the fact that most proxies and load balancers, most notable market leader Apache, do not (yet) deal correctly with the WebSocket protocol. It is thus easier to organize things such that your client directly talk to your Smalltalk image.
-
-The implementation of Zinc WebSockets as an add-on to Zinc HTTP Components was made possible in part through financial backing by Andy Burnett of Knowinnovation Inc. and ESUG.
 
 !!Conclusion
 
 WebSockets integrate smoothly with Zinc HTTP Components to form another part of the Pharo Web stack.
 It provides support for building modern single page Web applications in Pharo.
+The implementation of Zinc WebSockets as an add-on to Zinc HTTP Components was made possible in part through financial backing by Andy Burnett of Knowinnovation Inc. and ESUG.
