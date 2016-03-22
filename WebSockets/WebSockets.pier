@@ -28,12 +28,12 @@ Using WebSockets, a server can notify a client instantly of interesting events, 
 
 !!The WebSocket Protocol
 
-Zinc WebSockets implements RFC 6455 *http://tools.ietf.org/html/rfc6455*, not any of the previous development versions.
-For an introduction to, both *http://en.wikipedia.org/wiki/WebSocket* and *http://www.websocket.org* are good starting points.
+Zinc WebSockets implements *RFC 6455>http://tools.ietf.org/html/rfc6455*, not any of the previous development versions.
+For an introduction, both *the WebSocket Wikipedia article>http://en.wikipedia.org/wiki/WebSocket* and *websocket.org>http://www.websocket.org* are good starting points.
 
 As a protocol, WebSocket starts with an initial setup handshake that is based on HTTP. The initiative for setting up a WebSocket lies with the client, who is
 sending a so called connection upgrade request. The upgrade request contains a couple of special HTTP headers. The server begins as a regular HTTP server
-accepting the connection upgrade request. When the request is conform the specifications, a 101 switching protocols response is sent. This response also
+accepting the connection upgrade request. When the request conforms to the specification, a 101 Switching Protocols response is sent. This response also
 contains a couple of special HTTP headers. From that point on, the HTTP conversation over the network socket stops and the WebSocket protocol begins.
 
 WebSocket messages consist of one or more frames with minimal encoding. Behind the scenes, a number of control frames are used to properly close the WebSocket
@@ -44,13 +44,13 @@ and to manage keeping alive the connection using ping and pong frames.
 The code implementing Zinc WebSockets resides in a single package called 'Zinc-WebSocket-Core' in the Zinc HTTP Components repository.
 There is also an accompanying 'Zinc-WebSocket-Tests' package containing the unit tests.
 The ==ConfigurationOfZincHTTPComponents== has a group called =='WebSocket'== that you can load separately.
-Here the loading code snippet:
+Here is the loading code snippet:
 
 [[[
 Gofer new
-    smalltalkhubUser: 'SvenVanCaekenberghe' project: 'ZincHTTPComponents';
-    package: 'ConfigurationOfZincHTTPComponents';
-    load.
+   smalltalkhubUser: 'SvenVanCaekenberghe' project: 'ZincHTTPComponents';
+   package: 'ConfigurationOfZincHTTPComponents';
+   load.
 (Smalltalk globals at: #ConfigurationOfZincHTTPComponents) project latestVersion load: 'WebSocket'.
 ]]]
 
@@ -62,26 +62,25 @@ An endpoint for a WebSocket is specified using an URL:
 ws://www.example.com:8088/my-app
 ]]]
 
-Two new schemes are defined, ==ws://== for regular WebSockets and ==wss://== for the secure (TLS/SSL) variant. The ==host:port:== and path specification should be familiar.
-
+Two new schemes are defined, ==ws://== for regular WebSockets and ==wss://== for the secure (TLS/SSL) variant.
 Zinc WebSockets supports the usage of client side WebSockets of both the regular and secure variants.
-Note that the secure variant requires loading the XX *Zodiac TLS/SSL Pharo project>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/Zodiac*.
-Zinc WebSockets API is really simple, once you opened the socket, you use ==sendMessage:== and ==readMessage:== and finally ==close==.
+Note that the secure variant requires loading the *Zodiac TLS/SSL Pharo project>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/Zodiac*.
+Zinc WebSockets API is really simple, once you opened the socket, you use ==sendMessage:==, ==readMessage== and finally ==close==.
 
-Here is a client side example taking to a public echo service:
+Here is a client-side example talking to a public echo service:
 
 [[[
 | webSocket |
 webSocket := ZnWebSocket to: 'ws://echo.websocket.org'.
 [ webSocket
-    sendMessage: 'Pharo Smalltalk using Zinc WebSockets !';
-    readMessage ] ensure: [ webSocket close ].
+   sendMessage: 'Pharo Smalltalk using Zinc WebSockets !';
+   readMessage ] ensure: [ webSocket close ].
 ]]]
 
-Note that ==readMessage:== is blocking. It always returns a complete ==String== or ==ByteArray==, possible assembled out of multiple frames. Inside
-==readMessage:== control frames will be handled automagically. Reading and sending are completely separate and independent.
+Note that ==readMessage== is blocking. It always returns a complete ==String== or ==ByteArray==, possible assembled out of multiple frames. Inside
+==readMessage== control frames will be handled automagically. Reading and sending are completely separate and independent.
 
-For sending very large messages, there are ==sendTextFrames:== and ==sendByteFrames:== that take a collection of ==Strings== or ==ByteArrays== to be sent as
+For sending very large messages, there are ==sendTextFrames:== and ==sendByteFrames:== that take a collection of ==String==s or ==ByteArray==s to be sent as
 different frames of the same message. At the other end, these will be joined together and seen as a single message.
 
 In any non-trivial application, you will have to add your own encoding and decoding to messages. In many cases, JSON will be the obvious choice as the client
@@ -99,7 +98,7 @@ webSocket := ZnWebSocket to: 'wss://echo.websocket.org'.
 
 Of course, your image has to contain Zodiac and your VM needs access to the proper plugin. That should not be a problem with the latest Pharo releases.
 
-!!Using Server Side WebSockets
+!!Using Server-Side WebSockets
 
 Since the WebSocket protocol starts off as HTTP, it is logical that a ZnServer with a special delegate is the starting point. ==ZnWebSocketDelegate== implements the standard ==handleRequest:== to check if the incoming request is a valid WebSocket connection upgrade request. If so, the matching 101 switching protocols response is constructed and sent. From that moment on, the network socket stream is handed over to a new, server side ==ZnWebSocket== object.
 
@@ -259,29 +258,29 @@ The execution of this Javascript code by the Web browser sent an HTTP request to
 !!Building a Web Chat
 
 Another available example is ==ZnWebSocketChatroomHandler==.
-It implements the core logic of a chatroom: clients can send messages to the server who distributes them to all connected clients.
+It implements the core logic of a chatroom: clients can send messages to the server which distributes them to all connected clients.
 In this case, the handler has to manage a collection of all connected client Web sockets.
 Here is the core loop:
 
 [[[
 ZnWebSocketChatroomHandler>>value: webSocket
-  [
-    self register: webSocket.
-    webSocket runWith: [ :message |
-      self crLog: 'Received message: ', message printString.
-      self distributeMessage: message ] ]
-    on: ConnectionClosed
-    do: [
+   [
+      self register: webSocket.
+      webSocket runWith: [ :message |
+         self crLog: 'Received message: ', message printString.
+         self distributeMessage: message ] ]
+   on: ConnectionClosed
+   do: [
       self crLog: 'Connection close, cleaning up'.
       self unregister: webSocket ]
 ]]]
 
-Distributing a message is as simple as iterating over each client (ignoring some details):
+Distributing a message basically means iterating over each client:
 
 [[[
 ZnWebSocketChatroomHandler>>distributeMessage: message
-  clientWebSockets do: [ :each |
-    each sendMessage: message ].
+   clientWebSockets do: [ :each |
+      each sendMessage: message ].
 ]]]
 
 
