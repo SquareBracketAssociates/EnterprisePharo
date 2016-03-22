@@ -110,16 +110,16 @@ This should generate a ''output.html'' file you can open in a web browser. This 
 [[[language=html
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>No title</title>
-    [...]
-  </head>
-  <body>
-    <div class="container">
-      <h1>Hello World</h1>
-    </div>
-    [...]
-  </body>
+   <head>
+      <title>No title</title>
+      [...]
+   </head>
+   <body>
+      <div class="container">
+         <h1>Hello World</h1>
+      </div>
+     [...]
+   </body>
 </html>
 ]]]
 
@@ -130,7 +130,7 @@ at the beginning of the ''first.pillar'' file:
 
 [[[language=pillar
 {
-  "title": "My first document while reading the 5 minutes Pillar tutorial"
+   "title": "My first document while reading the 5 minutes Pillar tutorial"
 }
 
 !Hello World
@@ -153,9 +153,9 @@ you should now get a web page with a title:
 [[[language=html
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>My first document while reading the 5 minutes Pillar tutorial</title>
-  </head>
+   <head>
+      <title>My first document while reading the 5 minutes Pillar tutorial</title>
+   </head>
 ]]]
 
 Another way to achieve the same is to use a dedicated configuration file. This configuration is typically named ==pillar.conf== and is written in the 
@@ -164,7 +164,7 @@ first ==pillar.conf== file:
 
 [[[language=ston
 {
-  "title" : "My first document while reading the 5 minutes Pillar tutorial"
+   "title" : "My first document while reading the 5 minutes Pillar tutorial"
 }
 ]]]
 
@@ -177,8 +177,8 @@ In order to do that you have to add a parameter into your configuration.
 
 [[[language=ston
 {
-  "title" : "My first document while reading the 5 minutes Pillar tutorial",
-  "outputDirectory" : "result"
+   "title" : "My first document while reading the 5 minutes Pillar tutorial",
+   "outputDirectory" : "result"
 }
 ]]]
 
@@ -193,9 +193,9 @@ If you create a file ''second.pillar'' that contains ==I am a second file== you 
 
 [[[language=ston
 {
-  "title" : "My first document while reading the 5 minutes Pillar tutorial",
-  "outputDirectory" : "result",
-  "inputFiles" : [ "first.pillar", "second.pillar" ]
+   "title" : "My first document while reading the 5 minutes Pillar tutorial",
+   "outputDirectory" : "result",
+   "inputFiles" : [ "first.pillar", "second.pillar" ]
 }
 ]]]
 
@@ -225,10 +225,10 @@ If you want separate files you can add a parameter:
 
 [[[language=ston
 {
-  "title" : "My first document while reading the 5 minutes Pillar tutorial",
-  "outputDirectory" : "result",
-  "inputFiles" : [ "first.pillar", "second.pillar" ],
-  "separateOutputFiles" : true
+   "title" : "My first document while reading the 5 minutes Pillar tutorial",
+   "outputDirectory" : "result",
+   "inputFiles" : [ "first.pillar", "second.pillar" ],
+   "separateOutputFiles" : true
 }
 ]]]
 
@@ -242,17 +242,17 @@ If you want to tweak the content of the exported file, for example to reference 
 [[[language=html
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>{{{title}}}</title>
-  </head>
-  <body>
-    <div class="container">
-      {{{content}}}
-    </div>
-    <footer>
-      <p>{{author}}, {{year}}</p>
-    </footer>
-  </body>
+   <head>
+      <title>{{{title}}}</title>
+   </head>
+   <body>
+      <div class="container">
+         {{{content}}}
+      </div>
+      <footer>
+         <p>{{author}}, {{year}}</p>
+      </footer>
+   </body>
 </html>
 ]]]
 
@@ -260,13 +260,13 @@ Then, you need to reference this template from your configuration file. So, edit
 
 [[[language=ston
 {
-  "year" : 2014,
-  "configurations" : {
-    "html": {
-      "outputType" : #html,
-      "template" : "myhtml.template"
-    }
-  }
+   "year" : 2014,
+   "configurations" : {
+      "html": {
+         "outputType" : #html,
+         "template" : "myhtml.template"
+     }
+   }
 }
 ]]]
 
@@ -274,8 +274,8 @@ Now, add your name to ==first.pillar== :
 
 [[[language=pillar
 {
-  "title": "My first document while reading the 5 minutes Pillar tutorial",
-  "author": "Damien Cassou"
+   "title": "My first document while reading the 5 minutes Pillar tutorial",
+   "author": "Damien Cassou"
 }
 
 !Hello World
@@ -296,17 +296,17 @@ to generate a ==output.html== that will contain:
 [[[language=html
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>My first document while reading the 5 minutes Pillar tutorial</title>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Hello World</h1>
-    </div>
-    <footer>
-      <p>Damien Cassou, 2014</p>
-    </footer>
-  </body>
+   <head>
+      <title>My first document while reading the 5 minutes Pillar tutorial</title>
+   </head>
+   <body>
+      <div class="container">
+         <h1>Hello World</h1>
+      </div>
+      <footer>
+         <p>Damien Cassou, 2014</p>
+      </footer>
+   </body>
 </html>
 ]]]
 
@@ -332,8 +332,8 @@ For example, the following file,
 
 [[[language=pillar
 { 
-  "title": "My first document while reading the 5 minutes Pillar tutorial",
-  "author": "Damien Cassou"
+   "title": "My first document while reading the 5 minutes Pillar tutorial",
+   "author": "Damien Cassou"
 }
 
 !Hello World
@@ -386,8 +386,8 @@ it look nice, for example with such JavaScript code:
 [[[language=javascript
 // Wraps paragraphs with class pClass inside a div and adds an H4 element with pTitle.
 function transformAnnotatedParagraphs(pClass, pTitle) {
-    $("p." + pClass).wrap( "<div class='annotated-paragraph "
-                           + pClass + "' />" ).prepend("<h4>"+ pTitle +"</h4>");
+   $("p." + pClass).wrap( "<div class='annotated-paragraph "
+         + pClass + "' />" ).prepend("<h4>"+ pTitle +"</h4>");
 }
 
 transformAnnotatedParagraphs("note", "Note");
@@ -398,35 +398,35 @@ Above code will prepend the titles "Note" and "To do" to the ==@\@note== and ==@
 
 [[[language=css
 .annotated-paragraph {
-    margin: 20px 0;
-    padding: 15px 30px 15px 15px;
-    border-left: 5px solid #eee;
+   margin: 20px 0;
+   padding: 15px 30px 15px 15px;
+   border-left: 5px solid #eee;
 }
 
 .annotated-paragraph h4 {
-  margin-top: 0;
+   margin-top: 0;
 }
 
 .annotated-paragraph p:last-child {
-    margin-bottom: 0;
+   margin-bottom: 0;
 }
 
 .note {
-    background-color: #f0f7fd;
-    border-color: #d0e3f0;
+   background-color: #f0f7fd;
+   border-color: #d0e3f0;
 }
 
 .note h4 {
-    color: #3a87ad;
+   color: #3a87ad;
 }
 
 .todo {
-    background-color: #dff0d8;
-    border-color: #d6e9c6;
+   background-color: #dff0d8;
+   border-color: #d6e9c6;
 }
 
 .todo h4 {
-    color: #3c763d;
+   color: #3c763d;
 }
 ]]]
 
@@ -562,7 +562,7 @@ generates Figure *@pharoLogo* (this reference has been generated using ==\*@phar
 Use scripts when you want to add code blocks to your document.
 
 = [[[
-=     foo bar
+= foo bar
 = ]]]
 
 generates
@@ -576,7 +576,7 @@ foo bar
 If you want either a label (to reference the script later) or a caption (to give a nice title to the script), write the following:
 
 = [[[label=script1|caption=My script that works|language=smalltalk
-=     self foo bar
+= self foo bar
 = ]]]
 
 which produces
@@ -606,15 +606,15 @@ If you don't want syntax highlighting, specify ==no language== as value to the =
 If you need to explain a long piece of code you may want the script to have line numbers you can use the ==lineNumber== parameter like this :
 
 = [[[language=smalltalk|lineNumber=true
-=     self foo bar.
-=     self bar foo.
+= self foo bar.
+= self bar foo.
 = ]]]
 
 which produces
 
 [[[lineNumber=true
-  self foo bar.
-  self bar foo.
+self foo bar.
+self bar foo.
 ]]]
 
 !!!! Script from an External File
@@ -634,35 +634,34 @@ For example if you write a documentation and you give the number of classes on y
 You can just write a script one time that will generate a part of your document.
 
 = [[[eval=true
-=   | packages classes|
-=   packages :=
-=      (RPackageOrganizer default packages
-=         select: [ :each | each name includesSubstring: 'Pillar' ] ).
-=   classes := OrderedCollection new.
-=   packages
-=      do: [ :each |
-=         each classes
-=            do: [ :class | classes add: class ] ].
-=   stream
-=     nextPutAll: 'The Pillar project contains:' , String lf, '- ==';
-=     nextPutAll: packages size asString;
-=     nextPutAll: ' packages==.' , String lf, '- ==';
-=     nextPutAll: classes size asString;
-=     nextPutAll:  ' classes=='.
+= | packages classes|
+= packages :=
+=    (RPackageOrganizer default packages
+=       select: [ :each | each name includesSubstring: 'Pillar' ] ).
+= classes := OrderedCollection new.
+=    packages = do: [ :each |
+=       each classes
+=          do: [ :class | classes add: class ] ].
+= stream
+=    nextPutAll: 'The Pillar project contains:' , String lf, '- ==';
+=    nextPutAll: packages size asString;
+=    nextPutAll: ' packages==.' , String lf, '- ==';
+=    nextPutAll: classes size asString;
+=    nextPutAll:  ' classes=='.
 = ]]]
 
 will generate:
 
 [[[eval=true
-  | packages classes|
-  packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
-  classes := OrderedCollection new.
-  packages do: [ :each | each classes do: [ :class | classes add: class ] ].
-  stream nextPutAll: 'The Pillar project contains:' , String lf, '- ==';
-    nextPutAll: packages size asString;
-    nextPutAll: ' packages==.' , String lf, '- ==';
-    nextPutAll: classes size asString;
-    nextPutAll:  ' classes=='.
+| packages classes|
+packages := (RPackageOrganizer default packages select: [ :each | each name includesSubstring: 'Pillar' ] ).
+classes := OrderedCollection new.
+packages do: [ :each | each classes do: [ :class | classes add: class ] ].
+stream nextPutAll: 'The Pillar project contains:' , String lf, '- ==';
+   nextPutAll: packages size asString;
+   nextPutAll: ' packages==.' , String lf, '- ==';
+   nextPutAll: classes size asString;
+   nextPutAll:  ' classes=='.
 ]]]
 
 For example the Section *@sec:syntaxHighlighting* and the Section *@configParameters* are generated.
@@ -676,8 +675,8 @@ only LaTeX, HTML and Markdown are supported). For example, the following shows a
 
 = {{{latex:
 = \begin{equation}
-=   \label{eq:1}
-=   \frac{1+\sqrt{2}}{2}
+=    \label{eq:1}
+=    \frac{1+\sqrt{2}}{2}
 = \end{equation}
 = }}}
 = {{{html:
@@ -689,8 +688,8 @@ This results in
 
 {{{latex:
 \begin{equation}
-  \label{eq:1}
-  \frac{1+\sqrt{2}}{2}
+   \label{eq:1}
+   \frac{1+\sqrt{2}}{2}
 \end{equation}
 }}}
 {{{html:
@@ -719,11 +718,11 @@ This annotation takes only 1 parameter, the path of your file from the ==baseDir
 Here are some examples:
 
 [[[language=pillar
-  ${inputFile:test.pillar}$
-   
-  ${inputFile:value=test.pillar}$
-   
-  ${inputFile:chapter2/test.pillar}$
+${inputFile:test.pillar}$
+
+${inputFile:value=test.pillar}$
+
+${inputFile:chapter2/test.pillar}$
 ]]]
 
 !!!! Slide Annotation
@@ -737,11 +736,11 @@ You can also add a ""label"" to be able to create an internal link to your slide
 Here some examples:
 
 [[[language=pillar
-  ${slide: My slide}$
-   
-  ${slide:title= My slide}$
-   
-  ${slide: My slide |label=sld:mySlide}$
+${slide: My slide}$
+
+${slide:title= My slide}$
+
+${slide: My slide |label=sld:mySlide}$
 ]]]
 
 !!!! Columns
@@ -756,17 +755,12 @@ The column annotation takes 1 required parameter: the width of the column.
 Here some examples:
 
 [[[language=pillar
-  ${columns}$
-   
-  ${column:width=60}$
-   
-  bla
-   
-  ${column:40}$
-   
-  bla
-   
-  ${endColumns}$
+${columns}$
+   ${column:width=60}$
+      bla
+   ${column:40}$
+      bla
+${endColumns}$
 ]]]
 
 !!!Preformatted (less used)
@@ -803,10 +797,10 @@ For example:
 
 [[[language=ston
 {
-  "title":"Pillar's presentation",
-  "subtitle":"",
-  "author":"Cyril Ferlicot-Delbecque",
-  "complement":"cyril.ferlicot@gmail.com"
+   "title":"Pillar's presentation",
+   "subtitle":"",
+   "author":"Cyril Ferlicot-Delbecque",
+   "complement":"cyril.ferlicot@gmail.com"
 }
 ]]] 
 
@@ -821,24 +815,18 @@ Example of a slide:
 
 [[[language=pillar
 ${slide: Pillar}$
+   ${columns}$
+      ${column:45}$
+         - One input, many outputs
+         -- ''HTML''
+         -- ''LaTeX''
+         -- ''Text''
+         -- ''Markdown''
 
-${columns}$
-
-${column:45}$
-
-- One input, many outputs
--- ''HTML''
--- ''LaTeX''
--- ''Text''
--- ''Markdown''
-
-- Textual syntax
--- No need for a specific editor
-
-${column:55}$
-
-+ Figure !>file://path.png|width=80+
-
+         - Textual syntax
+         -- No need for a specific editor
+      ${column:55}$
+         + Figure !>file://path.png|width=80+
 ${endColumns}$
 ]]]
 
@@ -856,7 +844,7 @@ interchange format (similar to the popular *JSON>http://www.json.org*.
 @configParameters
 
 [[[eval=true
-    CCDocumentationGeneration of: PRPillarConfiguration on: stream.
+CCDocumentationGeneration of: PRPillarConfiguration on: stream.
 ]]]
 
 !! Templating
@@ -868,36 +856,35 @@ your document. Here is an example (bootrap-based) HTML template using Mustache:
 [[[language=html
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>{{{title}}}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="http://netdna.bootstrapcdn.com/
-bootstrap/3.0.3/css/bootstrap.min.css" 
-      rel="stylesheet">
-    <link href="http://netdna.bootstrapcdn.com/
-bootstrap/3.0.3/css/bootstrap-theme.min.css" 
-      rel="stylesheet">
-    <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">
-    <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+   <head>
+      <title>{{{title}}}</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link
+         href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css"
+         rel="stylesheet">
+      <link
+         href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap-theme.min.css"
+         rel="stylesheet">
+      <link rel="stylesheet" href="http://yandex.st/highlightjs/8.0/styles/default.min.css">
+      <script src="http://yandex.st/highlightjs/8.0/highlight.min.js"></script>
 
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/
-libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/
-libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
+      <!--[if lt IE 9]>
+         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js">
+         </script>
+         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js">
+         </script>
+      <![endif]-->
+   </head>
+   <body>
+      <div class="container">
+         {{{content}}}
+      </div>
 
-    <div class="container">
-      {{{content}}}
-    </div>
-
-    <script src="https://code.jquery.com/jquery.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js">
-    </script>
-    <script>hljs.initHighlightingOnLoad();</script>
-  </body>
+      <script src="https://code.jquery.com/jquery.js"></script>
+      <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js">
+      </script>
+      <script>hljs.initHighlightingOnLoad();</script>
+   </body>
 </html>
 ]]]
 
@@ -930,12 +917,12 @@ For example for ""Enterprise Pharo"" we use:
 
 [[[language=ston
 "latexCommand" : "lualatex --file-line-error --interaction=batchmode {fileName} 2>&1 1>/dev/null
-  ret=$?
-  if [[ $ret -ne 0 ]]; then
-    cat {fileNameWithoutExtension}.log
-    echo \"Can't generate the PDF!\"
-    exit 1
-  fi"
+   ret=$?
+   if [[ $ret -ne 0 ]]; then
+      cat {fileNameWithoutExtension}.log
+      echo \"Can't generate the PDF!\"
+      exit 1
+   fi"
 ]]]
 
 For now the script is only generated for an Unix shell. Windows users must have ''MinGW'' or ''Cygwin'' in order to launch it.
@@ -979,14 +966,14 @@ It is possible to directly create a Pillar document. There are two ways to do th
 Creating a document by parsing a String is simple, you just need to use PRDocumentParser.
 
 [[[
-  | wiki |
-  wiki := '!My Document'
-  PRDocumentParser parse: wiki
+| wiki |
+wiki := '!My Document'
+PRDocumentParser parse: wiki
 ]]]
 
 Or from a file: 
 [[[
-  PRDocumentParser parse: (FileSystem workingDirectory / 'foo.pillar' contents)
+PRDocumentParser parse: (FileSystem workingDirectory / 'foo.pillar' contents)
 ]]]
 
 !!!! Creating a Document Yourself
@@ -995,34 +982,33 @@ Or from a file:
 For that, you first need to create a document
 
 [[[
-  | document |
-  document := PRDocument new.
+| document |
+document := PRDocument new.
 ]]]
 
 Once you've created your document, you can create as many ==PRDocumantItem== subclass instances as you wish and add them. For instance, you can add a title and 
 a paragraph with an illustration
 
 [[[
-  | document title figure|
-  document := PRDocument new.
-  title := (PRHeader new)
-    level: 1;
-    add: (PRText content: 'foo');
-    yourself.
-  figure := PRFigure new
-    add: (PRText content: 'Alias');
-    reference: 'file://test.png';
-    embedded: true;
-    yourself.
-  document add: title; add: figure.
-  ^ document
+| document title figure|
+document := PRDocument new.
+title := (PRHeader new)
+   level: 1;
+   add: (PRText content: 'foo');
+   yourself.
+figure := PRFigure new
+   add: (PRText content: 'Alias');
+   reference: 'file://test.png';
+   embedded: true;
+   yourself.
+document add: title; add: figure.
 ]]]
 
 A document usually contains many different Items as ==PRText==
 
 [[[
-  | item |
-  item := PRText content: 'foo'
+| item |
+item := PRText content: 'foo'
 ]]]
 
 You can find how to implement all of  them in the unit-tests of Pillar.
@@ -1035,17 +1021,18 @@ parameter set as true by its evaluation.
 To have the list of the different transformers, you can use a transformer like this one:
 
 [[[
-  | configuration |
-  configuration := PRCocoonConfiguration new baseDirectory: 'directoryWithMyFiles'.
-  PRScriptEvaluator new 
-    configuration: configuration;
-    start: document; topNode
+| configuration |
+configuration := PRCocoonConfiguration new baseDirectory: 'directoryWithMyFiles'.
+PRScriptEvaluator new 
+   configuration: configuration;
+   start: document;
+   topNode
 ]]]
 
 Now we have our document. In order to export it we need to create a new instance of the PRDocumentWriter subclasses.
 
 [[[
-  PRHTMLWriter write: document
+PRHTMLWriter write: document
 ]]]
 
 !!! How to Export with a Configuration
@@ -1055,10 +1042,10 @@ In order to export with a configuration you need to create a new configuration. 
 [[[
 (PRCocoonConfiguration newFromString:'
 {
-  "inputFiles": [ "foo.pillar", "bar.pillar"],
-  "outputType": #html,
-  "separateOutputFiles": false,
-  "outputFile": "test.html" 
+   "inputFiles": [ "foo.pillar", "bar.pillar"],
+   "outputType": #html,
+   "separateOutputFiles": false,
+   "outputFile": "test.html" 
 }
 ') export
 ]]]
