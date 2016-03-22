@@ -77,10 +77,11 @@ STON toString: (Rectangle origin: 10@10 corner: 100@50)
 
 [[[
 STON toStringPretty: (Rectangle origin: 10@10 corner: 100@50) 
-   --> 'Rectangle {
-           #origin : Point [ 10, 10 ],
-           #corner : Point [ 100, 50 ]
-        }'
+   -->
+   'Rectangle {
+      #origin : Point [ 10, 10 ],
+      #corner : Point [ 100, 50 ]
+   }'
 ]]]
 
 What is shown above follows the default representation scheme for objects. Each class can define its own custom representation, as discussed in section 
@@ -122,20 +123,20 @@ Even without further explanation, the semantics should be clear.
 
 [[[
 TestDomainObject {
-      #created : DateAndTime [ '2012-02-14T16:40:15+01:00' ],
-      #modified : DateAndTime [ '2012-02-14T16:40:18+01:00' ],
-      #integer : 39581,
-      #float : 73.84789359463944,
-      #description : 'This is a test',
-      #color : #green,
-      #tags : [
-          #two,
-          #beta,
-          #medium
-      ],  
-      #bytes : ByteArray [ 'afabfdf61d030f43eb67960c0ae9f39f' ],
-      #boolean : false
-    }
+   #created : DateAndTime [ '2012-02-14T16:40:15+01:00' ],
+   #modified : DateAndTime [ '2012-02-14T16:40:18+01:00' ],
+   #integer : 39581,
+   #float : 73.84789359463944,
+   #description : 'This is a test',
+   #color : #green,
+   #tags : [
+      #two,
+      #beta,
+      #medium
+   ],
+   #bytes : ByteArray [ 'afabfdf61d030f43eb67960c0ae9f39f' ],
+   #boolean : false
+ }
 ]]]
 
 
@@ -147,36 +148,36 @@ braces are for dictionaries and square brackets are for lists.
 
 [[[
 ZnResponse {
-    #headers : ZnHeaders {
-        #headers : ZnMultiValueDictionary {
-           'Date' : 'Sat, 21 Mar 2015 20:09:23 GMT',
-            'Modification-Date' : 'Thu, 10 Feb 2011 08:32:30 GMT',
-            'Content-Length' : '113',
-            'Server' : 'Zinc HTTP Components 1.0',
-            'Vary' : 'Accept-Encoding',
-            'Connection' : 'close',
-            'Content-Type' : 'text/html;charset=utf-8'
-        }
-     },
-    #entity : ZnStringEntity {
-        #contentType : ZnMimeType {
-            #main : 'text',
-            #sub : 'html',
-            #parameters : {
-                'charset' : 'utf-8'
-            }
-         },
-         #contentLength : 113,
-         #string :
+   #headers : ZnHeaders {
+      #headers : ZnMultiValueDictionary {
+         'Date' : 'Sat, 21 Mar 2015 20:09:23 GMT',
+         'Modification-Date' : 'Thu, 10 Feb 2011 08:32:30 GMT',
+         'Content-Length' : '113',
+         'Server' : 'Zinc HTTP Components 1.0',
+         'Vary' : 'Accept-Encoding',
+         'Connection' : 'close',
+         'Content-Type' : 'text/html;charset=utf-8'
+      }
+   },
+   #entity : ZnStringEntity {
+      #contentType : ZnMimeType {
+         #main : 'text',
+         #sub : 'html',
+         #parameters : {
+            'charset' : 'utf-8'
+         }
+      },
+      #contentLength : 113,
+      #string :
 '<html>\n<head><title>Small</title></head>\n<body><h1>Small</h1>
 <p>This is a small HTML document</p></body>\n</html>\n',
-         #encoder : ZnUTF8Encoder { }
-       },
-    #statusLine : ZnStatusLine {
-         #version : 'HTTP/1.1',
-         #code : 200,
-         #reason : 'OK'
-    }
+      #encoder : ZnUTF8Encoder { }
+   },
+   #statusLine : ZnStatusLine {
+      #version : 'HTTP/1.1',
+      #code : 200,
+      #reason : 'OK'
+   }
 }
 ]]]
 
@@ -228,8 +229,9 @@ STON conventionally encodes all non-printable non-ASCII characters.
 
 [[[
 (STON reader on: '''a newline \n and \t a tab''' readStream) next.
-   -->  'a newline 
-         and     a tab'
+   -->
+'a newline
+ and     a tab'
 ]]]
 
 
@@ -312,11 +314,18 @@ Maps are delimited by =={== and ==}==. Keys and values are separated by a colon 
 maps, for example as below:
 
 [[[
-STON toStringPretty: (Dictionary new at: #blue put: 'bluish' ; at: #green put: 'greenish' ; yourself) 
-   --> '{
-           #green : ''greenish'',
-           #blue : ''bluish''
-        }'
+STON toStringPretty: (
+   Dictionary new
+      at: #blue
+      put: 'bluish';
+      at: #green
+      put: 'greenish';
+      yourself)
+   -->
+'{
+   #green : ''greenish'',
+   #blue : ''bluish''
+}'
 ]]]
 
 
@@ -327,12 +336,12 @@ The next example shows an instance of the class ==ZnMimeType==:
 
 [[[
 ZnMimeType {
-    #main : 'text',
-    #sub : 'html',
-    #parameters : {
-        'charset' : 'utf-8'
-    }
- }
+   #main : 'text',
+   #sub : 'html',
+   #parameters : {
+      'charset' : 'utf-8'
+   }
+}
 ]]]
 
 This is a generic way to encode arbitrary objects. 
@@ -407,7 +416,7 @@ STON toString: Date today
 !!!!Date and Time
 
   ==DateAndTime==, ==TimeStamp== is represented as a one element array with an ISO style ==YYYY-MM-DDTHH:MM:SS.N+TZ.TZ== string
-   
+
 [[[
 STON toString: DateAndTime now 
    --> 'DateAndTime[''2015-03-21T17:46:01.751981-03:00'']'
@@ -446,7 +455,7 @@ Associations are represented as a pair separated by ==:==.
 
 [[[
 STON toString: (42 -> #life)
-  --> '42:#life'
+   --> '42:#life'
 ]]]
 
 Nesting is also possible ==#foo : 1 : 2== means ==#foo->(1->2)==.
@@ -485,13 +494,13 @@ collection of elements respectively.
 Examples of this are below:
 
 [[[
-Date >> stonOn: stonWriter
+Date>>stonOn: stonWriter
    "Use an ISO style YYYYMMDD representation"
    stonWriter writeObject: self listSingleton: self yyyymmdd
 ]]]
 
 [[[
-Point >> stonOn: stonWriter
+Point>>stonOn: stonWriter
    stonWriter writeObject: self streamShortList: [ :array |
       array add: x; add: y ]
 ]]]
@@ -519,19 +528,19 @@ Parsing is the simplest operation, use either the ==fromString:== or ==fromStrea
 
 [[[
 STON fromString: 'Rectangle { #origin : Point [ -40, -15 ],
-    #corner : Point [ 60, 35 ]}'.
+   #corner : Point [ 60, 35 ]}'.
 ]]]
 [[[
 '/Users/sven/Desktop/foo.ston' asReference
-     fileStreamDo: [ :stream | STON fromStream: stream ].
+   fileStreamDo: [ :stream | STON fromStream: stream ].
 ]]]
 
 Invoking the reader (parser) directly goes like this:
 
 [[[
 (STON reader on:
-      'Rectangle{#origin:Point[0,0],#corner:Point[1440,846]}'
-           readStream) next.
+   'Rectangle{#origin:Point[0,0],#corner:Point[1440,846]}'
+      readStream) next.
 ]]]
 
 Writing has two variants: the regular compact representation or the pretty printed one.
@@ -540,17 +549,13 @@ or ==put:onStream:== and ==put:onStreamPretty:==, like this:
 
 [[[
 STON toString: World bounds.
-]]]
-[[[
 STON toStringPretty: World bounds.
-]]]
-[[[
-'/Users/sven/Desktop/bounds.ston' asReference 
-    fileStreamDo: [ :str |  STON put: World bounds onStream: str ].
-]]]
-[[[
-'/Users/sven/Desktop/bounds.ston' asReference 
-    fileStreamDo: [ :str | STON put: World bounds onStreamPretty: str ].
+'/Users/sven/Desktop/bounds.ston' asReference
+   fileStreamDo: [ :str |
+      STON put: World bounds onStream: str ].
+'/Users/sven/Desktop/bounds.ston' asReference
+   fileStreamDo: [ :str |
+      STON put: World bounds onStreamPretty: str ].
 ]]]
 
 
@@ -586,7 +591,7 @@ it just adds some functionality on top.
 The writer can be created explicitly as follows:
 [[[
 String streamContents: [ :stream |
-    (STON writer on: stream)  nextPut: World bounds ].
+   (STON writer on: stream)  nextPut: World bounds ].
 ]]]
 
 When created, the reference policy of the writer can be set.
@@ -622,18 +627,20 @@ Next is an example of how to use the STON writer to generate JSON output.
 | bounds json |
 bounds := World bounds.
 json := Dictionary
-    with: #origin -> (Dictionary
-            with: #x -> bounds origin x
-            with: #y -> bounds origin y)
-    with: #corner -> (Dictionary
-            with: #x -> bounds corner x
-            with: #y -> bounds corner y).
+   with: #origin -> (
+      Dictionary
+         with: #x -> bounds origin x
+         with: #y -> bounds origin y)
+   with: #corner -> (
+      Dictionary
+         with: #x -> bounds corner x
+         with: #y -> bounds corner y).
 String streamContents: [ :stream |
-    (STON writer on: stream)
-        prettyPrint: true;
-        jsonMode: true;
-        referencePolicy: #error;
-        nextPut: json ].
+   (STON writer on: stream)
+      prettyPrint: true;
+      jsonMode: true;
+      referencePolicy: #error;
+      nextPut: json ].
 ]]]
 
 !! Handling CR, LF inside Strings
@@ -647,9 +654,9 @@ see ==newLine:==. The default is false, not doing any convertions.
 In the following example, any CR, LF or CRLF seen while reading Strings will all be converted to the same EOL, CRLF.
 [[[
 (STON reader on: ..) 
-  newLine: String crlf; 
-  convertNewLines: true; 
-  next.
+   newLine: String crlf; 
+   convertNewLines: true; 
+   next.
 ]]]
 
 The message ==STONWriter>>keepNewLines: aBoolean== works as follows: If true, any newline CR, LF or CRLF inside strings or symbols will not be escaped but will 
@@ -657,9 +664,9 @@ instead be converted to the newline convention chosen, see ==newLine:==. The def
 
 [[[
 (STON writer on: ...) 
-  newLine: String crlf; 
-  keepNewLines: true; 
-  nextPut: ...
+   newLine: String crlf; 
+   keepNewLines: true; 
+   nextPut: ...
 ]]]
 
 
@@ -676,96 +683,94 @@ a custom representation for a given class.
 !! Appendix: BNF
 
 [[[
-   value
-     primitive-value
-     object-value
-     reference
-     nil
+value
    primitive-value
-     number
-     true
-     false
-     symbol
-     string
-
    object-value
-     object
-     map
-     list
-   object
-     classname map
-     classname list
    reference
-     @ int-index-previous-object-value
-   map
-     {}
-     { members }
-   members
-     pair
-     pair , members
-   pair
-     string : value
-     symbol : value
-     number : value
-   list
-     []
-     [ elements ]
-   elements
-     value 
-     value , elements
-   string
-     ''
-     ' chars '
-   chars
-     char
-     char chars
-   char
-     any-printable-ASCII-character-
-       except-'-"-or-\
-     \'
-     \"
-     \\
-     \/
-     \b
-     \f
-     \n
-     \r
-     \t
-     \u four-hex-digits
-   symbol
-     # chars-limited
-     # ' chars '
-   chars-limited
-     char-limited
-     char-limited chars-limited
-   char-limited
-     a-z A-Z 0-9 - _ . /
-   classname
-     uppercase-alpha-char alphanumeric-char
+   nil
+primitive-value
    number
-     int
-     int frac
-     int exp
-     int frac exp
+   true
+   false
+   symbol
+   string
+object-value
+   object
+   map
+   list
+object
+   classname map
+   classname list
+reference
+   @ int-index-previous-object-value
+map
+   {}
+   { members }
+members
+   pair
+   pair , members
+pair
+   string : value
+   symbol : value
+   number : value
+list
+   []
+   [ elements ]
+elements
+   value
+   value , elements
+string
+   ''
+   ' chars '
+chars
+   char
+   char chars
+char
+   any-printable-ASCII-character-except-'-"-or-\
+   \'
+   \"
+   \\
+   \/
+   \b
+   \f
+   \n
+   \r
+   \t
+   \u four-hex-digits
+symbol
+   # chars-limited
+   # ' chars '
+chars-limited
+   char-limited
+   char-limited chars-limited
+char-limited
+   a-z A-Z 0-9 - _ . /
+classname
+   uppercase-alpha-char alphanumeric-char
+number
    int
-     digit
-     digit1-9 digits 
-     - digit
-     - digit1-9 digits
-   frac
-     . digits
-   exp
-     e digits
-   digits
-     digit
-     digit digits
+   int frac
+   int exp
+   int frac exp
+int
+   digit
+   digit1-9 digits
+   - digit
+   - digit1-9 digits
+frac
+   . digits
+exp
+   e digits
+digits
+   digit
+   digit digits
+e
    e
-     e
-     e+
-     e-
-     E
-     E+
-     E-
+   e+
+   e-
+   E
+   E+
+   E-
 ]]]
 
 
