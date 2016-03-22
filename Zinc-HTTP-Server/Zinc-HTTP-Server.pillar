@@ -689,31 +689,31 @@ Now we can hold the same conversation as above, only in this case in terms of re
 
 [[[
    client get: '/'
-   ==>> #()
+   --> #()
 
    client post: '/' contents: #(1 2 3)
-   ==>> 'Created /1'
+   --> 'Created /1'
 
    client get: '/1'
-   ==>> #(1 2 3)
+   --> #(1 2 3)
 
    client post: '/' contents: (Dictionary with: #bar -> -2)
-   ==>> 'Created /2'
+   ---> 'Created /2'
 
    client put: '/2' contents: (Dictionary with: #bar -> -1)
-   ==>> 'Updated'
+   --> 'Updated'
 
    client get: '/2'
-   ==>> a Dictionary('bar'->-1 )
+   --> a Dictionary('bar'->-1 )
 
    client get: '/'
-   ==>> #('/1' '/2')
+   --> #('/1' '/2')
 
    client delete: '/2'
-   ==>> 'Deleted'
+   --> 'Deleted'
 
    client get: '/2'
-   ==>> throws a ZnHttpUnsuccessful exception
+   --> throws a ZnHttpUnsuccessful exception
 ]]]
 
 !!Conclusion

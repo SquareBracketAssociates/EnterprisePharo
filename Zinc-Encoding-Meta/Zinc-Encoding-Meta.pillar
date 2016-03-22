@@ -51,21 +51,21 @@ We can obtain the code point (Unicode value) of a character by sending it the ==
 
 [[[
 $H codePoint
-   -> 72
+   --> 72
 ]]]
 
 Here are some example strings in multiple languages with their Unicode code points:
 
 [[[
 'Hello' collect: #codePoint as: Array.
-   -> #(72 101 108 108 111)
+   --> #(72 101 108 108 111)
 
 'Les élèves français' collect: #codePoint as: Array.
-   -> #(76 101 115 32 233 108 232 118 101 115
+   --> #(76 101 115 32 233 108 232 118 101 115
         32 102 114 97 110 231 97 105 115)
 
 'Ελλάδα' collect: #codePoint as: Array.
-   -> #(917 955 955 940 948 945)
+   --> #(917 955 955 940 948 945)
 ]]]
 
 For a simple language like English, all characters have code points below 128 (which fits in 7 bits, for historical reasons).
@@ -73,7 +73,7 @@ These characters are part of *ASCII>http://en.wikipedia.org/wiki/ASCII*. The ver
 
 [[[
 $a codePoint
-   -> 97
+   --> 97
 ]]]
 
 Next come a number of European languages, like French, which have code points below 256 (fitting in 8 bits or one byte).
@@ -81,14 +81,14 @@ These characters are part of *Latin-1 (ISO-8859-1)>http://en.wikipedia.org/wiki/
 
 [[[
 $é codePoint
-   -> 233
+   --> 233
 ]]]
 
 And finally, there are hundreds of other languages, like Chinese, Japanese, Cyrillic, Arabic or Greek. You can see from the example above: Greece written in Greek, that those code points are higher than 256 (and thus no longer fit in one byte).
 
 [[[
 $λ codePoint
-   -> 955
+   --> 955
 ]]]
 
 Unicode code points are often written using a specific hexadecimal notation. For example, the previous character, the Greek lowercase lambda, is written as
@@ -130,21 +130,21 @@ We however deal only indirectly with character encoders. The ==ByteArray== and  
 
 [[[
 'Hello' utf8Encoded.
-   -> #[72 101 108 108 111]
+   --> #[72 101 108 108 111]
 
 'Hello' encodeWith: #latin1.
-   -> #[72 101 108 108 111]
+   --> #[72 101 108 108 111]
 ]]]
 
 Our ASCII string, =='Hello'== encodes identically using either UTF-8 or Latin-1.
 
 [[[
 'Les élèves français' utf8Encoded.
-   -> #[76 101 115 32 195 169 108 195 168 118 101 115
+   --> #[76 101 115 32 195 169 108 195 168 118 101 115
         32 102 114 97 110 195 167 97 105 115]
 
 'Les élèves français' encodeWith: #latin1.
-   -> #[76 101 115 32 233 108 232 118 101 115
+   --> #[76 101 115 32 233 108 232 118 101 115
        32 102 114 97 110 231 97 105 115]
 ]]]
 
@@ -154,21 +154,21 @@ Note how for Latin-1, and ""only"" for Latin-1 and ASCII, the Unicode code point
 
 [[[
 'éèç' utf8Encoded.
-   -> #[195 169 195 168 195 167]
+   --> #[195 169 195 168 195 167]
 
 'éèç' encodeWith: #latin1.
-   -> #[233 232 231]
+   --> #[233 232 231]
 
 'éèç' collect: #codePoint as: ByteArray
-   -> #[233 232 231]
+   --> #[233 232 231]
 ]]]
 
 [[[
 'Ελλάδα' utf8Encoded.
-   -> #[206 149 206 187 206 187 206 172 206 180 206 177]
+   --> #[206 149 206 187 206 187 206 172 206 180 206 177]
 
 'Ελλάδα' encodeWith: #latin1.
-   -> ZnCharacterEncodingError: 'Character Unicode code point outside encoder range'
+   --> ZnCharacterEncodingError: 'Character Unicode code point outside encoder range'
 ]]]
 
 Our greek string, =='Ελλάδα'==, gives an error when we try to encode it using Latin-1.
@@ -178,34 +178,34 @@ The reverse process, decoding, is equally simple:
 
 [[[
 #[72 101 108 108 111] utf8Decoded.
-   -> 'Hello'
+   --> 'Hello'
 
 #[72 101 108 108 111] decodeWith: #latin1.
-   -> 'Hello'
+   --> 'Hello'
 ]]]
 [[[
 #[76 101 115 32 195 169 108 195 168 118 101 115
   32 102 114 97 110 195 167 97 105 115] utf8Decoded.
-   -> 'Les élèves français'
+   --> 'Les élèves français'
 
 #[76 101 115 32 195 169 108 195 168 118 101 115
   32 102 114 97 110 195 167 97 105 115] decodeWith: #latin1.
-   -> 'Les Ã©lÃ¨ves franÃ§ais'
+   --> 'Les Ã©lÃ¨ves franÃ§ais'
 
 #[76 101 115 32 233 108 232 118 101 115
   32 102 114 97 110 231 97 105 115] utf8Decoded.
-   -> ZnInvalidUTF8: 'Illegal continuation byte for utf-8 encoding'
+   --> ZnInvalidUTF8: 'Illegal continuation byte for utf-8 encoding'
 ]]]
 [[[
 #[76 101 115 32 233 108 232 118 101 115
   32 102 114 97 110 231 97 105 115] decodeWith: #latin1.
-   -> 'Les élèves français'
+   --> 'Les élèves français'
 
 #[206 149 206 187 206 187 206 172 206 180 206 177] utf8Decoded.
-   -> 'Ελλάδα'
+   --> 'Ελλάδα'
 
 #[206 149 206 187 206 187 206 172 206 180 206 177] decodeWith: #latin1.
-   -> ZnCharacterEncodingError: 'Character Unicode code point outside encoder range'
+   --> ZnCharacterEncodingError: 'Character Unicode code point outside encoder range'
 ]]]
 
 Our English =='Hello'==, being pure ASCII, can be decoded using either UTF-8 or Latin-1. Our French =='Les élèves français'== is another story: using the wrong
@@ -245,7 +245,7 @@ character stream. Here is an example:
 'encoding-test.txt' asFileReference readStreamDo: [ :in |
    (ZnCharacterReadStream on: in binary encoding: #utf8)
       upToEnd ]
-   -> 'Hello Ελλάδα
+   --> 'Hello Ελλάδα
 Les élèves français
 '
 ]]]
@@ -264,13 +264,13 @@ to understand what is going on. Consider the following example strings:
 
 [[[
 'Hello' class.
-   -> ByteString
+   --> ByteString
 
 'Les élèves français' class.
-   -> ByteString
+   --> ByteString
 
 'Ελλάδα' class.
-   -> WideString
+   --> WideString
 ]]]
 
 Simple ASCII strings are ByteStrings. Strings using special characters may be WideStrings or may still be ByteStrings.
@@ -287,7 +287,7 @@ In practice, the difference between ==ByteString== and ==WideString== should not
 
 [[[
 'abc' copy at: 1 put: $α; class.
-   -> WideString
+   --> WideString
 ]]]
 
 As the above example shows, in a ==ByteString== =='abc'== putting the Unicode character ==$α==, converts it to a ==WideString==. (This is actually done using a ==becomeForward:== message.) When benchmarking, this conversion might show up as taking significant time. If you know upfront that you will need WideStrings, it can be better to start with the right type.
@@ -299,16 +299,16 @@ There is another implementation detail worth mentioning: for the Pharo virtual m
 
 [[[
 'abcdef' asByteArray.
-   -> #[97 98 99 100 101 102]
+   --> #[97 98 99 100 101 102]
 
 'ABC' asByteArray.
-   -> #[65 66 67]
+   --> #[65 66 67]
 
 'abcdef' copy replaceFrom: 1 to: 3 with: #[65 66 67].
-   -> 'ABCdef'
+   --> 'ABCdef'
 
 #[97 98 99 100 101 102] copy replaceFrom: 1 to: 3 with: 'ABC'.
-   -> #[65 66 67 100 101 102]
+   --> #[65 66 67 100 101 102]
 ]]]
 
 In the third expression, we send the message ==replaceFrom:to:with:== on a ==ByteString==, but give a ==ByteArray== as third argument. So we are replacing part of a ==ByteString== with a ==ByteArray==. And it works!
@@ -319,10 +319,10 @@ What about doing the same mix up with elements ?
 
 [[[
 'abc' copy at: 1 put: 65; yourself.
-   => Error: improper store into indexable object
+   --> Error: improper store into indexable object
 
 #[97 98 99] copy at: 1 put: $A; yourself.
-   => Error: improper store into indexable object
+   --> Error: improper store into indexable object
 ]]]
 
 This is more what we expect: we're not allowed to do this. We are mixing two types that are not equivalent, like ==Character== and ==Integer==.
@@ -339,13 +339,13 @@ the conversion is possible for strings for which the following property holds:
 
 [[[
 'Hello' allSatisfy: [ :each | each codePoint < 256 ].
-   -> true
+   --> true
 
 'Les élèves français' allSatisfy: [ :each | each codePoint < 256 ].
-   -> true
+   --> true
 
 'Ελλάδα' allSatisfy: [ :each | each codePoint < 256 ].
-   -> false
+   --> false
 ]]]
 
 Now, even though the first two can be converted, they will not be using the same encoding. Here is a way to explicitly express this idea:
@@ -353,16 +353,16 @@ Now, even though the first two can be converted, they will not be using the same
 [[[
 #(null ascii latin1 utf8) allSatisfy: [ :each |
   ('Hello' encodeWith: each) = 'Hello' asByteArray ].
-   -> true.
+   --> true.
 
 ('Les élèves français' encodeWith: #latin1) = 'Les élèves français' asByteArray.
-   -> true.
+   --> true.
 
 ('Les élèves français' encodeWith: #null) = 'Les élèves français' asByteArray.
-   -> true.
+   --> true.
 
 'Les élèves français' utf8Encoded = 'Les élèves français' asByteArray.
-   -> false.
+   --> false.
 ]]]
 
 For pure ASCII strings, with all code points below 128, no encoding (null encoding), ASCII, Latin-1 and UTF-8 are all the same. For other ==ByteString==
@@ -372,7 +372,7 @@ The lazy conversion for proper Unicode WideStrings will give unexpected results:
 
 [[[
 'Ελλάδα' asByteArray.
-   => #[0 0 3 149 0 0 3 187 0 0 3 187 0 0 3 172 0 0 3 180 0 0 3 177]
+   --> #[0 0 3 149 0 0 3 187 0 0 3 187 0 0 3 172 0 0 3 180 0 0 3 177]
 ]]]
 
 This 'conversion' does not correspond to any known encoding. It is the result of writing 4-byte Unicode code points as Integers.
@@ -389,30 +389,30 @@ For example, the Unicode code point 150 is strictly speaking not in Latin-1:
 
 [[[
 ZnByteEncoder latin1 encodeString: 150 asCharacter asString.
-   -> ZnCharacterEncodingError: 'Character Unicode code point outside encoder range'
+   --> ZnCharacterEncodingError: 'Character Unicode code point outside encoder range'
 
 ZnByteEncoder latin1 decodeBytes: #[ 150 ].
-   -> ZnCharacterEncodingError: 'Character Unicode code point outside encoder range'
+   --> ZnCharacterEncodingError: 'Character Unicode code point outside encoder range'
 ]]]
 
 The encoder can however be instructed to ==beLenient==, which will produce a silent conversion (if that is possible). In this case, Unicode character 150 (==U+0096==) is an unprintable control character meaning 'Start of Protected Area' (SPA) and is strictly speaking not part of Latin-1.
 
 [[[
 ZnByteEncoder latin1 beLenient encodeString: 150 asCharacter asString.
-   -> #[ 150 ]
+   --> #[ 150 ]
 
 ZnByteEncoder latin1 beLenient decodeBytes: #[ 150 ].
-   -> ''
+   --> ''
 ]]]
 
 You can explicity access both the allowed byte or character values, i.e. the domain of encoder or decoder:
 
 [[[
 ZnByteEncoder latin1 characterDomain includes: 150 asCharacter.
-   -> false
+   --> false
 
 ZnByteEncoder latin1 byteDomain includes: 150.
-   -> false
+   --> false
 ]]]
 
 Note that the lower half of a byte encoding, the ASCII part between 0 and 127, is always treated as a one to one mapping.
@@ -451,34 +451,34 @@ The class side of ==ZnMimeType== has some convenience methods (in the protocol =
 
 [[[
 ZnMimeType textHtml.
-   -> text/plain;charset=utf-8
+   --> text/plain;charset=utf-8
 
 ZnMimeType imagePng
-   -> image/png
+   --> image/png
 ]]]
 
 Here is an example of how to create a mime-type by explicitly specifying its components:
 
 [[[
 ZnMimeType main: 'image' sub: 'png'.
-   -> image/png
+   --> image/png
 ]]]
 
 The main parsing interface of ==ZnMimeType== is the class side ==fromString:== message.
 
 [[[
 ZnMimeType fromString: 'image/png'.
-   -> image/png
+   --> image/png
 ]]]
 
 To make it easier to write code that accepts both instances and strings, the ==asZnMimeType== message can be used:
 
 [[[
 'image/png' asZnMimeType
-   -> image/png
+   --> image/png
 
 ZnMimeType imagePng asZnMimeType = 'image/png' asZnMimeType
-   -> true
+   --> true
 ]]]
 
 Finally, ==ZnMimeType== also knows how to convert file name extensions to mime-types using the ==forFilenameExtension:== message. This mapping is based on the
@@ -487,14 +487,14 @@ method ==mimeTypeFilenameExtensionsSpec==.
 
 [[[
 ZnMimeType forFilenameExtension: 'html'.
-   -> text/html;charset=utf-8
+   --> text/html;charset=utf-8
 ]]]
 
 In most applications, the concept of a default mime-type exists. It basically means: we don't know what these bytes represent.
 
 [[[
 ZnMimeType default
-   -> application/octet-stream
+   --> application/octet-stream
 ]]]
 
 
@@ -513,16 +513,16 @@ mime-types. As a result, when charsets are involved it is often better to compar
 
 [[[
 'text/plain' asZnMimeType = ZnMimeType textPlain.
-   -> false
+   --> false
 
 ZnMimeType textPlain = 'text/plain' asZnMimeType.
-   -> false
+   --> false
 
 'text/plain' asZnMimeType matches: ZnMimeType textPlain.
-   -> true
+   --> true
 
 ZnMimeType textPlain matches: 'text/plain' asZnMimeType.
-   -> true
+   --> true
 ]]]
 
 The charset=UTF-8 that is part of what ==ZnMimeType textPlain== returns is not taken into account in the second set of comparisons.
@@ -532,16 +532,16 @@ when the sub type is ==\*==, the main types must be equal. Here is an example.
 
 [[[
 ZnMimeType text.
-   -> text/*
+   --> text/*
 
 ZnMimeType textHtml matches: ZnMimeType text.
-   -> true
+   --> true
 
 ZnMimeType textPlain matches: ZnMimeType text.
-   -> true
+   --> true
 
 ZnMimeType applicationXml matches: ZnMimeType text.
-   -> false
+   --> false
 ]]]
 
 
@@ -598,7 +598,7 @@ ZnUrl new
    queryAt: 'three' put: '3';
    queryRemoveKey: 'one';
    yourself.
-   -> http://www.google.com/?two=2&three=3
+   --> http://www.google.com/?two=2&three=3
 ]]]
 
 !!! External and Internal Representation of URLs
@@ -611,14 +611,14 @@ Some characters of parts of a URL are considered as illegal because including th
    addPathSegment: 'an encoding';
    queryAt: 'and more' put: 'here, too';
    yourself
-   -> http://www.google.com/an%20encoding?and%20more=here,%20too
+   --> http://www.google.com/an%20encoding?and%20more=here,%20too
 ]]]
 
 The ZnUrl parser is somewhat forgiving and accepts some unencoded URLs as well, like most browsers would.
 
 [[[
 'http://www.example.com:8888/a path?q=a, b, c' asZnUrl.
-   -> http://www.example.com:8888/a%20path?q=a,%20b,%20c
+   --> http://www.example.com:8888/a%20path?q=a,%20b,%20c
 ]]]
 
 !!! Relative URLs
@@ -627,7 +627,7 @@ ZnUrl can parse in the context of a default scheme, like a browser would do.
 
 [[[
 ZnUrl fromString: 'www.example.com' defaultScheme: #http
-   -> http://www.example.com/
+   --> http://www.example.com/
 ]]]
 
 Given a known scheme, ZnUrl knows its default port, and this is accessed by ==portOrDefault==.
@@ -638,7 +638,7 @@ ZnUrl has some support to handle one URL in the context of another one, this is 
 
 [[[
 '/folder/file.txt' asZnUrl inContextOf: 'http://fileserver.example.net:4400' asZnUrl.
-   -> http://fileserver.example.net:4400/folder/file.txt
+   --> http://fileserver.example.net:4400/folder/file.txt
 ]]]
 
 
