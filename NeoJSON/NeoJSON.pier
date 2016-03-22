@@ -36,9 +36,9 @@ To load NeoJSON, evaluate the following:
 
 [[[
 Gofer it
-  smalltalkhubUser: 'SvenVanCaekenberghe' project: 'Neo';
-  configurationOf: 'NeoJSON';
-  loadStable.
+   smalltalkhubUser: 'SvenVanCaekenberghe' project: 'Neo';
+   configurationOf: 'NeoJSON';
+   loadStable.
 ]]]
 
 
@@ -93,8 +93,8 @@ This expression can be decomposed to better control the reading process:
 
 [[[
 (NeoJSONReader on: ' [ 1,2,3 ] ' readStream)
-  listClass: OrderedCollection;
-  next.
+   listClass: OrderedCollection;
+   next.
 ]]]
 
 The above expression is equivalent to the previous one except that a Pharo ordered collection will be used in place of an array.
@@ -110,8 +110,8 @@ To automatically convert keys to symbols, pass ==true== to ==propertyNamesAsSymb
 
 [[[
 (NeoJSONReader on: ' { "x" : 1, "y" : 2 } ' readStream)
-  propertyNamesAsSymbols: true;
-  next
+   propertyNamesAsSymbols: true;
+   next
 ]]]
 
 The result of this expression is a dictionary with ==#x== and ==#y== as keys.
@@ -149,10 +149,10 @@ When writing, mappings are used when arbitrary objects are seen. For example, in
 
 [[[
 String streamContents: [ :stream |
-  (NeoJSONWriter on: stream)
-    prettyPrint: true;
-    mapInstVarsFor: Point;
-    nextPut: (Array with: 1@3 with: -1@3) ].
+   (NeoJSONWriter on: stream)
+      prettyPrint: true;
+      mapInstVarsFor: Point;
+      nextPut: (Array with: 1@3 with: -1@3) ].
 ]]]
 
 Collections are handled automatically, like in the generic case.
@@ -161,8 +161,8 @@ When reading, a mapping is used to specify what Pharo object to instantiate and 
 
 [[[
 (NeoJSONReader on: ' { "x" : 1, "y" : 2 } ' readStream)
-  mapInstVarsFor: Point;
-  nextAs: Point.
+   mapInstVarsFor: Point;
+   nextAs: Point.
 ]]]
 
 Since JSON lacks a universal way to specify the class of an object, we have to specify the target schema that we want to use as an argument to ==nextAs:==.
@@ -171,9 +171,9 @@ To define the schema of the elements in a list, write something like the followi
 
 [[[
 (NeoJSONReader on: ' [{ "x" : 1, "y" : 2 }, { "x" : 3, "y" : 4 }] ' readStream)
-  mapInstVarsFor: Point;
-  for: #ArrayOfPoints customDo: [ :mapping | mapping listOfElementSchema: Point ];
-    nextAs: #ArrayOfPoints.
+   mapInstVarsFor: Point;
+   for: #ArrayOfPoints customDo: [ :mapping | mapping listOfElementSchema: Point ];
+   nextAs: #ArrayOfPoints.
 ]]]
 
 The above expression returns an array of 2 points. As you can see, the argument to ==nextAs:== can be a class (as seen previously) be also any symbol, provided the mapper knows about it.
@@ -182,18 +182,18 @@ To get an ==OrderedCollection== instead of an array as output, you should use th
 
 [[[
 (NeoJSONReader on: ' [ 1, 2 ] ' readStream)
-  for: #Collection customDo: [ :mapping | mapping listOfType: OrderedCollection ];
-    nextAs: #Collection.
+   for: #Collection customDo: [ :mapping | mapping listOfType: OrderedCollection ];
+   nextAs: #Collection.
 ]]]
 
 To specify how values in a map should be instantiated, use the ==mapWithValueSchema:==:
 
 [[[
 (NeoJSONReader on: ' { "point1" : {"x" : 1, "y" : 2 } }' readStream)
-  mapInstVarsFor: Point;
-  for: #DictionaryOfPoints
-    customDo: [ :mapping | mapping mapWithValueSchema: Point ];
-  nextAs: #DictionaryOfPoints.
+   mapInstVarsFor: Point;
+   for: #DictionaryOfPoints
+      customDo: [ :mapping | mapping mapWithValueSchema: Point ];
+   nextAs: #DictionaryOfPoints.
 ]]]
 
 The above expression returns a ==Dictionary== with 1 key-value pair =='point1' -> (1@2)==.
@@ -202,18 +202,18 @@ You can go beyond pre-defined messages and specify a decoding block:
 
 [[[
 (NeoJSONReader on: ' "2015/06/19" ' readStream)
-  for: DateAndTime
-    customDo: [ :mapping | mapping decoder: [ :string | DateAndTime fromString: string ] ];
-  nextAs: DateAndTime.
+   for: DateAndTime
+      customDo: [ :mapping | mapping decoder: [ :string | DateAndTime fromString: string ] ];
+   nextAs: DateAndTime.
 ]]]
 
 The above expression returns an instance of ==DateAndTime==. The message ==encoder:== is used to do the opposite, ''i.e.'' convert from a Smalltalk object to JSON:
 
 [[[
 String streamContents: [ :stream |
-  (NeoJSONWriter on: stream)
-    for: DateAndTime customDo: [ :mapping | mapping encoder: #printString ];
-    nextPut: DateAndTime now ].
+   (NeoJSONWriter on: stream)
+      for: DateAndTime customDo: [ :mapping | mapping encoder: #printString ];
+      nextPut: DateAndTime now ].
 ]]]
 
 The above expression returns a string representing the current date and time.
@@ -227,19 +227,19 @@ For efficiency reasons, by default, ==NeoJSONWriter== does not write ==nil== val
 
 [[[
 String streamContents: [ :stream |
-  (NeoJSONWriter on: stream)
-  mapAllInstVarsFor: Point;
-  nextPut: Point new ].
+   (NeoJSONWriter on: stream)
+      mapAllInstVarsFor: Point;
+      nextPut: Point new ].
 ]]]
 
 The above expression returns the =='{}'== string. If you want to see the uninitialized instance properties, pass ==true== to the ==writeNil:== message:
 
 [[[
 String streamContents: [ :stream |
-  (NeoJSONWriter on: stream)
-  mapAllInstVarsFor: Point;
-  writeNil: true;
-  nextPut: Point new ].
+   (NeoJSONWriter on: stream)
+      mapAllInstVarsFor: Point;
+      writeNil: true;
+      nextPut: Point new ].
 ]]]
 
 The above expression returns the =='{"x":null,"y":null}'== string.
