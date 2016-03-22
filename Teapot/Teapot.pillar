@@ -106,7 +106,7 @@ It is also possible to use the Zinc client (see  Chapter *Zinc Client Side>../Zi
 
 [[[
 (ZnEasy get: 'http://localhost:1701/hi/user1') entity string.
- --> "Hello user1"
+   --> "Hello user1"
 ]]]
 
 !!!Parameters in URLs
@@ -140,9 +140,9 @@ Teapot on
    start.
 
 (ZnEasy get: 'http://localhost:1701/hi/user01') entity string.
- --> "Hello user01"
+   --> "Hello user01"
 ZnEasy get: 'http://localhost:1701/hi/user'
- --> not found
+   --> not found
 ]]]
 
 !!!How are Routes Matched?
@@ -214,14 +214,14 @@ chapter  *NeoJSON>../NeoJSON/NeoJSON.pillar@cha:JSON*.) the ==jsonlist== transfo
 
 [[[
 (ZnEasy get: 'http://localhost:1701/jsonlist') entity string.
- --> '[1,2,3,4]'"
+   --> '[1,2,3,4]'"
 ]]]
 
 If you have a file located ==/tmp/afile== you can access it
 
 [[[
 ZnEasy get: 'http://localhost:1701/download'
- --> a ZnResponse(200 OK application/octet-stream 35B)
+   --> a ZnResponse(200 OK application/octet-stream 35B)
 ]]]
 
 If Mustache is installed  (See chapter  *Mustache>../Mustache/Mustache.pillar@cha:mustache*.)  you can output templated information.
@@ -275,9 +275,9 @@ a bad request.
 
 [[[
 (ZnEasy get: 'http://localhost:1701/div/6/3') entity string.
- --> 2
+   --> 2
 (ZnEasy get: 'http://localhost:1701/div/6/0').
- --> "bad request"
+   --> "bad request"
 ]]]
 
 You can use a comma-separated exception set to handle multiple exceptions.
