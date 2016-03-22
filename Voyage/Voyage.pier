@@ -693,11 +693,11 @@ Object subclass: #Paginator
    classVariableNames: ''
    package: 'DemoPaginator'
 
-Paginator class >> on: aClass where: aCondition
+Paginator class>>on: aClass where: aCondition
    ^ self basicNew
       initializeOn: aClass where: aCondition
 
-Paginator >> initializeOn: aClass where: aCondition
+Paginator>>initializeOn: aClass where: aCondition
    self initialize.
    collectionClass := aClass.
    where := aCondition
@@ -706,10 +706,10 @@ Paginator >> initializeOn: aClass where: aCondition
 Then we define the arithmetic to get the number of pages for a page size and a given number of entities.
 
 [[[
-Paginator >> pageSize
+Paginator>>pageSize
    ^ 25
 
-Paginator >> pageCount
+Paginator>>pageCount
    ^ pageCount ifNil: [ pageCount := self calculatePageCount ]
 
 Paginator>>calculatePageCount
@@ -724,7 +724,7 @@ Paginator>>calculatePageCount
 The query that retrieves only the elements for a given page is then implemented as follows:
 
 [[[
-Paginator >> page: aNumber
+Paginator>>page: aNumber
    ^ self collectionClass
       selectMany: self where
       limit: self pageSize

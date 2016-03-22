@@ -316,7 +316,7 @@ For example, let's say we have the class ==User== and we do not want to serializ
 implement:
 
 [[[
-User class >> fuelIgnoredInstanceVariableNames
+User class>>fuelIgnoredInstanceVariableNames
    ^ #('accumulatedLogins' 'applications')
 ]]]
 
@@ -329,7 +329,7 @@ The message ==fuelAfterMaterialization== lets you execute some action once an ob
 instance variable =='accumulatedLogins'== during materialization. We can implement:
 
 [[[
-User >> fuelAfterMaterialization
+User>>fuelAfterMaterialization
    accumulatedLogins := 0.
 ]]]
 
@@ -370,7 +370,7 @@ As an example, imagine we want to replace an object directly with nil. In other 
 ==CachedResult== instances. For that, we should implement:
 
 [[[
-CachedResult >> fuelAccept: aGeneralMapper
+CachedResult>>fuelAccept: aGeneralMapper
    ^ aGeneralMapper
       visitSubstitution: self
       by: nil
@@ -380,7 +380,7 @@ As another example, we have a ==Proxy== class and when serializing we want to se
 follows:
 
 [[[
-Proxy >> fuelAccept: aGeneralMapper
+Proxy>>fuelAccept: aGeneralMapper
    ^ aGeneralMapper
       visitSubstitution: self
       by: target
@@ -390,7 +390,7 @@ The use of ==fuelAccept:== also allows for deciding about serialization conditio
 instance variable ==history== when its size is greater than 100. A naive implementation is as follows:
 
 [[[
-User >> fuelAccept: aGeneralMapper
+User>>fuelAccept: aGeneralMapper
    ^ self history size > 100
       ifTrue: [
          aGeneralMapper
@@ -406,7 +406,7 @@ should be used. In it, an alternative mapping is provided for the case of mappin
 should be written as follows:
 
 [[[
-User >> fuelAccept: aGeneralMapper
+User>>fuelAccept: aGeneralMapper
    aGeneralMapper
       visitSubstitution: self
       by: (self copy history: #())
@@ -426,7 +426,7 @@ referenced in our graph, we want to get that object from a global when the graph
 process as follows:
 
 [[[
-User >> fuelAccept: aGeneralMapper
+User>>fuelAccept: aGeneralMapper
    ^ self == User admin
       ifTrue: [
          aGeneralMapper
@@ -465,7 +465,7 @@ You may want to make sure that some objects are not part of the graph during ser
 signals an ==FLNotSerializable== exception if such an object is found in the graph that is to be serialized.
 
 [[[
-MyNotSerializableObject >> fuelAccept: aGeneralMapper
+MyNotSerializableObject>>fuelAccept: aGeneralMapper
    aGeneralMapper visitNotSerializable: self
 ]]]
 
