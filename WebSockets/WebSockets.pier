@@ -92,8 +92,8 @@ To use secure Web sockets, just use the proper URL scheme ==wss://== as in the f
 | webSocket |
 webSocket := ZnWebSocket to: 'wss://echo.websocket.org'.
 [ webSocket
-    sendMessage: 'Pharo Smalltalk using Zinc WebSockets & Zodiac !';
-    readMessage ] ensure: [ webSocket close ].
+   sendMessage: 'Pharo Smalltalk using Zinc WebSockets & Zodiac !';
+   readMessage ] ensure: [ webSocket close ].
 ]]]
 
 Of course, your image has to contain Zodiac and your VM needs access to the proper plugin. That should not be a problem with the latest Pharo releases.
@@ -111,10 +111,10 @@ In essence, we should go in a loop, reading a message and sending it back. Here 
 [[[
 ZnServer startDefaultOn: 1701.
 ZnServer default delegate: (ZnWebSocketDelegate handler:
-  [ :webSocket |
-    [ | message |
-      message := webSocket readMessage.
-      webSocket sendMessage: message ] repeat ]).
+   [ :webSocket |
+      [ | message |
+         message := webSocket readMessage.
+         webSocket sendMessage: message ] repeat ]).
 ]]]
 
 We start a default server on port 1701 and replace its delegate with a ==ZnWebSocketDelegate==. The ==ZnWebSocketDelegate== will pass each correct web socket
@@ -142,9 +142,9 @@ This behavior is implemented in the ==ZnWebSocket>>runWith:== convenience method
 [[[
 ZnServer startDefaultOn: 1701.
 ZnServer default delegate: (ZnWebSocketDelegate handler:
-  [ :webSocket |
-    webSocket runWith: [ :message |
-      webSocket sendMessage: message ] ]).
+   [ :webSocket |
+      webSocket runWith: [ :message |
+         webSocket sendMessage: message ] ]).
 ]]]
 
 That leaves us with the problem of ==ConnectionClosed==. This exception can occur at the lowest level when the underlying network connection closes unexpectedly,
@@ -169,11 +169,12 @@ or at the WebSocket protocol level when the other end sends a close frame. In ei
 ZnServer stopDefault.
 ZnServer startDefaultOn: 1701.
 ZnServer default delegate: (ZnWebSocketDelegate handler:
-  [ :webSocket |
-        [ webSocket runWith: [ :message |
-                webSocket sendMessage: message ]
-        ] on: ConnectionClosed
-          do: [ self crLog: 'Ignoring connection close, done' ] ]).
+   [ :webSocket |
+      [ webSocket runWith: [ :message |
+         webSocket sendMessage: message ]
+      ]
+      on: ConnectionClosed
+      do: [ self crLog: 'Ignoring connection close, done' ] ]).
 ]]]
 
 
@@ -184,8 +185,9 @@ You can find such an implementation in ==ZnWebSocketEchoHandler==.
 ZnServer stopDefault.
 ZnServer startDefaultOn: 1701.
 ZnServer default
-    delegate: (ZnWebSocketDelegate
-                    handler: ZnWebSocketEchoHandler new).
+   delegate: (
+      ZnWebSocketDelegate
+         handler: ZnWebSocketEchoHandler new).
 ]]]
 
 The current process (thread) as spawned by the server can be used freely by the handler code, for as long as the web socket connection lasts.
@@ -202,12 +204,12 @@ ZnServer stopDefault.
 ZnServer startDefaultOn: 1701.
 ZnServer default logToTranscript.
 ZnServer default delegate
-  map: 'ws-echo-client-remote'
-  to: [ :request | ZnResponse ok: (ZnEntity html: ZnWebSocketEchoHandler clientHtmlRemote) ];
-  map: 'ws-echo-client'
-  to: [ :request | ZnResponse ok: (ZnEntity html: ZnWebSocketEchoHandler clientHtml) ];
-  map: 'ws-echo'
-  to: (ZnWebSocketDelegate map: 'ws-echo' to: ZnWebSocketEchoHandler new).
+   map: 'ws-echo-client-remote'
+   to: [ :request | ZnResponse ok: (ZnEntity html: ZnWebSocketEchoHandler clientHtmlRemote) ];
+   map: 'ws-echo-client'
+   to: [ :request | ZnResponse ok: (ZnEntity html: ZnWebSocketEchoHandler clientHtml) ];
+   map: 'ws-echo'
+   to: (ZnWebSocketDelegate map: 'ws-echo' to: ZnWebSocketEchoHandler new).
 ]]]
 
 Now, you can try the following URLs in your Web browser:
@@ -225,15 +227,16 @@ Here is the core loop:
 
 [[[
 ZnWebSocketStatusHandler>>value: webSocket
-  [
-    self crLog: 'Started status streaming'.
-    [
-      webSocket sendMessage: self status.
-      1 second asDelay wait.
-      webSocket isConnected ] whileTrue ]
-    on: ConnectionClosed
-    do: [ self crLog: 'Ignoring connection close' ].
-  self crLog: 'Stopping status streaming'
+   [
+      self crLog: 'Started status streaming'.
+      [
+         webSocket sendMessage: self status.
+         1 second asDelay wait.
+         webSocket isConnected ] whileTrue
+   ]
+   on: ConnectionClosed
+   do: [ self crLog: 'Ignoring connection close' ].
+   self crLog: 'Stopping status streaming'
 ]]]
 
 Here is code to setup all examples:
@@ -243,10 +246,10 @@ ZnServer stopDefault.
 ZnServer startDefaultOn: 1701.
 ZnServer default logToTranscript.
 ZnServer default delegate
-  map: 'ws-status-client'
-  to: [ :request | ZnResponse ok: (ZnEntity html: ZnWebSocketStatusHandler clientHtml) ];
-  map: 'ws-status'
-  to: (ZnWebSocketDelegate map: 'ws-status' to: ZnWebSocketStatusHandler new).
+   map: 'ws-status-client'
+   to: [ :request | ZnResponse ok: (ZnEntity html: ZnWebSocketStatusHandler clientHtml) ];
+   map: 'ws-status'
+   to: (ZnWebSocketDelegate map: 'ws-status' to: ZnWebSocketStatusHandler new).
 ]]]
 
 Visit *http://localhost:1701/ws-status-client* to see statistics (uptime, memory...) of your running Pharo lively refreshed in a Web page.
@@ -268,7 +271,8 @@ ZnWebSocketChatroomHandler>>value: webSocket
       self register: webSocket.
       webSocket runWith: [ :message |
          self crLog: 'Received message: ', message printString.
-         self distributeMessage: message ] ]
+         self distributeMessage: message ]
+   ]
    on: ConnectionClosed
    do: [
       self crLog: 'Connection close, cleaning up'.
@@ -291,10 +295,10 @@ ZnServer stopDefault.
 ZnServer startDefaultOn: 1701.
 ZnServer default logToTranscript.
 ZnServer default delegate
-  map: 'ws-chatroom-client'
-  to: [ :request | ZnResponse ok: (ZnEntity html: ZnWebSocketChatroomHandler clientHtml) ];
-  map: 'ws-chatroom'
-  to: (ZnWebSocketDelegate map: 'ws-chatroom' to: ZnWebSocketChatroomHandler new).
+   map: 'ws-chatroom-client'
+   to: [ :request | ZnResponse ok: (ZnEntity html: ZnWebSocketChatroomHandler clientHtml) ];
+   map: 'ws-chatroom'
+   to: (ZnWebSocketDelegate map: 'ws-chatroom' to: ZnWebSocketChatroomHandler new).
 ]]]
 
 Visit *http://localhost:1701/ws-chat-client* to access your Web chat application.
@@ -303,7 +307,7 @@ You can also send chat messages directly from Pharo, much like a moderator:
 
 [[[
 (ZnServer default delegate prefixMap at: 'ws-chatroom')
-  handler distributeMessage: 'moderator>>No trolling please!'.
+   handler distributeMessage: 'moderator>>No trolling please!'.
 ]]]
 
 
