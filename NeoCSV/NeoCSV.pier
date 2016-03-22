@@ -38,7 +38,7 @@ from Smalltalk objects. The goals of NeoCSV are:
 
 To load NeoJSON, evaluate the following or use the Configuration Browser:
 
-[[[language=smalltalk
+[[[
 Gofer it
   smalltalkhubUser: 'SvenVanCaekenberghe' project: 'Neo';
   configurationOf: 'NeoCSV';
@@ -198,7 +198,7 @@ Here we specify 4 fields: an integer, a float, a string and a date field. Field 
 
 While reading from a CSV file, you can ignore fields using ==addIgnoredField==. In the following example, the third field of each record is ignored:
 
-[[[language=smalltalk
+[[[
 | input |
 (NeoCSVReader on: '1,2,a,3\1,2,b,3\1,2,c,3\' withCRs readStream)
   addIntegerField;
@@ -215,7 +215,7 @@ Adding ignored field(s) requires adding field types on all other fields.
 
 In many cases you will probably want your data to be returned as one of your domain objects. It would be wasteful to first create arrays and then convert all those. NeoCSV has non-intrusive options to create instances of your own classes and to convert and set fields on them directly. This is done by specifying accessors and converters. Here is an example for reading ==Association==s of ==Float==s.
 
-[[[language=smalltalk
+[[[
 (NeoCSVReader on: '1.5,2.2\4.5,6\7.8,9.1' withCRs readStream)
   recordClass: Association;
   addFloatField: #key: ;
@@ -230,7 +230,7 @@ For each field you have to give the mutating accessor to use. You might also wan
 
 Handling large CSV files is possible with NeoCVS. In the following, we first create a large CSV file then read it partly (this takes a bit of time, be patient).
 
-[[[language=smalltalk
+[[[
 'paul.csv' asFileReference writeStreamDo: [ :file |
   ZnBufferedWriteStream on: file do: [ :out | | writer |
     writer := (NeoCSVWriter on: out).
@@ -251,7 +251,7 @@ $ wc paul.csv
 
 The following code selectively collects every record with a third field lower than 1000 (this takes a bit of time, be patient):
 
-[[[language=smalltalk
+[[[
 Array streamContents: [ :out |
   'paul.csv' asFileReference readStreamDo: [ :input |
     (NeoCSVReader on: (ZnBufferedReadStream on: in))

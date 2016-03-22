@@ -34,7 +34,7 @@ That is really all there is to it. No options or additions are defined in the st
 
 To load NeoJSON, evaluate the following:
 
-[[[language=smalltalk
+[[[
 Gofer it
   smalltalkhubUser: 'SvenVanCaekenberghe' project: 'Neo';
   configurationOf: 'NeoJSON';
@@ -85,13 +85,13 @@ While reading:
 
 The following example creates a Pharo array from a JSON expression:
 
-[[[language=smalltalk
+[[[
 NeoJSONReader fromString: ' [ 1,2,3 ] '.
 ]]]
 
 This expression can be decomposed to better control the reading process:
 
-[[[language=smalltalk
+[[[
 (NeoJSONReader on: ' [ 1,2,3 ] ' readStream)
   listClass: OrderedCollection;
   next.
@@ -102,13 +102,13 @@ The above expression is equivalent to the previous one except that a Pharo order
 
 The next example creates a Pharo dictionary (with =='x'== and =='y'== keys):
 
-[[[language=smalltalk
+[[[
 NeoJSONReader fromString: ' { "x" : 1, "y" : 2 } '.
 ]]]
 
 To automatically convert keys to symbols, pass ==true== to ==propertyNamesAsSymbols:== like this:
 
-[[[language=smalltalk
+[[[
 (NeoJSONReader on: ' { "x" : 1, "y" : 2 } ' readStream)
   propertyNamesAsSymbols: true;
   next
@@ -126,7 +126,7 @@ While writing:
 
 Here are some examples writing in generic mode:
 
-[[[language=smalltalk
+[[[
 NeoJSONWriter toString: #(1 2 3).
 NeoJSONWriter toString: { Float pi. true. false. 'string' }.
 NeoJSONWriter toString: { #a -> '1' . #b -> '2' } asDictionary.
@@ -134,7 +134,7 @@ NeoJSONWriter toString: { #a -> '1' . #b -> '2' } asDictionary.
 
 Above expressions return a compact string (''i.e.'', with neither indentation nor new lines). To get a nicely formatted output, use ==toStringPretty:== like this:
 
-[[[language=smalltalk
+[[[
 NeoJSONWriter toStringPretty: #(1 2 3).
 ]]]
 
@@ -147,7 +147,7 @@ NeoJSON allows for the optional specification of schemas and mappings to be used
 
 When writing, mappings are used when arbitrary objects are seen. For example, in order to write an array of points, you could do as follows:
 
-[[[language=smalltalk
+[[[
 String streamContents: [ :stream |
   (NeoJSONWriter on: stream)
     prettyPrint: true;
@@ -180,7 +180,7 @@ The above expression returns an array of 2 points. As you can see, the argument 
 
 To get an ==OrderedCollection== instead of an array as output, you should use the ==listOfType:== message:
 
-[[[language=smalltalk
+[[[
 (NeoJSONReader on: ' [ 1, 2 ] ' readStream)
   for: #Collection customDo: [ :mapping | mapping listOfType: OrderedCollection ];
     nextAs: #Collection.
@@ -188,7 +188,7 @@ To get an ==OrderedCollection== instead of an array as output, you should use th
 
 To specify how values in a map should be instantiated, use the ==mapWithValueSchema:==:
 
-[[[language=smalltalk
+[[[
 (NeoJSONReader on: ' { "point1" : {"x" : 1, "y" : 2 } }' readStream)
   mapInstVarsFor: Point;
   for: #DictionaryOfPoints
@@ -200,7 +200,7 @@ The above expression returns a ==Dictionary== with 1 key-value pair =='point1' -
 
 You can go beyond pre-defined messages and specify a decoding block:
 
-[[[language=smalltalk
+[[[
 (NeoJSONReader on: ' "2015/06/19" ' readStream)
   for: DateAndTime
     customDo: [ :mapping | mapping decoder: [ :string | DateAndTime fromString: string ] ];
@@ -209,7 +209,7 @@ You can go beyond pre-defined messages and specify a decoding block:
 
 The above expression returns an instance of ==DateAndTime==. The message ==encoder:== is used to do the opposite, ''i.e.'' convert from a Smalltalk object to JSON:
 
-[[[language=smalltalk
+[[[
 String streamContents: [ :stream |
   (NeoJSONWriter on: stream)
     for: DateAndTime customDo: [ :mapping | mapping encoder: #printString ];
@@ -225,7 +225,7 @@ On modern hardware, NeoJSON can write or read tens of thousands of small objects
 
 For efficiency reasons, by default, ==NeoJSONWriter== does not write ==nil== values:
 
-[[[language=smalltalk
+[[[
 String streamContents: [ :stream |
   (NeoJSONWriter on: stream)
   mapAllInstVarsFor: Point;
@@ -234,7 +234,7 @@ String streamContents: [ :stream |
 
 The above expression returns the =='{}'== string. If you want to see the uninitialized instance properties, pass ==true== to the ==writeNil:== message:
 
-[[[language=smalltalk
+[[[
 String streamContents: [ :stream |
   (NeoJSONWriter on: stream)
   mapAllInstVarsFor: Point;

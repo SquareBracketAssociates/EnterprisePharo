@@ -107,7 +107,7 @@ RenoirST also supports the creation of percentages: ==50 percent== is mapped to 
 
 Some properties require integer or floating point values. In these cases just use the standard Pharo integer and float support. For example:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div ]
   with: [ :style | style zIndex: 2 ];
@@ -122,7 +122,7 @@ and the abstractions ==CssRGBColor== and ==CssHSLColor== allow the creation of c
 
 For example,
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div ]
   with: [ :style |
@@ -146,7 +146,7 @@ div
 
 RGB-Colors also support percentage values:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div ]
   with: [ :style |
@@ -169,7 +169,7 @@ Notice the difference in the used message because there is no alpha channel spec
 
 A lot of values for CSS properties are just keyword constants. This support is provided by the classes ==CssConstants== and ==CssFontConstants==.
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div ]
   with: [ :style | style textAlign: CssConstants justify ];
@@ -190,7 +190,7 @@ div
 Some properties support a wide range of values. For example the ==margin== property can have 1, 2 , 3 or 4 values specified. If you only need one value, just 
 pass it as a parameter. For more than one value, use an array:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div ]
   with: [ :style | style margin: { 2 px. 4 px } ];
@@ -210,7 +210,7 @@ div
 
 ==ZnUrl== instances can be used as the value for properties requiring an URI. Both relative and absolute URLs are accepted. A relative URL is considered by default relative to the site root.
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div class: 'logo' ]
   with: [ :style | style backgroundImage: 'images/logo.png' asZnUrl ];
@@ -233,7 +233,7 @@ div.logo
 
 To use a URL relative to the style sheet, send to it the message ==relativeToStyleSheet==.
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div class: 'logo' ]
   with: [ :style | style backgroundImage: 'images/logo.png' asZnUrl relativeToStyleSheet];
@@ -251,7 +251,7 @@ div.logo
 
 When declaring rule sets, the library supports attaching comments to them with the ==declareRuleSetFor:with:andComment:== message:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div ]
   with: [ :style | style margin: 2 pc ]
@@ -271,7 +271,7 @@ div
 
 RenoirST also supports defining stand-alone comments (not attached to any rule):
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   comment: 'A general comment';
   build
@@ -292,7 +292,7 @@ between values, attribute references, and gradients are all supported in RenoirS
 
 The library provides support for math expressions using the  ==CssMathExpression== abstraction:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div ]
   with: [ :style | style margin: (CssMathExpression on: 2 pc) / 3 + 2 percent ];
@@ -312,7 +312,7 @@ div
 
 To let descendant elements cycle over a list of values instead of inheriting the same value, one can use the ==CssToggle== abstraction:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector unorderedList unorderedList ]
   with: [ :style | style listStyleType: (CssToggle cyclingOver: { CssConstants disc. CssConstants circle. CssConstants square}) ];
@@ -334,7 +334,7 @@ The ==attr()== function is allowed as a component value in properties applied to
 the element. If used on a pseudo-element, it returns the value of the attribute on the pseudo-element's originating element. This function is supported using 
 the ==CssAttributeReference== abstraction and can be used simply providing an attribute name:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div before ]
   with: [ :style | style content: (CssAttributeReference toAttributeNamed: 'title') ];
@@ -350,7 +350,7 @@ div::before
 
 RenoirST allows for providing the type or unit of the attribute (if no type or unit is specified the ==string== type is assumed):
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div  ]
   with: [ :style |
@@ -371,7 +371,7 @@ div
 
 Additionally, it is possible to provide a value to use when the attribute is absent:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div before ]
   with: [ :style |
@@ -399,7 +399,7 @@ other places. The gradient notations described in this section allow an author t
 
 To represent a simple linear gradient from a color to another, send the ==fading:== message to ==CssLinearGradient== with the two colors in an array as a parameter:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div ]
   with: [ :style | style background: (CssLinearGradient
@@ -417,7 +417,7 @@ div
 
 By default, a gradient's direction is from top to bottom. To specify a different direction, the author can use the ==to:fading:== message instead:
 
-[[[language=smalltalk
+[[[
 CssLinearGradient
   to: CssConstants right
   fading: { CssSVGColors yellow. CssSVGColors blue }
@@ -431,7 +431,7 @@ linear-gradient(to right, yellow, blue);
 
 To specify a diagonal direction, an array must be passed as the ==to:== argument:
 
-[[[language=smalltalk
+[[[
 CssLinearGradient
   to: { CssConstants top. CssConstants right }
   fading: { CssSVGColors yellow. CssSVGColors blue }
@@ -445,7 +445,7 @@ linear-gradient(to top right, yellow, blue);
 
 Directions can also be specified as an angle by sending the ==rotated:fading:== message:
 
-[[[language=smalltalk
+[[[
 CssLinearGradient
   rotated: 45 deg
   fading: { CssSVGColors yellow. CssSVGColors blue }
@@ -459,7 +459,7 @@ linear-gradient(45deg, yellow, blue);
 
 Gradients can be fine-tuned by manipulating so-called color stops:
 
-[[[language=smalltalk
+[[[
 CssLinearGradient
   to: CssConstants right
   fading: {
@@ -476,7 +476,7 @@ linear-gradient(to right, yellow, blue 30%);
 This results in a linear gradient from left to right with yellow at the left side and plain blue from 30% (of the horizontal line) to the right side. More than 
 two colors can be passed as argument to ==fading:==. This can be used to create rainbows:
 
-[[[language=smalltalk
+[[[
 CssLinearGradient
   to: CssConstants right
   fading: {
@@ -498,7 +498,7 @@ linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
 
 To create radial gradients, the author must send messages to ==CssRadialGradient==. For example,
 
-[[[language=smalltalk
+[[[
 CssRadialGradient fading: { CssSVGColors yellow. CssSVGColors green }
 ]]]
 
@@ -524,7 +524,7 @@ This maps to:
 ]]]
 
 To make the gradient repeatable, just send to it the message ==beRepeating==. For Example:
-[[[language=smalltalk
+[[[
 (CssRadialGradient fading: { CssSVGColors yellow. CssSVGColors green }) beRepeating
 ]]]
 renders as:
@@ -536,7 +536,7 @@ repeating-radial-gradient(yellow, green);
 
 Box Shadows are supported with ==CssBoxShadow== abstraction. This abstraction simplifies the use of the ==box-shadow== property. 
 
-[[[language=smalltalk
+[[[
 CssBoxShadow 
   horizontalOffset: 64 px 
   verticalOffset: 64 px 
@@ -550,7 +550,7 @@ evaluates to:
 ]]]
 
 Several shadows can be combined:
-[[[language=smalltalk
+[[[
 (CssBoxShadow horizontalOffset: 64 px verticalOffset: 64 px blurRadius: 12 px  spreadDistance: 40 px color: (CssSVGColors black newWithAlpha: 0.4)) , 
 (CssBoxShadow horizontalOffset: 12 px verticalOffset: 11 px blurRadius: 0 px  spreadDistance: 8 px color: (CssSVGColors black newWithAlpha: 0.4)) beInset
 ]]]
@@ -568,7 +568,7 @@ So far our focus was on the ''style'' part of the rule. Let's focus now on the a
 
 These selectors match a specific element type in the DOM. The library provides out-of-the-box support for HTML elements. One example is the ==div== selector used in the previous chapter:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div ]
   with: [ :style | ... ];
@@ -577,7 +577,7 @@ CascadingStyleSheetBuilder new
 
 The following other example matches ==<ol>== (ordered list) elements:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector orderedList ]
   with: [ :style | ... ]
@@ -598,7 +598,7 @@ To get a list of the supported type selectors evaluate ==CssSelector selectorsIn
 
 Selectors can be combined to represent complex queries. One of the most common use cases is the ''descendant combinator'':
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div orderedList ]
   with: [:style | ... ]
@@ -617,7 +617,7 @@ This only matches if an ==ol== element is a descendant (direct or not) of a ==di
 
 The ''child combinator'' only matches when an element is a direct child of another one:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div > selector orderedList ]
   with: [:style |  ]
@@ -634,7 +634,7 @@ div > ol
 
 ''Siblings combinators'' can be created using ==\+== and ==\~==:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div + selector orderedList ]
   with: [:style |  ]
@@ -644,7 +644,7 @@ CascadingStyleSheetBuilder new
 
 Class selectors can be created by sending ==class:== and id selectors can be created by sending ==id:==. For example,
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | (selector div class: 'pastoral') id: #account5 ]
   with: [:style |  ]
@@ -664,7 +664,7 @@ div.pastoral#account5
 A comma-separated list of selectors represents the union of all elements selected by each of the individual selectors in the list. For example, in CSS when 
 several selectors share the same declarations, they may be grouped into a comma-separated list.
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector paragraph , selector div ]
   with: [:style | ... ]
@@ -685,7 +685,7 @@ Attribute selectors are useful to match an element if that element has an attrib
 
 The ''attribute presence'' selector matches an element having an attribute (without considering the value of the attribute):
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new 
   declareRuleSetFor: [:selector | selector h1 havingAttribute: 'title' ]
   with: [:style | style color: CssSVGColors blue ];
@@ -701,7 +701,7 @@ h1[title]
 
 The ''attribute value exact matching'' selectors matches an element having an attribute with a specific value:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new 
   declareRuleSetFor: [:selector | selector span withAttribute: 'class' equalTo: 'example' ]
   with: [:style | style color: CssSVGColors blue ];
@@ -717,7 +717,7 @@ span[class="example"]
 
 The ''attribute value inclusion'' selector matches an element having an attribute with a value including as a word the matching term:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new 
   declareRuleSetFor: [:selector | selector anchor attribute: 'rel' includes: 'copyright' ]
   with: [:style | style color: CssSVGColors blue ];
@@ -732,7 +732,7 @@ a[rel~="copyright"]
 
 Other attribute selectors are used for substring matching:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new 
   declareRuleSetFor: [:selector | selector anchor firstValueOfAttribute: 'hreflang' beginsWith: 'en' ]
   with: [:style | style color: CssSVGColors blue ];
@@ -745,7 +745,7 @@ a[hreflang|="en"]
 }
 ]]]
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new 
   declareRuleSetFor: [:selector | selector anchor attribute: 'type' beginsWith: 'image/' ]
   with: [:style | style color: CssSVGColors blue ];
@@ -758,7 +758,7 @@ a[type^="image/"]
 }
 ]]]
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new 
   declareRuleSetFor: [:selector | selector anchor attribute: 'type' endsWith: '.html' ]
   with: [:style | style color: CssSVGColors blue ];
@@ -771,7 +771,7 @@ a[type$=".html"]
 }
 ]]]
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new 
   declareRuleSetFor: [:selector | selector paragraph attribute: 'title' includesSubstring: 'hello' ]
   with: [:style | style color: CssSVGColors blue ];
@@ -789,7 +789,7 @@ p[title*="hello"]
 The pseudo-class concept is introduced to allow selection based on information that lies outside of the document tree or that cannot be expressed using the simpler selectors. Most pseudo-classes are supported just by sending one of the following messages ==link==, ==visited==, ==active==, ==hover==, ==focus==, ==target==, ==enabled==, ==disabled== or ==checked==.
 
 Here is a small example that uses the pseudo-classes:
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector anchor link ]
   with: [:style | style color: CssSVGColors blue ];
@@ -837,7 +837,7 @@ input:checked
 
 The ==:lang(C)== pseudo-class can be used by sending the message ==lang:==:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | (selector lang: 'es') > selector div ]
   with: [:style | style quotes: { '"«"'. '"»"' }  ];
@@ -858,7 +858,7 @@ evaluates to:
 The negation pseudo-class, ==:not(X)==, is a functional notation taking a simple selector (excluding the negation pseudo-class itself) as an argument. It represents an element that is not represented by its argument. For more information take a look at the CSS spec.
 
 This selector is supported sending the message ==not:== 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new 
   declareRuleSetFor: [:selector | selector button not: (selector havingAttribute: 'DISABLED') ]
   with: [:style | style color: CssSVGColors blue ];
@@ -875,7 +875,7 @@ button:not([DISABLED])
 These selectors allow selection based on extra information that lies in the document tree but cannot be represented by other simpler selectors nor combinators.
 
 The ==:root== pseudo-class represents an element that is the root of the document. To build this kind of selector just send the message ==root== to another selector:
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector root ]
   with: [:style | style color: CssSVGColors grey ];
@@ -896,7 +896,7 @@ zero value of ==n==, and has a parent element. For values of ==a== and ==b== gre
 
 In addition to this, ==:nth-child()== can take a number, ==odd== and ==even== as arguments. The value ==odd== is equivalent to ==2n\+1==, whereas ==even== is equivalent to ==2n==.
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector childAt: 3 n + 1 ]
   with: [:style | style color: CssSVGColors blue ];
@@ -950,7 +950,7 @@ Pseudo-elements may also provide authors a way to refer to content that does not
 
 The ==firstLine== pseudo-element describes the contents of the first formatted line of an element.
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector paragraph firstLine ]
   with: [:style | style textTransform: CssConstants uppercase ];
@@ -968,7 +968,7 @@ p::first-line
 
 The ==firstLetter== pseudo-element represents the first letter of an element, if it is not preceded by any other content (such as images or inline tables) on its line.
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector paragraph firstLetter ]
   with: [:style | style fontSize: 200 percent ];
@@ -986,7 +986,7 @@ p::first-letter
 
 The ==before== and ==after== pseudo-elements can be used to describe generated content before or after an element's content. The ==content== property, in conjunction with these pseudo-elements, specifies what is inserted.
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | (selector paragraph class: 'note') before ]
   with: [:style | style content: '"Note: "' ];
@@ -1019,7 +1019,7 @@ special requirements control over presentation.
 
 The library provides support for this feature by sending ==beImportantDuring:== message to the style.
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector paragraph ]
   with: [:style |
@@ -1052,7 +1052,7 @@ same style sheet. Style rules outside of ==@media== rules apply to all media typ
 CSS2.1.
 
 The most basic media rule consists of specifying just a media type:
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
     declare: [ :cssBuilder |
         cssBuilder
@@ -1096,7 +1096,7 @@ New units for resolutions are added using the ==CssMeasure== abstraction. This k
 ==dpcm== (dots per centimeter) or ==dppx== (dots per pixel unit) to an integer or float.
 
 Here is a final example to better understand the media features support:
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
     declare: [ :cssBuilder |
         cssBuilder
@@ -1127,7 +1127,7 @@ evaluates to:
 
 The library doesn't provide out of the box support for non standard properties. Nevertheless, the message ==vendorPropertyAt:put:== is available to ease the creation of this kind of properties by the end user:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div ]
   with: [:style | style vendorPropertyAt: 'crazy-margin' put: 1 px ];
@@ -1154,7 +1154,7 @@ div
 The ==@font-face== rule allows for linking to fonts that are automatically fetched and activated when needed. This allows authors to select a font that closely matches the design goals for a given page rather than limiting the font choice to a set of fonts available on a given platform. A set of font descriptors define the location of a font resource, either locally or externally, along with the style characteristics of an individual face.
 
 This support is implemented in the builder:
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
 	declareFontFaceRuleWith: [ :style | 
 		style
@@ -1173,7 +1173,7 @@ evaluates to:
 
 This kind of rule allows for multiple ==src== definitions specifying the resources containing the data. This resources can be external (fonts fetched from a URL) or local (available in the user system). This kind of resources are supported using ==CssLocalFontReference== and ==CssExternalFontReference== abstractions:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
 	declareFontFaceRuleWith:
 		[ :style | 
@@ -1206,7 +1206,7 @@ The ==Units== package (available using the ConfigurationBrowser in Pharo) includ
 
 RenoirSt includes an optional group including some useful extensions. The *Seaside>http://www.seaside.st* framework includes its own class modeling URLs: when this group is loaded the instances of ==WAUrl== can be used in the properties requiring an URI:
 
-[[[language=smalltalk
+[[[
 CascadingStyleSheetBuilder new
   declareRuleSetFor: [:selector | selector div class: 'logo' ]
   with: [:style | style backgroundImage: 'images/logo.png' seasideUrl ];
@@ -1226,7 +1226,7 @@ This optional group also loads extensions to ==CssDeclarationBlock== so it can b
 
 To load this extensions you need to load (in an image with Seaside already loaded) the group ==Deployment-Seaside-Extensions== or ==Development-Seaside-Extensions== (if you want the test cases):
 
-[[[language=smalltalk
+[[[
 Metacello new
   baseline: 'RenoirSt';
   repository: 'github://gcotelli/RenoirSt:stable-pharo-50/source';
@@ -1235,7 +1235,7 @@ Metacello new
 
 or 
 
-[[[language=smalltalk
+[[[
 Metacello new
   baseline: 'RenoirSt';
   repository: 'github://gcotelli/RenoirSt:stable-pharo-40/source';

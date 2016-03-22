@@ -50,7 +50,7 @@ To make sure that your deployment image is reproducible, the best approach is to
 
 When you have a Pharo image with your application inside, the next step is to start the application. To make this process reproducible, it is recommended to create a dedicated file (''e.g.'', named ==myapp.st==) with the instructions needed to start your application. Here is an example of a script used to start a web application using Zinc.
 
-[[[language=Smalltalk
+[[[
 ZnServer defaultOn: 8080.
 ZnServer default logToStandardOutput.
 ZnServer default delegate 

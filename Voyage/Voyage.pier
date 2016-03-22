@@ -483,7 +483,7 @@ Using MongoQueries, the following operators may be used in a query:
 
 For example, a query that selects all elements in the database whose name is ==John== is the following:
 
-[[[language=smalltalk
+[[[
 [ :each | each name = 'John' ]
 ]]]
 
@@ -491,7 +491,7 @@ For example, a query that selects all elements in the database whose name is ==J
 
 A slightly more complicated query is to find all elements in the database whose name is ==John== and the value in ==orders== is greater than 10.
 
-[[[language=smalltalk
+[[[
 [ :each | (each name = 'John') & (each orders > 10 ) ]
 ]]]
 
@@ -504,7 +504,7 @@ For such case you should build your query using ids, as traditionally done in re
 With No-SQL databases, it is impossible to query on multiple collections (the equivalent of a JOIN statement in SQL). You have two options: alter your schema, as suggested above, or write application-level code to reproduce the JOIN behavior. The latter option can be done by sending the ==voyageId== message to an object already 
 returned by a previous query and using that id to match another object. An example where we match colors ==color== to a reference color ==refCol== is as follows:
 
-[[[language=smalltalk
+[[[
 [ :each | (each at: 'color.__id') = refCol voyageId ]
 ]]]
 
@@ -528,7 +528,7 @@ Since MongoDB stores documents of any complexity, it is common that one document
 In this case, to search for objects by one of the embedded document elements, the message ==at:==, and the field separator """.""" needs to be used. For 
 example, to select all the rectangles whose origin x value is equal to 42, the query is as as follows.
 
-[[[language=smalltalk
+[[[
 [ :each | (each at: 'origin.x') = 42 ]
 ]]]
 
@@ -539,7 +539,7 @@ Javascript using the ==$where== operand. This is also possible in MongoQueries b
 
 In the following example we repeat the previous query with a Javascript expression:
 
-[[[language=smalltalk
+[[[
 [ :each | each where: 'this.origin.x == 42' ].
 ]]]
 
@@ -559,14 +559,14 @@ satisfies these requirements.
 
 For example, the first example of the use of MongoQueries is written as a dictionary as follows:
 
-[[[language=smalltalk
+[[[
 { 'name' -> 'John' } asDictionary
 ]]]
 
 Dictionary pairs are composed with AND semantics. Selecting the elements having ==John== as name AND whose ==orders== value is greater than 10 can be written 
 like this:
 
-[[[language=smalltalk
+[[[
 {
   'name' -> 'John'.
   'orders' -> { '$gt' : 10 } asDictionary
@@ -581,7 +581,7 @@ relation. For the list of available query selectors we refer to the
 
 If you know the ObjectId for a document, you can create an OID instance with this value
 and query for it.
-[[[language=smalltalk
+[[[
 {('_id' -> (OID value: 16r55CDD2B6E9A87A520F000001))} asDictionary.
 ]]]
 
@@ -598,7 +598,7 @@ OID value: 16r55CDD2B6E9A87A520F000001. "hex"
 To access values embedded in documents with JSON queries, the dot notation is used. For example, the query representing rectangles whose origin have 42 as their 
 ==x== values can be expressed this way:
 
-[[[language=smalltalk
+[[[
 {
   'origin.x' -> {'$eq' : 42} asDictionary
 } asDictionary
@@ -610,7 +610,7 @@ To access values embedded in documents with JSON queries, the dot notation is us
 To express an OR condition, a dictionary whose key is =='$or'== and whose values are the expression of the condition is needed. The following example shows how 
 to select all objects whose name is ==John== that have more than ten orders OR objects whose name is not ==John== and has ten or less orders:
 
-[[[language=smalltalk
+[[[
 { '$or' :
   {
     {
@@ -631,7 +631,7 @@ to select all objects whose name is ==John== that have more than ten orders OR o
 Using JSON queries allows to use features that are not present in MongoQueries, for example the use of regular expressions. Below is a query that searches for 
 all documents with a ==fullname.lastName== that starts with the letter ==D==:
 
-[[[language=smalltalk
+[[[
 {
   'fullname.lastName' -> {
     '$regexp': '^D.*'.
