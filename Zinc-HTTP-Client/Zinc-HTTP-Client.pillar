@@ -63,9 +63,9 @@ belongs to the convenience API. Let's use a more general API to be a bit more ex
 
 [[[
 ZnClient new
-  url: 'http://zn.stfx.eu/zn/small.html';
-  get;
-  response.
+   url: 'http://zn.stfx.eu/zn/small.html';
+   get;
+   response.
 ]]]
 
 Here we explicitly set the url of the resource to access using ==url:==, then we execute an HTTP GET using ==get== and we finally ask for the response object 
@@ -93,9 +93,9 @@ through the network.
 [[[
 | response |
 response := (ZnClient new)
-  url: 'http://zn.stfx.eu/zn/small.html';
-  get;
-  response.
+   url: 'http://zn.stfx.eu/zn/small.html';
+   get;
+   response.
 response writeOn: Transcript.
 Transcript flush.
 ]]]
@@ -125,9 +125,9 @@ You might wonder what the request looked like when it went over the network? You
 [[[
 | request |
 request := (ZnClient new)
-  url: 'http://zn.stfx.eu/zn/small.html';
-  get;
-  request.
+   url: 'http://zn.stfx.eu/zn/small.html';
+   get;
+   request.
 request writeOn: Transcript.
 Transcript flush.
 ]]]
@@ -161,8 +161,8 @@ For debugging and for learning, it can be helpful to enable logging on the clien
 
 [[[
 ZnClient new
-  logToTranscript;
-  get: 'http://zn.stfx.eu/zn/small.html'.
+   logToTranscript;
+   get: 'http://zn.stfx.eu/zn/small.html'.
 ]]]
 
 This will print out some information on the Transcript, as shown below.
@@ -196,7 +196,7 @@ ZnEasy getJpeg: 'http://caretaker.wolf359.be/sun-fire-x2100.jpg'.
 ZnEasy getPng: 'http://pharo.org/files/pharo.png'.
 
 (ZnEasy getPng: 'http://chart.googleapis.com/chart?cht=tx&chl=',
-    'a^2+b^2=c^2') asMorph openInHand.
+   'a^2+b^2=c^2') asMorph openInHand.
 ]]]
 
 When you explore the implementation, you will notice that ==ZnEasy== uses a ==ZnClient== object internally.
@@ -224,8 +224,8 @@ specifically the response) was successful. As mentioned before, this is done by 
 client := ZnClient new.
 client get: 'http://zn.stfx.eu/zn/numbers.txt'.
 client isSuccess
-  ifTrue: [ client contents lines collect: [ :each | each asNumber ] ]
-  ifFalse: [ self inform: 'Something went wrong' ]
+   ifTrue: [ client contents lines collect: [ :each | each asNumber ] ]
+   ifFalse: [ self inform: 'Something went wrong' ]
 ]]]
 
 To make it easier to write better HTTP client code, ==ZnClient== offers some useful status handling methods in its API. You can ask the client to consider 
@@ -237,9 +237,9 @@ goes wrong. Together, this allows the above code to be rewritten as follows.
 
 [[[
 ZnClient new
-  enforceHttpSuccess: true;
-  ifFail: [ :ex | self inform: 'Cannot get numbers: ', ex printString ];
-  get: 'http://zn.stfx.eu/zn/numbers.txt'.
+   enforceHttpSuccess: true;
+   ifFail: [ :ex | self inform: 'Cannot get numbers: ', ex printString ];
+   get: 'http://zn.stfx.eu/zn/numbers.txt'.
 ]]]
 
 Maybe it doesn't look like a big difference, but combined with some other options and features of ==ZnClient== that we'll see later on, the code does become more 
@@ -270,8 +270,8 @@ Setting the timeout directly on a ==ZnClient== is the easiest.
 
 [[[
 ZnClient new
-  timeout: 1;
-  get: 'http://zn.stfx.eu/zn/small.html'.
+   timeout: 1;
+   get: 'http://zn.stfx.eu/zn/small.html'.
 ]]]
 
 The timeout counts for each socket level connect, read and write operation, separately. You can dynamically redefine the timeout using the ==ZnConnectionTimeout== 
@@ -279,8 +279,8 @@ class, which is a ==DynamicVariable== subclass.
 
 [[[
 ZnConnectionTimeout
-  value: 5
-  during: [ ^ ZnClient new get: 'http://zn.stfx.eu/zn/small.html' ].
+   value: 5
+   during: [ ^ ZnClient new get: 'http://zn.stfx.eu/zn/small.html' ].
 ]]]
 
 Zn defines its global default timeout in seconds as a setting.
@@ -299,9 +299,9 @@ and how many seconds to wait between retries.
 
 [[[
 ZnClient new
-  numberOfRetries: 3;
-  retryDelay: 2;
-  get: 'http://zn.stfx.eu/zn/small.html'.
+   numberOfRetries: 3;
+   retryDelay: 2;
+   get: 'http://zn.stfx.eu/zn/small.html'.
 ]]]
 
 In the above example, the request will be tried up to 3 times, with a 2 second delay between attempts. Note that the definition of failure/success is broad: it 
@@ -313,11 +313,11 @@ Zn uses ==ZnUrl== objects to deal with URLs. ==ZnClient== also contains an API t
 
 [[[
 ZnClient new
-  http;
-  host: 'zn.stfx.eu';
-  addPath: 'zn';
-  addPath: 'small.html';
-  get.
+   http;
+   host: 'zn.stfx.eu';
+   addPath: 'zn';
+   addPath: 'small.html';
+   get.
 ]]]
 
 Instead of giving a string argument to be parsed into a ==ZnUrl==, we now provide the necessary elements to construct the URL manually, by sending messages to 
@@ -328,23 +328,23 @@ A URL can also contain query parameters. Let's do a Google search as an example:
 
 [[[
 ZnClient new
-  http;
-  host: 'www.google.com';
-  addPath: 'search';
-  queryAt: 'q' put: 'Pharo Smalltalk';
-  get.
+   http;
+   host: 'www.google.com';
+   addPath: 'search';
+   queryAt: 'q' put: 'Pharo Smalltalk';
+   get.
 ]]]
 
 Query parameters have a name and a value. Certain special characters have to be encoded. You can build the same URL with the ==ZnUrl== object, in several ways.
 
 [[[
 ZnUrl new
-  scheme: #http;
-  host: 'www.google.com';
-  port: 80;
-  addPathSegment: 'search';
-  queryAt: 'q' put: 'Pharo Smalltalk';
-  yourself.
+   scheme: #http;
+   host: 'www.google.com';
+   port: 80;
+   addPathSegment: 'search';
+   queryAt: 'q' put: 'Pharo Smalltalk';
+   yourself.
 ]]]
 
 If you print the above expression, it gives you the printable representation of the URL. 
@@ -371,8 +371,8 @@ First you have to find out how the form is implemented by looking at the HTML co
 
 [[[language=html
 <form action="search-handler" method="POST" enctype="application/x-www-form-urlencoded">
-  Search for: <input type="text" name="search-field"/>
-  <input type="submit" value="Go!"/>
+   Search for: <input type="text" name="search-field"/>
+   <input type="submit" value="Go!"/>
 </form>
 ]]]
 
@@ -381,9 +381,9 @@ URL ==http://www.search-engine.com/==, we can implement the behavior of the brow
 
 [[[
 ZnClient new
-  url: 'http://www.search-engine.com/search-handler';
-  formAt: 'search-field' put: 'Pharo Smalltalk';
-  post.
+   url: 'http://www.search-engine.com/search-handler';
+   formAt: 'search-field' put: 'Pharo Smalltalk';
+   post.
 ]]]
 
 The URL is composed by combining the URL of the page that contains the form with the action specified. There is no need to set the encoding of the request here 
@@ -396,8 +396,8 @@ There is a second type of form encoding called ==multipart/form-data==. Here, in
 
 [[[language=html
 <form action="search-handler" method="POST" enctype="multipart/form-data">
-  Search for: <input type="text" name="search-field"/>
-  <input type="submit" value="Go!"/>
+   Search for: <input type="text" name="search-field"/>
+   <input type="submit" value="Go!"/>
 </form>
 ]]]
 
@@ -405,18 +405,19 @@ The code to submit this form would then be as follows.
 
 [[[
 ZnClient new
-  url: 'http://www.search-engine.com/search-handler';
-  addPart: (ZnMimePart fieldName: 'search-field'
-                  value: 'Pharo Smalltalk');
-  post.
+   url: 'http://www.search-engine.com/search-handler';
+   addPart: (ZnMimePart
+                fieldName: 'search-field'
+                value: 'Pharo Smalltalk');
+   post.
 ]]]
 
 In this case, an entity of type ==ZnMultiPartFormDataEntity== is created and used. This type is often used in forms that upload files. Here is an example.
 
 [[[language=html
 <form action="upload-handler" method="POST" enctype="multipart/form-data">
-  Photo file: <input type="file" name="photo-file"/>
-  <input type="submit" value="Upload!"/>
+   Photo file: <input type="file" name="photo-file"/>
+   <input type="submit" value="Upload!"/>
 </form>
 ]]]
 
@@ -424,10 +425,11 @@ This would be the way to do the upload programmatically.
 
 [[[
 ZnClient new
-  url: 'http://www.search-engine.com/upload-handler';
-  addPart: (ZnMimePart fieldName: 'photo-file'
-                   fileNamed: '/Pictures/cat.jpg');
-  post.
+   url: 'http://www.search-engine.com/upload-handler';
+   addPart: (ZnMimePart
+                fieldName: 'photo-file'
+                fileNamed: '/Pictures/cat.jpg');
+   post.
 ]]]
 
 Sometimes, the form's submit method is GET instead of POST, just send ==get== instead of ==post== to the client. Note that this technique of sending form data to 
@@ -440,8 +442,8 @@ and most common form of authentication is called 'Basic Authentication'.
 
 [[[
 ZnClient new
-  username: 'john@hacker.com' password: 'trustno1';
-  get: 'http://www.example.com/secret.txt'.
+   username: 'john@hacker.com' password: 'trustno1';
+   get: 'http://www.example.com/secret.txt'.
 ]]]
 
 That is all there is to it. If you want to understand how this works, look at how ==ZnRequest>>#setBasicAuthenticationUsername:password:== is implemented.
@@ -470,11 +472,11 @@ to access a specific file.
 
 [[[
 ZnClient new
-  url: 'http://cloud-storage.com/login';
-  formAt: 'username' put: 'john.doe@acme.com';
-  formAt: 'password' put: 'trustno1';
-  post;
-  get: 'http://cloud-storage.com/my-file'.
+   url: 'http://cloud-storage.com/login';
+   formAt: 'username' put: 'john.doe@acme.com';
+   formAt: 'password' put: 'trustno1';
+   post;
+   get: 'http://cloud-storage.com/my-file'.
 ]]]
 
 After the ==post==, the server will presumably set a cookie to acknowledge a successful login. When a specific file is next requested from the same domain, the 
@@ -505,8 +507,8 @@ ZnClient new
 
 ZnClient new
    entity: (ZnEntity
-              with: '<xml><object><id>42</id></object></xml>'
-              type: ZnMimeType applicationXml);
+               with: '<xml><object><id>42</id></object></xml>'
+               type: ZnMimeType applicationXml);
    post.
 ]]]
 
@@ -547,11 +549,11 @@ one request. ==ZnClient== implements this behavior by default.
 
 [[[
 Array streamContents: [ :stream | | client |
-  client := ZnClient new url: 'http://zn.stfx.eu'.
-  (1 to: 10) collect: [ :each | | url |
-    url := '/random/', each asString.
-    stream nextPut: (client path: url; get) ].
-  client close ].
+   client := ZnClient new url: 'http://zn.stfx.eu'.
+   (1 to: 10) collect: [ :each | | url |
+      url := '/random/', each asString.
+      stream nextPut: (client path: url; get) ].
+   client close ].
 ]]]
 
 The above example sets up a client to connect to a specific host. Then it collects the results of 10 different requests, asking for random strings of a specific 
@@ -568,8 +570,8 @@ In many situations, you only want to do one single request. HTTP 1.1 has provisi
 
 [[[
 ZnClient new
-  beOneShot;
-  get: 'http://zn.stfx.eu/numbers.txt'.
+   beOneShot;
+   get: 'http://zn.stfx.eu/numbers.txt'.
 ]]]
 
 With the beOneShot option, the client notifies the server that it will do just one request and both parties will consequently close the connection after use, 
@@ -595,15 +597,15 @@ This works both for regular requests as well as for downloads.
 
 [[[
 ZnClient new
-  url: 'http://zn.stfx.eu/zn/numbers.txt';
-  setIfModifiedSince: (Date year: 2011 month: 1 day: 1);
-  downloadTo: FileLocator imageDirectory.
+   url: 'http://zn.stfx.eu/zn/numbers.txt';
+   setIfModifiedSince: (Date year: 2011 month: 1 day: 1);
+   downloadTo: FileLocator imageDirectory.
 
 ZnClient new
-  url: 'http://zn.stfx.eu/zn/numbers.txt';
-  setIfModifiedSince: (Date year: 2012 month: 1 day: 1);
-  get;
-  response.
+   url: 'http://zn.stfx.eu/zn/numbers.txt';
+   setIfModifiedSince: (Date year: 2012 month: 1 day: 1);
+   get;
+   response.
 ]]]
 
 For this to work, the server has to honor this particular protocol interaction, of course.
@@ -645,9 +647,9 @@ With ==ZnClient== you can set the accept request header to indicate what you as 
 
 [[[
 ZnClient new
-  enforceAcceptContentType: true;
-  accept: ZnMimeType textPlain;
-  get: 'http://zn.stfx.eu/zn/numbers.txt'.
+   enforceAcceptContentType: true;
+   accept: ZnMimeType textPlain;
+   get: 'http://zn.stfx.eu/zn/numbers.txt'.
 ]]]
 
 The above code indicates to the server that we want a ==text/plain== type resource by means of the ==Accept== header. When the response comes back and it is not 
@@ -665,8 +667,8 @@ actual resource or entity. This is called a HEAD request.
 
 [[[
 ZnClient new
-  head: 'http://zn.stfx.eu/zn/small.html';
-  response.
+   head: 'http://zn.stfx.eu/zn/small.html';
+   response.
 ]]]
 
 Since there is no content, we have to look at the ==headers== of the response object. Note that the content-type and content-length headers will be set, as if 
@@ -689,7 +691,7 @@ Once a request is executed, you can query the response headers like this:
 [[[
 client response isConnectionClose.
 (client response headers at: 'Connection' ifAbsent: [ '' ])
-    sameAs: 'close'.
+   sameAs: 'close'.
 ]]]
 
 
@@ -725,8 +727,8 @@ ZnClient new
    url: 'http://zn.stfx.eu/zn/numbers.txt';
    accept: ZnMimeType textPlain;
    contentReader: [ :entity |
-                       entity contents lines
-                         collect: [ :each | each asInteger ] ];
+      entity contents lines
+         collect: [ :each | each asInteger ] ];
   get.
 ]]]
 
@@ -744,13 +746,13 @@ To customize the content writer, you need to pass a one-argument block to the ==
 
 [[[
 ZnClient new
-  url: 'http://internet-calculator.com/sum';
-  contentWriter: [ :numberCollection |
+   url: 'http://internet-calculator.com/sum';
+   contentWriter: [ :numberCollection |
       ZnEntity text:
-        (Character space join:
-           (numberCollection collect: [ :each | each asString ])) ];
-  contentReader: [ :entity | entity contents asNumber ];
-  post.
+         (Character space join:
+            (numberCollection collect: [ :each | each asString ])) ];
+   contentReader: [ :entity | entity contents asNumber ];
+   post.
 ]]]
 
 Assuming there is a web service at ==http://internet-calculator.com== where you can send numbers to, we send a whitespace separated list of numbers to its sum URI 
@@ -763,8 +765,8 @@ do this in scripts. There is a handy convenience method in ==ZnClient== to do ju
 
 [[[
 ZnClient new
-  url: 'http://zn.stfx.eu/zn/numbers.txt';
-  downloadTo: FileLocator imageDirectory.
+   url: 'http://zn.stfx.eu/zn/numbers.txt';
+   downloadTo: FileLocator imageDirectory.
 ]]]
 
 The example will download the URL and save it in a file named ==numbers.txt== next to your image. The argument to ==downloadTo:== can be a ==FileReference== or 
@@ -779,10 +781,10 @@ name extension. If needed you can next override that mime type using ==contentTy
 
 [[[
 ZnClient new
-  url: 'http://cloudstorage.com/myfiles/';
-  username: 'john@foo.co.uk' password: 'asecret';
-  uploadEntityFrom: FileLocator imageDirectory / 'numbers.txt';
-  post.
+   url: 'http://cloudstorage.com/myfiles/';
+   username: 'john@foo.co.uk' password: 'asecret';
+   uploadEntityFrom: FileLocator imageDirectory / 'numbers.txt';
+   post.
 ]]]
 
 Some HTTP operations, particularly those involving large resources, might take some time, especially when slower networks or servers are involved. During 
@@ -791,13 +793,13 @@ By default this is off. Here is an example.
 
 [[[
 UIManager default informUserDuring: [ :bar |
-  bar label: 'Downloading latest Pharo image...'.
-  [ ^ ZnClient new
-             signalProgress: true;
-             url: 'http://files.pharo.org/image/stable/latest.zip';
-             downloadTo: FileLocator imageDirectory ]
-      on: HTTPProgress
-      do: [ :progress | 
+   bar label: 'Downloading latest Pharo image...'.
+   [ ^ ZnClient new
+         signalProgress: true;
+         url: 'http://files.pharo.org/image/stable/latest.zip';
+         downloadTo: FileLocator imageDirectory ]
+   on: HTTPProgress
+   do: [ :progress |
          bar label: progress printString.
          progress isEmpty ifFalse: [ bar current: progress percentage ].
          progress resume ] ]
@@ -813,8 +815,8 @@ named ==timeout:== whose implementation defines its default
 
 [[[
 ^ self
-    optionAt: #timeout
-    ifAbsent: [ ZnNetworkingUtils defaultSocketStreamTimeout ]
+   optionAt: #timeout
+   ifAbsent: [ ZnNetworkingUtils defaultSocketStreamTimeout ]
 ]]]
 
 The set of all option defaults defines the default policy of ==ZnClient==. For certain scenarios, there are policy methods that set several options at once. The 
