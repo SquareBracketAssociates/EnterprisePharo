@@ -155,8 +155,10 @@ Now, when you try to visit the server at *http://localhost:1701* you will have t
 a get request to this URL with these credentials.
 
 [[[
-ZnEasy get: 'http://localhost:1701'
-        username: 'admin' password: 'secret'.
+ZnEasy
+   get: 'http://localhost:1701'
+   username: 'admin'
+   password: 'secret'.
 ]]]
 
 @@note Using ==ZnBasicAuthenticator== or implementing an alternative authenticator is only one of several possibilities to address the problem of adding security to a web site or web application.
@@ -211,8 +213,9 @@ The following example shows how to log events in a file named
 [[[
 | logger |
 loggerStream := (Smalltalk imageDirectory / 'zn.log') writeStream.
-ZnLogEvent announcer when: ZnLogEvent
-                       do: [ :event | loggerStream lf; print: event ].
+ZnLogEvent announcer
+   when: ZnLogEvent
+   do: [ :event | loggerStream lf; print: event ].
 (ZnServer defaultOn: 1701) start.
 ]]]
 
@@ -223,9 +226,9 @@ hierarchy looks as follows.
 
 [[[language=no language
 ZnServer
-  + ZnSingleThreadedServer
-     + ZnMultiThreadedServer
-        + ZnManagedMultiThreadedServer
+   + ZnSingleThreadedServer
+      + ZnMultiThreadedServer
+         + ZnManagedMultiThreadedServer
 ]]]
 
  ==ZnServer== is an abstract class. ==ZnSingleThreadedServer== implements the core server functionality. It runs in one single process, which means it can only
@@ -256,10 +259,11 @@ Zn can do this by using a ==ZnStaticFileServerDelegate==. Given a directory and 
 
 [[[
 (ZnServer startDefaultOn: 1701)
-   delegate: (ZnStaticFileServerDelegate new
-                directory: '/var/www' asFileReference;
-                prefixFromString: 'static-files';
-                yourself).
+   delegate: (
+      ZnStaticFileServerDelegate new
+         directory: '/var/www' asFileReference;
+         prefixFromString: 'static-files';
+         yourself).
 ]]]
 
 If we suppose the contents of ==/var/www== is
@@ -297,12 +301,13 @@ Here is a more complex example:
 [[[
 (ZnServer startDefaultOn: 1701)
    logToTranscript;
-   delegate: (ZnStaticFileServerDelegate new
-                directory: '/var/www' asFileReference;
-                mimeTypeExpirations: ZnStaticFileServerDelegate defaultMimeTypeExpirations;
-                yourself);
-   authenticator:
-       (ZnBasicAuthenticator username: 'admin' password: 'secret').
+   delegate: (
+      ZnStaticFileServerDelegate new
+         directory: '/var/www' asFileReference;
+         mimeTypeExpirations: ZnStaticFileServerDelegate defaultMimeTypeExpirations;
+         yourself);
+   authenticator: (
+      ZnBasicAuthenticator username: 'admin' password: 'secret').
 ]]]
 
 In the above example, we add the optional expiration and caching control based on default settings. Note that it is easy to combine static file serving with logging and authentication.
@@ -355,12 +360,12 @@ ZnServer startDefaultOn: 8080.
    directory: '/home/ubuntu/zn' asFileReference.
 
 ZnServer default delegate prefixMap
-  at: 'zn'
-  put: [ :request | staticFileServerDelegate handleRequest: request ];
-  at: 'redirect-to-zn'
-  put: [ :request | ZnResponse redirect: '/zn/index.html' ];
-  at: '/'
-  put: 'redirect-to-zn'.
+   at: 'zn'
+   put: [ :request | staticFileServerDelegate handleRequest: request ];
+   at: 'redirect-to-zn'
+   put: [ :request | ZnResponse redirect: '/zn/index.html' ];
+   at: '/'
+   put: 'redirect-to-zn'.
 ]]]
 
 This is taken from the configuration of what runs at *http://zn.stfx.eu*. A static web server is set up under the ==zn== prefix pointing to the directory
@@ -373,11 +378,11 @@ This is taken from the configuration of what runs at *http://zn.stfx.eu*. A stat
 Another option is to use ==ZnDispatcherDelegate==.
 
 [[[
-(ZnServer startDefaultOn: 9090) delegate:
-     (ZnDispatcherDelegate new
-          map: '/hello'
-          to: [ :request :response |
-               response entity: (ZnEntity html: '<h1>hello!</h1>') ]).
+(ZnServer startDefaultOn: 9090) delegate: (
+   ZnDispatcherDelegate new
+      map: '/hello'
+      to: [ :request :response |
+            response entity: (ZnEntity html: '<h1>hello!</h1>') ]).
 ]]]
 
 You configure the dispatcher using ==map:to:== methods. First argument is the prefix, second argument is a block taking two arguments: the incoming request and
@@ -409,17 +414,18 @@ Consider the following example:
 ZnServer startDefaultOn: 1701.
 
 ZnClient new
- url: 'http://localhost:1701/echo';
- entity: (ZnEntity with: 'An der schönen blauen Donau');
- post.
+   url: 'http://localhost:1701/echo';
+   entity: (ZnEntity with: 'An der schönen blauen Donau');
+   post.
 
 ZnClient new
- url: 'http://localhost:1701/echo';
- entity: (ZnEntity
-           with: 'An der schönen blauen Donau'
-           type: (ZnMimeType textPlain charSet: #'iso-8859-1'; yourself));
- post;
- yourself.
+   url: 'http://localhost:1701/echo';
+   entity: (
+      ZnEntity
+         with: 'An der schönen blauen Donau'
+        type: (ZnMimeType textPlain charSet: #'iso-8859-1'; yourself));
+   post;
+   yourself.
 ]]]
 
 In the first case, a UTF-8 encoded string is POST-ed and correctly returned (in a UTF-8 encoded response).
@@ -430,12 +436,13 @@ In both cases the decoding was done correctly, using the specified charset (if t
 
 [[[
 ZnClient new
- url: 'http://localhost:1701/echo';
- entity: (ZnEntity
-           with: 'An der schönen blauen Donau'
-           type: (ZnMimeType textPlain clearCharSet; yourself));
- post;
- yourself.
+   url: 'http://localhost:1701/echo';
+   entity: (
+      ZnEntity
+         with: 'An der schönen blauen Donau'
+         type: (ZnMimeType textPlain clearCharSet; yourself));
+   post;
+   yourself.
 ]]]
 
 !!Resource Protection Limits, Content and Transfer Encoding
@@ -514,13 +521,15 @@ The server implementation uses two helper objects: a ==jsonEntityBuilder== and a
 | jsonEntityBuilder mapper |
 
 jsonEntityBuilder := [ :object |
-    ZnEntity with: ((String streamContents: [ :stream |
-                 STON jsonWriter on: stream;
-                                   prettyPrint: true;
-                                   nextPut: object.
-                 stream cr ])
-                      replaceAll: Character cr with: Character lf)
-              type: ZnMimeType applicationJson ].
+   ZnEntity
+      with: ((String streamContents: [ :stream |
+         STON jsonWriter
+            on: stream;
+            prettyPrint: true;
+            nextPut: object.
+         stream cr ])
+         replaceAll: Character cr with: Character lf)
+      type: ZnMimeType applicationJson ].
 ]]]
 
 The ==jsonEntityBuilder== block helps in transforming Smalltalk objects to a JSON entity. We use the STON writer and reader here because they are backwards compatible with JSON. We
@@ -528,63 +537,63 @@ use linefeeds to improve compatibility with internet conventions as well as pret
 
 [[[
 mapper := {
-  [ :request |
-    request uri isSlash and: [ request method = #GET ] ]
-    ->
- [ :request |
-   ZnResponse
-     ok: (jsonEntityBuilder value: JSONStore keys asArray) ].
+   [ :request |
+      request uri isSlash and: [ request method = #GET ] ]
+   ->
+   [ :request |
+      ZnResponse
+         ok: (jsonEntityBuilder value: JSONStore keys asArray) ].
 "----------------------------------------------------------------"
-  [ :request |
-    (request uri hasPath and: [ request method = #GET ])
-      and: [ request uri pathSegments size = 1 ] ]
-  ->
-  [ :request | | uri |
-    uri := request uri pathPrintString.
-    JSONStore
-      at: uri
-      ifPresent: [ :object |
-        ZnResponse ok: (jsonEntityBuilder value: object) ]
-      ifAbsent: [ ZnResponse notFound: uri ] ].
+   [ :request |
+      (request uri hasPath and: [ request method = #GET ])
+         and: [ request uri pathSegments size = 1 ] ]
+   ->
+   [ :request | | uri |
+      uri := request uri pathPrintString.
+      JSONStore
+         at: uri
+         ifPresent: [ :object |
+            ZnResponse ok: (jsonEntityBuilder value: object) ]
+         ifAbsent: [ ZnResponse notFound: uri ] ].
 "----------------------------------------------------------------"
-  [ :request |
-    (request uri isSlash
-      and: [ request method = #POST ])
-      and: [ request contentType = ZnMimeType applicationJson ] ]
-  ->
-  [ :request | | uri |
-    uri := '/', (JSONStore size + 1) asString.
-    JSONStore at: uri put: (STON fromString: request contents).
-    (ZnResponse created: uri)
-      entity: (jsonEntityBuilder value: 'Created ', uri);
-      yourself ].
+   [ :request |
+      (request uri isSlash
+         and: [ request method = #POST ])
+         and: [ request contentType = ZnMimeType applicationJson ] ]
+   ->
+   [ :request | | uri |
+      uri := '/', (JSONStore size + 1) asString.
+      JSONStore at: uri put: (STON fromString: request contents).
+     (ZnResponse created: uri)
+         entity: (jsonEntityBuilder value: 'Created ', uri);
+         yourself ].
 "----------------------------------------------------------------"
-  [ :request |
-    ((request uri hasPath and: [ request method = #PUT ])
+   [ :request |
+      ((request uri hasPath and: [ request method = #PUT ])
       and: [ request uri pathSegments size = 1 ])
       and: [ request contentType = ZnMimeType applicationJson ]]
-  ->
-  [ :request | | uri |
-    uri := request uri pathPrintString.
-    (JSONStore includesKey: uri)
-      ifTrue: [
-        JSONStore
-          at: uri
-          put: (STON fromString: request contents).
-        ZnResponse ok: (jsonEntityBuilder value: 'Updated') ]
-      ifFalse: [ ZnResponse notFound: uri ] ].
+   ->
+   [ :request | | uri |
+      uri := request uri pathPrintString.
+      (JSONStore includesKey: uri)
+         ifTrue: [
+            JSONStore
+               at: uri
+               put: (STON fromString: request contents).
+            ZnResponse ok: (jsonEntityBuilder value: 'Updated') ]
+         ifFalse: [ ZnResponse notFound: uri ] ].
 "----------------------------------------------------------------"
-  [ :request |
-    (request uri hasPath
-      and: [ request method = #DELETE ])
-      and: [ request uri pathSegments size = 1 ] ]
+   [ :request |
+      (request uri hasPath
+         and: [ request method = #DELETE ])
+         and: [ request uri pathSegments size = 1 ] ]
   ->
-  [ :request | | uri |
-    uri := request uri pathPrintString.
-    (JSONStore removeKey: uri ifAbsent: [ nil ])
-      ifNil: [ ZnResponse notFound: uri ]
-      ifNotNil: [
-        ZnResponse ok: (jsonEntityBuilder value: 'Deleted') ] ].
+   [ :request | | uri |
+      uri := request uri pathPrintString.
+      (JSONStore removeKey: uri ifAbsent: [ nil ])
+         ifNil: [ ZnResponse notFound: uri ]
+         ifNotNil: [
+            ZnResponse ok: (jsonEntityBuilder value: 'Deleted') ] ].
 }.
 ]]]
 
@@ -598,12 +607,13 @@ The server logic thus becomes: find a matching entry in the mapper and invoke it
 
 [[[
 (ZnServer startDefaultOn: 1701)
-    logToTranscript;
-    onRequestRespond: [ :request |
-        (mapper detect: [ :each | each key value: request ]
-                 ifNone: [ nil ])
-            ifNil: [ ZnResponse badRequest: request ]
-            ifNotNil: [ :handler | handler value value: request ] ].
+   logToTranscript;
+   onRequestRespond: [ :request |
+      (mapper
+            detect: [ :each | each key value: request ]
+            ifNone: [ nil ])
+         ifNil: [ ZnResponse badRequest: request ]
+         ifNotNil: [ :handler | handler value value: request ] ].
 ]]]
 
 !!!Using the Server
@@ -663,47 +673,47 @@ It is trivial to use ==ZnClient== to have the same interaction. But we can do be
 | client |
 
 client := ZnClient new
-    url: 'http://localhost:1701';
-    enforceHttpSuccess: true;
-    accept: ZnMimeType applicationJson;
-    contentWriter: [ :object |
-        ZnEntity
-            with: (String streamContents: [ :stream |
-                        STON jsonWriter on: stream; nextPut: object ])
-            type: ZnMimeType applicationJson ];
-    contentReader: [ :entity |  STON fromString: entity contents ];
-    yourself.
+   url: 'http://localhost:1701';
+   enforceHttpSuccess: true;
+   accept: ZnMimeType applicationJson;
+   contentWriter: [ :object |
+      ZnEntity
+         with: (String streamContents: [ :stream |
+                  STON jsonWriter on: stream; nextPut: object ])
+         type: ZnMimeType applicationJson ];
+   contentReader: [ :entity |  STON fromString: entity contents ];
+   yourself.
 ]]]
 
 Now we can hold the same conversation as above, only in this case in terms of real Smalltalk objects.
 
 [[[
- client get: '/'
- ==>> #()
+   client get: '/'
+   ==>> #()
 
- client post: '/' contents: #(1 2 3)
- ==>> 'Created /1'
+   client post: '/' contents: #(1 2 3)
+   ==>> 'Created /1'
 
- client get: '/1'
- ==>> #(1 2 3)
+   client get: '/1'
+   ==>> #(1 2 3)
 
- client post: '/' contents: (Dictionary with: #bar -> -2)
- ==>> 'Created /2'
+   client post: '/' contents: (Dictionary with: #bar -> -2)
+   ==>> 'Created /2'
 
- client put: '/2' contents: (Dictionary with: #bar -> -1)
- ==>> 'Updated'
+   client put: '/2' contents: (Dictionary with: #bar -> -1)
+   ==>> 'Updated'
 
- client get: '/2'
- ==>> a Dictionary('bar'->-1 )
+   client get: '/2'
+   ==>> a Dictionary('bar'->-1 )
 
- client get: '/'
- ==>> #('/1' '/2')
+   client get: '/'
+   ==>> #('/1' '/2')
 
- client delete: '/2'
- ==>> 'Deleted'
+   client delete: '/2'
+   ==>> 'Deleted'
 
- client get: '/2'
- ==>> throws a ZnHttpUnsuccessful exception
+   client get: '/2'
+   ==>> throws a ZnHttpUnsuccessful exception
 ]]]
 
 !!Conclusion
