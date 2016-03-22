@@ -37,10 +37,10 @@ Your definition should now appear in the bottom pane.
 
 [[[
 Object subclass: #MyFirstWebApp
-    instanceVariableNames: ''
-    classVariableNames: ''
-    poolDictionaries: ''
-    category: 'MyFirstWebApp'
+   instanceVariableNames: ''
+   classVariableNames: ''
+   poolDictionaries: ''
+   category: 'MyFirstWebApp'
 ]]]
 
 Any object can be a Web app, it only has to respond to the
@@ -48,9 +48,9 @@ Any object can be a Web app, it only has to respond to the
 
 [[[
 MyFirstWebApp>>handleRequest: request
-    request uri path = #image
-        ifFalse: [ ^ ZnResponse notFound: request uri ].
-    ^ ZnResponse ok: (ZnEntity text: 'Hello World!')
+   request uri path = #image
+      ifFalse: [ ^ ZnResponse notFound: request uri ].
+   ^ ZnResponse ok: (ZnEntity text: 'Hello World!')
 ]]]
 
 Create a new protocol called ==public== (by right-clicking in the third column). When the new protocol is selected, a new method template will appear in the bottom
@@ -66,7 +66,7 @@ Now we define the method ==value:== to make it an alias of ==handleRequest:== as
 
 [[[
 MyFirstWebApp>>value: request
-    ^ self handleRequest: request
+   ^ self handleRequest: request
 ]]]
 
 This is needed so our Web app object can be used more flexibly.
@@ -108,19 +108,19 @@ Go ahead and add a new method named ==html==.
 
 [[[
 MyFirstWebApp>>html
-  ^ '<html><head><title>Image</title>
-  <body>
-  <h1>Image</h1>
-  </body></html>'
+   ^ '<html><head><title>Image</title>
+   <body>
+   <h1>Image</h1>
+   </body></html>'
 ]]]
 
 Additionally, change the ==handleRequest:== method to use the new method.
 
 [[[
 MyFirstWebApp>>handleRequest: request
-  request uri path = #image
-    ifFalse: [ ^ ZnResponse notFound: request uri ].
-  ^ ZnResponse ok: (ZnEntity html: self html)
+   request uri path = #image
+      ifFalse: [ ^ ZnResponse notFound: request uri ].
+   ^ ZnResponse ok: (ZnEntity html: self html)
 ]]]
 
 Refresh the page in your web browser. You should now see an HTML page as in Figure *@htmlResponse*.
@@ -140,7 +140,7 @@ To simplify our app, we will arrange things so that we always start with a defau
 
 [[[
 MyFirstWebApp>>downloadPharoLogo
-  ^ ZnClient new
+   ^ ZnClient new
       beOneShot;
       get: 'http://pharo.org/files/pharo.png';
       entity
@@ -152,7 +152,7 @@ Now add the accessor ==image== defined as follow:
 
 [[[
 MyFirstWebApp>>image
-    ^ image ifNil: [ image := self downloadPharoLogo ]
+   ^ image ifNil: [ image := self downloadPharoLogo ]
 ]]]
 
 When you try to accept this method, you will get an error.
@@ -164,19 +164,19 @@ Make the following modification to existing methods and add a new one as shown b
 
 [[[
 MyFirstWebApp>>html
-  ^ '<html><head><title>Image</title>
-  <body>
-  <h1>Image</h1>
-  <img src="image?raw=true"/>
-  </body></html>'
+   ^ '<html><head><title>Image</title>
+   <body>
+   <h1>Image</h1>
+   <img src="image?raw=true"/>
+   </body></html>'
 
 MyFirstWebApp>>handleRequest: request
-  request uri path = #image
-    ifFalse: [ ^ ZnResponse notFound: request uri ].
-  ^ self handleGetRequest: request
+   request uri path = #image
+      ifFalse: [ ^ ZnResponse notFound: request uri ].
+   ^ self handleGetRequest: request
 
 MyFirstWebApp>>handleGetRequest: request
-  ^ (request uri queryAt: #raw ifAbsent: [ nil ])
+   ^ (request uri queryAt: #raw ifAbsent: [ nil ])
       ifNil: [ ZnResponse ok: (ZnEntity html: self html) ]
       ifNotNil: [ ZnResponse ok: self image ]
 ]]]
@@ -197,16 +197,16 @@ one last time.
 
 [[[
 MyFirstWebApp>>html
-  ^ '<html><head><title>Image</title>
-  <body>
-  <h1>Image</h1>
-  <img src="image?raw=true"/>
-  <br/>
-  <form enctype="multipart/form-data" action="image" method="POST">
-    <h3>Change the image:</h3>
-    <input type="file" name="file"/>
-    <input type="submit" value= "Upload"/>
-  </form> </body> </html>'
+   ^ '<html><head><title>Image</title>
+   <body>
+   <h1>Image</h1>
+   <img src="image?raw=true"/>
+   <br/>
+   <form enctype="multipart/form-data" action="image" method="POST">
+      <h3>Change the image:</h3>
+      <input type="file" name="file"/>
+      <input type="submit" value= "Upload"/>
+   </form> </body> </html>'
 ]]]
 
 The user will be able to select a file on the local disk for upload.
@@ -218,23 +218,22 @@ Change ==handleRequest:== one last time:
 
 [[[
 MyFirstWebApp>>handleRequest: request
-  request uri path = #image
-    ifTrue: [
-      request method = #GET
-        ifTrue: [ ^ self handleGetRequest: request ].
-      request method = #POST
-        ifTrue: [ ^ self handlePostRequest: request ] ].
-  ^ ZnResponse notFound: request uri
+   request uri path = #image ifTrue: [
+      request method = #GET ifTrue: [
+         ^ self handleGetRequest: request ].
+      request method = #POST ifTrue: [
+         ^ self handlePostRequest: request ] ].
+   ^ ZnResponse notFound: request uri
 ]]]
 
 Now we have to add an implementation of ==handlePostRequest:== to accept the uploaded image and change the current one.
 
 [[[
 MyFirstWebApp>>handlePostRequest: request
-    | part |
-    part := request entity partNamed: #file.
-    image := part entity.
-    ^ ZnResponse redirect: #image
+   | part |
+   part := request entity partNamed: #file.
+   image := part entity.
+   ^ ZnResponse redirect: #image
 ]]]
 
 We start with a simple version without error handling.
@@ -249,20 +248,20 @@ Here is an improved version.
 
 [[[
 MyFirstWebApp>>handlePostRequest: request
-  | part newImage badRequest |
-  badRequest := [ ^ ZnResponse badRequest: request ].
-  request hasEntity ifFalse: badRequest.
-  (request contentType matches: ZnMimeType multiPartFormData)
-    ifFalse: badRequest.
-  part := request entity
-            partNamed: #file
-            ifNone: badRequest.
-  newImage := part entity.
-  (newImage notNil
+   | part newImage badRequest |
+   badRequest := [ ^ ZnResponse badRequest: request ].
+   request hasEntity ifFalse: badRequest.
+   (request contentType matches: ZnMimeType multiPartFormData)
+      ifFalse: badRequest.
+   part := request entity
+      partNamed: #file
+      ifNone: badRequest.
+   newImage := part entity.
+   (newImage notNil
       and: [ newImage contentType matches: 'image/*' asZnMimeType ])
-    ifFalse: badRequest.
-  image := newImage.
-  ^ ZnResponse redirect: #image
+      ifFalse: badRequest.
+   image := newImage.
+   ^ ZnResponse redirect: #image
 ]]]
 
 +Changing the displayed image>file://figures/14-ChangingDisplayedImage.jpg|width=90|label=ChangingDisplayedImage+
@@ -339,16 +338,15 @@ bytes into forms. Add two helper methods, ==formForImageEntity:== and ==form==.
 
 [[[
 MyFirstWebApp>>formForImageEntity: imageEntity
-    | imageType parserClassName parserClass parser |
-    imageType := imageEntity contentType sub.
-    parserClassName := imageType asUppercase, #ReadWriter.
-    parserClass := Smalltalk globals at: parserClassName asSymbol.
-    parser := parserClass on: imageEntity readStream.
-    ^ parser nextImage
+   | imageType parserClassName parserClass parser |
+   imageType := imageEntity contentType sub.
+   parserClassName := imageType asUppercase, #ReadWriter.
+   parserClass := Smalltalk globals at: parserClassName asSymbol.
+   parser := parserClass on: imageEntity readStream.
+   ^ parser nextImage
 
 MyFirstWebApp>>form
-    ^ self formForImageEntity: self image
-
+   ^ self formForImageEntity: self image
 ]]]
 
 What we do is use the sub type of the mime type, like "png" in image/png, to find the parser class. Then we instantiate a new parser on a read stream on the
@@ -364,23 +362,23 @@ Obviously you can do this while debugging too. We can also use the image parsing
 
 [[[
 MyFirstWebApp>>handlePostRequest: request
-    | part newImage badRequest |
-    badRequest := [ ^ ZnResponse badRequest: request ].
-    (request hasEntity
-        and: [ request contentType matches: ZnMimeType multiPartFormData ])
+   | part newImage badRequest |
+   badRequest := [ ^ ZnResponse badRequest: request ].
+   (request hasEntity
+      and: [ request contentType matches: ZnMimeType multiPartFormData ])
       ifFalse: badRequest.
-    part := request entity
+   part := request entity
               partNamed: #file
               ifNone: badRequest.
-    newImage := part entity.
-    (newImage notNil
-        and: [ newImage contentType matches: 'image/*' asZnMimeType ])
+   newImage := part entity.
+   (newImage notNil
+      and: [ newImage contentType matches: 'image/*' asZnMimeType ])
       ifFalse: badRequest.
-    [ self formForImageEntity: newImage ]
-on: Error
-      do: badRequest.
-    image := newImage.
-    ^ ZnResponse redirect: #image
+   [ self formForImageEntity: newImage ]
+   on: Error
+   do: badRequest.
+   image := newImage.
+   ^ ZnResponse redirect: #image
 ]]]
 
 Before making the actual assignment of the new image to our instance variable we added an extra expression. We try parsing the image. We are not interested in
@@ -403,14 +401,14 @@ Add now the following helper method on ==MyFirstWebAppTest==:
 
 [[[
 MyFirstWebAppTest>>withServerDo: block
-    | server |
-    server := ZnServer on: 1700 + 10 atRandom.
-    [
+   | server |
+   server := ZnServer on: 1700 + 10 atRandom.
+   [
       server start.
       self assert: server isRunning & server isListening.
       server delegate: MyFirstWebApp new.
       block cull: server
-    ] ensure: [ server stop ]
+   ] ensure: [ server stop ]
 ]]]
 
 Since we will need a configured server instance with our Web app as delegate for each of our tests, we move that logic into ==#withServerDo:== and make sure the server is OK and properly stopped afterwards.
@@ -420,7 +418,7 @@ Now we are ready for our first test.
 
 [[[
 MyFirstWebAppTest>>testMainPage
-    self withServerDo: [ :server |
+   self withServerDo: [ :server |
       | client |
       client := ZnClient new.
       client url: server localUrl; addPath: #image.
@@ -429,7 +427,6 @@ MyFirstWebAppTest>>testMainPage
       self assert: (client entity contentType matches: ZnMimeType textHtml).
       self assert: (client contents includesSubstring: 'Image').
       client close ]
-
 ]]]
 
 
@@ -439,7 +436,7 @@ Let's try to write a test for the actual raw image being served.
 
 [[[
 MyFirstWebAppTest>>testDefaultImage
-    self withServerDo: [ :server |
+   self withServerDo: [ :server |
       | client |
       client := ZnClient new.
       client url: server localUrl; addPath: #image; queryAt: #raw put: #true.
@@ -457,13 +454,13 @@ returns a new image.
 
 [[[
 MyFirstWebAppTest>>image
-    ^ ZnClient new
-        beOneShot;
-        get: 'http://zn.stfx.eu/zn/Hot-Air-Balloon.gif';
-        entity
+   ^ ZnClient new
+      beOneShot;
+      get: 'http://zn.stfx.eu/zn/Hot-Air-Balloon.gif';
+      entity
 
 MyFirstWebAppTest>>testUpload
-    self withServerDo: [ :server |
+   self withServerDo: [ :server |
       | image client |
       image := self image.
       client := ZnClient new.
@@ -594,9 +591,8 @@ ConfigurationOfMyFirstWebApp>>baseline1: spec
       spec
          blessing: #baseline;
          repository:
-  'http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main'
+  'http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main';
          package: 'MyFirstWebApp' ]
-
 
 ConfigurationOfMyFirstWebApp>>version1: spec
    <version: '1' imports: #('1-baseline')>
@@ -693,8 +689,8 @@ Metacello configuration. Before actually loading anything, we will ask for all a
 
 [[[language=shellcommands
 # ./pharo myfirstwebapp.image config \
-  http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main \
-  ConfigurationOfMyFirstWebApp
+   http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main \
+   ConfigurationOfMyFirstWebApp
 'Available versions for ConfigurationOfMyFirstWebApp'
 1
 1-baseline
@@ -708,8 +704,8 @@ Now we will load and install the stable version.
 
 [[[language=shellcommands
 # ./pharo myfirstwebapp.image config \
-  http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main \
-  ConfigurationOfMyFirstWebApp --install=stable
+   http://smalltalkhub.com/mc/SvenVanCaekenberghe/MyFirstWebApp/main \
+   ConfigurationOfMyFirstWebApp --install=stable
 'Installing ConfigurationOfMyFirstWebApp stable'
 
 Loading 1 of ConfigurationOfMyFirstWebApp...
@@ -722,11 +718,11 @@ After loading all necessary code, the config option will also save our image so 
 
 [[[
 ZnServer defaultOn: 8080.
-  ZnServer default logToTranscript.
-  ZnServer default delegate
-    map: 'image' to: MyFirstWebApp new;
-    map: 'redirect-to-image' to: [ :request | ZnResponse redirect: 'image' ];
-    map: '/' to: 'redirect-to-image'.
+ZnServer default logToTranscript.
+ZnServer default delegate
+   map: 'image' to: MyFirstWebApp new;
+   map: 'redirect-to-image' to: [ :request | ZnResponse redirect: 'image' ];
+   map: '/' to: 'redirect-to-image'.
 ZnServer default start.
 ]]]
 
@@ -810,47 +806,47 @@ updatePreviousImage
 
 Here are the changes to 3 existing methods for the complete solution.
 [[[
-  html
-    ^ '<html><head><title>Image</title>
-    <body>
-    <h1>Image</h1>
-    <img src="image?raw=true"/>
-    <br/>
-    <form enctype="multipart/form-data" action="image" method="POST">
-    <h3>Change the image:</h3>
+html
+   ^ '<html><head><title>Image</title>
+   <body>
+      <h1>Image</h1>
+      <img src="image?raw=true"/>
+      <br/>
+      <form enctype="multipart/form-data" action="image" method="POST">
+         <h3>Change the image:</h3>
          <input type="file" name="file"/>
          <input type="submit" value= "Upload"/>
-        </form>
-        <h3>Previous Image</h3>
-        <img src="image?previous=true"/>
-        </body></html>'
+      </form>
+      <h3>Previous Image</h3>
+      <img src="image?previous=true"/>
+   </body></html>'
 
- handleGetRequest: request
-        (request uri queryAt: #raw ifAbsent: [ nil ])
-          ifNotNil: [ ^ ZnResponse ok: self image ].
-        (request uri queryAt: #previous ifAbsent: [ nil ])
-          ifNotNil: [ ^ ZnResponse ok: self previousImage ].
-        ^ ZnResponse ok: (ZnEntity html: self html)
+handleGetRequest: request
+   (request uri queryAt: #raw ifAbsent: [ nil ])
+      ifNotNil: [ ^ ZnResponse ok: self image ].
+   (request uri queryAt: #previous ifAbsent: [ nil ])
+      ifNotNil: [ ^ ZnResponse ok: self previousImage ].
+   ^ ZnResponse ok: (ZnEntity html: self html)
 
-  handlePostRequest: request
-        | part newImage badRequest |
-        badRequest := [ ^ ZnResponse badRequest: request ].
-        (request hasEntity
-            and: [ request contentType matches: ZnMimeType multiPartFormData ])
-          ifFalse: badRequest.
-        part := request entity
-                  partNamed: #file
-                  ifNone: badRequest.
-        newImage := part entity.
-        (newImage notNil
-            and: [ newImage contentType matches: 'image/*' asZnMimeType ])
-          ifFalse: badRequest.
-        [ self formForImageEntity: newImage ]
-    on: Error
-          do: badRequest.
-        self updatePreviousImage.
-        image := newImage.
-        ^ ZnResponse redirect: #image
+handlePostRequest: request
+   | part newImage badRequest |
+   badRequest := [ ^ ZnResponse badRequest: request ].
+   (request hasEntity
+      and: [ request contentType matches: ZnMimeType multiPartFormData ])
+      ifFalse: badRequest.
+   part := request entity
+              partNamed: #file
+              ifNone: badRequest.
+   newImage := part entity.
+   (newImage notNil
+      and: [ newImage contentType matches: 'image/*' asZnMimeType ])
+      ifFalse: badRequest.
+   [ self formForImageEntity: newImage ]
+      on: Error
+      do: badRequest.
+   self updatePreviousImage.
+   image := newImage.
+   ^ ZnResponse redirect: #image
 ]]]
 
 !!!Solution, Part 3, Updated Configuration
@@ -866,8 +862,8 @@ version2: spec
          package: 'MyFirstWebApp' with: 'MyFirstWebApp-SvenVanCaekenberghe.2' ]
 
 stable: spec
-    <symbolicVersion: #'stable'>
-    spec for: #common version: '2'
+   <symbolicVersion: #'stable'>
+   spec for: #common version: '2'
 ]]]
 
 Of course, you will have to substitute your name for the concrete version.
