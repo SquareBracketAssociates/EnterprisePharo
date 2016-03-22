@@ -40,9 +40,9 @@ Our first useful style sheet will simply assign a margin to every div element in
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div ]
-  with: [ :style | style margin: 2 px ];
-  build
+   declareRuleSetFor: [ :selector | selector div ]
+   with: [ :style | style margin: 2 px ];
+   build
 ]]]
 
 the expected result in CSS is:
@@ -50,7 +50,7 @@ the expected result in CSS is:
 [[[
 div
 {
-  margin: 2px;
+   margin: 2px;
 }
 ]]]
 
@@ -109,9 +109,9 @@ Some properties require integer or floating point values. In these cases just us
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div ]
-  with: [ :style | style zIndex: 2 ];
-  build
+   declareRuleSetFor: [ :selector | selector div ]
+   with: [ :style | style zIndex: 2 ];
+   build
 ]]]
 
 !!!!Colors
@@ -124,12 +124,12 @@ For example,
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div ]
-  with: [ :style |
-    style
-      backgroundColor: CssSVGColors aliceBlue;
-      borderColor: (CssRGBColor red: 0 green: 128 blue: 0 alpha: 0.5)];
-  build
+   declareRuleSetFor: [ :selector | selector div ]
+   with: [ :style |
+      style
+         backgroundColor: CssSVGColors aliceBlue;
+         borderColor: (CssRGBColor red: 0 green: 128 blue: 0 alpha: 0.5) ];
+         build
 ]]]
 
 evaluates to:
@@ -137,8 +137,8 @@ evaluates to:
 [[[language=css
 div
 {
-    background-color: aliceblue;
-    border-color: rgba(0,128,0,0.5);
+   background-color: aliceblue;
+   border-color: rgba(0,128,0,0.5);
 }
 ]]]
 
@@ -148,10 +148,10 @@ RGB-Colors also support percentage values:
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div ]
-  with: [ :style |
-    style borderColor: (CssRGBColor red: 0 percent green: 50 percent blue: 0 percent) ];
-  build
+   declareRuleSetFor: [ :selector | selector div ]
+   with: [ :style |
+      style borderColor: (CssRGBColor red: 0 percent green: 50 percent blue: 0 percent) ];
+   build
 ]]]
 
 evaluates to:
@@ -159,7 +159,7 @@ evaluates to:
 [[[language=css
 div
 {
-    border-color: rgb(0%,50%,0%);
+   border-color: rgb(0%,50%,0%);
 }
 ]]]
 
@@ -171,9 +171,9 @@ A lot of values for CSS properties are just keyword constants. This support is p
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div ]
-  with: [ :style | style textAlign: CssConstants justify ];
-  build
+   declareRuleSetFor: [ :selector | selector div ]
+   with: [ :style | style textAlign: CssConstants justify ];
+   build
 ]]]
 
 evaluates to:
@@ -181,7 +181,7 @@ evaluates to:
 [[[language=css
 div
 {
-    text-align: justify;
+   text-align: justify;
 }
 ]]]
 
@@ -192,9 +192,9 @@ pass it as a parameter. For more than one value, use an array:
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div ]
-  with: [ :style | style margin: { 2 px. 4 px } ];
-  build
+   declareRuleSetFor: [ :selector | selector div ]
+   with: [ :style | style margin: { 2 px. 4 px } ];
+   build
 ]]]
 
 evaluates to:
@@ -202,7 +202,7 @@ evaluates to:
 [[[language=css
 div
 {
-    margin: 2px 4px;
+   margin: 2px 4px;
 }
 ]]]
 
@@ -212,22 +212,22 @@ div
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div class: 'logo' ]
-  with: [ :style | style backgroundImage: 'images/logo.png' asZnUrl ];
-  declareRuleSetFor: [ :selector | selector div class: 'logo' ]
-  with: [ :style | style backgroundImage: 'http://www.example.com/images/logo.png' asZnUrl ];
-  build
+   declareRuleSetFor: [ :selector | selector div class: 'logo' ]
+   with: [ :style | style backgroundImage: 'images/logo.png' asZnUrl ];
+   declareRuleSetFor: [ :selector | selector div class: 'logo' ]
+   with: [ :style | style backgroundImage: 'http://www.example.com/images/logo.png' asZnUrl ];
+   build
 ]]]
 Evaluates to:
 [[[language=css
 div.logo
 {
-    background-image: url("/images/logo.png");
+   background-image: url("/images/logo.png");
 }
 
 div.logo
 {
-    background-image: url("http://www.example.com/images/logo.png");
+   background-image: url("http://www.example.com/images/logo.png");
 }
 ]]]
 
@@ -235,15 +235,15 @@ To use a URL relative to the style sheet, send to it the message ==relativeToSty
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div class: 'logo' ]
-  with: [ :style | style backgroundImage: 'images/logo.png' asZnUrl relativeToStyleSheet];
-  build
+   declareRuleSetFor: [ :selector | selector div class: 'logo' ]
+   with: [ :style | style backgroundImage: 'images/logo.png' asZnUrl relativeToStyleSheet];
+   build
 ]]]
 Evaluates to: 
 [[[language=css
 div.logo
 {
-    background-image: url("images/logo.png");
+   background-image: url("images/logo.png");
 }
 ]]]
 
@@ -253,10 +253,10 @@ When declaring rule sets, the library supports attaching comments to them with t
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div ]
-  with: [ :style | style margin: 2 pc ]
-  andComment: 'Two picas margin';
-  build
+   declareRuleSetFor: [ :selector | selector div ]
+   with: [ :style | style margin: 2 pc ]
+   andComment: 'Two picas margin';
+   build
 ]]]
 
 evaluates to:
@@ -265,7 +265,7 @@ evaluates to:
 /*Two picas margin*/
 div
 {
-    margin: 2pc;
+   margin: 2pc;
 }
 ]]]
 
@@ -273,8 +273,8 @@ RenoirST also supports defining stand-alone comments (not attached to any rule):
 
 [[[
 CascadingStyleSheetBuilder new
-  comment: 'A general comment';
-  build
+   comment: 'A general comment';
+   build
 ]]]
 
 evaluates to:
@@ -294,9 +294,9 @@ The library provides support for math expressions using the  ==CssMathExpression
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div ]
-  with: [ :style | style margin: (CssMathExpression on: 2 pc) / 3 + 2 percent ];
-  build
+   declareRuleSetFor: [ :selector | selector div ]
+   with: [ :style | style margin: (CssMathExpression on: 2 pc) / 3 + 2 percent ];
+   build
 ]]]
 
 evaluates to:
@@ -314,9 +314,9 @@ To let descendant elements cycle over a list of values instead of inheriting the
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector unorderedList unorderedList ]
-  with: [ :style | style listStyleType: (CssToggle cyclingOver: { CssConstants disc. CssConstants circle. CssConstants square}) ];
-  build
+   declareRuleSetFor: [ :selector | selector unorderedList unorderedList ]
+   with: [ :style | style listStyleType: (CssToggle cyclingOver: { CssConstants disc. CssConstants circle. CssConstants square}) ];
+   build
 ]]]
 
 evaluates to:
@@ -324,7 +324,7 @@ evaluates to:
 [[[language=css
 ul ul
 {
-    list-style-type: toggle(disc, circle, square);
+   list-style-type: toggle(disc, circle, square);
 }
 ]]]
 
@@ -336,15 +336,15 @@ the ==CssAttributeReference== abstraction and can be used simply providing an at
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div before ]
-  with: [ :style | style content: (CssAttributeReference toAttributeNamed: 'title') ];
-  build
+   declareRuleSetFor: [ :selector | selector div before ]
+   with: [ :style | style content: (CssAttributeReference toAttributeNamed: 'title') ];
+   build
 ]]]
 Evaluates to:
 [[[language=css
 div::before
 {
-    content: attr(title string);
+   content: attr(title string);
 }
 ]]]
 
@@ -352,12 +352,12 @@ RenoirST allows for providing the type or unit of the attribute (if no type or u
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div  ]
-  with: [ :style |
-    style width: (CssAttributeReference
-      toAttributeNamed: 'height'
-      ofType: CssLengthUnits pixel) ];
-  build
+   declareRuleSetFor: [ :selector | selector div  ]
+   with: [ :style |
+      style width: (CssAttributeReference
+         toAttributeNamed: 'height'
+         ofType: CssLengthUnits pixel) ];
+   build
 ]]]
 
 evaluates to:
@@ -365,7 +365,7 @@ evaluates to:
 [[[language=css
 div
 {
-    width: attr(height px);
+   width: attr(height px);
 }
 ]]]
 
@@ -373,13 +373,13 @@ Additionally, it is possible to provide a value to use when the attribute is abs
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div before ]
-  with: [ :style |
-    style content: (CssAttributeReference
-     toStringAttributeNamed: 'title' 
-     withFallback: 'Missing title')
+   declareRuleSetFor: [ :selector | selector div before ]
+   with: [ :style |
+      style content: (CssAttributeReference
+      toStringAttributeNamed: 'title' 
+      withFallback: 'Missing title')
    ];
-  build
+   build
 ]]]
 
 evaluates to:
@@ -387,7 +387,7 @@ evaluates to:
 [[[language=css
 div::before
 {
-    content: attr(title string, "Missing title");
+   content: attr(title string, "Missing title");
 }
 ]]]
 
@@ -401,9 +401,9 @@ To represent a simple linear gradient from a color to another, send the ==fading
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div ]
-  with: [ :style | style background: (CssLinearGradient
-    fading: { CssSVGColors yellow. CssSVGColors blue }) ]
+   declareRuleSetFor: [ :selector | selector div ]
+   with: [ :style | style background: (CssLinearGradient
+      fading: { CssSVGColors yellow. CssSVGColors blue }) ]
 ]]]
 
 Above code evaluates to:
@@ -411,7 +411,7 @@ Above code evaluates to:
 [[[language=css
 div
 {
-    background: linear-gradient(yellow, blue);
+   background: linear-gradient(yellow, blue);
 }
 ]]]
 
@@ -419,8 +419,8 @@ By default, a gradient's direction is from top to bottom. To specify a different
 
 [[[
 CssLinearGradient
-  to: CssConstants right
-  fading: { CssSVGColors yellow. CssSVGColors blue }
+   to: CssConstants right
+   fading: { CssSVGColors yellow. CssSVGColors blue }
 ]]]
 
 Above code will result in a gradient with yellow on the left side and blue on the right side. The equivalent CSS is:
@@ -433,8 +433,8 @@ To specify a diagonal direction, an array must be passed as the ==to:== argument
 
 [[[
 CssLinearGradient
-  to: { CssConstants top. CssConstants right }
-  fading: { CssSVGColors yellow. CssSVGColors blue }
+   to: { CssConstants top. CssConstants right }
+   fading: { CssSVGColors yellow. CssSVGColors blue }
 ]]]
 
 Above code will result in a gradient with blue in the top right corner and yellow in the bottom left one. The equivalent CSS is:
@@ -447,8 +447,8 @@ Directions can also be specified as an angle by sending the ==rotated:fading:== 
 
 [[[
 CssLinearGradient
-  rotated: 45 deg
-  fading: { CssSVGColors yellow. CssSVGColors blue }
+   rotated: 45 deg
+   fading: { CssSVGColors yellow. CssSVGColors blue }
 ]]]
 
 Above code maps to:
@@ -461,10 +461,10 @@ Gradients can be fine-tuned by manipulating so-called color stops:
 
 [[[
 CssLinearGradient
-  to: CssConstants right
-  fading: {
-    CssSVGColors yellow.
-    CssColorStop for: CssSVGColors blue at: 30 percent }
+   to: CssConstants right
+   fading: {
+      CssSVGColors yellow.
+      CssColorStop for: CssSVGColors blue at: 30 percent }
 ]]]
 
 Above code maps to:
@@ -478,16 +478,16 @@ two colors can be passed as argument to ==fading:==. This can be used to create 
 
 [[[
 CssLinearGradient
-  to: CssConstants right
-  fading: {
-    CssSVGColors red.
-    CssSVGColors orange.
-    CssSVGColors yellow.
-    CssSVGColors green.
-    CssSVGColors blue.
-    CssSVGColors indigo.
-    CssSVGColors violet.
-  }
+   to: CssConstants right
+   fading: {
+      CssSVGColors red.
+      CssSVGColors orange.
+      CssSVGColors yellow.
+      CssSVGColors green.
+      CssSVGColors blue.
+      CssSVGColors indigo.
+      CssSVGColors violet.
+   }
 ]]]
 
 This maps to:
@@ -513,14 +513,14 @@ This results in a radial gradient with yellow at the center and green all around
 
 [[[
 (CssRadialGradient
-  elliptical: {20 px. 30 px}
-  at: { 20 px. 30 px}
-  fading: { CssSVGColors red. CssSVGColors yellow. CssSVGColors green })
+   elliptical: {20 px. 30 px}
+   at: { 20 px. 30 px}
+   fading: { CssSVGColors red. CssSVGColors yellow. CssSVGColors green })
 ]]]
 
 This maps to:
 [[[language=css
-    background: radial-gradient(20px 30px ellipse at 20px 30px, red, yellow, green);
+   background: radial-gradient(20px 30px ellipse at 20px 30px, red, yellow, green);
 ]]]
 
 To make the gradient repeatable, just send to it the message ==beRepeating==. For Example:
@@ -538,11 +538,11 @@ Box Shadows are supported with ==CssBoxShadow== abstraction. This abstraction si
 
 [[[
 CssBoxShadow 
-  horizontalOffset: 64 px 
-  verticalOffset: 64 px 
-  blurRadius: 12 px  
-  spreadDistance: 40 px 
-  color: (CssSVGColors black newWithAlpha: 0.4)
+   horizontalOffset: 64 px 
+   verticalOffset: 64 px 
+   blurRadius: 12 px  
+   spreadDistance: 40 px 
+   color: (CssSVGColors black newWithAlpha: 0.4)
 ]]]
 evaluates to:
 [[[language=css
@@ -570,17 +570,17 @@ These selectors match a specific element type in the DOM. The library provides o
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [ :selector | selector div ]
-  with: [ :style | ... ];
-  build
+   declareRuleSetFor: [ :selector | selector div ]
+   with: [ :style | ... ];
+   build
 ]]]
 
 The following other example matches ==<ol>== (ordered list) elements:
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | selector orderedList ]
-  with: [ :style | ... ]
+   declareRuleSetFor: [:selector | selector orderedList ]
+   with: [ :style | ... ]
 ]]]
 
 evaluating to:
@@ -600,8 +600,8 @@ Selectors can be combined to represent complex queries. One of the most common u
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | selector div orderedList ]
-  with: [:style | ... ]
+   declareRuleSetFor: [:selector | selector div orderedList ]
+   with: [:style | ... ]
 ]]]
 
 evaluating to:
@@ -609,7 +609,7 @@ evaluating to:
 [[[language=css
 div ol
 {
-  ...
+   ...
 }
 ]]]
 
@@ -619,8 +619,8 @@ The ''child combinator'' only matches when an element is a direct child of anoth
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | selector div > selector orderedList ]
-  with: [:style |  ]
+   declareRuleSetFor: [:selector | selector div > selector orderedList ]
+   with: [:style |  ]
 ]]]
 
 evaluates to
@@ -636,18 +636,18 @@ div > ol
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | selector div + selector orderedList ]
-  with: [:style |  ]
-  declareRuleSetFor: [:selector | selector div ~ selector orderedList ]
-  with: [:style |  ]
+   declareRuleSetFor: [:selector | selector div + selector orderedList ]
+   with: [:style |  ]
+   declareRuleSetFor: [:selector | selector div ~ selector orderedList ]
+   with: [:style |  ]
 ]]]
 
 Class selectors can be created by sending ==class:== and id selectors can be created by sending ==id:==. For example,
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | (selector div class: 'pastoral') id: #account5 ]
-  with: [:style |  ]
+   declareRuleSetFor: [:selector | (selector div class: 'pastoral') id: #account5 ]
+   with: [:style |  ]
 ]]]
 
 evaluates to:
@@ -655,7 +655,7 @@ evaluates to:
 [[[language=css
 div.pastoral#account5
 {
-  ...
+   ...
 }
 ]]]
 
@@ -666,8 +666,8 @@ several selectors share the same declarations, they may be grouped into a comma-
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | selector paragraph , selector div ]
-  with: [:style | ... ]
+   declareRuleSetFor: [:selector | selector paragraph , selector div ]
+   with: [:style | ... ]
 ]]]
 
 evaluates to:
@@ -687,9 +687,9 @@ The ''attribute presence'' selector matches an element having an attribute (with
 
 [[[
 CascadingStyleSheetBuilder new 
-  declareRuleSetFor: [:selector | selector h1 havingAttribute: 'title' ]
-  with: [:style | style color: CssSVGColors blue ];
-  build
+   declareRuleSetFor: [:selector | selector h1 havingAttribute: 'title' ]
+   with: [:style | style color: CssSVGColors blue ];
+   build
 ]]]
 evaluates to:
 [[[language=css
@@ -703,9 +703,9 @@ The ''attribute value exact matching'' selectors matches an element having an at
 
 [[[
 CascadingStyleSheetBuilder new 
-  declareRuleSetFor: [:selector | selector span withAttribute: 'class' equalTo: 'example' ]
-  with: [:style | style color: CssSVGColors blue ];
-  build
+   declareRuleSetFor: [:selector | selector span withAttribute: 'class' equalTo: 'example' ]
+   with: [:style | style color: CssSVGColors blue ];
+   build
 ]]]
 evaluates to:
 [[[language=css
@@ -719,10 +719,11 @@ The ''attribute value inclusion'' selector matches an element having an attribut
 
 [[[
 CascadingStyleSheetBuilder new 
-  declareRuleSetFor: [:selector | selector anchor attribute: 'rel' includes: 'copyright' ]
-  with: [:style | style color: CssSVGColors blue ];
-  build
+   declareRuleSetFor: [:selector | selector anchor attribute: 'rel' includes: 'copyright' ]
+   with: [:style | style color: CssSVGColors blue ];
+   build
 ]]]
+
 [[[language=css
 a[rel~="copyright"]
 {
@@ -734,10 +735,11 @@ Other attribute selectors are used for substring matching:
 
 [[[
 CascadingStyleSheetBuilder new 
-  declareRuleSetFor: [:selector | selector anchor firstValueOfAttribute: 'hreflang' beginsWith: 'en' ]
-  with: [:style | style color: CssSVGColors blue ];
-  build
+   declareRuleSetFor: [:selector | selector anchor firstValueOfAttribute: 'hreflang' beginsWith: 'en' ]
+   with: [:style | style color: CssSVGColors blue ];
+   build
 ]]]
+
 [[[language=css
 a[hreflang|="en"]
 {
@@ -747,10 +749,11 @@ a[hreflang|="en"]
 
 [[[
 CascadingStyleSheetBuilder new 
-  declareRuleSetFor: [:selector | selector anchor attribute: 'type' beginsWith: 'image/' ]
-  with: [:style | style color: CssSVGColors blue ];
-  build
+   declareRuleSetFor: [:selector | selector anchor attribute: 'type' beginsWith: 'image/' ]
+   with: [:style | style color: CssSVGColors blue ];
+   build
 ]]]
+
 [[[language=css
 a[type^="image/"]
 {
@@ -760,10 +763,11 @@ a[type^="image/"]
 
 [[[
 CascadingStyleSheetBuilder new 
-  declareRuleSetFor: [:selector | selector anchor attribute: 'type' endsWith: '.html' ]
-  with: [:style | style color: CssSVGColors blue ];
-  build
+   declareRuleSetFor: [:selector | selector anchor attribute: 'type' endsWith: '.html' ]
+   with: [:style | style color: CssSVGColors blue ];
+   build
 ]]]
+
 [[[language=css
 a[type$=".html"]
 {
@@ -773,10 +777,11 @@ a[type$=".html"]
 
 [[[
 CascadingStyleSheetBuilder new 
-  declareRuleSetFor: [:selector | selector paragraph attribute: 'title' includesSubstring: 'hello' ]
-  with: [:style | style color: CssSVGColors blue ];
-  build
+   declareRuleSetFor: [:selector | selector paragraph attribute: 'title' includesSubstring: 'hello' ]
+   with: [:style | style color: CssSVGColors blue ];
+   build
 ]]]
+
 [[[language=css
 p[title*="hello"]
 {
@@ -791,17 +796,17 @@ The pseudo-class concept is introduced to allow selection based on information t
 Here is a small example that uses the pseudo-classes:
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | selector anchor link ]
-  with: [:style | style color: CssSVGColors blue ];
-  declareRuleSetFor: [:selector | selector anchor visited active]
-  with: [:style | style color: CssSVGColors green ];
-  declareRuleSetFor: [:selector | selector anchor focus hover enabled]
-  with: [:style | style color: CssSVGColors green ];
-  declareRuleSetFor: [:selector | (selector paragraph class: 'note') target disabled]
-  with: [:style | style color: CssSVGColors green ];
-  declareRuleSetFor: [:selector | selector input checked ]
-  with: [:style | style color: CssSVGColors green ];
-  build
+   declareRuleSetFor: [:selector | selector anchor link ]
+   with: [:style | style color: CssSVGColors blue ];
+   declareRuleSetFor: [:selector | selector anchor visited active]
+   with: [:style | style color: CssSVGColors green ];
+   declareRuleSetFor: [:selector | selector anchor focus hover enabled]
+   with: [:style | style color: CssSVGColors green ];
+   declareRuleSetFor: [:selector | (selector paragraph class: 'note') target disabled]
+   with: [:style | style color: CssSVGColors green ];
+   declareRuleSetFor: [:selector | selector input checked ]
+   with: [:style | style color: CssSVGColors green ];
+   build
 ]]]
 
 evaluates to:
@@ -809,27 +814,27 @@ evaluates to:
 [[[language=css
 a:link
 {
-    color: blue;
+   color: blue;
 }
 
 a:visited:active
 {
-    color: green;
+   color: green;
 }
 
 a:focus:hover:enabled
 {
-    color: green;
+   color: green;
 }
 
 p.note:target:disabled
 {
-    color: green;
+   color: green;
 }
 
 input:checked
 {
-    color: green;
+   color: green;
 }
 ]]]
 
@@ -839,9 +844,9 @@ The ==:lang(C)== pseudo-class can be used by sending the message ==lang:==:
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | (selector lang: 'es') > selector div ]
-  with: [:style | style quotes: { '"«"'. '"»"' }  ];
-  build
+   declareRuleSetFor: [:selector | (selector lang: 'es') > selector div ]
+   with: [:style | style quotes: { '"«"'. '"»"' }  ];
+   build
 ]]]
 
 evaluates to:
@@ -860,10 +865,11 @@ The negation pseudo-class, ==:not(X)==, is a functional notation taking a simple
 This selector is supported sending the message ==not:== 
 [[[
 CascadingStyleSheetBuilder new 
-  declareRuleSetFor: [:selector | selector button not: (selector havingAttribute: 'DISABLED') ]
-  with: [:style | style color: CssSVGColors blue ];
-  build
+   declareRuleSetFor: [:selector | selector button not: (selector havingAttribute: 'DISABLED') ]
+   with: [:style | style color: CssSVGColors blue ];
+   build
 ]]]
+
 [[[language=css
 button:not([DISABLED])
 {
@@ -877,9 +883,9 @@ These selectors allow selection based on extra information that lies in the docu
 The ==:root== pseudo-class represents an element that is the root of the document. To build this kind of selector just send the message ==root== to another selector:
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | selector root ]
-  with: [:style | style color: CssSVGColors grey ];
-  build
+   declareRuleSetFor: [:selector | selector root ]
+   with: [:style | style color: CssSVGColors grey ];
+   build
 ]]]
 
 evaluates to:
@@ -887,7 +893,7 @@ evaluates to:
 [[[language=css
 :root
 {
-    color: grey;
+   color: grey;
 }
 ]]]
 
@@ -898,13 +904,13 @@ In addition to this, ==:nth-child()== can take a number, ==odd== and ==even== as
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | selector childAt: 3 n + 1 ]
-  with: [:style | style color: CssSVGColors blue ];
-  declareRuleSetFor: [:selector | selector childAt: 5 ]
-  with: [:style | style color: CssSVGColors blue ];
-  declareRuleSetFor: [:selector | selector childAt: CssConstants even]
-  with: [:style | style color: CssSVGColors blue ];
-  build
+   declareRuleSetFor: [:selector | selector childAt: 3 n + 1 ]
+   with: [:style | style color: CssSVGColors blue ];
+   declareRuleSetFor: [:selector | selector childAt: 5 ]
+   with: [:style | style color: CssSVGColors blue ];
+   declareRuleSetFor: [:selector | selector childAt: CssConstants even]
+   with: [:style | style color: CssSVGColors blue ];
+   build
 ]]]
 
 evaluates to:
@@ -912,17 +918,17 @@ evaluates to:
 [[[language=css
 :nth-child(3n+1)
 {
-    color: blue;
+   color: blue;
 }
 
 :nth-child(5)
 {
-    color: blue;
+   color: blue;
 }
 
 :nth-child(even)
 {
-    color: blue;
+   color: blue;
 }
 ]]]
 
@@ -952,9 +958,9 @@ The ==firstLine== pseudo-element describes the contents of the first formatted l
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | selector paragraph firstLine ]
-  with: [:style | style textTransform: CssConstants uppercase ];
-  build
+   declareRuleSetFor: [:selector | selector paragraph firstLine ]
+   with: [:style | style textTransform: CssConstants uppercase ];
+   build
 ]]]
 
 evaluates to:
@@ -962,7 +968,7 @@ evaluates to:
 [[[language=css
 p::first-line
 {
-    text-transform: uppercase;
+   text-transform: uppercase;
 }
 ]]]
 
@@ -970,9 +976,9 @@ The ==firstLetter== pseudo-element represents the first letter of an element, if
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | selector paragraph firstLetter ]
-  with: [:style | style fontSize: 200 percent ];
-  build
+   declareRuleSetFor: [:selector | selector paragraph firstLetter ]
+   with: [:style | style fontSize: 200 percent ];
+   build
 ]]]
 
 evaluates to:
@@ -988,11 +994,11 @@ The ==before== and ==after== pseudo-elements can be used to describe generated c
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | (selector paragraph class: 'note') before ]
-  with: [:style | style content: '"Note: "' ];
-  declareRuleSetFor: [:selector | (selector paragraph class: 'note') after ]
-  with: [:style | style content: '"[*]"' ];
-  build
+   declareRuleSetFor: [:selector | (selector paragraph class: 'note') before ]
+   with: [:style | style content: '"Note: "' ];
+   declareRuleSetFor: [:selector | (selector paragraph class: 'note') after ]
+   with: [:style | style content: '"[*]"' ];
+   build
 ]]]
 
 evaluates to:
@@ -1000,12 +1006,12 @@ evaluates to:
 [[[language=css
 p.note::before
 {
-    content: "Note: ";
+   content: "Note: ";
 }
 
 p.note::after
 {
-    content: "[*]";
+   content: "[*]";
 }
 ]]]
 
@@ -1021,16 +1027,14 @@ The library provides support for this feature by sending ==beImportantDuring:== 
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | selector paragraph ]
-  with: [:style |
-    style beImportantDuring: [:importantStyle |
-      importantStyle
-        textIndent: 1 em;
-        fontStyle: CssConstants italic
-    ].
-    style fontSize: 18 pt.
-  ];
-  build
+   declareRuleSetFor: [:selector | selector paragraph ]
+   with: [:style |
+      style beImportantDuring: [:importantStyle |
+         importantStyle
+            textIndent: 1 em;
+            fontStyle: CssConstants italic ].
+      style fontSize: 18 pt ];
+   build
 ]]]
 
 evaluates to:
@@ -1038,9 +1042,9 @@ evaluates to:
 [[[language=css
 p
 {
-    text-indent: 1em !important;
-    font-style: italic !important;
-    font-size: 18pt;
+   text-indent: 1em !important;
+   font-style: italic !important;
+   font-size: 18pt;
 }
 ]]]
 Note that the important properties must be created by sending the messages to the inner argument ==importantStyle== instead of the outer argument ==style==.
@@ -1054,13 +1058,12 @@ CSS2.1.
 The most basic media rule consists of specifying just a media type:
 [[[
 CascadingStyleSheetBuilder new
-    declare: [ :cssBuilder |
-        cssBuilder
-            declareRuleSetFor: [ :selector | selector div ]
-            with: [ :style | ]
-        ]
-    forMediaMatching: [ :queryBuilder | queryBuilder type: CssMediaQueryConstants print ];
-    build
+   declare: [ :cssBuilder |
+      cssBuilder
+         declareRuleSetFor: [ :selector | selector div ]
+         with: [ :style | ] ]
+   forMediaMatching: [ :queryBuilder | queryBuilder type: CssMediaQueryConstants print ];
+   build
 ]]]
 
 evaluates to:
@@ -1068,9 +1071,7 @@ evaluates to:
 [[[language=css
 @media print
 {
-    div
-    {
-    }
+   div { }
 }
 ]]]
 
@@ -1098,17 +1099,15 @@ New units for resolutions are added using the ==CssMeasure== abstraction. This k
 Here is a final example to better understand the media features support:
 [[[
 CascadingStyleSheetBuilder new
-    declare: [ :cssBuilder |
-        cssBuilder
-            declareRuleSetFor: [ :selector | selector id: #oop ]
-            with: [ :style | style color: CssSVGColors red ]
-        ]
-    forMediaMatching: [ :queryBuilder |
-        queryBuilder
-            orientation: CssMediaQueryConstants landscape;
-            resolution: 300 dpi
-        ];
-    build
+   declare: [ :cssBuilder |
+      cssBuilder
+         declareRuleSetFor: [ :selector | selector id: #oop ]
+         with: [ :style | style color: CssSVGColors red ] ]
+   forMediaMatching: [ :queryBuilder |
+      queryBuilder
+         orientation: CssMediaQueryConstants landscape;
+         resolution: 300 dpi ];
+   build
 ]]]
 
 evaluates to:
@@ -1116,10 +1115,10 @@ evaluates to:
 [[[language=css
 @media all and (orientation: landscape) and (resolution: 300dpi)
 {
-    #oop
-    {
-        color: red;
-    }
+   #oop
+   {
+      color: red;
+   }
 }
 ]]]
 
@@ -1129,9 +1128,9 @@ The library doesn't provide out of the box support for non standard properties. 
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | selector div ]
-  with: [:style | style vendorPropertyAt: 'crazy-margin' put: 1 px ];
-  build
+   declareRuleSetFor: [:selector | selector div ]
+   with: [:style | style vendorPropertyAt: 'crazy-margin' put: 1 px ];
+   build
 ]]]
 
 evaluates to:
@@ -1139,11 +1138,11 @@ evaluates to:
 [[[language=css
 div
 {
-    crazy-margin: 1px;
-    -moz-crazy-margin: 1px;
-    -webkit-crazy-margin: 1px;
-    -o-crazy-margin: 1px;
-    -ms-crazy-margin: 1px;
+   crazy-margin: 1px;
+   -moz-crazy-margin: 1px;
+   -webkit-crazy-margin: 1px;
+   -o-crazy-margin: 1px;
+   -ms-crazy-margin: 1px;
 }
 ]]]
 
@@ -1162,7 +1161,9 @@ CascadingStyleSheetBuilder new
          src: 'http://example.com/fonts/gentium.woff' asZnUrl ];
    build
 ]]]
+
 evaluates to:
+
 [[[language=css
 @font-face
 {
@@ -1208,9 +1209,9 @@ RenoirSt includes an optional group including some useful extensions. The *Seasi
 
 [[[
 CascadingStyleSheetBuilder new
-  declareRuleSetFor: [:selector | selector div class: 'logo' ]
-  with: [:style | style backgroundImage: 'images/logo.png' seasideUrl ];
-  build
+   declareRuleSetFor: [:selector | selector div class: 'logo' ]
+   with: [:style | style backgroundImage: 'images/logo.png' seasideUrl ];
+   build
 ]]]
 
 evaluates to:
@@ -1218,7 +1219,7 @@ evaluates to:
 [[[language=css
 div.logo
 {
-    background-image: url("/images/logo.png");
+   background-image: url("/images/logo.png");
 }
 ]]]
 
@@ -1228,16 +1229,16 @@ To load this extensions you need to load (in an image with Seaside already loade
 
 [[[
 Metacello new
-  baseline: 'RenoirSt';
-  repository: 'github://gcotelli/RenoirSt:stable-pharo-50/source';
-  load: 'Deployment-Seaside-Extensions'
+   baseline: 'RenoirSt';
+   repository: 'github://gcotelli/RenoirSt:stable-pharo-50/source';
+   load: 'Deployment-Seaside-Extensions'
 ]]]
 
 or 
 
 [[[
 Metacello new
-  baseline: 'RenoirSt';
-  repository: 'github://gcotelli/RenoirSt:stable-pharo-40/source';
-  load: 'Deployment-Seaside-Extensions'
+   baseline: 'RenoirSt';
+   repository: 'github://gcotelli/RenoirSt:stable-pharo-40/source';
+   load: 'Deployment-Seaside-Extensions'
 ]]]
