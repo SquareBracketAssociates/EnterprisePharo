@@ -119,8 +119,8 @@ Let us enrich the previous example and add a page to the document.
 
 [[[
 PDFDocument new 
-    add: PDFPage new; 
-    exportTo: 'helloworld.pdf' asFileReference writeStream
+   add: PDFPage new; 
+   exportTo: 'helloworld.pdf' asFileReference writeStream
 ]]]
 
 Now if you open the file the result is different since the document contains an empty page. Let us add a first text component to our page. 
@@ -450,18 +450,20 @@ This page contains one image placed at two different locations. In the first cas
 In the second case, the width is 80mm and the height is automatically computed keeping the original image ratio.
 
 [[[
-   | pdf page |
-   pdf := PDFDocument new.   page := PDFPage new.
-   page add:
-         (PDFJpegElement
-            from: 10 mm @ 10 mm
-            dimension: 80 mm @ 30 mm
-            fromStream: (FileStream fileNamed: '/home/enterprise/image.jpg')).
-   page add:
-         ((PDFJpegElement fromStream: (FileStream fileNamed: '/home/enterprise/image.jpg'))
-            from: 10 mm @ 50 mm; width: 80 mm).
-   pdf add: page;
-   pdf exportTo: (FileStream forceNewFileNamed: '/home/enterprise/image.pdf')
+| pdf page |
+pdf := PDFDocument new.
+page := PDFPage new.
+page add: (
+   PDFJpegElement
+      from: 10 mm @ 10 mm
+      dimension: 80 mm @ 30 mm
+      fromStream: (FileStream fileNamed: '/home/enterprise/image.jpg')).
+page add: ((
+   PDFJpegElement
+      fromStream: (FileStream fileNamed: '/home/enterprise/image.jpg'))
+      from: 10 mm @ 50 mm; width: 80 mm).
+pdf add: page;
+pdf exportTo: (FileStream forceNewFileNamed: '/home/enterprise/image.pdf')
 ]]]
 
 
@@ -472,19 +474,19 @@ Artefact has the following components for geometric shapes:
 The class ==PDFLineElement== draws a line using ==from:to:==.
 
 [[[
-   PDFLineElement from: 15mm @ 30mm to: 90mm@170mm
+PDFLineElement from: 15mm @ 30mm to: 90mm@170mm
 ]]]
 
 The class message ==from:angle:length:== draws a line with the given start position, angle and length.
 
 [[[
-   PDFLineElement from: 10mm @ 20mm angle: 70 length: 50mm
+PDFLineElement from: 10mm @ 20mm angle: 70 length: 50mm
 ]]]
 
 The class ==PDFRectElement== represents a rectangle. Two messages are relevant: ==from: dimension:== and ==from: to: ==. The two following examples are equivalent:
 
 [[[
-   PDFRectElement from: 10 mm@10mm dimension: 100 mm @ 30 mm.
+PDFRectElement from: 10 mm@10mm dimension: 100 mm @ 30 mm.
 ]]]
 
 [[[
@@ -494,23 +496,23 @@ The class ==PDFRectElement== represents a rectangle. Two messages are relevant: 
 The class ==PDFPolygonElement== draws polygons. To define a polygon, we set the start point and a series of points using the message ==from:points:==. 
 
 [[[  
-   PDFPolygonElement 
-      from: 10mm@10mm 
-      points: { 30mm@30mm . 15mm@40mm . 5mm@20mm }
+PDFPolygonElement 
+   from: 10mm@10mm 
+   points: { 30mm@30mm . 15mm@40mm . 5mm@20mm }
 ]]]
 
 Circles are defined with the class  ==PDFCircleElement== and using the message ==center:radius:==. 
 
 [[[
-   PDFCircleElement center: 100mm@100mm radius: 50mm
+PDFCircleElement center: 100mm@100mm radius: 50mm
 ]]]
 
 Bezier curves are represented by the class ==PDFBezierCurveElement== and defined using the message ==from:points==.
 
 [[[
-   PDFBezierCurveElement 
-      from: 10mm@50mm 
-      points:{ 0mm@0mm. 100mm@20mm. 150mm@0mm. 50mm@50mm }
+PDFBezierCurveElement 
+   from: 10mm@50mm 
+   points: { 0mm@0mm. 100mm@20mm. 150mm@0mm. 50mm@50mm }
 ]]]
 
 
@@ -541,9 +543,9 @@ The component ==PDFArrowElement== draws an arrow with a tip at its end.
 The component ==PDFDoubleArrowElement== draws a tip at both extremities.
 
 [[[
-   PDFArrowElement from: 10mm@10mm to: 100mm@30mm
+PDFArrowElement from: 10mm@10mm to: 100mm@30mm
 
-   PDFDoubleArrowElement from: 10mm@80mm to: 100mm@150mm
+PDFDoubleArrowElement from: 10mm@80mm to: 100mm@150mm
 ]]]
 
 !!!!Report Creation
@@ -555,13 +557,13 @@ With the class ==PDFDataTableElement== you define a report with specific dimensi
 The data is organized in a tabular manner: a report contains a number of rows, each representing a line of the report.
 
 [[[
-   PDFDataTableElement new
-      data: #(
-            #('Smith' 'Peter' 43) 
-            #('Jones' 'Mickael' 25) 
-            #('washington' 'robert' 30) );
-      from: 10mm @ 20mm;
-      dimension: 150mm @ 60mm
+PDFDataTableElement new
+   data: #(
+      #('Smith' 'Peter' 43) 
+      #('Jones' 'Mickael' 25) 
+      #('washington' 'robert' 30) );
+   from: 10mm @ 20mm;
+   dimension: 150mm @ 60mm
 ]]]
 
 The subclass ==PDFDataTableWithColumnsCaptionElement== extends the table behavior to support captions. The message ==captions:== takes an array as argument, 
@@ -569,15 +571,15 @@ which contains the title of each column of your report.
 It is important to note that the number of column headings should be the same as the number of columns and each line must have the same number of columns.
 
 [[[
-   PDFDataTableWithColumnsCaptionElement new
-      captions: #('Name' 'Surname' 'Age');
-      data: #(
-         #('Smith' 'Peter' 43) 
-         #('Jones' 'Mickael' 25) 
-         #('washington' 'robert' 30)
-      );
-      from: 10 mm @ 20 mm;
-      dimension: 150 mm @ 60 mm
+PDFDataTableWithColumnsCaptionElement new
+   captions: #('Name' 'Surname' 'Age');
+   data: #(
+      #('Smith' 'Peter' 43) 
+      #('Jones' 'Mickael' 25) 
+      #('washington' 'robert' 30)
+   );
+   from: 10 mm @ 20 mm;
+   dimension: 150 mm @ 60 mm
 ]]]
 
 Finally Artefact also provides a
@@ -594,20 +596,20 @@ The following example shows a use of the ==customizationBlock:== message. The bl
 is older than thirty. Note that the block only considers the third cell of each line and excludes the title of each column. 
 
 [[[
-   (PDFDataTableWithColumnsCaptionElement new
-      captions: #('Name' 'Surname' 'Age');
-      data: #(
-         #('Smith' 'Peter' 43) 
-         #('Jones' 'Mickael' 25) 
-         #('washington' 'robert' 30)
-      );
-      from: 10 mm @ 20 mm;
-      dimension: 150 mm @ 60 mm;
-      customizationBlock: [ :cell :x :y :data |
-         (x = 3 and: [ y > 1 ]) ifTrue: [
-            (data > 30) ifTrue: [ cell text: 'Older than 30' ] 
-         ] 
-      ])
+(PDFDataTableWithColumnsCaptionElement new
+   captions: #('Name' 'Surname' 'Age');
+   data: #(
+      #('Smith' 'Peter' 43) 
+      #('Jones' 'Mickael' 25) 
+      #('washington' 'robert' 30)
+   );
+   from: 10 mm @ 20 mm;
+   dimension: 150 mm @ 60 mm;
+   customizationBlock: [ :cell :x :y :data |
+      (x = 3 and: [ y > 1 ]) ifTrue: [
+         (data > 30) ifTrue: [ cell text: 'Older than 30' ] 
+      ] 
+   ])
 ]]]
 
 Composite elements bring a lot of flexibility to PDF document creation. 
@@ -626,14 +628,15 @@ defined in their own stylesheet.
 Artefact also includes a dictionary of styles that allows every ==PDFElement== to be given a specific, named style. For example the code below is given the ==#title== style.
 
 [[[
-   PDFText from: 10mm@15mm text: 'My title' style: #title
+PDFText from: 10mm@15mm text: 'My title' style: #title
 ]]]
 
 At any upper level (document, page, etc), you can define the named style using the message ==>==, e.g. as follows:
 
 [[[
-   myDocument stylesheet > #title
-            at: #font put: PDFCourierFont size: 32 pt
+myDocument stylesheet > #title
+   at: #font
+   put: PDFCourierFont size: 32 pt
 ]]]
 
 The message ==>== gives access to the style attribute of ==PDFStyleSheet==. Here we specify the ==#title== attribute of the document. 
@@ -651,8 +654,10 @@ These fonts are available in any PDF viewer. A ==PDFFont== instance supports the
 As said above, fonts can be set directly for a piece of text, which is shown below:
 
 [[[
-   PDFText from: 10mm@15mm text: 'My title'
-         font: ((PDFTimesFont size: 24 pt) bold).
+PDFText
+   from: 10mm@15mm
+   text: 'My title'
+   font: ((PDFTimesFont size: 24 pt) bold).
 ]]]
 
 The class ==PDFFont== offers two extremely useful messages when creating a document: ==getStringWidth:== and ==getIdealFontSizeForTheString:width:==.
@@ -669,8 +674,8 @@ The message  ==getIdealFontSizeForTheString:width:== returns the optimal size fo
 The following example determines the required size for a Courier font to display the =='Hello'== text if the width should be 15 cm:
 
 [[[
-   (PDFCourierFont new)
-        getIdealFontSizeForTheString: 'hello' width: 15 cm
+(PDFCourierFont new)
+   getIdealFontSizeForTheString: 'hello' width: 15 cm
 ]]]
 
 
@@ -679,8 +684,8 @@ The following example determines the required size for a Courier font to display
 All geometric shapes can use a dotted style. It is defined by a PDFDotted object that specifies the length of each line segment and the space between them, as shown below:
 
 [[[
-   ((PDFArrowElement from: 125 mm @ 40 mm to:  100 mm @ 80 mm)
-      dotted: (PDFDotted new length: 2 mm; space: 3 mm)).
+((PDFArrowElement from: 125 mm @ 40 mm to:  100 mm @ 80 mm)
+   dotted: (PDFDotted new length: 2 mm; space: 3 mm)).
 ]]]
 
 !!!!Colors and Shades of Gray
@@ -698,20 +703,20 @@ For example, the following code draws a rectangle
 whose border will be blue and will have a red fill:
 
 [[[
-   PDFRectElement new
-      from: 10 mm @ 10 mm;
-      dimension: 100 mm @ 30 mm;
-      fillColor: (PDFColor r: 255 g: 0 b: 0);
-      drawColor: (PDFColor r: 0 g: 0 b: 255).
+PDFRectElement new
+   from: 10 mm @ 10 mm;
+   dimension: 100 mm @ 30 mm;
+   fillColor: (PDFColor r: 255 g: 0 b: 0);
+   drawColor: (PDFColor r: 0 g: 0 b: 255).
 ]]]
 
 The code below produces a gray piece of text:
 
 [[[
-   PDFTextElement new
-      textColor: (PDFColor greyLevel: 128);
-      from: 10 mm @ 50 mm;
-      text: 'A text in blue';
+PDFTextElement new
+   textColor: (PDFColor greyLevel: 128);
+   from: 10 mm @ 50 mm;
+   text: 'A text in blue';
 ]]]
 
 
@@ -729,9 +734,9 @@ The thickness of a line, a segment, or a border, is controlled by the message ==
 Text alignment is managed using the ==PDFAlignment== class. Text can be aligned left, center or right. 
 Messages are ==left==, ==center== and ==right==. The following example creates a right-aligned text:
 [[[
-   (PDFFormattedTextElement from: 0 mm @ 0 mm dimension: 100 mm @ 10 mm)
-      alignment: (PDFAlignment right);
-      text: 'At right!'
+(PDFFormattedTextElement from: 0 mm @ 0 mm dimension: 100 mm @ 10 mm)
+   alignment: (PDFAlignment right);
+   text: 'At right!'
 ]]]
 
 !!!Abstracting a Style 
@@ -744,10 +749,10 @@ You can access the stylesheet using the message ==styleSheet==.
 To change the values of the default style, you simply change the properties of the stylesheet, for example as follows:
 
 [[[
-   myDocument := PDFDocument new.
-   myDocument styleSheet 
-         textColor: (PDFColor r: 0 g: 100 b: 200);
-         font: (PDFHelveticaFont size: 32pt) italic.
+myDocument := PDFDocument new.
+myDocument styleSheet 
+   textColor: (PDFColor r: 0 g: 100 b: 200);
+   font: (PDFHelveticaFont size: 32pt) italic.
 ]]]
 
 Artefact styles form a tree. Each sub style points to its parent and the root of styles is the default style attached to the document. This way properties can 
@@ -760,18 +765,18 @@ apply it to the elements that should follow this custom style.
 For example, that you want to use a certain font and style for some text element or quotes, you can define a style named ==#quote== as follows:
 
 [[[
-   myDocument := PDFDocument new.
-   myDocument styleSheet > #quote 
-      textColor: (PDFColor r: 0 g: 50 b: 200);
-      font: (PDFCourierFont size: 8pt) italic.
+myDocument := PDFDocument new.
+myDocument styleSheet > #quote 
+   textColor: (PDFColor r: 0 g: 50 b: 200);
+   font: (PDFCourierFont size: 8pt) italic.
 ]]]
 
 This style is defined here as the sub-document style and it will be applied to all elements of that use the ==#quote== style. 
 In the following example we assign the ==#quote== style to a piece of text using the message ==style:==.
 
 [[[
-   (PDFTextElement from: 5cm @ 5cm)
-      text: 'my Quote with the quote style'; style: #quote
+(PDFTextElement from: 5cm @ 5cm)
+   text: 'my Quote with the quote style'; style: #quote
 ]]]
 
 In the above example, we only have one level of styles. However, Artefact supports an infinite levels of styles. This behavior is essential for composite 
@@ -780,15 +785,15 @@ elements where the nesting of the elements implies the nesting of their styles.
 For example, below we create a data table with a title for each column.
 
 [[[
-   (PDFDataTableWithColumnsCaptionElement
-      from: 10 mm @ 20 mm dimension: 190 mm @ 60 mm)
-         captions: #('Name' 'Surname' 'email');
-         data: #(
-            #('Smith' 'Peter' 'peter.smith@mail.org') 
-            #('Jones' 'Mickael' 'mickael.jones@epr.com')
-            #('washington' 'robert' 'robert.washington@blif.com'));
-         style: #dataTableWithColoredCaption;
-         yourself).
+(PDFDataTableWithColumnsCaptionElement
+   from: 10 mm @ 20 mm dimension: 190 mm @ 60 mm)
+      captions: #('Name' 'Surname' 'email');
+      data: #(
+         #('Smith' 'Peter' 'peter.smith@mail.org') 
+         #('Jones' 'Mickael' 'mickael.jones@epr.com')
+         #('washington' 'robert' 'robert.washington@blif.com'));
+      style: #dataTableWithColoredCaption;
+      yourself).
 ]]]
 
 ==PDFDataTableWithColumnsCaptionElement==  is a composite element. This element uses as styles of its sub-elements ==#cell== and ==#caption==, respectively for 
@@ -797,13 +802,13 @@ captions and cells. By using the specialisation based on style nesting, it is th
 To define this style, the second  expression below = access the caption style of the ==dataTableWithColoredCaption== style, and then customizes it. 
 
 [[[
-   pdfdoc := PDFDocument new.
-   pdfdoc styleSheet > #dataTableWithColoredCaption > #caption
-      fillColor: (PDFColor r: 158 g: 158 b: 79);
-      drawColor: (PDFColor r: 158 g: 158 b: 79).
-   pdfdoc styleSheet > #dataTableWithColoredCaption margin: 4 pt.
-   pdfdoc styleSheet > #dataTableWithColoredCaption > #cell
-         alignment: PDFAlignment right.
+pdfdoc := PDFDocument new.
+pdfdoc styleSheet > #dataTableWithColoredCaption > #caption
+   fillColor: (PDFColor r: 158 g: 158 b: 79);
+   drawColor: (PDFColor r: 158 g: 158 b: 79).
+pdfdoc styleSheet > #dataTableWithColoredCaption margin: 4 pt.
+pdfdoc styleSheet > #dataTableWithColoredCaption > #cell
+      alignment: PDFAlignment right.
 ]]]
 
 Here we see that we can change a nested element attribute: we change the alignment of a cell in the table using a sequence of ==>==  messages. 
@@ -825,10 +830,10 @@ In this tutorial we will create a clock, which is basically a circle and two arr
 First create the class of your element and generate accessors for its variable ==time== that will contain the time to display.
 
 [[[
-   PDFComposite subclass: #PDFClockElement
-      instanceVariableNames: 'time'
-      classVariableNames: ''
-      category: 'Artefact-Tutorial'
+PDFComposite subclass: #PDFClockElement
+   instanceVariableNames: 'time'
+   classVariableNames: ''
+   category: 'Artefact-Tutorial'
 ]]]
 
 The two relevant methods for Artefact are ==defaultStyle== and ==getSubElementsWith:styleSheet:==. The first one must return a collection of ==PDFElements== 
@@ -838,14 +843,14 @@ However it's not necessary to define this style in your document, Artefact will 
 Define the default style:
 [[[
 PDFClockElement>>defaultStyle
-      ^ #clock
+   ^ #clock
 ]]]
 
 Then define the method that will draw the clock. As a first approximation, this method just returns a circle:
 
 [[[
 PDFClockElement>>getSubElementsWith: aGenerator styleSheet: aStyleSheet
-      ^ { PDFCircleElement from: self from to: self to }
+   ^ { PDFCircleElement from: self from to: self to }
 ]]]
 
 The circle will be drawn depending on this composite position and size. We are using ==from: to:== for the circle instead of ==center:radius:== because 
@@ -854,29 +859,30 @@ it's easier for us to create a clock using the boundary box of the circle.
 To complete the clock, we add the hands using two ==PDFArrowElement==s and a filled little circle in the middle:
 [[[
 PDFClockElement>>getSubElementsWith: aGenerator styleSheet: aStyleSheet
-      | hourAngle minuteAngle |
-      hourAngle := Float pi / 2 - (time hour12 * 2 * Float pi / 12).
-      minuteAngle := Float pi / 2 - (time minute * 2 * Float pi / 60).
-
-      ^ {
-         (PDFCircleElement from: self from to: self to).
-         (PDFCircleElement
-                center: self center radius: self dimension x * 0.05).
-         (PDFArrowElement
-                from: self center angle: hourAngle length: dimension x * 0.25).
-         (PDFArrowElement
-                from: self center angle: minuteAngle length: dimension x * 0.45)
-         }
+   | hourAngle minuteAngle |
+   hourAngle := Float pi / 2 - (time hour12 * 2 * Float pi / 12).
+   minuteAngle := Float pi / 2 - (time minute * 2 * Float pi / 60).
+   ^ {
+      (PDFCircleElement from: self from to: self to).
+      (PDFCircleElement
+             center: self center radius: self dimension x * 0.05).
+      (PDFArrowElement
+             from: self center angle: hourAngle length: dimension x * 0.25).
+      (PDFArrowElement
+             from: self center angle: minuteAngle length: dimension x * 0.45)
+   }
 ]]]
 
 Don't be afraid about the two angle calculus, it's just to convert hours and minutes to radian angles.
 
 At this time, your ==PDFClockElement== is already usable and fully integrated into Artefact. We can insert it into a PDF document and export it:
 [[[
-   PDFDocument new
-      add: (PDFPage new add: ((PDFClockElement
-            from: 2 cm @ 2 cm to: 10 cm @ 10 cm) time: Time current));
-      exportTo: 'clockTutorialStep1.pdf' asFileReference writeStream
+PDFDocument new
+   add: (PDFPage new add: ((
+      PDFClockElement
+         from: 2 cm @ 2 cm
+         to: 10 cm @ 10 cm) time: Time current));
+   exportTo: 'clockTutorialStep1.pdf' asFileReference writeStream
 ]]]
 
 
@@ -885,15 +891,15 @@ At this time, your ==PDFClockElement== is already usable and fully integrated in
 Your clock is already personnalizable independently of other elements because you previously defined its style as ==#clock==. This is shown below:
 
 [[[
-   | doc |
-   doc := PDFDocument new.
-   doc add: (PDFPage new add:
-      ((PDFClockElement from: 2 cm @ 2 cm to: 10 cm @ 10 cm)
-            time: Time current)).
-   doc styleSheet > #clock
-      drawColor: (PDFColor r:180 g: 24 b:24);
-      fillColor: (PDFColor r:230 g: 230 b:10).
-   doc exportTo: 'clockTutorialStep2.pdf' asFileReference writeStream
+| doc |
+doc := PDFDocument new.
+doc add: (PDFPage new add:
+   ((PDFClockElement from: 2 cm @ 2 cm to: 10 cm @ 10 cm)
+      time: Time current)).
+doc styleSheet > #clock
+   drawColor: (PDFColor r:180 g: 24 b:24);
+   fillColor: (PDFColor r:230 g: 230 b:10).
+doc exportTo: 'clockTutorialStep2.pdf' asFileReference writeStream
 ]]]
 
 At this time, you don't have defined specific styles for sub elements of your clock. Consequently, you will not be able to 
@@ -902,20 +908,20 @@ possibilities, you should define specific styles for sub elements you reuse, as 
 
 [[[
 PDFClockElement>>getSubElementsWith: aGenerator styleSheet: aStyleSheet
-      | hourAngle minuteAngle |
-      hourAngle := Float pi / 2 - (time hour12 * 2 * Float pi / 12).
-      minuteAngle := Float pi / 2 - (time minute * 2 * Float pi / 60).
-      ^ {
-         (PDFCircleElement from: self from to: self to).
-         (PDFCircleElement
-               center: self center radius: self dimension min * 0.05).
-         ((PDFArrowElement
-               from: self center angle: hourAngle
-               length: dimension min * 0.25) style: #hourHand).
-         ((PDFArrowElement
-               from: self center angle: minuteAngle
-               length: dimension min * 0.45) style: #minuteHand)
-         }
+   | hourAngle minuteAngle |
+   hourAngle := Float pi / 2 - (time hour12 * 2 * Float pi / 12).
+   minuteAngle := Float pi / 2 - (time minute * 2 * Float pi / 60).
+   ^ {
+      (PDFCircleElement from: self from to: self to).
+      (PDFCircleElement
+         center: self center radius: self dimension min * 0.05).
+      ((PDFArrowElement
+         from: self center angle: hourAngle
+         length: dimension min * 0.25) style: #hourHand).
+      ((PDFArrowElement
+         from: self center angle: minuteAngle
+         length: dimension min * 0.45) style: #minuteHand)
+   }
 ]]]
 
 As you can see, we just send the message ==style:== to each subelement that we want to define a specific style.
@@ -923,47 +929,50 @@ As you can see, we just send the message ==style:== to each subelement that we w
 Now, we can personalize each hand as follows:
 
 [[[
-   | doc |
-   doc := PDFDocument new.
-   doc add: (PDFPage new add: ((PDFClockElement
-         from: 2 cm @ 2 cm to: 10 cm @ 10 cm) time: Time current)).
-   doc styleSheet > #clock
-         drawColor: (PDFColor r:180 g: 24 b:24);
-         fillColor: (PDFColor r:230 g: 230 b:10).
-   doc styleSheet > #clock > #hourHand
-         drawColor: (PDFColor r:0 g: 45 b:200).
-   doc styleSheet > #clock > #minuteHand
-         drawColor: (PDFColor r:0 g: 200 b:45).
-   doc exportTo: 'clockTutorialStep4.pdf' asFileReference writeStream
+| doc |
+doc := PDFDocument new.
+doc add: (PDFPage new add: ((PDFClockElement
+   from: 2 cm @ 2 cm to: 10 cm @ 10 cm) time: Time current)).
+doc styleSheet > #clock
+   drawColor: (PDFColor r:180 g: 24 b:24);
+   fillColor: (PDFColor r:230 g: 230 b:10).
+doc styleSheet > #clock > #hourHand
+   drawColor: (PDFColor r:0 g: 45 b:200).
+doc styleSheet > #clock > #minuteHand
+   drawColor: (PDFColor r:0 g: 200 b:45).
+doc exportTo: 'clockTutorialStep4.pdf' asFileReference writeStream
 ]]]
 
 This gives the clock hands have different colors. Moreover, like for any element in Artefact, you can specify a style for a given instance of a 
 ==PDFClockElement==, allowing you to reuse and adapt each clock:
 
 [[[
-   | doc |
-   doc := PDFDocument new.
-   doc add: (PDFPage new
-         add: ((PDFClockElement from: 2 cm @ 2 cm to: 10 cm @ 10 cm)
-               time: Time current);
-         add: ((PDFClockElement from: 12 cm @ 2 cm to: 20 cm @ 10 cm)
-               time: Time current;
-               style: #apocalypseClock)).
-   doc styleSheet > #clock
-      drawColor: (PDFColor r: 180 g: 24 b: 24);
-      fillColor: (PDFColor r: 230 g: 230 b: 10).
-   doc styleSheet > #clock > #hourHand
-      drawColor: (PDFColor r: 0 g: 45 b: 200).
-   doc styleSheet > #clock > #minuteHand
-      drawColor: (PDFColor r: 0 g: 200 b: 45).
-   doc styleSheet > #apocalypseClock
-      fillColor: (PDFColor r: 244 g: 221 b: 25);
-      thickness: 2 mm;
-      roundCap: true.
-   doc styleSheet > #apocalypseClock > #minuteHand
-      drawColor: (PDFColor r: 240 g: 6 b: 7);
-      thickness: 1 mm.
-   doc exportTo: 'clockTutorialStep5.pdf' asFileReference writeStream
+| doc |
+doc := PDFDocument new.
+doc add: (
+   PDFPage new
+      add: (
+         (PDFClockElement from: 2 cm @ 2 cm to: 10 cm @ 10 cm)
+            time: Time current);
+      add: (
+         (PDFClockElement from: 12 cm @ 2 cm to: 20 cm @ 10 cm)
+            time: Time current;
+            style: #apocalypseClock)).
+doc styleSheet > #clock
+   drawColor: (PDFColor r: 180 g: 24 b: 24);
+   fillColor: (PDFColor r: 230 g: 230 b: 10).
+doc styleSheet > #clock > #hourHand
+   drawColor: (PDFColor r: 0 g: 45 b: 200).
+doc styleSheet > #clock > #minuteHand
+   drawColor: (PDFColor r: 0 g: 200 b: 45).
+doc styleSheet > #apocalypseClock
+   fillColor: (PDFColor r: 244 g: 221 b: 25);
+   thickness: 2 mm;
+   roundCap: true.
+doc styleSheet > #apocalypseClock > #minuteHand
+   drawColor: (PDFColor r: 240 g: 6 b: 7);
+   thickness: 1 mm.
+doc exportTo: 'clockTutorialStep5.pdf' asFileReference writeStream
 ]]]
 
 !!Conclusion
