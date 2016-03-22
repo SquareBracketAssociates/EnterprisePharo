@@ -10,7 +10,7 @@ RenoirST is a DSL enabling programmatic cascading style sheet generation for Pha
 RenoirST aims to improve CSS integration with existing web frameworks. To do that, RenoirST generates CSS out of Pharo code. Renoir features are:
 common properties declaration, CSS3 selector support, important rules, font face rules and media queries support.
 In this tutorial we will present the key features of RenoirSt with a large set of examples.
-This tutorial assumes some knowledge of CSS and Pharo. For a little introduction about CSS you can read the 
+This tutorial assumes some knowledge of CSS and Pharo. For a little introduction about CSS you can read the
 *Seaside's book CSS chapter>http://book.seaside.st/book/fundamentals/css*.
 
 !!Getting Started
@@ -33,7 +33,7 @@ The main entry point for the library is the class ==CascadingStyleSheetBuilder==
 CascadingStyleSheetBuilder new build
 ]]]
 
-You now have an inspector on your first (empty and useless) style sheet. Real stylesheets are composed of rules (or rule-sets), where each one has a selector 
+You now have an inspector on your first (empty and useless) style sheet. Real stylesheets are composed of rules (or rule-sets), where each one has a selector
 and a declaration group. The selector determines if the rule applies to some element in the DOM, and the declaration group specifies the style to apply.
 
 Our first useful style sheet will simply assign a margin to every div element in the DOM.
@@ -55,7 +55,7 @@ div
 ]]]
 
 The message ==declareRuleSetFor:with:== is used to configure a rule-set in the builder. The message requires two blocks: the first block defines the selector
-and the second defines the style to apply to elements matching the selector. The ==selector== argument of the first block is an entry point to construct the 
+and the second defines the style to apply to elements matching the selector. The ==selector== argument of the first block is an entry point to construct the
 selector (more on this later). The ==style== argument of the second block is an entry point to declare CSS properties and values.
 
 The properties API is mostly defined following this rules:
@@ -116,7 +116,7 @@ CascadingStyleSheetBuilder new
 
 !!!!Colors
 
-The library supports abstractions for properties requiring color values. The shared pool ==CssSVGColors== provides easy access to colors in the SVG 1.0 list, 
+The library supports abstractions for properties requiring color values. The shared pool ==CssSVGColors== provides easy access to colors in the SVG 1.0 list,
 and the abstractions ==CssRGBColor== and ==CssHSLColor== allow the creation of colors in the RGB and HSL spaces including alpha support.
 
 
@@ -187,7 +187,7 @@ div
 
 !!!!Several Property Values
 
-Some properties support a wide range of values. For example the ==margin== property can have 1, 2 , 3 or 4 values specified. If you only need one value, just 
+Some properties support a wide range of values. For example the ==margin== property can have 1, 2 , 3 or 4 values specified. If you only need one value, just
 pass it as a parameter. For more than one value, use an array:
 
 [[[
@@ -239,7 +239,7 @@ CascadingStyleSheetBuilder new
    with: [ :style | style backgroundImage: 'images/logo.png' asZnUrl relativeToStyleSheet];
    build
 ]]]
-Evaluates to: 
+Evaluates to:
 [[[language=css
 div.logo
 {
@@ -285,7 +285,7 @@ evaluates to:
 
 !!!Functional Notation
 
-A functional notation is a type of CSS component value that can represent complex types or invoke special processing. Mathematical expressions, toggling 
+A functional notation is a type of CSS component value that can represent complex types or invoke special processing. Mathematical expressions, toggling
 between values, attribute references, and gradients are all supported in RenoirST.
 
 !!!!Mathematical Expressions
@@ -330,8 +330,8 @@ ul ul
 
 !!!!Attribute References
 
-The ==attr()== function is allowed as a component value in properties applied to an element or pseudo-element. The function returns the value of an attribute on 
-the element. If used on a pseudo-element, it returns the value of the attribute on the pseudo-element's originating element. This function is supported using 
+The ==attr()== function is allowed as a component value in properties applied to an element or pseudo-element. The function returns the value of an attribute on
+the element. If used on a pseudo-element, it returns the value of the attribute on the pseudo-element's originating element. This function is supported using
 the ==CssAttributeReference== abstraction and can be used simply providing an attribute name:
 
 [[[
@@ -376,7 +376,7 @@ CascadingStyleSheetBuilder new
    declareRuleSetFor: [ :selector | selector div before ]
    with: [ :style |
       style content: (CssAttributeReference
-      toStringAttributeNamed: 'title' 
+      toStringAttributeNamed: 'title'
       withFallback: 'Missing title')
    ];
    build
@@ -393,8 +393,8 @@ div::before
 
 !!!!Gradients
 
-A gradient is an image that smoothly fades from one color to another. Gradients are commonly used for subtle shading in background images, buttons, and many 
-other places. The gradient notations described in this section allow an author to specify such an image in a terse syntax. This notation is supported using 
+A gradient is an image that smoothly fades from one color to another. Gradients are commonly used for subtle shading in background images, buttons, and many
+other places. The gradient notations described in this section allow an author to specify such an image in a terse syntax. This notation is supported using
 ==CssLinearGradient== and ==CssRadialGradient== abstractions.
 
 To represent a simple linear gradient from a color to another, send the ==fading:== message to ==CssLinearGradient== with the two colors in an array as a parameter:
@@ -473,7 +473,7 @@ Above code maps to:
 linear-gradient(to right, yellow, blue 30%);
 ]]]
 
-This results in a linear gradient from left to right with yellow at the left side and plain blue from 30% (of the horizontal line) to the right side. More than 
+This results in a linear gradient from left to right with yellow at the left side and plain blue from 30% (of the horizontal line) to the right side. More than
 two colors can be passed as argument to ==fading:==. This can be used to create rainbows:
 
 [[[
@@ -508,7 +508,7 @@ maps to:
 radial-gradient(yellow,green)
 ]]]
 
-This results in a radial gradient with yellow at the center and green all around. Coordinates can be passed to both the first and second parameters of the 
+This results in a radial gradient with yellow at the center and green all around. Coordinates can be passed to both the first and second parameters of the
 ==elliptical:at:fading:== message:
 
 [[[
@@ -534,14 +534,14 @@ repeating-radial-gradient(yellow, green);
 
 !!!!Box Shadows
 
-Box Shadows are supported with ==CssBoxShadow== abstraction. This abstraction simplifies the use of the ==box-shadow== property. 
+Box Shadows are supported with ==CssBoxShadow== abstraction. This abstraction simplifies the use of the ==box-shadow== property.
 
 [[[
-CssBoxShadow 
-   horizontalOffset: 64 px 
-   verticalOffset: 64 px 
-   blurRadius: 12 px  
-   spreadDistance: 40 px 
+CssBoxShadow
+   horizontalOffset: 64 px
+   verticalOffset: 64 px
+   blurRadius: 12 px
+   spreadDistance: 40 px
    color: (CssSVGColors black newWithAlpha: 0.4)
 ]]]
 evaluates to:
@@ -551,7 +551,7 @@ evaluates to:
 
 Several shadows can be combined:
 [[[
-(CssBoxShadow horizontalOffset: 64 px verticalOffset: 64 px blurRadius: 12 px  spreadDistance: 40 px color: (CssSVGColors black newWithAlpha: 0.4)) , 
+(CssBoxShadow horizontalOffset: 64 px verticalOffset: 64 px blurRadius: 12 px  spreadDistance: 40 px color: (CssSVGColors black newWithAlpha: 0.4)) ,
 (CssBoxShadow horizontalOffset: 12 px verticalOffset: 11 px blurRadius: 0 px  spreadDistance: 8 px color: (CssSVGColors black newWithAlpha: 0.4)) beInset
 ]]]
 
@@ -661,7 +661,7 @@ div.pastoral#account5
 
 @@note You should not hardcode the classes and ids, they should be obtained from the same object that holds them for the HTML generation. You probably have some code setting the class(es) and/or id(s) to a particular HTML element.
 
-A comma-separated list of selectors represents the union of all elements selected by each of the individual selectors in the list. For example, in CSS when 
+A comma-separated list of selectors represents the union of all elements selected by each of the individual selectors in the list. For example, in CSS when
 several selectors share the same declarations, they may be grouped into a comma-separated list.
 
 [[[
@@ -686,7 +686,7 @@ Attribute selectors are useful to match an element if that element has an attrib
 The ''attribute presence'' selector matches an element having an attribute (without considering the value of the attribute):
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
    declareRuleSetFor: [:selector | selector h1 havingAttribute: 'title' ]
    with: [:style | style color: CssSVGColors blue ];
    build
@@ -702,7 +702,7 @@ h1[title]
 The ''attribute value exact matching'' selectors matches an element having an attribute with a specific value:
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
    declareRuleSetFor: [:selector | selector span withAttribute: 'class' equalTo: 'example' ]
    with: [:style | style color: CssSVGColors blue ];
    build
@@ -718,7 +718,7 @@ span[class="example"]
 The ''attribute value inclusion'' selector matches an element having an attribute with a value including as a word the matching term:
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
    declareRuleSetFor: [:selector | selector anchor attribute: 'rel' includes: 'copyright' ]
    with: [:style | style color: CssSVGColors blue ];
    build
@@ -734,7 +734,7 @@ a[rel~="copyright"]
 Other attribute selectors are used for substring matching:
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
    declareRuleSetFor: [:selector | selector anchor firstValueOfAttribute: 'hreflang' beginsWith: 'en' ]
    with: [:style | style color: CssSVGColors blue ];
    build
@@ -748,7 +748,7 @@ a[hreflang|="en"]
 ]]]
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
    declareRuleSetFor: [:selector | selector anchor attribute: 'type' beginsWith: 'image/' ]
    with: [:style | style color: CssSVGColors blue ];
    build
@@ -762,7 +762,7 @@ a[type^="image/"]
 ]]]
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
    declareRuleSetFor: [:selector | selector anchor attribute: 'type' endsWith: '.html' ]
    with: [:style | style color: CssSVGColors blue ];
    build
@@ -776,7 +776,7 @@ a[type$=".html"]
 ]]]
 
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
    declareRuleSetFor: [:selector | selector paragraph attribute: 'title' includesSubstring: 'hello' ]
    with: [:style | style color: CssSVGColors blue ];
    build
@@ -862,9 +862,9 @@ evaluates to:
 
 The negation pseudo-class, ==:not(X)==, is a functional notation taking a simple selector (excluding the negation pseudo-class itself) as an argument. It represents an element that is not represented by its argument. For more information take a look at the CSS spec.
 
-This selector is supported sending the message ==not:== 
+This selector is supported sending the message ==not:==
 [[[
-CascadingStyleSheetBuilder new 
+CascadingStyleSheetBuilder new
    declareRuleSetFor: [:selector | selector button not: (selector havingAttribute: 'DISABLED') ]
    with: [:style | style color: CssSVGColors blue ];
    build
@@ -897,7 +897,7 @@ evaluates to:
 }
 ]]]
 
-The ==:nth-child(an+b)== pseudo-class notation represents an element that has ==an+b-1== siblings before it in the document tree, for any positive integer or 
+The ==:nth-child(an+b)== pseudo-class notation represents an element that has ==an+b-1== siblings before it in the document tree, for any positive integer or
 zero value of ==n==, and has a parent element. For values of ==a== and ==b== greater than zero, this effectively divides the element's children into groups of ==a== elements (the last group taking the remainder), and selecting the ==b==th element of each group. The ==a== and ==b== values must be integers (positive, negative, or zero). The index of the first child of an element is 1.
 
 In addition to this, ==:nth-child()== can take a number, ==odd== and ==even== as arguments. The value ==odd== is equivalent to ==2n\+1==, whereas ==even== is equivalent to ==2n==.
@@ -950,8 +950,8 @@ All structural pseudo-classes can be generated using the following messages:
 
 !!! Pseudo-Elements
 
-Pseudo-elements create abstractions about the document tree beyond those specified by the document language. For instance, document languages do not offer 
-mechanisms to access the first letter or first line of an element's content. Pseudo-elements allow authors to refer to this otherwise inaccessible information. 
+Pseudo-elements create abstractions about the document tree beyond those specified by the document language. For instance, document languages do not offer
+mechanisms to access the first letter or first line of an element's content. Pseudo-elements allow authors to refer to this otherwise inaccessible information.
 Pseudo-elements may also provide authors a way to refer to content that does not exist in the source document.
 
 The ==firstLine== pseudo-element describes the contents of the first formatted line of an element.
@@ -1019,8 +1019,8 @@ p.note::after
 
 CSS attempts to create a balance of power between author and user style sheets. By default, rules in an author's style sheet override those in a user's style sheet.
 
-However, for balance, an ==!important== declaration takes precedence over a normal declaration. Both author and user style sheets may contain ==!important== 
-declarations, and user ==!important== rules override author ==!important== rules. This CSS feature improves accessibility of documents by giving users with 
+However, for balance, an ==!important== declaration takes precedence over a normal declaration. Both author and user style sheets may contain ==!important==
+declarations, and user ==!important== rules override author ==!important== rules. This CSS feature improves accessibility of documents by giving users with
 special requirements control over presentation.
 
 The library provides support for this feature by sending ==beImportantDuring:== message to the style.
@@ -1051,8 +1051,8 @@ Note that the important properties must be created by sending the messages to th
 
 !! Media Queries
 
-A ==@media== rule specifies the target media types of a set of statements. The ==@media== construct allows style sheet rules that apply to various media in the 
-same style sheet. Style rules outside of ==@media== rules apply to all media types that the style sheet applies to. At-rules inside ==@media== are invalid in 
+A ==@media== rule specifies the target media types of a set of statements. The ==@media== construct allows style sheet rules that apply to various media in the
+same style sheet. Style rules outside of ==@media== rules apply to all media types that the style sheet applies to. At-rules inside ==@media== are invalid in
 CSS2.1.
 
 The most basic media rule consists of specifying just a media type:
@@ -1075,14 +1075,14 @@ evaluates to:
 }
 ]]]
 
-To use media queries in the library just send the message ==declare:forMediaMatching:== to the builder. The first block is evaluated with an instance of a 
+To use media queries in the library just send the message ==declare:forMediaMatching:== to the builder. The first block is evaluated with an instance of a
 ==CascadingStyleSheetBuilder== and the second one with a builder of media queries.
 
-The media query builder will match any media type by default. To specify a media type just send it the message ==type:== with the corresponding media type. The 
+The media query builder will match any media type by default. To specify a media type just send it the message ==type:== with the corresponding media type. The
 class ==CssMediaQueryConstants== provides easy access to the following media types:
 ==braille==, ==embossed==, ==handheld==, ==print==, ==projection==, ==screen==, ==speech==, ==tty== and ==tv==.
 
-The media query builder supports a variety of messages for additional conditions (called media features). Media features are used in expressions to describe 
+The media query builder supports a variety of messages for additional conditions (called media features). Media features are used in expressions to describe
 requirements of the output device.
 
 The following media feature messages are supported:
@@ -1093,7 +1093,7 @@ The following media feature messages are supported:
 - Accepting a ==CssMeasure== with resolution units: ==resolution:==, ==minResolution:==, ==maxResolution:==;
 - ==scan:== accepting ==CssMediaQueryConstants progressive== or ==CssMediaQueryConstants interlace==.
 
-New units for resolutions are added using the ==CssMeasure== abstraction. This kind of measures can be created sending the messages ==dpi== (dots per inch), 
+New units for resolutions are added using the ==CssMeasure== abstraction. This kind of measures can be created sending the messages ==dpi== (dots per inch),
 ==dpcm== (dots per centimeter) or ==dppx== (dots per pixel unit) to an integer or float.
 
 Here is a final example to better understand the media features support:
@@ -1155,7 +1155,7 @@ The ==@font-face== rule allows for linking to fonts that are automatically fetch
 This support is implemented in the builder:
 [[[
 CascadingStyleSheetBuilder new
-   declareFontFaceRuleWith: [ :style | 
+   declareFontFaceRuleWith: [ :style |
       style
          fontFamily: 'Gentium';
          src: 'http://example.com/fonts/gentium.woff' asZnUrl ];
@@ -1177,7 +1177,7 @@ This kind of rule allows for multiple ==src== definitions specifying the resourc
 [[[
 CascadingStyleSheetBuilder new
    declareFontFaceRuleWith:
-      [ :style | 
+      [ :style |
       style
          fontFamily: 'MainText';
          src: (CssExternalFontReference locatedAt: 'gentium.eat' asZnUrl relativeToStyleSheet);
@@ -1234,7 +1234,7 @@ Metacello new
    load: 'Deployment-Seaside-Extensions'
 ]]]
 
-or 
+or
 
 [[[
 Metacello new

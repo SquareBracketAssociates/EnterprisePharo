@@ -5,13 +5,13 @@
 @cha:JSON
 
 
-JSON (JavaScript Object Notation) is a popular data-interchange format. NeoJSON is an elegant and efficient standalone Smalltalk library to read and write 
+JSON (JavaScript Object Notation) is a popular data-interchange format. NeoJSON is an elegant and efficient standalone Smalltalk library to read and write
 JSON converting to and from Smalltalk objects. The library is developed and actively maintained by Sven Van Caekenberghe.
 
 !!An Introduction to JSON
 
-JSON is a lightweight text-based open standard designed for human-readable data interchange. It was derived from the JavaScript scripting language for 
-representing simple data structures and associative arrays, called objects. Despite its relationship to JavaScript, it is language-independent, with parsers 
+JSON is a lightweight text-based open standard designed for human-readable data interchange. It was derived from the JavaScript scripting language for
+representing simple data structures and associative arrays, called objects. Despite its relationship to JavaScript, it is language-independent, with parsers
 available for many languages.
 
 @@note References: *http://www.json.org/*, *http://en.wikipedia.org/wiki/Json* and *http://www.ietf.org/rfc/rfc4627.txt?number=4627*.
@@ -74,7 +74,7 @@ While writing:
 
 !! Generic Mode
 
-NeoJSON can operate in a generic mode that requires no further configuration. 
+NeoJSON can operate in a generic mode that requires no further configuration.
 
 !!! Reading from JSON
 

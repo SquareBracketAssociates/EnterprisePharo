@@ -193,7 +193,7 @@ When you refresh the page in the web browser, you should now see an image as in 
 Interaction is what differentiates a Web site from a Web application.
 We will now add the ability for users to upload a new image to change the one on the server.
 To add this ability we need to use an HTML form. Let's change our HTML
-one last time. 
+one last time.
 
 [[[
 MyFirstWebApp>>html

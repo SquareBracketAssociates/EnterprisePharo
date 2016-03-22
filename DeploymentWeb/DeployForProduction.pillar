@@ -53,10 +53,10 @@ When you have a Pharo image with your application inside, the next step is to st
 [[[
 ZnServer defaultOn: 8080.
 ZnServer default logToStandardOutput.
-ZnServer default delegate 
+ZnServer default delegate
    map: 'image' to: MyFirstWebApp new;
    map: 'redirect-to-image' to: [ :request | ZnResponse redirect: 'image' ];
-   map: '/' to: 'redirect-to-image'. 
+   map: '/' to: 'redirect-to-image'.
 ZnServer default start
 ]]]
 This script will start an instance of the Zinc Web Server on localhost on the port 8080 and store it as the default instance. We configured the Zinc instance to log on the standard output, we changed the default root (/) handler to redirect to your new /image web app. ==MyFirstWebApp== class handles HTTP requests by implementing the ==#handleRequest:== message.
@@ -206,7 +206,7 @@ check process myapp with pidfile /var/run/myapp.pid
       and content == "pong"
       and timeout 10 seconds)
       then restart
-   if 5 restarts within 5 cycles 
+   if 5 restarts within 5 cycles
       then timeout
 ]]]
 
