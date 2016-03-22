@@ -763,13 +763,13 @@ To ensure that a query indeed uses the index, ==".explain()"== can be used in th
 > db.Trips.find({"receipts.description":"a"})
                    .explain("executionStats")
 {
-	"cursor" : "BtreeCursor receipts.receiptDescription_1",
-	"isMultiKey" : true,
-	"n" : 2,
-	"nscannedObjects" : 2,
-	"nscanned" : 2,
-	"nscannedObjectsAllPlans" : 2,
-	"nscannedAllPlans" : 2,
+   "cursor" : "BtreeCursor receipts.receiptDescription_1",
+   "isMultiKey" : true,
+   "n" : 2,
+   "nscannedObjects" : 2,
+   "nscanned" : 2,
+   "nscannedObjectsAllPlans" : 2,
+   "nscannedAllPlans" : 2,
 
   [...]
 }
@@ -781,13 +781,13 @@ After removing the index, all documents are scanned (in this example there are 2
 > db.Trips.find({"receipts.description":"a"}
                  ..explain("executionStats")
 {
-	"cursor" : "BasicCursor",
-	"isMultiKey" : false,
-	"n" : 2,
-	"nscannedObjects" : 246,
-	"nscanned" : 246,
-	"nscannedObjectsAllPlans" : 246,
-	"nscannedAllPlans" : 246,
+   "cursor" : "BasicCursor",
+   "isMultiKey" : false,
+   "n" : 2,
+   "nscannedObjects" : 246,
+   "nscanned" : 246,
+   "nscannedObjectsAllPlans" : 246,
+   "nscannedAllPlans" : 246,
 
   [...]
 }

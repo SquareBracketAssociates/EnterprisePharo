@@ -19,9 +19,9 @@ To load the library in your image, evaluate:
 
 [[[
 Metacello new
-	configuration: 'RenoirSt';
-	githubUser: 'gcotelli' project: 'RenoirSt' commitish: 'master' path: 'source';
-	load
+   configuration: 'RenoirSt';
+   githubUser: 'gcotelli' project: 'RenoirSt' commitish: 'master' path: 'source';
+   load
 ]]]
 
 download a ready to use image from the *Pharo contribution CI Server>https://ci.inria.fr/pharo-contribution/job/RenoirSt* or install it using the Catalog/Configuration Browser.
@@ -376,9 +376,9 @@ CascadingStyleSheetBuilder new
   declareRuleSetFor: [ :selector | selector div before ]
   with: [ :style |
     style content: (CssAttributeReference
-	  toStringAttributeNamed: 'title' 
-	  withFallback: 'Missing title')
-	];
+     toStringAttributeNamed: 'title' 
+     withFallback: 'Missing title')
+   ];
   build
 ]]]
 
@@ -695,7 +695,7 @@ evaluates to:
 [[[language=css
 h1[title]
 {
-	color: blue;
+   color: blue;
 }
 ]]]
 
@@ -711,7 +711,7 @@ evaluates to:
 [[[language=css
 span[class="example"]
 {
-	color: blue;
+   color: blue;
 }
 ]]]
 
@@ -726,7 +726,7 @@ CascadingStyleSheetBuilder new
 [[[language=css
 a[rel~="copyright"]
 {
-	color: blue;
+   color: blue;
 }
 ]]]
 
@@ -741,7 +741,7 @@ CascadingStyleSheetBuilder new
 [[[language=css
 a[hreflang|="en"]
 {
-	color: blue;
+   color: blue;
 }
 ]]]
 
@@ -754,7 +754,7 @@ CascadingStyleSheetBuilder new
 [[[language=css
 a[type^="image/"]
 {
-	color: blue;
+   color: blue;
 }
 ]]]
 
@@ -767,7 +767,7 @@ CascadingStyleSheetBuilder new
 [[[language=css
 a[type$=".html"]
 {
-	color: blue;
+   color: blue;
 }
 ]]]
 
@@ -780,7 +780,7 @@ CascadingStyleSheetBuilder new
 [[[language=css
 p[title*="hello"]
 {
-	color: blue;
+   color: blue;
 }
 ]]]
 
@@ -867,7 +867,7 @@ CascadingStyleSheetBuilder new
 [[[language=css
 button:not([DISABLED])
 {
-	color: blue;
+   color: blue;
 }
 ]]]
 
@@ -1156,18 +1156,18 @@ The ==@font-face== rule allows for linking to fonts that are automatically fetch
 This support is implemented in the builder:
 [[[
 CascadingStyleSheetBuilder new
-	declareFontFaceRuleWith: [ :style | 
-		style
-			fontFamily: 'Gentium';
-			src: 'http://example.com/fonts/gentium.woff' asZnUrl ];
-	build
+   declareFontFaceRuleWith: [ :style | 
+      style
+         fontFamily: 'Gentium';
+         src: 'http://example.com/fonts/gentium.woff' asZnUrl ];
+   build
 ]]]
 evaluates to:
 [[[language=css
 @font-face
 {
-	font-family: Gentium;
-	src: url("http://example.com/fonts/gentium.woff");
+   font-family: Gentium;
+   src: url("http://example.com/fonts/gentium.woff");
 }
 ]]]
 
@@ -1175,23 +1175,23 @@ This kind of rule allows for multiple ==src== definitions specifying the resourc
 
 [[[
 CascadingStyleSheetBuilder new
-	declareFontFaceRuleWith:
-		[ :style | 
-		style
-			fontFamily: 'MainText';
-			src: (CssExternalFontReference locatedAt: 'gentium.eat' asZnUrl relativeToStyleSheet);
-			src: (CssLocalFontReference toFontNamed: 'Gentium')	, (CssExternalFontReference locatedAt: 'gentium.woff' asZnUrl relativeToStyleSheet withFormat: CssFontConstants woff);
-			src: (CssExternalFontReference svgFontLocatedAt: 'fonts.svg' asZnUrl relativeToStyleSheet withId: 'simple') ];
-	build
+   declareFontFaceRuleWith:
+      [ :style | 
+      style
+         fontFamily: 'MainText';
+         src: (CssExternalFontReference locatedAt: 'gentium.eat' asZnUrl relativeToStyleSheet);
+         src: (CssLocalFontReference toFontNamed: 'Gentium')   , (CssExternalFontReference locatedAt: 'gentium.woff' asZnUrl relativeToStyleSheet withFormat: CssFontConstants woff);
+         src: (CssExternalFontReference svgFontLocatedAt: 'fonts.svg' asZnUrl relativeToStyleSheet withId: 'simple') ];
+   build
 ]]]
 
 [[[language=css
 @font-face
 {
-	font-family: MainText;
-	src: url("gentium.eat");
-	src: local(Gentium), url("gentium.woff") format("woff");
-	src: url("fonts.svg#simple") format("svg");
+   font-family: MainText;
+   src: url("gentium.eat");
+   src: local(Gentium), url("gentium.woff") format("woff");
+   src: url("fonts.svg#simple") format("svg");
 }
 ]]]
 

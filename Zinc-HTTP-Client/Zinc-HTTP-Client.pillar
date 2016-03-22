@@ -822,10 +822,10 @@ most useful one is called ==systemPolicy==. It specifies good practice behavior 
 
 [[[
 ZnClient>>systemPolicy
-    self
-       enforceHttpSuccess: true;
-       enforceAcceptContentType: true;
-   	   numberOfRetries: 2
+   self
+      enforceHttpSuccess: true;
+      enforceAcceptContentType: true;
+      numberOfRetries: 2
 ]]]
 
 Also, in some networks you do not talk to internet web servers directly, but indirectly via a proxy. Such a proxy controls and regulates traffic. A proxy can 

@@ -240,7 +240,7 @@ character stream. Here is an example:
 'encoding-test.txt' asFileReference writeStreamDo: [ :out |
   (ZnCharacterWriteStream on: out binary encoding: #utf8)
      nextPutAll: 'Hello'; space; nextPutAll: 'Ελλάδα'; crlf;
-	 nextPutAll: 'Les élèves français'; crlf ].
+    nextPutAll: 'Les élèves français'; crlf ].
 
 'encoding-test.txt' asFileReference readStreamDo: [ :in |
   (ZnCharacterReadStream on: in binary encoding: #utf8)

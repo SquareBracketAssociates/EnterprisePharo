@@ -78,8 +78,8 @@ STON toString: (Rectangle origin: 10@10 corner: 100@50)
 [[[
 STON toStringPretty: (Rectangle origin: 10@10 corner: 100@50) 
    --> 'Rectangle {
-        	#origin : Point [ 10, 10 ],
-        	#corner : Point [ 100, 50 ]
+           #origin : Point [ 10, 10 ],
+           #corner : Point [ 100, 50 ]
         }'
 ]]]
 
@@ -229,7 +229,7 @@ STON conventionally encodes all non-printable non-ASCII characters.
 [[[
 (STON reader on: '''a newline \n and \t a tab''' readStream) next.
    -->  'a newline 
-         and 	 a tab'
+         and     a tab'
 ]]]
 
 
@@ -246,7 +246,7 @@ outside this limited set are encoded like strings, enclosed in single quotes.
 ]]]
 
 [[[
-(STON reader on: '#''Foo-bar''' readStream) next.	
+(STON reader on: '#''Foo-bar''' readStream) next.   
    --> #'Foo-bar'
 ]]]
 
@@ -254,7 +254,7 @@ outside this limited set are encoded like strings, enclosed in single quotes.
 Booleans consist of the constants ==true== and ==false==.
 
 [[[
-(STON reader on: 'true' readStream) next.		
+(STON reader on: 'true' readStream) next.      
    --> true
 ]]]
 
@@ -263,7 +263,7 @@ Booleans consist of the constants ==true== and ==false==.
 The undefined object is represented by the constant ==nil== 
 
 [[[
-(STON reader on: 'nil' readStream) next.		
+(STON reader on: 'nil' readStream) next.      
    --> nil
 ]]]
 
@@ -314,8 +314,8 @@ maps, for example as below:
 [[[
 STON toStringPretty: (Dictionary new at: #blue put: 'bluish' ; at: #green put: 'greenish' ; yourself) 
    --> '{
-        	#green : ''greenish'',
-        	#blue : ''bluish''
+           #green : ''greenish'',
+           #blue : ''bluish''
         }'
 ]]]
 
@@ -407,7 +407,7 @@ STON toString: Date today
 !!!!Date and Time
 
   ==DateAndTime==, ==TimeStamp== is represented as a one element array with an ISO style ==YYYY-MM-DDTHH:MM:SS.N+TZ.TZ== string
-	
+   
 [[[
 STON toString: DateAndTime now 
    --> 'DateAndTime[''2015-03-21T17:46:01.751981-03:00'']'
@@ -486,14 +486,14 @@ Examples of this are below:
 
 [[[
 Date >> stonOn: stonWriter
-	"Use an ISO style YYYYMMDD representation"
-	stonWriter writeObject: self listSingleton: self yyyymmdd
+   "Use an ISO style YYYYMMDD representation"
+   stonWriter writeObject: self listSingleton: self yyyymmdd
 ]]]
 
 [[[
 Point >> stonOn: stonWriter
-	stonWriter writeObject: self streamShortList: [ :array |
-		array add: x; add: y ]
+   stonWriter writeObject: self streamShortList: [ :array |
+      array add: x; add: y ]
 ]]]
 
 An instance of ==STONWriter== also understands the ==#writeObject:streamList:== and ==#writeObject:streamMap:== messages, which generate a multi-line representation. Also, classes can use another external name by overriding ==Object class>>stonName==.
@@ -562,18 +562,18 @@ The following snippets illustrate two ways to use this stream:
 [[[
 STON fromStream: (STONCStyleCommentsSkipStream on:
     'Point[/* this is X*/ 1, /* this is Y*/ 2] // Nice huh ?' readStream).
-	--> 1@2
+   --> 1@2
 ]]]
 
 [[[
 STON fromStringWithComments: '// Here is how you create a point:
 Point[
-	// this is X
-	1, 
-	// this is Y
-	2 ] 
+   // this is X
+   1, 
+   // this is Y
+   2 ] 
 // Nice huh ?'.
-	--> 1@2
+   --> 1@2
 ]]]
 
 This helper class is useable in other contexts too, like for NeoJSON.
@@ -599,9 +599,9 @@ with the risk of going into an infinite loop. An example of the error reference 
 pt := 10@20.
 ar := { pt . pt . pt }.
 String streamContents: [ :stream |
-	(STON writer on: stream)
-		referencePolicy: #error;
-		nextPut: ar]
+   (STON writer on: stream)
+      referencePolicy: #error;
+      nextPut: ar]
    --> STONWriterError: 'Shared reference detected'
 ]]]
 
@@ -676,96 +676,96 @@ a custom representation for a given class.
 !! Appendix: BNF
 
 [[[
-	value
-	  primitive-value
-	  object-value
-	  reference
-	  nil
-	primitive-value
-	  number
-	  true
-	  false
-	  symbol
-	  string
+   value
+     primitive-value
+     object-value
+     reference
+     nil
+   primitive-value
+     number
+     true
+     false
+     symbol
+     string
 
-	object-value
-	  object
-	  map
-	  list
-	object
-	  classname map
-	  classname list
-	reference
-	  @ int-index-previous-object-value
-	map
-	  {}
-	  { members }
-	members
-	  pair
-	  pair , members
-	pair
-	  string : value
-	  symbol : value
-	  number : value
-	list
-	  []
-	  [ elements ]
-	elements
-	  value 
-	  value , elements
-	string
-	  ''
-	  ' chars '
-	chars
-	  char
-	  char chars
-	char
-	  any-printable-ASCII-character-
-	    except-'-"-or-\
-	  \'
-	  \"
-	  \\
-	  \/
-	  \b
-	  \f
-	  \n
-	  \r
-	  \t
-	  \u four-hex-digits
-	symbol
-	  # chars-limited
-	  # ' chars '
-	chars-limited
-	  char-limited
-	  char-limited chars-limited
-	char-limited
-	  a-z A-Z 0-9 - _ . /
-	classname
-	  uppercase-alpha-char alphanumeric-char
-	number
-	  int
-	  int frac
-	  int exp
-	  int frac exp
-	int
-	  digit
-	  digit1-9 digits 
-	  - digit
-	  - digit1-9 digits
-	frac
-	  . digits
-	exp
-	  e digits
-	digits
-	  digit
-	  digit digits
-	e
-	  e
-	  e+
-	  e-
-	  E
-	  E+
-	  E-
+   object-value
+     object
+     map
+     list
+   object
+     classname map
+     classname list
+   reference
+     @ int-index-previous-object-value
+   map
+     {}
+     { members }
+   members
+     pair
+     pair , members
+   pair
+     string : value
+     symbol : value
+     number : value
+   list
+     []
+     [ elements ]
+   elements
+     value 
+     value , elements
+   string
+     ''
+     ' chars '
+   chars
+     char
+     char chars
+   char
+     any-printable-ASCII-character-
+       except-'-"-or-\
+     \'
+     \"
+     \\
+     \/
+     \b
+     \f
+     \n
+     \r
+     \t
+     \u four-hex-digits
+   symbol
+     # chars-limited
+     # ' chars '
+   chars-limited
+     char-limited
+     char-limited chars-limited
+   char-limited
+     a-z A-Z 0-9 - _ . /
+   classname
+     uppercase-alpha-char alphanumeric-char
+   number
+     int
+     int frac
+     int exp
+     int frac exp
+   int
+     digit
+     digit1-9 digits 
+     - digit
+     - digit1-9 digits
+   frac
+     . digits
+   exp
+     e digits
+   digits
+     digit
+     digit digits
+   e
+     e
+     e+
+     e-
+     E
+     E+
+     E-
 ]]]
 
 

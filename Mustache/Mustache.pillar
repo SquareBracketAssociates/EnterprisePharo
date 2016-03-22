@@ -19,9 +19,9 @@ To install Mustache, execute the following expression in a workspace:
 
 [[[
 Gofer it
-	  smalltalkhubUser: 'NorbertHartl' project: 'Mustache';
-	  configuration;
-	  loadStable
+     smalltalkhubUser: 'NorbertHartl' project: 'Mustache';
+     configuration;
+     loadStable
 ]]]
 
 A Mustache expression takes two arguments as input: 
@@ -305,16 +305,16 @@ With such behavior we can easily generate menus and lists in html, for example:
 % To be able to loop over values as shown previously we should define multiple dictionaries as follows:
 
 % [[[
-% 	| template result |
-% 	template := MustacheTemplate on: '{{#person?}} Hi {{name}}! {{/person?}}' .
-% 		result := template 
-% 			value: { 'person?' -> 
-% 					{  
-% 						{'name' -> 'Jon' } asDictionary .
-% 						{'name' -> 'Pilou'} asDictionary} 
-% 					} asDictionary 
-					
-% 	-> ' Hi Jon!  Hi Pilou! '
+%    | template result |
+%    template := MustacheTemplate on: '{{#person?}} Hi {{name}}! {{/person?}}' .
+%       result := template 
+%          value: { 'person?' -> 
+%                {  
+%                   {'name' -> 'Jon' } asDictionary .
+%                   {'name' -> 'Pilou'} asDictionary} 
+%                } asDictionary 
+               
+%    -> ' Hi Jon!  Hi Pilou! '
 
 % ]]]
 
@@ -344,7 +344,7 @@ the value of this argument will be the section with subsituted variables.
       'wrapped' -> [ :render | '<b>',  render value, '</b>' ]  } asDictionary.
  -->
 '<b> Willy is awesome </b>'.
-]]]	
+]]]   
 
 !!! Inverted Sections
 
@@ -384,7 +384,7 @@ That is, they will be rendered if the key doesn't exist, is false, or is an empt
 % | template |
 % template := MustacheTemplate on: 'This is a test for {{ name }}.'.
 % template value: { 'name' -> '&' } asDictionary .
-%  -->	
+%  -->   
 % 'This is a test for &amp;.'
 % ]]]
 
@@ -503,9 +503,9 @@ After that it is just as simple as in the following example:
 % pillarDocument := PRDocumentParser parse: pillarString.
 % htmlString := PRHTMLWriter write: pillarDocument.
 % 'main.template.html' asFileReference mustacheTemplateDuring: [ :template |
-% 	'result.html' asFileReference writeStreamDo: [ :outStream |
-% 		outStream nextPutAll: (template value: { 'contents' -> htmlString} asDictionary )
-% 		]]
+%    'result.html' asFileReference writeStreamDo: [ :outStream |
+%       outStream nextPutAll: (template value: { 'contents' -> htmlString} asDictionary )
+%       ]]
 % ]]]
 
 !! Templates made Easy
