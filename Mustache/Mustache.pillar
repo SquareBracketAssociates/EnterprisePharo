@@ -19,9 +19,9 @@ To install Mustache, execute the following expression in a workspace:
 
 [[[
 Gofer it
-     smalltalkhubUser: 'NorbertHartl' project: 'Mustache';
-     configuration;
-     loadStable
+   smalltalkhubUser: 'NorbertHartl' project: 'Mustache';
+   configuration;
+   loadStable
 ]]]
 
 A Mustache expression takes two arguments as input: 
@@ -43,10 +43,10 @@ In the above example, =={{ name }}== represents the variable ==name==. When the 
 
 [[[
 context := {
-  'name' -> 'Chris'.
-  'value' -> 10000.
-  'taxed_value' -> (10000 - (10000 * 0.4)).
-  'in_ca' -> true } asDictionary
+   'name' -> 'Chris'.
+   'value' -> 10000.
+   'taxed_value' -> (10000 - (10000 * 0.4)).
+   'in_ca' -> true } asDictionary
 ]]]
 
 Given a context object with some bindings, we can evaluate a template
@@ -88,14 +88,14 @@ The following example illustrates this. Since ==age== is not defined, nothing is
 * {{age}}
 * {{company}}' asMustacheTemplate value:
 {
- 'name' -> 'Chris' .
- 'company' -> '<b>GitHub</b>'
+   'name' -> 'Chris' .
+   'company' -> '<b>GitHub</b>'
 } asDictionary
 
- -->
+   -->
 '* Chris
 * 
-* &lt;b&gt;GitHub&lt;/b&gt;
+* &lt;b&gt;GitHub&lt;/b&gt;'
 ]]]
 
 The last line above shows that all variables are HTML escaped by default, e.g. if a binding for that variable contains a ==<== character it will be converted to ==&lt;==. To return unescaped HTML, the 
@@ -110,11 +110,11 @@ The template below shows the different ways in which ==company== is escaped in t
 * {{{company}}}' asMustacheTemplate value:
 {
 'age' -> 33 .
- 'name' -> 'Chris' .
- 'company' -> '<b>GitHub</b>'
+   'name' -> 'Chris' .
+   'company' -> '<b>GitHub</b>'
 } asDictionary
 
- -->
+   -->
 '* Chris
 * 33
 * <b>GitHub</b>
@@ -132,12 +132,12 @@ When a variable is not present in the context the section is not present in the 
 | templateString context |
 templateString := 'Shown.
 {{#number}}
-  Shown too!
+   Shown too!
 {{/number}}'.
 context := { 'foo' -> 'true' } asDictionary.
 (MustacheTemplate on: templateString) value: context 
 
-  -->
+   -->
 'Shown.
 '
 ]]]
@@ -154,12 +154,12 @@ For example, below ==number== is bound to ==true== which renders the text =='Sho
 | templateString context |
 templateString := 'Shown.
 {{#number}}
-  Shown too!
+   Shown too!
 {{/number}}'.
 context := { 'number' -> true } asDictionary.
 (MustacheTemplate on: templateString) value: context
 
- -->
+   -->
 'Shown.
 
   Shown too!
@@ -172,12 +172,12 @@ There is one exception to this rule: when the variable is bound to ==false== the
 | templateString context |
 templateString := 'Shown.
 {{#number}}
-  Shown too!
+   Shown too!
 {{/number}}'.
 context := { 'number' -> false } asDictionary.
 (MustacheTemplate on: templateString) value: context 
 
-  -->
+   -->
 'Shown.
 '
 ]]]
@@ -194,13 +194,13 @@ items in the collection. Keep in mind that Strings are collections of characters
 | templateString context |
 templateString := 'Shown.
 {{#list}}
-  Shown too!
+   Shown too!
 {{/list}}'.
 context := { 'list' -> #(1 2 3) } asDictionary.
 (MustacheTemplate on: templateString) value: context 
 
-  --> 
- 'Shown.
+   --> 
+'Shown.
 
   Shown too!
 
@@ -229,8 +229,8 @@ context := {
 } asDictionary.
 (MustacheTemplate on: templateString) value: context  
 
-  -->
- 'A fine list of numbers
+   -->
+'A fine list of numbers
 
 Number: 1
 
@@ -250,12 +250,11 @@ With such behavior we can easily generate menus and lists in html, for example:
       { 'label' -> 'second' . 'active' -> true } asDictionary.
       { 'label' -> 'third' } asDictionary } } asDictionary.
 
- -->
+   -->
 '<ul>
    <li class="menuEntry">first</li>
    <li class="menuEntry active">second</li>
    <li class="menuEntry">third</li>
-   
 </ul>'
 ]]]
 [[[
@@ -268,7 +267,7 @@ With such behavior we can easily generate menus and lists in html, for example:
       { 'name' -> 'Fun Wih Pharo' } asDictionary }
       } asDictionary
 
- -->
+   -->
 '
    <b>Pharo By Example</b>
 
@@ -327,7 +326,7 @@ We can use Pharo blocks in context objects as well. They are evaluated at the ti
 [[[
 'The alphabet: {{ alphabet }}' asMustacheTemplate 
    value: { 'alphabet' -> [ Character alphabet ] } asDictionary
- -->
+   -->
 The alphabet: abcdefghijklmnopqrstuvwxyz
 ]]]
 
@@ -342,7 +341,7 @@ the value of this argument will be the section with subsituted variables.
    value: { 
       'name' -> 'Willy'.
       'wrapped' -> [ :render | '<b>',  render value, '</b>' ]  } asDictionary.
- -->
+   -->
 '<b> Willy is awesome </b>'.
 ]]]   
 
@@ -356,21 +355,21 @@ That is, they will be rendered if the key doesn't exist, is false, or is an empt
 [[[
 'list{{^ list }} is {{/ list}}displayed' asMustacheTemplate
    value: { 'list' -> false } asDictionary.
- -->
+   -->
 'list is displayed'
 ]]]
 
 [[[
 'list{{^ list }} is {{/ list}}displayed' asMustacheTemplate
    value: { 'list' -> { } } asDictionary.
- -->
+   -->
 'list is displayed' 
 ]]]
 
 [[[
 'list{{^ list }} is {{/ list}}displayed' asMustacheTemplate
    value: { 'list' -> { 1 } } asDictionary.
- -->
+   -->
 'listdisplayed' 
 ]]]
 
@@ -410,7 +409,7 @@ template := 'This is a test for {{> partial }} .' asMustacheTemplate.
 template 
    value: { 'name' -> 'partial template' } asDictionary
    partials: { 'partial' ->  '{{name}} rendering' } asDictionary.
- -->
+   -->
 'This is a test for partial template rendering .'
 ]]]
 
@@ -428,7 +427,7 @@ template
       (Dictionary new
          at: 'partial' put: (MustacheTemplate on: 'including {{name}} item');
          yourself).
- -->
+   -->
 'We can have a list ( [ including first AAA item ]  [ including last BBB item ] ) .' 
 ]]]
 
@@ -446,7 +445,7 @@ template
       'names' -> {
          { 'name' -> 'Username' } asDictionary } } asDictionary
    partials: {'user' ->  '<strong>{{name}}</strong>'} asDictionary
- -->
+   -->
 '<h2>Names</h2>
 
    <strong>Username</strong>
@@ -486,7 +485,7 @@ After that it is just as simple as in the following example:
 'I can use {{name}} easily with {{format}}' asMustacheTemplate 
    value: (NeoJSONReader fromString:
       '{ "name" : "Mustache", "format" : "JSON" }')
- -->
+   -->
 'I can use Mustache easily with JSON' 
 ]]]
 
