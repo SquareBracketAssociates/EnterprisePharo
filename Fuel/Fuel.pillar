@@ -194,8 +194,8 @@ The following example uses the message ==showProgress== to display a progress ba
 'numbers.fuel' asFileReference readStreamDo: [ :aStream | 
    materializedString :=
       (FLMaterializer newDefault 
-            showProgress;
-            materializeFrom: aStream binary) root ].
+         showProgress;
+         materializeFrom: aStream binary) root ].
 ]]]
 
 
@@ -330,7 +330,7 @@ instance variable =='accumulatedLogins'== during materialization. We can impleme
 
 [[[
 User >> fuelAfterMaterialization
-    accumulatedLogins := 0.
+   accumulatedLogins := 0.
 ]]]
 
 !!!Substitution on Serialization
@@ -587,7 +587,7 @@ objectsByFileName := Dictionary new.
 
 (ConfigurationOfFuel project version: oldVersion) load.
 "Need to do it like this otherwise
-  the class is decided at compile time."
+   the class is decided at compile time."
 materializerClass := Smalltalk at: #FLMaterializer.
 
 fileNames do: [ :fileName | 
@@ -598,7 +598,7 @@ fileNames do: [ :fileName |
 
 (ConfigurationOfFuel project version: newVersion) load.
 "Need to do it like this otherwise
-  the class is decided at compile time."
+   the class is decided at compile time."
 serializerClass := Smalltalk at: #FLSerializer.
 
 objectsByFileName keysAndValuesDo: [ :fileName :objects |
