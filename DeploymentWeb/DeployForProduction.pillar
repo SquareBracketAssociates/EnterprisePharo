@@ -54,9 +54,9 @@ When you have a Pharo image with your application inside, the next step is to st
 ZnServer defaultOn: 8080.
 ZnServer default logToStandardOutput.
 ZnServer default delegate 
-  map: 'image' to: MyFirstWebApp new;
-  map: 'redirect-to-image' to: [ :request | ZnResponse redirect: 'image' ];
-  map: '/' to: 'redirect-to-image'. 
+   map: 'image' to: MyFirstWebApp new;
+   map: 'redirect-to-image' to: [ :request | ZnResponse redirect: 'image' ];
+   map: '/' to: 'redirect-to-image'. 
 ZnServer default start
 ]]]
 This script will start an instance of the Zinc Web Server on localhost on the port 8080 and store it as the default instance. We configured the Zinc instance to log on the standard output, we changed the default root (/) handler to redirect to your new /image web app. ==MyFirstWebApp== class handles HTTP requests by implementing the ==#handleRequest:== message.
@@ -124,9 +124,9 @@ You can first activate the embedded HTTP dashboard of monit. We will only allow 
 
 [[[language=monit
 set httpd port 2812 and
-  use address localhost  # only accept connection from localhost
-  allow localhost        # allow localhost to connect to the server and
-  allow admin:monit      # require user 'admin' with password 'monit'
+   use address localhost  # only accept connection from localhost
+   allow localhost        # allow localhost to connect to the server and
+   allow admin:monit      # require user 'admin' with password 'monit'
 ]]]
 
 Do not forget to apply the new configuration:
@@ -177,10 +177,10 @@ Application-specific configuration files must be added to the ==/etc/monit/monit
 alert me@domain.com
 
 check process myapp with pidfile /var/run/myapp.pid
-  start program = "/etc/init.d/myapp start"
-  stop program  = "/etc/init.d/myapp stop"
-  if 5 restarts within 5 cycles
-    then timeout
+   start program = "/etc/init.d/myapp start"
+   stop program  = "/etc/init.d/myapp stop"
+   if 5 restarts within 5 cycles
+      then timeout
 ]]]
 
 With this in place, when a problem occurs, the ''alert'' instruction makes sure ==me@domain.com== is notified by email. The monitoring is described with the check command. We ask monit to check a given PID file. If there is no PID or no process associated to the PID, monit will start the program with the given instruction. The last instruction prevents infinite loops if there is a problem with the script.
@@ -200,14 +200,14 @@ A Pharo image may be running (alive process) but not responding to HTTP requests
 alert me@domain.com
 
 check process myapp with pidfile /var/run/myapp.pid
-  start program = "/etc/init.d/myapp start"
-  stop program  = "/etc/init.d/myapp stop"
-  if failed (url http://localhost:8080/ping
-    and content == "pong"
-    and timeout 10 seconds)
-    then restart
-  if 5 restarts within 5 cycles 
-    then timeout
+   start program = "/etc/init.d/myapp start"
+   stop program  = "/etc/init.d/myapp stop"
+   if failed (url http://localhost:8080/ping
+      and content == "pong"
+      and timeout 10 seconds)
+      then restart
+   if 5 restarts within 5 cycles 
+      then timeout
 ]]]
 
 This configuration will try to connect to the ==/ping== URL on localhost. If monit can not connect, or no answer arrives before 10 seconds, or the content is not exactly ==pong==, monit will restart the application.
@@ -235,20 +235,20 @@ You may wonder why it is a good idea to put a web server like Apache or Nginx in
 Here is a simple Apache configuration that can be used to redirect the incoming traffic (internet) on the default HTTP port (80) to your Pharo web application running on the local interface on the port 8080.
 [[[language=apache
 <VirtualHost *:80>
-  ServerName mydomain.com
-  #ServerAlias anothercooldomain.org
- 
-  ProxyPreserveHost On
-  ProxyRequests Off
-  <Proxy *>
-    Order allow,deny
-    Allow from all
-  </Proxy>
-  ProxyPass / http://127.0.0.1:8080/
-  ProxyPassReverse / http://127.0.0.1:8080/
+   ServerName mydomain.com
+   #ServerAlias anothercooldomain.org
 
-  ErrorLog /var/log/apache2/myapp-error.log
-  CustomLog /var/log/apache2/myapp-access.log combined
+   ProxyPreserveHost On
+   ProxyRequests Off
+   <Proxy *>
+      Order allow,deny
+      Allow from all
+   </Proxy>
+   ProxyPass / http://127.0.0.1:8080/
+   ProxyPassReverse / http://127.0.0.1:8080/
+
+   ErrorLog /var/log/apache2/myapp-error.log
+   CustomLog /var/log/apache2/myapp-access.log combined
 </VirtualHost>
 ]]]
 The first section declares the full server name (including the domain), the second one activates the proxy to forward the traffic to your Pharo web application, and the last one creates dedicated log files.
@@ -262,7 +262,6 @@ server {
 
    access_log  /var/log/nginx/myapp-access.log;
    error_log  /var/log/nginx/myapp-error.log;
- 
 
    location / {
       proxy_set_header  Host $host;
