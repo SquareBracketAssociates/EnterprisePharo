@@ -33,9 +33,9 @@ Or alternatively execute in a workspace:
 
 [[[
 Gofer it
-  url: 'http://smalltalkhub.com/mc/estebanlm/Voyage/main';
-  configurationOf: 'VoyageMongo';
-  loadStable.
+   url: 'http://smalltalkhub.com/mc/estebanlm/Voyage/main';
+   configurationOf: 'VoyageMongo';
+   loadStable.
 ]]]
 
 This will load all that is needed to persist objects into a Mongo database.
@@ -61,8 +61,8 @@ In this text, we shall however use the MongoDB backend. To start a new MongoDB r
 
 [[[
 repository := VOMongoRepository
-  host: 'mongo.db.url'
-  database: 'databaseName'.
+   host: 'mongo.db.url'
+   database: 'databaseName'.
 ]]]
 
 Alternatively, using the message ==host:port:database:== allows to
@@ -146,14 +146,14 @@ repository.  To express this we define the class method ==isVoyageRoot== to retu
 
 [[[
 Association class>>isVoyageRoot
-  ^ true
+   ^ true
 ]]]
 
 We can also define the name of the collection that will be used to store documents with the ==voyageCollectionName== class method. By default, Voyage creates a MongoDB collection for each root class with name the name of the class.
 
 [[[
 Association class>>voyageCollectionName
-  ^ 'Associations'
+   ^ 'Associations'
 ]]]
 
 Then, to save an association, we need to just send it the ==save== message:
@@ -167,11 +167,11 @@ This will generate a collection in the database containing a document of the fol
 
 [[[language=json
 {
-  "_id" : ObjectId("a05feb630000000000000000"),
-  "#instanceOf" : "Association",
-  "#version" : NumberLong("3515916499"),
-  "key" : 'answer',
-  "value" : 42
+   "_id" : ObjectId("a05feb630000000000000000"),
+   "#instanceOf" : "Association",
+   "#version" : NumberLong("3515916499"),
+   "key" : 'answer',
+   "value" : 42
 }
 ]]]
 
@@ -196,7 +196,7 @@ this, we specify that the ==Rectangle== class is a document root as follows:
 
 [[[
 Rectangle class>>isVoyageRoot
-  ^ true
+   ^ true
 ]]]
 
 This allows rectangles to be saved to the database, for example as shown by this snippet:
@@ -210,19 +210,19 @@ This will add a document to the ==rectangle== collection of the database with th
 
 [[[language=json
 {
-  "_id" : ObjectId("ef72b5810000000000000000"),
-  "#instanceOf" : "Rectangle",
-  "#version" : NumberLong("2460645040"),
-  "origin" : {
-    "#instanceOf" : "Point",
-    "x" : 42,
-    "y" : 1
-  },
-  "corner" : {
-    "#instanceOf" : "Point",
-    "x" : 10,
-    "y" : 20
-  }
+   "_id" : ObjectId("ef72b5810000000000000000"),
+   "#instanceOf" : "Rectangle",
+   "#version" : NumberLong("2460645040"),
+   "origin" : {
+      "#instanceOf" : "Point",
+      "x" : 42,
+      "y" : 1
+   },
+   "corner" : {
+      "#instanceOf" : "Point",
+      "x" : 10,
+      "y" : 20
+   }
 }
 ]]]
 
@@ -241,20 +241,20 @@ instead of embedded.
 After we add ==isVoyageRoot== to ==Point class==, and save the rectangle, in the ==rectangle== collection, we get the following document:
 
 [[[language=json
-{
-  "_id" : ObjectId("7c5e772b0000000000000000"),
-  "#instanceOf" : "Rectangle",
-  "#version" : 423858205,
-  "origin" : {
-    "#collection" : "point",
-    "#instanceOf" : "Point",
-    "__id" : ObjectId("7804c56c0000000000000000")
-  },
-  "corner" : {
-    "#collection" : "point",
-    "#instanceOf" : "Point",
-    "__id" : ObjectId("2a731f310000000000000000")
-  }
+ {
+   "_id" : ObjectId("7c5e772b0000000000000000"),
+   "#instanceOf" : "Rectangle",
+   "#version" : 423858205,
+   "origin" : {
+      "#collection" : "point",
+      "#instanceOf" : "Point",
+      "__id" : ObjectId("7804c56c0000000000000000")
+   },
+   "corner" : {
+      "#collection" : "point",
+      "#instanceOf" : "Point",
+      "__id" : ObjectId("2a731f310000000000000000")
+   }
 }
 ]]]
 
@@ -262,19 +262,19 @@ In addition to this, in the collection ==point== we also get the two following e
 
 [[[language=json
 {
-  "_id" : ObjectId("7804c56c0000000000000000"),
-  "#version" : NumberLong("4212049275"),
-  "#instanceOf" : "Point",
-  "x" : 42,
-  "y" : 1
+   "_id" : ObjectId("7804c56c0000000000000000"),
+   "#version" : NumberLong("4212049275"),
+   "#instanceOf" : "Point",
+   "x" : 42,
+   "y" : 1
 }
 
 {
-  "_id" : ObjectId("2a731f310000000000000000"),
-  "#version" : 821387165,
-  "#instanceOf" : "Point",
-  "x" : 10,
-  "y" : 20
+   "_id" : ObjectId("2a731f310000000000000000"),
+   "#version" : 821387165,
+   "#instanceOf" : "Point",
+   "x" : 10,
+   "y" : 20
 }
 ]]]
 
@@ -322,12 +322,12 @@ declare that the collection to be used is ==rectanglesForTest==, or only specify
 
 [[[
 Rectangle class>>mongoContainer
-  <mongoContainer>
+   <mongoContainer>
 
-  ^ VOMongoContainer new
-    collectionName: 'rectanglesForTest';
-    kind: Rectangle;
-    yourself
+   ^ VOMongoContainer new
+      collectionName: 'rectanglesForTest';
+      kind: Rectangle;
+      yourself
 ]]]
 
 The two other methods use the pragma ==<mongoDescription>== and return a Mongo description that is configured with their respective attribute name and kind, as 
@@ -335,22 +335,22 @@ follows:
 
 [[[
 Rectangle class>>mongoOrigin
-  <mongoDescription>
+   <mongoDescription>
 
-  ^ VOMongoToOneDescription new
-    attributeName: 'origin';
-    kind: Point;
-    yourself
+   ^ VOMongoToOneDescription new
+      attributeName: 'origin';
+      kind: Point;
+      yourself
 ]]]
 
 [[[
 Rectangle class>>mongoCorner
-  <mongoDescription>
+   <mongoDescription>
 
-  ^ VOMongoToOneDescription new
-    attributeName: 'corner';
-    kind: Point;
-    yourself
+   ^ VOMongoToOneDescription new
+      attributeName: 'corner';
+      kind: Point;
+      yourself
 ]]]
 
 After resetting the repository with:
@@ -363,16 +363,16 @@ a saved rectangle, now in the ==rectanglesForTest== collection, will look more o
 
 [[[language=json
 {
-  "_id" : ObjectId("ef72b5810000000000000000"),
-  "#version" : NumberLong("2460645040"),
-  "origin" : {
-    "x" : 42,
-    "y" : 1
-  },
-  "corner" : {
-    "x" : 10,
-    "y" : 20
-  }
+   "_id" : ObjectId("ef72b5810000000000000000"),
+   "#version" : NumberLong("2460645040"),
+   "origin" : {
+      "x" : 42,
+      "y" : 1
+   },
+   "corner" : {
+      "x" : 10,
+      "y" : 20
+   }
 }
 ]]]
 
@@ -405,14 +405,14 @@ is achieved as follows:
 
 [[[
 Amount class>>mongoCurrency
-  <mongoDescription>
+   <mongoDescription>
 
-  ^ VOMongoToOneDescription new
-    attributeName: 'currency';
-    accessor: (MAPluggableAccessor
-      read: [ :amount | amount currency abbreviation ]
-      write: [ :amount :value | amount currency: (Currency fromAbbreviation: value) ]);
-    yourself
+   ^ VOMongoToOneDescription new
+      attributeName: 'currency';
+      accessor: (MAPluggableAccessor
+         read: [ :amount | amount currency abbreviation ]
+         write: [ :amount :value | amount currency: (Currency fromAbbreviation: value) ]);
+      yourself
 ]]]
 
 Also, a post-load action can be defined for an attribute or for the containing object, by adding a ==postLoad:== action to the attribute descriptor or the 
@@ -514,14 +514,14 @@ Since MongoDB stores documents of any complexity, it is common that one document
 
 [[[language=json
 {
-  "origin" : {
-    "x" : 42,
-    "y" : 1
-  },
-  "corner" : {
-    "x" : 10,
-    "y" : 20
-  }
+   "origin" : {
+      "x" : 42,
+      "y" : 1
+   },
+   "corner" : {
+      "x" : 10,
+      "y" : 20
+   }
 }
 ]]]
 
@@ -568,8 +568,8 @@ like this:
 
 [[[
 {
-  'name' -> 'John'.
-  'orders' -> { '$gt' : 10 } asDictionary
+   'name' -> 'John'.
+   'orders' -> { '$gt' : 10 } asDictionary
 } asDictionary
 ]]]
 
@@ -600,7 +600,7 @@ To access values embedded in documents with JSON queries, the dot notation is us
 
 [[[
 {
-  'origin.x' -> {'$eq' : 42} asDictionary
+   'origin.x' -> {'$eq' : 42} asDictionary
 } asDictionary
 ]]]
 
@@ -612,16 +612,16 @@ to select all objects whose name is ==John== that have more than ten orders OR o
 
 [[[
 { '$or' :
-  {
-    {
-      'name' -> 'John'.
-      'orders' -> { '$gt': 10 } asDictionary
-    } asDictionary.
-    {
-      'name' -> { '$ne': 'John'} asDictionary.
-      'orders' -> { '$lte': 10 } asDictionary
-    } asDictionary.
-  }.
+   {
+      {
+         'name' -> 'John'.
+         'orders' -> { '$gt': 10 } asDictionary
+      } asDictionary.
+      {
+         'name' -> { '$ne': 'John'} asDictionary.
+         'orders' -> { '$lte': 10 } asDictionary
+      } asDictionary.
+   }.
 } asDictionary.
 ]]]
 
@@ -633,10 +633,10 @@ all documents with a ==fullname.lastName== that starts with the letter ==D==:
 
 [[[
 {
-  'fullname.lastName' -> {
-    '$regexp': '^D.*'.
-    '$options': 'i'.
-  } asDictionary.
+   'fullname.lastName' -> {
+      '$regexp': '^D.*'.
+      '$options': 'i'.
+   } asDictionary.
 } asDictionary.
 ]]]
 
@@ -717,7 +717,7 @@ Paginator>>calculatePageCount
    count := self collectionClass count: self where.
    pages := count / self pageSize.
    count \\ self pageSize > 0
-       ifTrue: [ pages := pages + 1].
+      ifTrue: [ pages := pages + 1].
    ^ count
 ]]]
 
