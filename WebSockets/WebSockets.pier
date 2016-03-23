@@ -43,7 +43,7 @@ and to manage keeping alive the connection using ping and pong frames.
 
 The code implementing Zinc WebSockets resides in a single package called 'Zinc-WebSocket-Core' in the Zinc HTTP Components repository.
 There is also an accompanying 'Zinc-WebSocket-Tests' package containing the unit tests.
-The ==ConfigurationOfZincHTTPComponents== has a group called =='WebSocket'== that you can load separately.
+The ==ConfigurationOfZincHTTPComponents== has a =='WebSocket'== group that you can load separately.
 Here is the loading code snippet:
 
 [[[
@@ -65,7 +65,8 @@ ws://www.example.com:8088/my-app
 Two new schemes are defined, ==ws://== for regular WebSockets and ==wss://== for the secure (TLS/SSL) variant.
 Zinc WebSockets supports the usage of client side WebSockets of both the regular and secure variants.
 Note that the secure variant requires loading the *Zodiac TLS/SSL Pharo project>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/Zodiac*.
-Zinc WebSockets API is really simple, once you opened the socket, you use ==sendMessage:==, ==readMessage== and finally ==close==.
+The Zinc WebSockets API is really simple: you use ==sendMessage:==,
+==readMessage== and finally ==close== on an open socket.
 
 Here is a client-side example talking to a public echo service:
 
@@ -117,7 +118,8 @@ ZnServer default delegate: (ZnWebSocketDelegate handler:
          webSocket sendMessage: message ] repeat ]).
 ]]]
 
-We start a default server on port 1701 and replace its delegate with a ==ZnWebSocketDelegate==. The ==ZnWebSocketDelegate== will pass each correct web socket
+We start a default server on port 1701 and replace its delegate with
+an instance of ==ZnWebSocketDelegate==. This instance will pass each correct web socket
 request on to its handler. In this example, a block is used as handler. The handler is given a new connected ==ZnWebSocket== instance. For the echo service, we
 go into a repeat loop, reading a message and sending it back.
 
@@ -127,7 +129,7 @@ Finally, you can stop the server using:
 ZnServer stopDefault.
 ]]]
 
-Although the code above works, it will eventually encounter two ==NetworkErrors==:
+The code above works but will eventually encounter two ==NetworkErrors==:
 
 [[[
 ConnectionTimedOut
@@ -254,7 +256,8 @@ ZnServer default delegate
 
 Visit *http://localhost:1701/ws-status-client* to see statistics (uptime, memory...) of your running Pharo lively refreshed in a Web page.
 
-What happened is that your Web browser contacted the Zinc server on *http://localhost:1701/ws-status-client* and got back the HTML and Javascript code in ==ZnWebSocketStatusHandler class>>clientHtml==.
+What happened is that your Web browser contacted the Zinc server at
+the URL *http://localhost:1701/ws-status-client* and got back the HTML and Javascript code in ==ZnWebSocketStatusHandler class>>clientHtml==.
 The execution of this Javascript code by the Web browser sent an HTTP request to the Zinc server on *http://localhost:1701/ws-status* asking for an upgrade to up a Web socket connection. Then, the ==ZnWebSocketStatusHandler== object can send status updates through this Web socket connection directly to the Javascript code that refreshes the HTML page content.
 
 
@@ -314,19 +317,20 @@ You can also send chat messages directly from Pharo, much like a moderator:
 !!A Quick Tour of Zinc WebSocket Implementation
 
 All code resides in the =='Zinc-WebSocket-Core'== package.
-The wire level protocol, the encoding and decoding of frames can be found in ==ZnWebSocketFrame==.
+The wire level protocol, the encoding and decoding of frames is in ==ZnWebSocketFrame==.
 The key methods are ==writeOn:== and ==readFrom:== as well as the instance creation protocol. Together with the testing protocol and ==printOn:== these should give enough information to understand the implementation.
 
 ==ZnWebSocket== implements the protocol above frames, either from a server or a client perspective. The key methods are ==readMessage== and ==readFrame==, sending is quite simple.
 Client-side setup can be found on the class side of ==ZnWebSocket==.
-Server-side handling of the setup is implemented in ==ZnWebSocketDelegate==.
-Two exceptions, ==ZnWebSocketFailed== and ==ZnWebSocketClosed== and a shared ==ZnWebSocketUtils== class round out the core code.
+Server-side handling of the setup is implemented in the class ==ZnWebSocketDelegate==.
+Two kinds of exceptions, ==ZnWebSocketFailed== and ==ZnWebSocketClosed== and a shared ==ZnWebSocketUtils== class round out the core code.
 
 !!Live Demo
 
 There is a live demo available at *http://websocket.stfx.eu* with the basic Zinc-WebSocket demos: echo, status & chatroom.
-Have a look at ==ZnWebSocketDelegate class>>installExamplesInServer:== as a starting point to learn how these demos were set up.
-Setting up a production demo is complicated by the fact that most proxies and load balancers, most notably the market leader Apache, do not (yet) deal correctly with the WebSocket protocol. It is thus easier to organize things such that your client directly talk to your Smalltalk image.
+A starting point to learn how these demos were set up is
+the method ==installExamplesInServer:== in the ==ZnWebSocketDelegate class==.
+Setting up a production demo is complicated by the fact that most proxies and load balancers, most notably the market leader Apache, do not (yet) deal correctly with the WebSocket protocol. It is thus easier to organize things such that your client directly talks to your Smalltalk image.
 
 
 !!Conclusion
