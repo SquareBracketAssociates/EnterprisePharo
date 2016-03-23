@@ -456,7 +456,7 @@ Zinc HTTP Components currently implements and enforces the following limits:
 - maximumEntitySize (16Mb), the size of incoming entities
 - maximumNumberOfDictionaryEntries (256), which is used in headers, URLs and some entities
 
-Of course these values may be customized if one need to.
+Of course these values may be customized if one needs to.
 
 Also, Zn implements two important techniques used by HTTP servers when they send entity bodies to clients: Gzip encoding and chunked transfer encoding. The
 first one adds compression. The second one is used when the size of an entity is not known up front. Instead chunks of certain sizes are sent until the entity is complete.
@@ -509,10 +509,11 @@ The service will allow arbitrary *JSON>http://www.json.org/* objects to be store
 !!!The Server Code
 
 A proper implementation should best use a couple of classes. However for brevity, the following implementation is written in a workspace, not using any classes. It requires STON (see
-Chapter *STON>../STON/STON.pillar@cha:ston*) and starts by creating one global variable to hold the stored objects. It is a standard dictionary mapping string URIs to objects.
+Chapter *STON>../STON/STON.pillar@cha:ston*) and starts by creating two global variables to hold the stored objects and the last ID used. The former is a standard dictionary mapping string URIs to objects.
 
 [[[
 JSONStore := Dictionary new.
+ServerLastId := 0.
 ]]]
 
 The server implementation uses two helper objects: a ==jsonEntityBuilder== and a ==mapper==. Both make use of block closures.
@@ -545,8 +546,7 @@ mapper := {
          ok: (jsonEntityBuilder value: JSONStore keys asArray) ].
 "----------------------------------------------------------------"
    [ :request |
-      (request uri hasPath and: [ request method = #GET ])
-         and: [ request uri pathSegments size = 1 ] ]
+      request uri pathSegments size = 1 and: [ request method = #GET ] ]
    ->
    [ :request | | uri |
       uri := request uri pathPrintString.
@@ -562,16 +562,16 @@ mapper := {
          and: [ request contentType = ZnMimeType applicationJson ] ]
    ->
    [ :request | | uri |
-      uri := '/', (JSONStore size + 1) asString.
+      uri := '/', (ServerLastId := ServerLastId + 1) asString.
       JSONStore at: uri put: (STON fromString: request contents).
-     (ZnResponse created: uri)
+      (ZnResponse created: uri)
          entity: (jsonEntityBuilder value: 'Created ', uri);
          yourself ].
 "----------------------------------------------------------------"
    [ :request |
-      ((request uri hasPath and: [ request method = #PUT ])
-      and: [ request uri pathSegments size = 1 ])
-      and: [ request contentType = ZnMimeType applicationJson ]]
+      (request uri pathSegments size = 1
+         and: [ request method = #PUT ])
+         and: [ request contentType = ZnMimeType applicationJson ]]
    ->
    [ :request | | uri |
       uri := request uri pathPrintString.
@@ -584,10 +584,9 @@ mapper := {
          ifFalse: [ ZnResponse notFound: uri ] ].
 "----------------------------------------------------------------"
    [ :request |
-      (request uri hasPath
-         and: [ request method = #DELETE ])
-         and: [ request uri pathSegments size = 1 ] ]
-  ->
+      request uri pathSegments size = 1
+         and: [ request method = #DELETE ] ]
+   ->
    [ :request | | uri |
       uri := request uri pathPrintString.
       (JSONStore removeKey: uri ifAbsent: [ nil ])
@@ -718,4 +717,4 @@ Now we can hold the same conversation as above, only in this case in terms of re
 
 !!Conclusion
 
-Zinc HTTP Components was written with the explicit goal of allowing users to explore the implementation. The test suite contains many examples that can serve as learning material. This carefulness while writing Zinc HTTP Components code now enable users customize it to their need or build on top of it. Zinc is indeed an extremely malleable piece of software.
+Zinc HTTP Components was written with the explicit goal of allowing users to explore the implementation. The test suite contains many examples that can serve as learning material. This carefulness while writing Zinc HTTP Components code now enable users to customize it to their need or to build on top of it. Zinc is indeed an extremely malleable piece of software.
