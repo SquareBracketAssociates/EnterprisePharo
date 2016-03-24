@@ -271,7 +271,7 @@ With this simple configuration, you will get a more secure and flexible configur
 
 !! Conclusion
 
-In this chapter we have seen how to deploy your Pharo web application. We treated deciding on where to deploy it and what operating system to use, before talking about how to deploy and run it. Lastly we talked about and how to monitor crashes with monit and putting a HTTP server in front of your application.
+In this chapter we have seen how to deploy your Pharo web application. We treated deciding on where to deploy it and what operating system to use, before talking about how to deploy and run it. Lastly we discussed how to monitor crashes with monit and putting a HTTP server in front of your application.
 
 This chapter ends the Enterprise Pharo book. We hope you enjoyed learning about this set of libraries and frameworks, and that they prove useful for you. We wish you success!
 
