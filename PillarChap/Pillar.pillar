@@ -10,16 +10,16 @@ This chapter describes Pillar version 2.
 !!Introduction
 
 *Pillar>http://www.smalltalkhub.com/#!/~Pier/Pillar* is a markup syntax and associated tools to write and generate documentation, books (such as this one) and slide-based presentations. The Pillar
-screenshot below (see Figure *@voyageDocExample*) shows the HTML version of chapter *@cha:voyage*.
+screenshot in Figure *@voyageDocExample* shows the HTML version of chapter *@cha:voyage*.
 
-+An example Pillar output>file://figures/voyageDocExample-small.png|label=voyageDocExample|width=30+
++An example Pillar output>file://figures/voyageDocExample-small.png|label=voyageDocExample|width=60+
 
 Pillar has many features:
-- simple markup syntax with references, tables, pictures, captions...);
+- simple markup syntax with references, tables, pictures, captions...;
 - export to HTML, LaTeX, Markdown, AsciiDoc and Pillar itself;
 - export presentations to Beamer and Deck.js;
-- customization of the export through a dedicated *STON>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/STON* configuration file;
-- support of templates using the *Mustache>http://smalltalkhub.com/#!/~NorbertHartl/Mustache* templating engine;
+- customization of the export through a dedicated STON configuration file (see chapter *@cha:ston*);
+- support templates using the Mustache engine (see chapter *@cha:mustache*);
 - syntax-highlighting of generated code blocks (not yet in LaTeX);
 - configurable numbering of section titles and figures;
 - ...
@@ -38,8 +38,7 @@ The original author of Pillar and current main contributor is *Damien Cassou>htt
 
 The past contributors are Ben Coman, Stéphane Ducasse, Guillermo Polito, Lukas Renggli (original author of Pier from which Pillar has been extracted), Benjamin van Ryseghem and Cyril Ferlicot-Delbecque.
 
-+This project is sponsored by ESUG: *http://www.esug.org*>file://figures/esug-logo.jpg|width=20|label=esugsponsoring+
-
+This project is sponsored by *ESUG>http://www.esug.org*.
 
 !!!Editors
 
