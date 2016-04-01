@@ -5,7 +5,7 @@
 @cha:pillar
 
 
-This chapter describes Pillar version 2.
+This chapter describes Pillar version 2. Pillar is sponsored by *ESUG>http://www.esug.org*.
 
 !!Introduction
 
@@ -20,25 +20,19 @@ Pillar has many features:
 - export presentations to Beamer and Deck.js;
 - customization of the export through a dedicated STON configuration file (see chapter *@cha:ston*);
 - support templates using the Mustache engine (see chapter *@cha:mustache*);
-- syntax-highlighting of generated code blocks (not yet in LaTeX);
+- syntax-highlighting of generated code blocks;
 - configurable numbering of section titles and figures;
 - ...
 
 Pillar has also:
-- a 5-minutes tutorial
-- a documentation (in progress)
 - a good test coverage (94% with more than a 2100 executed tests)
 - a *continuous integration job>https://ci.inria.fr/pharo-contribution/job/Pillar*
 - a command-line interface
-- several existing use cases (see Section *@pillarUSERS*)
 - a *cheat sheet>http://pillarhub.pharocloud.com/hub/pillarhub/pillarcheatsheet*
+- many users (see below)
 
 
-The original author of Pillar and current main contributor is *Damien Cassou>http://damiencassou.seasidehosting.st*.
-
-The past contributors are Ben Coman, Stéphane Ducasse, Guillermo Polito, Lukas Renggli (original author of Pier from which Pillar has been extracted), Benjamin van Ryseghem and Cyril Ferlicot-Delbecque.
-
-This project is sponsored by *ESUG>http://www.esug.org*.
+The original author of Pillar and current main contributor is Damien Cassou. The past contributors are Ben Coman, Stéphane Ducasse, Guillermo Polito, Lukas Renggli (original author of Pier from which Pillar has been extracted), Benjamin van Ryseghem and Cyril Ferlicot-Delbecque.
 
 !!!Editors
 
@@ -54,17 +48,10 @@ These editors have dedicated plugins for Pillar:
 
 Pillar is used in several projects. You can have a look at these projects for real use cases of Pillar.
 
-- *the Enterprise Pharo book>https://ci.inria.fr/pharo-contribution/job/PharoForTheEnterprise/*
-- *the Updated Pharo by Example>https://github.com/SquareBracketAssociates/UpdatedPharoByExample*
-- *the Pharo MOOC>https://github.com/SquareBracketAssociates/PharoMooc*
-- *the Pharo Laser Game Tutorial>https://github.com/SquareBracketAssociates/PharoLaserGameTutorial*
-- *the Pharo Web Stack>https://github.com/SquareBracketAssociates/PharoWebStack*
-- *the Marina CMS>https://github.com/tide-framework/marina*
+- *this book>http://books.pharo.org/enterprise-pharo/*
+- *the Updated Pharo by Example book>https://github.com/SquareBracketAssociates/UpdatedPharoByExample*
+- *the Pharo MOOC>https://github.com/SquareBracketAssociates/PharoMooc* (Massive open online course)
 - *the PillarHub open-access shared blog>http://pillarhub.pharocloud.com*
-- *the Pier CMS>http://piercms.com*
-- *the Pillar documentation itself>https://ci.inria.fr/pharo-contribution/job/EnterprisePharoBook/lastSuccessfulBuild/artifact/PillarChap/*
-- *the Spec documentation>https://github.com/SpecForPharo/documentation*
-- *the Pharo sound tutorial>https://github.com/xmessner/PharoSoundTutorial*
 
 !!5 Minutes Tutorial
 
@@ -79,10 +66,10 @@ cd mydocument
 !!!Installing and Exporting your First Document
 
 You first need to get Pillar. For that, I recommend
-*downloading executing this script>https://raw.githubusercontent.com/pillar-markup/book-skeleton/master/download.sh* in the base directory if you are on an Unix environment.
+*downloading and executing this script>https://raw.githubusercontent.com/pillar-markup/book-skeleton/master/download.sh* in the base directory if you are on an Unix environment.
 
-If you are on Windows you can get a new Pillar image by extracting the archive build by the *Continuous Integration>https://ci.inria.fr/pharo-contribution/job/Pillar/PHARO=40,VERSION=stable,VM=vm/lastSuccessfulBuild/artifact/Pillar.zip*.
-Then you can get a Pharo *Virtual Machine for windows>http://files.pharo.org/get-files/40/pharo-win-stable.zip*.
+If you are on Windows you can get a new Pillar image by extracting *an archive>https://ci.inria.fr/pharo-contribution/job/Pillar/PHARO=40,VERSION=stable,VM=vm/lastSuccessfulBuild/artifact/Pillar.zip*.
+Then you need a Pharo *Virtual Machine for Windows>http://files.pharo.org/get-files/40/pharo-win-stable.zip*.
 
 Then, you can check everything is working fine by creating a ==first.pillar== file with this content:
 
@@ -102,18 +89,18 @@ Or in windows open a new shell (==Windows key + r== then type ==cmd==) then run:
 Pharo.exe Pillar.image pillar export --to=html first.pillar
 ]]]
 
-This should generate a ''output.html'' file you can open in a web browser. This content of this file will be something like:
+This should generate an ''output.html'' file you can open in a web browser. The content of this file will be something like:
 
 [[[language=html
 <!DOCTYPE html>
 <html lang="en">
    <head>
-      <title>No title</title>
+      <title></title>
       [...]
    </head>
    <body>
-      <div class="container">
-         <h1>Hello World</h1>
+      <div class="container"> [...]
+         <h1>I. Hello World</h1>
       </div>
      [...]
    </body>
@@ -122,7 +109,7 @@ This should generate a ''output.html'' file you can open in a web browser. This 
 
 !!!Configuring a Document
 
-As you can see, there is no title in the generated ''output.html'' file. This is because we did not specify any. To specify a title, we have to add it with a configuration
+As you can see, there is no document title in the generated ''output.html'' file. This is because we did not specify any. To specify a title, we have to add it with a configuration
 at the beginning of the ''first.pillar'' file:
 
 [[[language=pillar
@@ -156,25 +143,25 @@ you should now get a web page with a title:
 ]]]
 
 Another way to achieve the same is to use a dedicated configuration file. This configuration is typically named ==pillar.conf== and is written in the
-*STON>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/STON* format (see Section *@configuring* for more information about the configuration file). Create your
+STON format (see Section *@configuring* for more information about the configuration file). Create your
 first ==pillar.conf== file:
 
 [[[language=ston
 {
-   "title" : "My first document while reading the 5 minutes Pillar tutorial"
+   "title" : "My first document from pillar.conf"
 }
 ]]]
 
-Meta-information specified in Pillar files take precedence over configuration in the ==pillar.conf== file.
+Meta-information specified in Pillar files take precedence over configuration in the ==pillar.conf== file. To see the new title, you thus have to remove the one in ==first.pillar==.
 
 !!!Output and Multi Files
 
-When you export files you have the possibility to export all your files into a specific directory.
-In order to do that you have to add a parameter into your configuration.
+You have the possibility to export all your files into a specific directory.
+To do that you have to add a parameter to ==pillar.conf==:
 
 [[[language=ston
 {
-   "title" : "My first document while reading the 5 minutes Pillar tutorial",
+   "title" : "My first document from pillar.conf",
    "outputDirectory" : "result"
 }
 ]]]
@@ -185,12 +172,12 @@ You have two ways to export files:
 # separate output files
 # as one output file
 
-By default Pillar export all the input files as one.
+By default Pillar exports all the input files as one.
 If you create a file ''second.pillar'' that contains ==I am a second file== you can add a parameter ''inputFiles'' to your configuration.
 
 [[[language=ston
 {
-   "title" : "My first document while reading the 5 minutes Pillar tutorial",
+   "title" : "My first document from pillar.conf",
    "outputDirectory" : "result",
    "inputFiles" : [ "first.pillar", "second.pillar" ]
 }
@@ -201,28 +188,24 @@ If you export this with the command:
 
 [[[language=bash
 ./pillar export --to=html
-
-#Or in windows:
-
-Pharo.exe Pillar.image pillar export --to=html
 ]]]
 
 You will get a file ''result/output.html'' that contains:
 
 [[[language=html
-<h1>I.  Hello World</h1>
+<h1>I. Hello World</h1>
 <p>
 I am a second file
 </p>
 ]]]
 
-If you want to change the name of the file you can use the parameter ''outputFile'' as we used ''outputDirectory''.
+If you want to change the name of the output file you can use the parameter ''outputFile''.
 
 If you want separate files you can add a parameter:
 
 [[[language=ston
 {
-   "title" : "My first document while reading the 5 minutes Pillar tutorial",
+   "title" : "My first document from pillar.conf",
    "outputDirectory" : "result",
    "inputFiles" : [ "first.pillar", "second.pillar" ],
    "separateOutputFiles" : true
@@ -256,22 +239,21 @@ If you want to tweak the content of the exported file, for example to reference 
 Then, you need to reference this template from your configuration file. So, edit your ==pillar.conf== configuration file:
 
 [[[language=ston
-{
-   "year" : 2014,
+{  [...]
+   "year" : 2016,
    "configurations" : {
       "html": {
          "outputType" : #html,
          "template" : "myhtml.template"
-     }
+      }
    }
 }
 ]]]
 
-Now, add your name to ==first.pillar== :
+Now, write your name in ==first.pillar== :
 
 [[[language=pillar
 {
-   "title": "My first document while reading the 5 minutes Pillar tutorial",
    "author": "Damien Cassou"
 }
 
@@ -282,35 +264,30 @@ Finally, compile ==first.pillar== one last time
 
 [[[language=bash
 ./pillar export --to=html first.pillar
-
-#Or in windows:
-
-Pharo.exe Pillar.image pillar export --to=html first.pillar
 ]]]
 
-to generate a ==output.html== that will contain:
+to generate a file containing:
 
 [[[language=html
 <!DOCTYPE html>
 <html lang="en">
    <head>
-      <title>My first document while reading the 5 minutes Pillar tutorial</title>
+      <title>My first document from pillar.conf</title>
    </head>
    <body>
-      <div class="container">
+      <div class="container"> [...]
          <h1>Hello World</h1>
       </div>
       <footer>
-         <p>Damien Cassou, 2014</p>
+         <p>Damien Cassou, 2016</p>
       </footer>
    </body>
 </html>
 ]]]
 
-Look at how the HTML template references ==title==, ==author== and ==year==. This variables are referenced by enclosing them in 3 curly braces. The templating
-engine that transforms your templates in documents is *Mustache>http://smalltalkhub.com/#!/~NorbertHartl/Mustache*. As you can see, I decided to put the author
-and title of the document in the ==first.pillar== file whereas the year is specified in ==pillar.conf==: this is arbitrary and you can do whatever suits you
-best, the only difference being that the ==pillar.conf== file applies to all Pillar files of the project.
+Look at how the HTML template (==myhtml.template==) references ==title==, ==author== and ==year==. These variables are referenced by enclosing them in 3 curly braces. The templating
+engine that transforms your templates in documents is Mustache (see chapter *@mustache*. As you can see, I decided to put the author of the document in the ==first.pillar== file whereas the year and title are specified in ==pillar.conf==: this is arbitrary and you can do whatever suits you
+best: the differences being that the ==pillar.conf== file applies to all Pillar files of the project and that file meta-information takes precedence.
 
 This concludes our 5 minutes tutorial.
 
@@ -329,7 +306,7 @@ For example, the following file,
 
 [[[language=pillar
 {
-   "title": "My first document while reading the 5 minutes Pillar tutorial",
+   "title": "My first document from pillar.conf",
    "author": "Damien Cassou"
 }
 
