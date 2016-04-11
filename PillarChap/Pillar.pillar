@@ -286,7 +286,7 @@ to generate a file containing:
 ]]]
 
 Look at how the HTML template (==myhtml.template==) references ==title==, ==author== and ==year==. These variables are referenced by enclosing them in 3 curly braces. The templating
-engine that transforms your templates in documents is Mustache (see chapter *@mustache*. As you can see, I decided to put the author of the document in the ==first.pillar== file whereas the year and title are specified in ==pillar.conf==: this is arbitrary and you can do whatever suits you
+engine that transforms your templates in documents is Mustache (see chapter *@cha:mustache*. As you can see, I decided to put the author of the document in the ==first.pillar== file whereas the year and title are specified in ==pillar.conf==: this is arbitrary and you can do whatever suits you
 best: the differences being that the ==pillar.conf== file applies to all Pillar files of the project and that file meta-information takes precedence.
 
 This concludes our 5 minutes tutorial.
