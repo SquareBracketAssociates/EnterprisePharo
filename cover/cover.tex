@@ -1,0 +1,80 @@
+%!TEX TS-program = lualatex
+% -*- mode: LaTeX; -*-
+\documentclass[11pt,english]{../support/latex/sbabook/sbabook}
+\let\wholebook=\relax
+
+\usepackage{import}
+\subimport{../support/latex/}{common.tex}
+
+\begin{document}
+\sffamily
+\pagestyle{titlingpage}
+\thispagestyle{titlingpage} % \pagestyle does not work on the first one…
+
+\emph{Enterprise Pharo} is the third volume of the series, following
+\emph{Pharo by Example} and \emph{Deep into Pharo}. It covers
+enterprise libraries and frameworks, and in particular those useful
+for doing web development.
+
+\begin{tabular}{@{\quad}r@{\quad}l@{}}
+   & \textbf{Simple Web Applications}                 \\
+1  & Teapot                                           \\
+2  & Building and Deploying a Small Web Application   \\[\smallskipamount]
+   & \textbf{HTTP}                                    \\
+3  & Character Encoding and Resource Meta Description \\
+4  & Zinc HTTP: The Client Side                       \\
+5  & Zinc HTTP: The Server Side                       \\
+6  & WebSockets                                       \\[\smallskipamount]
+   & \textbf{Data}                                    \\
+7  & Handling CSV with NeoCSV                         \\
+8  & JSON                                             \\
+9  & STON: a Smalltalk Object Notation                \\
+10 & Serializing Complex Objects with Fuel            \\
+11 & Persisting Objects with Voyage                   \\[\smallskipamount]
+   & \textbf{Presentation}                            \\
+12 & Mustache Templates for Pharo                     \\
+13 & Cascading Style Sheets with RenoirSt             \\
+14 & Documenting and Presenting with Pillar           \\
+15 & Generate PDF Documents with Artefact             \\[\smallskipamount]
+   & \textbf{Deployment}                              \\
+16 & Deploying a Pharo Web Application in Production  \\
+
+\end{tabular}
+
+\paragraph{This book is a collective work}
+The editors have curated and reformatted the chapters from blog posts
+and tutorials written by many people. Here is the complete list of contributors
+to the book, in alphabetical order:
+
+\small
+
+\begin{multicols}{3}
+Olivier Auverlot\\
+Sven Van Caekenberghe\\
+Damien Cassou\\
+Gabriel Cotelli\\
+Christophe Demarey\\
+Martín Dias\\
+Stéphane Ducasse\\
+Luc Fabresse\\
+Johan Fabry\\
+Cyril Ferlicot Delbecque\\
+Norbert Hartl\\
+Guillaume Larchevêque\\
+Max Leske\\
+Esteban Lorenzano\\
+Attila Magyar\\
+Mariano Martinez-Peck\\
+Damien Pollet\\
+\end{multicols}
+
+
+
+\end{document}
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
