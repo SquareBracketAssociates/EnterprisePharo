@@ -70,7 +70,7 @@ ZnClient new
    formAt: 'title' put: 'Pharo For The Enterprise'; put
 ]]]
 
-You can also list the contents using *http://localhost:1701/books*
+You can also list the contents using *http://localhost:8080/books*
 For a more complete example, study the 'Teapot-Library-Example' package.
 
 Now that you get the general feel of Teapot, let us see the key concepts.
