@@ -5,7 +5,7 @@
 @cha:neoCSV
 
 
-CSV (Comma Separated Values) is a popular data-interchange format. This chapter presents NeoCSV, a library to parse and export CSV files.
+CSV (Comma-Separated Values) is a popular data-interchange format. This chapter presents NeoCSV, a library to parse and export CSV files.
 This chapter has originally been written by Sven Van Caekenberghe the author of NeoCSV and many other nicely designed Pharo libraries.
 
 !!NeoCSV
@@ -36,7 +36,7 @@ from Smalltalk objects. The goals of NeoCSV are:
 -to be efficient (both in time and space); and
 -to be flexible and non-intrusive.
 
-To load NeoJSON, evaluate the following or use the Configuration Browser:
+To load NeoCSV, evaluate the following or use the Configuration Browser:
 
 [[[
 Gofer it
@@ -45,7 +45,7 @@ Gofer it
    loadStable.
 ]]]
 
-To use either the reader or the writer, you instantiate them on a character stream and use standard stream access messages. Here are two examples:
+To use either the reader or the writer, you instantiate them on a character stream and use standard stream access messages.
 
 The first example reads a sequence of data separated by ==,== and containing line breaks. The reader produces arrays corresponding to the lines with the data (the ==withCRs== method converts backslashes to new lines).
 
@@ -115,7 +115,7 @@ There are 3 mechanisms that the writer may use to write a field (in increasing o
 ;object
 :not quoting it and using ==printOn:== directly on the output stream.
 
-Obviously, when disabling quoting, you have to be sure your values do not contain embedded separators or line endings. If you are writing arrays of numbers for example, this would be the fastest way to do it:
+When disabling quoting, you have to be sure your values do not contain embedded separators or line endings. If you are writing arrays of numbers for example, this would be the fastest way to do it:
 
 [[[
 neoCSVWriter
@@ -264,7 +264,9 @@ Array streamContents: [ :out |
          addSymbolField;
          addIntegerField;
          addFieldConverter: [ :x | x = #true ];
-         do: [ :each | each third < 1000 ifTrue: [ out nextPut: each ] ] ] ].
+         do: [ :each |
+            each third < 1000
+               ifTrue: [ out nextPut: each ] ] ] ].
 ]]]
 
 !! Conclusion
@@ -272,3 +274,7 @@ Array streamContents: [ :out |
 NeoCSV provides a good support to emit and import comma-separated data.
 
 %  LocalWords:  accessor
+
+% Local Variables:
+% compile-command: "cd .. && ./pillar export --to=\"LaTeX by chapter\" NeoCSV/NeoCSV.pier && bash pillarPostExport.sh"
+% End:
