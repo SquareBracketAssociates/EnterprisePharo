@@ -11,7 +11,7 @@ JSON converting to and from Smalltalk objects. The library is developed and acti
 !!An Introduction to JSON
 
 JSON is a lightweight text-based open standard designed for human-readable data interchange. It was derived from the JavaScript scripting language for
-representing simple data structures and associative arrays, called objects. Despite its relationship to JavaScript, it is language-independent, with parsers
+representing simple data structures and associative arrays, called objects. Despite its relationship to JavaScript, it is language independent, with parsers
 available for many languages.
 
 @@note References: *http://www.json.org/*, *http://en.wikipedia.org/wiki/Json* and *http://www.ietf.org/rfc/rfc4627.txt?number=4627*.
@@ -66,10 +66,10 @@ Obviously, the primitive types are mapped to corresponding Pharo classes. While 
 
 While writing:
 
-- Pharo numbers are converted to floats, except for instances of ==Integer== that become JSON integers;
-- Pharo strings become JSON strings;
-- Pharo booleans become JSON booleans;
-- Pharo ==nil== becomes JSON ==null==.
+- Pharo numbers are converted to floats, except for instances of ==Integer== that become JSON integers
+- Pharo strings become JSON strings
+- Pharo booleans become JSON booleans
+- Pharo ==nil== becomes JSON ==null==
 
 
 !! Generic Mode
@@ -155,7 +155,20 @@ String streamContents: [ :stream |
       nextPut: (Array with: 1@3 with: -1@3) ].
 ]]]
 
-Collections are handled automatically, like in the generic case.
+Collections are handled automatically, like in the generic case. As a result, the above expression returns a string containing:
+
+[[[language=json
+[
+   {
+      "x" : 1,
+      "y" : 3
+   },
+   {
+      "x" : -1,
+      "y" : 3
+   }
+]
+]]]
 
 When reading, a mapping is used to specify what Pharo object to instantiate and how to instantiate it. Here is a very simple case, reading a map as a point:
 
@@ -170,19 +183,23 @@ Since JSON lacks a universal way to specify the class of an object, we have to s
 To define the schema of the elements in a list, write something like the following:
 
 [[[
-(NeoJSONReader on: ' [{ "x" : 1, "y" : 2 }, { "x" : 3, "y" : 4 }] ' readStream)
+(NeoJSONReader
+      on: ' [{ "x" : 1, "y" : 2 },
+             { "x" : 3, "y" : 4 }] ' readStream)
    mapInstVarsFor: Point;
-   for: #ArrayOfPoints customDo: [ :mapping | mapping listOfElementSchema: Point ];
+   for: #ArrayOfPoints
+      customDo: [ :mapping | mapping listOfElementSchema: Point ];
    nextAs: #ArrayOfPoints.
 ]]]
 
-The above expression returns an array of 2 points. As you can see, the argument to ==nextAs:== can be a class (as seen previously) be also any symbol, provided the mapper knows about it.
+The above expression returns an array of 2 points. As you can see, the argument to ==nextAs:== can be a class (as seen previously) or any symbol, provided the mapper knows about it.
 
 To get an ==OrderedCollection== instead of an array as output, you should use the ==listOfType:== message:
 
 [[[
 (NeoJSONReader on: ' [ 1, 2 ] ' readStream)
-   for: #Collection customDo: [ :mapping | mapping listOfType: OrderedCollection ];
+   for: #Collection
+      customDo: [ :mapping | mapping listOfType: OrderedCollection ];
    nextAs: #Collection.
 ]]]
 
@@ -203,7 +220,9 @@ You can go beyond pre-defined messages and specify a decoding block:
 [[[
 (NeoJSONReader on: ' "2015/06/19" ' readStream)
    for: DateAndTime
-      customDo: [ :mapping | mapping decoder: [ :string | DateAndTime fromString: string ] ];
+      customDo: [ :mapping |
+         mapping decoder: [ :string |
+            DateAndTime fromString: string ] ];
    nextAs: DateAndTime.
 ]]]
 
@@ -212,7 +231,8 @@ The above expression returns an instance of ==DateAndTime==. The message ==encod
 [[[
 String streamContents: [ :stream |
    (NeoJSONWriter on: stream)
-      for: DateAndTime customDo: [ :mapping | mapping encoder: #printString ];
+      for: DateAndTime
+         customDo: [ :mapping | mapping encoder: #printString ];
       nextPut: DateAndTime now ].
 ]]]
 
@@ -249,3 +269,7 @@ The above expression returns the =='{"x":null,"y":null}'== string.
 NeoJSON is a powerful library to convert objects. Sven, the author of NeoJSON, also developed STON (Smalltalk object notation) which is closer to Pharo syntax and handles cycles and references between serialized objects.
 
 %  LocalWords:  Caekenberghe
+
+% Local Variables:
+% compile-command: "cd .. && ./pillar export --to='LaTeX by chapter' NeoJSON/NeoJSON.pier && bash pillarPostExport.sh"
+% End:
