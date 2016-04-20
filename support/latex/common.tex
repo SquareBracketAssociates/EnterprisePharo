@@ -34,7 +34,11 @@
 \usepackage{url} % define and apply style to URLs
 \def\url@sfstyle{\def\UrlFont{\sf}}
 \urlstyle{sf}
-\usepackage[unicode,breaklinks,hidelinks]{hyperref} % undecorated hyperlinks
+\usepackage[
+  unicode,
+  breaklinks, hidelinks, % undecorated hyperlinks
+  bookmarks, bookmarksdepth = subsection
+]{hyperref}
 
 % Lulu only supports PDF format version 1.3
 \pdfminorversion=3
