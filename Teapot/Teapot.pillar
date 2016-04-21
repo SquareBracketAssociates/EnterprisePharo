@@ -27,7 +27,7 @@ Teapot on
 
 Opening a browser on *http://localhost:1701/welcome* results in the following:
 
-+Go to the Teapot welcome at *http://localhost:1701/welcome*>file://figures/TeapotWelcome.png|width=70|label=TeapotWelcome+
++The Teapot welcome at *http://localhost:1701/welcome*>file://figures/TeapotWelcome.png|width=70|label=TeapotWelcome+
 
 
 !!!Differences between Teapot and other Web Frameworks
