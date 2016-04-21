@@ -508,7 +508,7 @@ returned by a previous query and using that id to match another object. An examp
 [ :each | (each at: 'color.__id') = refCol voyageId ]
 ]]]
 
-!!!!Using the ==at:== Message to Access Embedded Documents
+!!!!Using the at: Message to Access Embedded Documents
 
 Since MongoDB stores documents of any complexity, it is common that one document is composed of several embedded documents, for example:
 
@@ -532,7 +532,7 @@ example, to select all the rectangles whose origin x value is equal to 42, the q
 [ :each | (each at: 'origin.x') = 42 ]
 ]]]
 
-!!!!Using the ==where:== Message to Perform Javascript Comparisons
+!!!!Using the where: Message to Perform Javascript Comparisons
 
 To perform queries which are outside the capabilities of MongoQueries or even the MongoDB query language, MongoDB provides a way to write queries directly in
 Javascript using the ==$where== operand. This is also possible in MongoQueries by sending the ==where:== message:
