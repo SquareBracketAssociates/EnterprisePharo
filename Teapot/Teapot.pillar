@@ -207,7 +207,7 @@ Teapot on
 
 Figure *@plainText* shows the result for the ==/sometext== route.
 
-+Teapot producing plain text *http://localhost:1701/sometext*.>file://figures/plainText.png|width=70|label=plainText+
++Teapot producing plain text *http://localhost:1701/sometext*>file://figures/plainText.png|width=70|label=plainText+
 
 If the NeoJSON package is loaded (See
 chapter  *NeoJSON>../NeoJSON/NeoJSON.pillar@cha:JSON*.) the ==jsonlist== transformer will return a JSON array:

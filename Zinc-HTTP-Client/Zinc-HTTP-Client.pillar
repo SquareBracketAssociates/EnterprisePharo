@@ -16,7 +16,7 @@ HTTP, short for Hypertext Transfer Protocol, functions as a request-response pro
 is layered on top of a reliable transport such as a TCP socket stream. The most important standard specification document describing HTTP version 1.1 is
 *RFC 2616>http://tools.ietf.org/html/rfc2616*. As usual, a good starting point for learning about HTTP is its *Wikipedia article>http://en.wikipedia.org/wiki/Http*.
 
-+Client/Server interacting via request/response.>file://figures/clientServer.png|width=50|label=figclientServer+
++Client/Server interacting via request/response>file://figures/clientServer.png|width=50|label=figclientServer+
 
 
 A client, often called user-agent, submits an HTTP request to a server which will respond with an HTTP response (see Fig. *@figclientServer*). The initiative of

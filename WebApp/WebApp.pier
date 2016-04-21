@@ -56,7 +56,7 @@ MyFirstWebApp>>handleRequest: request
 Create a new protocol called ==public== (by right-clicking in the third column). When the new protocol is selected, a new method template will appear in the bottom
 pane. Overwrite the whole template with the code above and accept it as shown Figure *@pharo-in-action*.
 
-+Defining a first version of the application.>file://figures/8-MethodAdded.jpg|width=90|label=pharo-in-action+
++Defining a first version of the application>file://figures/8-MethodAdded.jpg|width=90|label=pharo-in-action+
 
 What we do here is to look at the incoming request to make sure the URI path is ==/image== which will be the final name of our Web app.
 If not, we return a ==Not Found== (code 404) response.
@@ -302,7 +302,7 @@ ZnServer default delegate map: #image to: MyFirstWebApp new.
 
 If you now try to upload an image through the Web browser, the debugger will pop up in Pharo telling you that ==ZnResponse== does not understand ==redirectTo:== and show you the offending code. You could fix the code and try uploading again to see if it works as shown in Figure *@dnu*.
 
-+Debugging.>file://figures/15-debugMode.jpg|width=100|label=dnu+
++Debugging>file://figures/15-debugMode.jpg|width=100|label=dnu+
 
 But we can do even better! Just fix the code directly within the debugger window and accept it.
 Now you can restart and proceed the execution.
@@ -316,7 +316,7 @@ Now set a breakpoint in ==handleGetRequest:== and reload the main page.
 There will be two requests coming in: the first request for ==/image== and the second request for ==/image?raw=true==.
 Proceed the first one.
 
-+Live change.>file://figures/16-LiveModification.jpg|width=90|label=live+
++Live change>file://figures/16-LiveModification.jpg|width=90|label=live+
 
 Now, with the execution being stopped for the second request, click on the image instance variable in the bottom left pane (see Figure *@live*). The pane next to it will show some
 image entity. Select the whole contents and replace it with ==self downloadPharoLogo== and accept the change. Now proceed the execution. Your previously
@@ -395,7 +395,7 @@ Writing tests is creating objects, letting them interact and asserting some cond
 Start by creating a new subclass ==MyFirstWebAppTest== of ==TestCase==.
 The Pharo browser helps you here using the "Jump to test class" item in the contextual menu on ==MyFirstWebApp== (see Figure *@CreateTestClass*).
 
-+Automatically create a test class.>file://figures/17-CreateTestClass.jpg|width=90|label=CreateTestClass+
++Automatically create a test class>file://figures/17-CreateTestClass.jpg|width=90|label=CreateTestClass+
 
 Add now the following helper method on ==MyFirstWebAppTest==:
 
@@ -414,7 +414,7 @@ MyFirstWebAppTest>>withServerDo: block
 Since we will need a configured server instance with our Web app as delegate for each of our tests, we move that logic into ==#withServerDo:== and make sure the server is OK and properly stopped afterwards.
 Now we are ready for our first test.
 
-+Running a test case.>file://figures/18-RunningTestCase.jpg|width=90|label=RunningTestCase+
++Running a test case>file://figures/18-RunningTestCase.jpg|width=90|label=RunningTestCase+
 
 [[[
 MyFirstWebAppTest>>testMainPage
@@ -492,12 +492,12 @@ Let's change that and move our code to a source code repository.
 For this we first have to use the Monticello Browser tool.
 In the first pane of the Nautilus Browser, click on the icon in front of your package named  ==MyFirstWebApp== as shown in Figure *@OpenMC*.
 
-+Open Monticello on your package.>file://figures/19-OpenMC.jpg|width=90|label=OpenMC+
++Opening Monticello on your package>file://figures/19-OpenMC.jpg|width=90|label=OpenMC+
 
 Once opened, Monticello shows on it left pane the list of loaded packages.
 The currently selected one should be yours as depicted in Figure *@MCOpened*.
 
-+The Monticello browser.>file://figures/20-MCOpened.jpg|width=90|label=MCOpened+
++The Monticello browser>file://figures/20-MCOpened.jpg|width=90|label=MCOpened+
 
 The left pane of Monticello shows the list of repositories in which the currently selected package can be saved.
 Indeed, Pharo uses distributed source code management.
@@ -511,7 +511,7 @@ You can leave the public option checked, it means that you and others
 can download the code without having to enter any credentials.
 Your project's page should look like the one on Figure *@WebAppStHubRepo*.
 
-+Smalltalkhub project page.>file://figures/21-WebAppStHubRepo.jpg|width=90|label=WebAppStHubRepo+
++Smalltalkhub project page>file://figures/21-WebAppStHubRepo.jpg|width=90|label=WebAppStHubRepo+
 
 On this page, select and copy the Monticello registration template (make sure to copy the whole contents, including the username and password parts).
 Now, go back to Pharo and in Monticello, click on the ""\+Repository"" button (be sure that your package is selected in the left pane).
@@ -532,7 +532,7 @@ Before accepting, fill in your user(name) and password (between the single quote
 
 Now, Monticello Browser shows you to select repositories to save your package as shown in Figure *@StHubRepoInMc*.
 
-+Multiple repositories for a project in Monticello.>file://figures/23-StHubRepoInMc.jpg|width=90|label=StHubRepoInMc+
++Multiple repositories for a project in Monticello>file://figures/23-StHubRepoInMc.jpg|width=90|label=StHubRepoInMc+
 
 You may have noticed that there is an asterisk (==*==) in front of your package name,
 indicating the package is dirty: i.e., it has uncommitted changes.
@@ -743,7 +743,7 @@ You can surf to the correct IP address and port to test you application. Note th
 ]]]
 
 Figure *@runningOnCloud9* shows how the deployment looks like on cloud9.
-+Our Web app running in the cloud.>file://figures/24-runningOnCloud9.jpg|width=90|label=runningOnCloud9+
++Our Web app, running in the cloud>file://figures/24-runningOnCloud9.jpg|width=90|label=runningOnCloud9+
 
 !!Have Fun Extending this Web App
 
