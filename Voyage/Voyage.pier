@@ -86,32 +86,30 @@ operations. To use Singleton mode, execute:
 repository enableSingleton.
 ]]]
 
-@@note Only one repository can be the singleton, hence executing this line will remove any other existing repositories from Singleton mode!
-
-@@note In this document, we are going to cover Voyage in Singleton mode, but using it in Instance mode is straightforward as well. See the protocol ==persistence== of ==VORepository== for more information.
+@@note Only one repository can be the singleton, hence executing this line will remove any other existing repositories from Singleton mode! In this document, we cover Voyage in Singleton mode, but using it in Instance mode is straightforward as well. See the protocol ==persistence== of ==VORepository== for more information.
 
 !!! Voyage API
 
 The following two tables show a representative subset of the API of Voyage. These methods are defined on ==Object== and ==Class==, but will only truly perform
 work if (instances of) the receiver of the message is a Voyage root. See the ==voyage-model-core-extensions== persistence protocol on both classes for the full
- API of Voyage.
+API of Voyage.
 
 First we show Singleton mode:
-||save || stores an object into repository (insert or update)
-||remove || removes an object from repository
-||removeAll ||removes all objects of class from repository
-||selectAll ||retrieves all objects of some kind
-||selectOne: ||retrieves first object that matches the argument
-||selectMany: || retrieves all objects that matches the argument
+| ==save==        | stores an object into repository (insert or update)
+| ==remove==      | removes an object from repository
+| ==removeAll==   | removes all objects of class from repository
+| ==selectAll==   | retrieves all objects of some kind
+| ==selectOne:==  | retrieves first object that matches the argument
+| ==selectMany:== | retrieves all objects that matches the argument
 
 
 Second is Instance mode. In Instance mode, the first argument is always the repository on which to perform the operation.
-||save:|| stores an object into repository (insert or update)
-||remove: ||removes an object from repository
-||removeAll: ||removes all objects of class from repository
-||selectAll: ||retrieves all objects of some kind
-||selectOne:where: ||retrieves first object that matches the where clause
-||selectMany:where: || retrieves all objects that matches the where clause
+| ==save:==             | stores an object into repository (insert or update)
+| ==remove:==           | removes an object from repository
+| ==removeAll:==        | removes all objects of class from repository
+| ==selectAll:==        | retrieves all objects of some kind
+| ==selectOne:where:==  | retrieves first object that matches the where clause
+| ==selectMany:where:== | retrieves all objects that matches the where clause
 
 !!! Resetting or Dropping the Database Connection
 
