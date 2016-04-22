@@ -20,9 +20,9 @@ stdout
 /PharoDebug.log
 /auto
 .auctex/
-cover/cover.aux
-cover/cover.log
-cover/cover.out
-cover/cover.pdf
-cover/cover.png
-cover/cover.synctex.gz
+cover/cover-text.aux
+cover/cover-text.log
+cover/cover-text.out
+cover/cover-text.pdf
+cover/cover-text.png
+cover/cover-text.synctex.gz
