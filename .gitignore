@@ -18,7 +18,7 @@ stdout
 /pillarPostExport.sh
 /play-cache
 /PharoDebug.log
-/auto
+auto/
 .auctex/
 cover/cover-text.aux
 cover/cover-text.log
@@ -26,3 +26,4 @@ cover/cover-text.out
 cover/cover-text.pdf
 cover/cover-text.png
 cover/cover-text.synctex.gz
+/cover/cover.png
