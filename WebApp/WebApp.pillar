@@ -880,5 +880,5 @@ configuration, is on *SmalltalkHub>http://smalltalkhub.com/#!/~SvenVanCaekenberg
 A similar example is also included in the Zinc HTTP Components project itself, under the name ==ZnImageExampleDelegate==[Tests].
 
 % Local Variables:
-% compile-command: "cd .. && ./pillar export --to=\"HTML by chapter\" WebApp/WebApp.pier"
+% compile-command: "cd .. && ./pillar export --to=\"HTML by chapter\" WebApp/WebApp.pillar"
 % End:

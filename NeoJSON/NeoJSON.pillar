@@ -271,5 +271,5 @@ NeoJSON is a powerful library to convert objects. Sven, the author of NeoJSON, a
 %  LocalWords:  Caekenberghe
 
 % Local Variables:
-% compile-command: "cd .. && ./pillar export --to='LaTeX by chapter' NeoJSON/NeoJSON.pier && bash pillarPostExport.sh"
+% compile-command: "cd .. && ./pillar export --to='LaTeX by chapter' NeoJSON/NeoJSON.pillar && bash pillarPostExport.sh"
 % End:
