@@ -276,5 +276,5 @@ NeoCSV provides a good support to emit and import comma-separated data.
 %  LocalWords:  accessor
 
 % Local Variables:
-% compile-command: "cd .. && ./pillar export --to=\"LaTeX by chapter\" NeoCSV/NeoCSV.pier && bash pillarPostExport.sh"
+% compile-command: "cd .. && ./pillar export --to=\"LaTeX by chapter\" NeoCSV/NeoCSV.pillar && bash pillarPostExport.sh"
 % End:
