@@ -1,3 +1,6 @@
 [submodule "support/latex/sbabook"]
 	path = support/latex/sbabook
 	url = git://github.com/cdlm/sbabook.git
+[submodule "overcolored"]
+	path = support/latex/overcolored
+	url = git://github.com/raphink/overcolored.git

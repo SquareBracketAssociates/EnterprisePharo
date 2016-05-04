@@ -7,6 +7,14 @@
 \subimport{support/latex/}{common.tex}
 
 %=================================================================
+% Debug packages for page layout and overfull lines
+% Remove the showtrims document option before printing
+\ifshowtrims
+  \usepackage{showframe}
+  \usepackage[color=magenta,width=5mm]{support/latex/overcolored/overcolored}
+\fi
+
+%=================================================================
 % Add the path for the figures of each chapter here:
 \graphicspath{
         {../figures/}
