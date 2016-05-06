@@ -773,7 +773,7 @@ stream nextPutAll: 'You can select an export type with the parameter ==-\-to==. 
 stream nextPutAll: '.'
 ]]]
 
-In the case of a ''LaTeX'' or ''Beamer'' export Pillar will generate a script (==pillarPostExport.sh==) to generate PDF files from the TeX files. This script will create a symbolic link named ==root== referencing the output directory into each directory containing TeX files.
+In the case of a LaTeX or Beamer export Pillar will generate a script named ==pillarPostExport.sh== to generate PDF files from the TeX files. This script will create a symbolic link named ==root== referencing the output directory into each directory containing TeX files.
 You can use this symbolic link to reference files in specified in the ==support== collection.
 You can customize the LaTeX command with the ==latexCommand== parameter of the configuration.
 For this book, we use:
