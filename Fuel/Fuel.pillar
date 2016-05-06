@@ -93,7 +93,7 @@ materializedArray third
 
 !!! Some Links
 
-- The home page is *http://rmod.lille.inria.fr/web/software/Fuel*.
+- The home page is *http://rmod.inria.fr/web/software/Fuel*.
 - The source code is at *http://smalltalkhub.com/#!/~Pharo/Fuel*.
 - The CI job is at *https://ci.inria.fr/pharo-contribution/job/Fuel-Stable/*.
 
