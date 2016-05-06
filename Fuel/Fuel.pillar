@@ -534,7 +534,7 @@ As most classes of Fuel, they have class comments that explain their purpose:
 We often need to load objects whose class has changed since it was saved. For example, figure *@figClassChanges* illustrates typical changes that can happen to
 the class shape. Now imagine we previously serialized an instance of ==Point== and we need to materialize it after ==Point== class has changed.
 
-+Example of changes to a class>file://figures/ClassChanges.png|width=70|label=figClassChanges+
++Example of changes to a class>file://figures/ClassChanges.png|width=100|label=figClassChanges+
 
 Let's start with the simple cases. If a variable was ""inserted"", its value will be ==nil==. If it was ""removed"", it is also obvious: the serialized value will be
 ignored. The ""change of Order"" of instance variables is handled by Fuel automatically.
