@@ -1,6 +1,6 @@
 %!TEX TS-program = lualatex
 % -*- mode: LaTeX; -*-
-\documentclass[11pt,english]{../support/latex/sbabook/sbabook}
+\documentclass[11pt,english,oneside]{../support/latex/sbabook/sbabook}
 \let\wholebook=\relax
 
 \usepackage{import}
@@ -11,10 +11,8 @@
 \pagestyle{titlingpage}
 \thispagestyle{titlingpage} % \pagestyle does not work on the first one…
 
-Enterprise Pharo is the third volume of the series,\\
-following Pharo by Example and Deep into Pharo.\\
-It covers enterprise libraries and frameworks, \\
-around the theme of web development.
+Third book in the series, after Pharo by Example and Deep into Pharo, \\
+Enterprise Pharo covers libraries around web development.
 
 \begin{tabular}{@{\quad}r@{\quad}l@{}}
    & \textbf{Simple Web Applications}                 \\
@@ -35,18 +33,15 @@ around the theme of web development.
 12 & Mustache Templates for Pharo                     \\
 13 & Cascading Style Sheets with RenoirSt             \\
 14 & Documenting and Presenting with Pillar           \\
-15 & Generate PDF Documents with Artefact             \\[\smallskipamount]
+15 & Generating PDF Documents with Artefact           \\[\smallskipamount]
    & \textbf{Deployment}                              \\
 16 & Deploying a Pharo Web Application in Production  \\
-
 \end{tabular}
 
-\color{white}
-\vspace{5\baselineskip}
-This book is based on contributions by the following persons:
+\clearpage
+\small\color{white}
 
-\small
-
+This book is based on contributions by:
 \begin{multicols}{3}
 Olivier Auverlot\\
 Sven Van Caekenberghe\\
@@ -68,12 +63,7 @@ Mariano Martinez-Peck\\
 Damien Pollet\\
 \end{multicols}
 
-
-
 \end{document}
-
-
-
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t
