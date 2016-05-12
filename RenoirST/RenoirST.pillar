@@ -1176,12 +1176,13 @@ This kind of rule allows for multiple ==src== definitions specifying the resourc
 
 [[[
 CascadingStyleSheetBuilder new
-   declareFontFaceRuleWith:
-      [ :style |
+   declareFontFaceRuleWith: [ :style |
       style
          fontFamily: 'MainText';
-         src: (CssExternalFontReference locatedAt: 'gentium.eat' asZnUrl relativeToStyleSheet);
-         src: (CssLocalFontReference toFontNamed: 'Gentium')   , (CssExternalFontReference locatedAt: 'gentium.woff' asZnUrl relativeToStyleSheet withFormat: CssFontConstants woff);
+         src: (CssExternalFontReference
+            locatedAt: 'gentium.eat' asZnUrl relativeToStyleSheet);
+         src: (CssLocalFontReference toFontNamed: 'Gentium'),
+            (CssExternalFontReference locatedAt: 'gentium.woff' asZnUrl relativeToStyleSheet withFormat: CssFontConstants woff);
          src: (CssExternalFontReference svgFontLocatedAt: 'fonts.svg' asZnUrl relativeToStyleSheet withId: 'simple') ];
    build
 ]]]
@@ -1210,7 +1211,8 @@ RenoirSt includes an optional group including some useful extensions. The *Seasi
 [[[
 CascadingStyleSheetBuilder new
    declareRuleSetFor: [:selector | selector div class: 'logo' ]
-   with: [:style | style backgroundImage: 'images/logo.png' seasideUrl ];
+   with: [:style |
+      style backgroundImage: 'images/logo.png' seasideUrl ];
    build
 ]]]
 
@@ -1225,20 +1227,11 @@ div.logo
 
 This optional group also loads extensions to ==CssDeclarationBlock== so it can be used as a ==JSObject== in plugins requiring some style parameter or as the argument in a component ==style:== method.
 
-To load this extensions you need to load (in an image with Seaside already loaded) the group ==Deployment-Seaside-Extensions== or ==Development-Seaside-Extensions== (if you want the test cases):
+To load these extensions in an image with Seaside already loaded, you need to load the group ==Deployment-Seaside-Extensions==, or ==Development-Seaside-Extensions== if you want the test cases (there is also a ==stable-pharo-40== branch if needed):
 
 [[[
 Metacello new
    baseline: 'RenoirSt';
    repository: 'github://gcotelli/RenoirSt:stable-pharo-50/source';
-   load: 'Deployment-Seaside-Extensions'
-]]]
-
-or
-
-[[[
-Metacello new
-   baseline: 'RenoirSt';
-   repository: 'github://gcotelli/RenoirSt:stable-pharo-40/source';
    load: 'Deployment-Seaside-Extensions'
 ]]]

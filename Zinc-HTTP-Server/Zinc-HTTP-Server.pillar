@@ -649,8 +649,6 @@ $ curl http://localhost:1701/2
     "bar" : -1
 }
 
-
-
 $ curl http://localhost:1701/
 [
     "/1",
@@ -687,32 +685,32 @@ client := ZnClient new
 Now we can hold the same conversation as above, only in this case in terms of real Smalltalk objects.
 
 [[[
-   client get: '/'
-   --> #()
+client get: '/'
+--> #()
 
-   client post: '/' contents: #(1 2 3)
-   --> 'Created /1'
+client post: '/' contents: #(1 2 3)
+--> 'Created /1'
 
-   client get: '/1'
-   --> #(1 2 3)
+client get: '/1'
+--> #(1 2 3)
 
-   client post: '/' contents: (Dictionary with: #bar -> -2)
-   ---> 'Created /2'
+client post: '/' contents: (Dictionary with: #bar -> -2)
+---> 'Created /2'
 
-   client put: '/2' contents: (Dictionary with: #bar -> -1)
-   --> 'Updated'
+client put: '/2' contents: (Dictionary with: #bar -> -1)
+--> 'Updated'
 
-   client get: '/2'
-   --> a Dictionary('bar'->-1 )
+client get: '/2'
+--> a Dictionary('bar'->-1 )
 
-   client get: '/'
-   --> #('/1' '/2')
+client get: '/'
+--> #('/1' '/2')
 
-   client delete: '/2'
-   --> 'Deleted'
+client delete: '/2'
+--> 'Deleted'
 
-   client get: '/2'
-   --> throws a ZnHttpUnsuccessful exception
+client get: '/2'
+--> throws a ZnHttpUnsuccessful exception
 ]]]
 
 !!Conclusion
