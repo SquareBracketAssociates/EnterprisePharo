@@ -28,3 +28,5 @@ cover/cover-text.synctex.gz
 cover/cover-text*.png
 cover/cover.png
 cover/isbn-barcode.png
+*.fdb_latexmk
+*.fls
