@@ -406,7 +406,7 @@ CascadingStyleSheetBuilder new
       fading: { CssSVGColors yellow. CssSVGColors blue }) ]
 ]]]
 
-Above code evaluates to:
+The above code evaluates to:
 
 [[[language=css
 div
@@ -423,7 +423,7 @@ CssLinearGradient
    fading: { CssSVGColors yellow. CssSVGColors blue }
 ]]]
 
-Above code will result in a gradient with yellow on the left side and blue on the right side. The equivalent CSS is:
+The above code will result in a gradient with yellow on the left side and blue on the right side. The equivalent CSS is:
 
 [[[language=css
 linear-gradient(to right, yellow, blue);
@@ -437,7 +437,7 @@ CssLinearGradient
    fading: { CssSVGColors yellow. CssSVGColors blue }
 ]]]
 
-Above code will result in a gradient with blue in the top right corner and yellow in the bottom left one. The equivalent CSS is:
+The above code will result in a gradient with blue in the top right corner and yellow in the bottom left one. The equivalent CSS is:
 
 [[[language=css
 linear-gradient(to top right, yellow, blue);
@@ -451,7 +451,7 @@ CssLinearGradient
    fading: { CssSVGColors yellow. CssSVGColors blue }
 ]]]
 
-Above code maps to:
+The above code maps to:
 
 [[[language=css
 linear-gradient(45deg, yellow, blue);
@@ -467,7 +467,7 @@ CssLinearGradient
       CssColorStop for: CssSVGColors blue at: 30 percent }
 ]]]
 
-Above code maps to:
+The above code maps to:
 
 [[[language=css
 linear-gradient(to right, yellow, blue 30%);
@@ -681,7 +681,7 @@ p, div
 
 !!! Attribute Selectors
 
-Attribute selectors are useful to match an element if that element has an attribute that matches the attribute represented by the selectors.
+Attribute selectors are useful to match an element based on its attributes and their values.
 
 The ''attribute presence'' selector matches an element having an attribute (without considering the value of the attribute):
 
@@ -1018,12 +1018,11 @@ p.note::after
 !! Important Rules
 
 CSS attempts to create a balance of power between author and user style sheets. By default, rules in an author's style sheet override those in a user's style sheet.
-
 However, for balance, an ==!important== declaration takes precedence over a normal declaration. Both author and user style sheets may contain ==!important==
 declarations, and user ==!important== rules override author ==!important== rules. This CSS feature improves accessibility of documents by giving users with
 special requirements control over presentation.
 
-The library provides support for this feature by sending ==beImportantDuring:== message to the style.
+RenoirSt supports this feature through the ==beImportantDuring:== message sent to the style.
 
 [[[
 CascadingStyleSheetBuilder new
@@ -1062,7 +1061,8 @@ CascadingStyleSheetBuilder new
       cssBuilder
          declareRuleSetFor: [ :selector | selector div ]
          with: [ :style | ] ]
-   forMediaMatching: [ :queryBuilder | queryBuilder type: CssMediaQueryConstants print ];
+   forMediaMatching: [ :queryBuilder |
+      queryBuilder type: CssMediaQueryConstants print ];
    build
 ]]]
 
