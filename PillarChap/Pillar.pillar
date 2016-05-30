@@ -31,7 +31,7 @@ Pillar has many features, helpful tools, and documentation:
 !!!Pillar Users
 @pillarUSERS
 
-This book was written in Pillar. If you want to see how Pillar is used, have a look at *its source code>http://books.pharo.org/enterprise-pharo/*, or check the following other real-world projects:
+This book was written in Pillar. If you want to see how Pillar is used, have a look at the book's source code available from *its website>http://books.pharo.org/enterprise-pharo/*, or check the following other real-world projects:
 - *the Updated Pharo by Example book>https://github.com/SquareBracketAssociates/UpdatedPharoByExample*
 - *the Pharo MOOC>https://github.com/SquareBracketAssociates/PharoMooc* (Massive open online course)
 - *the PillarHub open-access shared blog>http://pillarhub.pharocloud.com*
