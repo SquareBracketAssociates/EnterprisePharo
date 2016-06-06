@@ -667,6 +667,14 @@ ${inputFile:test.pillar}$
 ${inputFile:chapter2/chapter2.pillar}$
 ]]]
 
+!!!! Footnotes Annotation
+
+You can add footnotes to explain or annotate words. The ==footnotes== annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
+
+[[[
+Foo$(footnote:Some Explanation for Foo)$
+]]]
+
 !!!! Slide Annotation
 @sec:slide
 
@@ -696,6 +704,7 @@ ${endColumns}$
 ]]]
 
 @@note The column annotations currently works only for the beamer, HTML and Deck.js export.
+
 
 !!!Preformatted (less used)
 
