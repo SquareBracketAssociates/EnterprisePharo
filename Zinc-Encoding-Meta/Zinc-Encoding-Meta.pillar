@@ -1,6 +1,7 @@
 {
     "title": "Character Encoding and Resource Meta Description",
-    "attribution": "Sven Van Caekenberghe with Luc Fabresse and Johan Fabry"
+    "attribution": "Sven Van Caekenberghe with Luc Fabresse and Johan Fabry",
+    "headingLevelOffset":2
 }
 @cha:zincEncoding
 
@@ -35,13 +36,13 @@ In this chapter we discuss Character encoding, MIME types and URL/URIs. They are
 % ]]]
 
 
-!! Character Encoding
+! Character Encoding
 
 We will first show how to get Unicode from characters and strings within Pharo.
 We will then show how to decode and encode characters and strings from and to bytes.
 
 
-!!! Characters and Strings use Unicode Internally
+!! Characters and Strings use Unicode Internally
 
 Proper character encoding and decoding is crucial in today's international world. Internally, Pharo stores characters and strings using Unicode.
 *Unicode>http://en.wikipedia.org/wiki/Unicode* is a very large internationally standardized collection of code points (integer numbers) representing all of the world
@@ -98,7 +99,7 @@ The good thing is, we can work with text in any language in Pharo. However, to d
 characters (or glyphs) needed, for example Arial Unicode MS.
 
 
-!!! Encoding and Decoding
+!! Encoding and Decoding
 
 For communication with the world outside Pharo, the operating system, files, the internet, et cetera, we have to represent our strings as a collection of bytes.
 Yet code points are different to bytes, as will be shown below. Therefore we need a way to transform our internal strings into external collection of bytes and vice versa.
@@ -123,7 +124,7 @@ The recommended encoding is the primary internet encoding: *UTF-8>http://en.wiki
 optimized somewhat for ASCII and to a lesser degree for Latin1 and some other common European encodings.
 
 
-!!! Converting Strings and ByteArrays
+!! Converting Strings and ByteArrays
 
 The first use of encoders is to convert Strings to ByteArrays and vice-versa.
 We however deal only indirectly with character encoders. The ==ByteArray== and  ==String== classes have some convenience methods to do encoding and decoding:
@@ -225,7 +226,7 @@ Note that identifiers for encodings are interpreted flexibly (case and punctuati
 There exists a special ==ZnNullEncoder== that basically does nothing: it treats bytes are characters and vice versa. This is actually mostly equivalent to Latin-1 or ISO-8859-1. (And yes, that is a bit confusing.)
 
 
-!!! Converting Streams
+!! Converting Streams
 
 
 The second primary use of encoders is when dealing with streams. More specifically, when interpreting a binary read or write stream as a character stream.
@@ -254,7 +255,7 @@ We used the message ==on:encoding:== here, but there is also a plain message ==o
 Internally, the character streams will use an encoder instance to do the actual work.
 
 
-!!! ByteStrings and WideStrings are Concrete Subclasses of String
+!! ByteStrings and WideStrings are Concrete Subclasses of String
 
 
 Up until now we spoke about Strings as being a collection of Characters, each of which is represented as a Unicode code point.
@@ -293,7 +294,7 @@ In practice, the difference between ==ByteString== and ==WideString== should not
 As the above example shows, in a ==ByteString== =='abc'== putting the Unicode character ==$α==, converts it to a ==WideString==. (This is actually done using a ==becomeForward:== message.) When benchmarking, this conversion might show up as taking significant time. If you know upfront that you will need WideStrings, it can be better to start with the right type.
 
 
-!!! ByteString and ByteArray Equivalence is an Implementation Detail
+!! ByteString and ByteArray Equivalence is an Implementation Detail
 
 There is another implementation detail worth mentioning: for the Pharo virtual machine, more specifically, for a number of primitives, ==ByteString== and ==ByteArray== instances are equivalent. Given what we now know, that makes sense. Consider the following code:
 
@@ -331,7 +332,7 @@ So although it is true that there is some equivalence between ByteString and Byt
 should not rely upon.
 
 
-!!! Beware of Bogus Conversions
+!! Beware of Bogus Conversions
 
 Given a string, it is tempting to send it the message ==asByteArray== to convert it to bytes. Similary, it is tempting to convert a byte array by
 sending it the message ==asString==. These are however bogus conversions that should not be used as for some strings they will work, but for others not. Success depends on the code points of the characters in the string. Basically
@@ -380,7 +381,7 @@ This 'conversion' does not correspond to any known encoding. It is the result of
 @@note Using this is a bug no matter how you look at it. In this century you will look silly for not implementing proper support for all languages. When converting between strings and bytes, use a proper, explicit encoding.
 
 
-!!! Strict and Lenient Encoding
+!! Strict and Lenient Encoding
 
 No encoding (or the null encoder) and Latin-1 encoding are in fact not completely the same. This is because there are 'holes' in the table: some byte
 values are undefined, which a strict encoder won't allow, and the default encoder is strict.
@@ -417,7 +418,7 @@ ZnByteEncoder latin1 byteDomain includes: 150.
 
 Note that the lower half of a byte encoding, the ASCII part between 0 and 127, is always treated as a one to one mapping.
 
-!!! Available Encoders
+!! Available Encoders
 
 Pharo comes with support for the most important encodings currently used, as well as with support for some important legacy encodings. Seen as the classes
 implementing them, the following encoders are available:
@@ -429,7 +430,7 @@ implementing them, the following encoders are available:
 
 Where ==ZnByteEncoder== groups a large number of encodings. This list is available as ==ZnByteEncoder knownEncodingIdentifiers==. Here is a list of all recognized, canonical names: arabic, cp1250, cp1251, cp1252, cp1253, cp1254, cp1255, cp1256, cp1257, cp1258, cp850, cp866, cp874, cyrillic, dos874, doslatin1, greek, hebrew, ibm819, ibm850, ibm866, iso885910, iso885911, iso885913, iso885914, iso885915, iso885916, iso88592, iso88593, iso88594, iso88595, iso88596, iso88597, iso88598, iso88599, koi8, koi8r, koi8u, latin2, latin3, latin4, latin5, latin6, mac, maccyrillic, macintosh, macroman, oem850, windows1250, windows1251, windows1252, windows1253, windows1254, windows1255, windows1256, windows1257, windows1258, windows874, xcp1250, xcp1251, xcp1252, xcp1253, xcp1254, xcp1255, xcp1256, xcp1257, xcp1258, xmaccyrillic and xmacroman.
 
-!! Mime-Types
+! Mime-Types
 
 A mime-type is a standard, cross-platform definition of a file or document type or format. The official term is an *Internet media type>http://en.wikipedia.org/wiki/Internet_media_type*.
 
@@ -443,7 +444,7 @@ The mime-type syntax is as follows:
 
 ==<main>/<sub> [;<param1>=<value1>[,<param2>=<value2>]*]==.
 
-!!! Creating Mime-Types
+!! Creating Mime-Types
 
 Instances of ==ZnMimeType== are created by explicitly specifying its components, through parsing a string or by accessing predefined values. In any case, a new instance is always created.
 
@@ -498,7 +499,7 @@ ZnMimeType default
 ]]]
 
 
-!!! Working with Mime-Types
+!! Working with Mime-Types
 
 Once you have a ZnMimeType instance, you can access its components using the ==main==, ==sub== and ==parameters== messages.
 
@@ -545,7 +546,7 @@ ZnMimeType applicationXml matches: ZnMimeType text.
 ]]]
 
 
-!! URLs
+! URLs
 
 URLs (or URIs) are a way to name or identify an entity. Often, they also contain information of where the entity they name or identify can be accessed.
 
@@ -570,7 +571,7 @@ By considering most parts of an URL as optional, we can use one abstraction to i
 The syntax of the external representation of a ZnUrl informally looks like this:
 ==scheme://username:password@host:port/segments?query#fragment==
 
-!!! Creating URLs
+!! Creating URLs
 
 ZnUrls are most often created by parsing an external representation using either the ==fromString:== class message or by sending the ==asUrl== or ==asZnUrl==
 convenience message to a string.
@@ -601,7 +602,7 @@ ZnUrl new
    --> http://www.google.com/?two=2&three=3
 ]]]
 
-!!! External and Internal Representation of URLs
+!! External and Internal Representation of URLs
 
 Some characters of parts of a URL are considered as illegal because including them would interfere with the syntax and further processing. They thus have to be encoded. The methods of ==ZnUrl== in the
 ==accessing== protocols do not do any encoding, while those in ==parsing== and ==printing== do. Here is an example:
@@ -621,7 +622,7 @@ The ZnUrl parser is somewhat forgiving and accepts some unencoded URLs as well, 
    --> http://www.example.com:8888/a%20path?q=a,%20b,%20c
 ]]]
 
-!!! Relative URLs
+!! Relative URLs
 
 ZnUrl can parse in the context of a default scheme, like a browser would do.
 
@@ -642,7 +643,7 @@ ZnUrl has some support to handle one URL in the context of another one, this is 
 ]]]
 
 
-!!! Operations on URLs
+!! Operations on URLs
 
 To add operations to URLs you could add an extension method to the ZnUrl class. In many cases though, it will not work on all kinds of URLs but only on a subset. In other words, you need to dispatch, not just on the scheme but maybe even on other URL elements. That is where ==ZnUrlOperation== comes in.
 
@@ -660,7 +661,7 @@ for the schemes ==http== and ==https== or the class ==ZnFileRetrieveContents== f
 
 This dispatching mechanism is more powerful than scheme specific ==ZnUrl== subclasses because other elements can be taken into account. It also addresses another issue with scheme specific ==ZnUrl== subclasses, which is that there are an infinite number of schemes which no hierarchy could cover.
 
-!!! Odds and Ends
+!! Odds and Ends
 
 Sometimes, the combination of a host and port are referred to as authority, and this is accessable with the ==authority== message.
 

@@ -1,0 +1,4 @@
+% -*- mode: latex; -*- mustache tags: {{=« »=}} «! the '&' below prevents HTML escaping. »
+!«& title»
+
+«& content»
