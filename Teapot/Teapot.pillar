@@ -1,6 +1,8 @@
 {
-    "title" : "Teapot",
-    "attribution" : "Attila Magyar with Johan Fabry",
+    "metadata" : {
+        "title" : "Teapot",
+        "attribution" : "Attila Magyar with Johan Fabry"
+    },
     "headingLevelOffset":2
 }
 @cha:teapot

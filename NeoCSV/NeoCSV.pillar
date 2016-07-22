@@ -1,6 +1,8 @@
 {
-    "title": "NeoCSV",
-    "attribution": "Sven Van Caekenberghe with Damien Cassou and Stéphane Ducasse",
+    "metadata" : {
+        "title": "NeoCSV",
+        "attribution": "Sven Van Caekenberghe with Damien Cassou and Stéphane Ducasse"
+    },
     "headingLevelOffset":2
 }
 @cha:neoCSV

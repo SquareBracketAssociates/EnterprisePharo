@@ -1,6 +1,8 @@
 {
-    "title": "WebSockets",
-    "attribution": "Sven Van Caekenberghe with Luc Fabresse",
+    "metadata" : {
+        "title": "WebSockets",
+        "attribution": "Sven Van Caekenberghe with Luc Fabresse"
+    },
     "headingLevelOffset":2
 }
 @cha:webSockets

@@ -1,6 +1,8 @@
 {
-    "title": "Deploying a Pharo Web Application in Production",
-    "attribution": "Christophe Demarey with Johan Fabry",
+    "metadata" : {
+        "title": "Deploying a Pharo Web Application in Production",
+        "attribution": "Christophe Demarey with Johan Fabry"
+    },
     "headingLevelOffset":2
 }
 @cha:deploy

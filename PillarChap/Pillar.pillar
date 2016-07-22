@@ -1,6 +1,8 @@
 {
-    "title": "Documenting and Presenting with Pillar",
-    "attribution": "Damien Cassou and Cyril Ferlicot Delbecque",
+    "metadata" : {
+        "title": "Documenting and Presenting with Pillar",
+        "attribution": "Damien Cassou and Cyril Ferlicot Delbecque"
+    },
     "headingLevelOffset":2
 }
 @cha:pillar

@@ -1,6 +1,8 @@
 {
-    "title": "Character Encoding and Resource Meta Description",
-    "attribution": "Sven Van Caekenberghe with Luc Fabresse and Johan Fabry",
+    "metadata" : {
+        "title": "Character Encoding and Resource Meta Description",
+        "attribution": "Sven Van Caekenberghe with Luc Fabresse and Johan Fabry"
+    },
     "headingLevelOffset":2
 }
 @cha:zincEncoding

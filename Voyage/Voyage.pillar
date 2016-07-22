@@ -1,6 +1,8 @@
 {
-    "title": "Persisting Objects with Voyage",
-    "attribution": "Johan Fabry and Esteban Lorenzano with Damien Cassou and Norbert Hartl",
+    "metadata" : {
+        "title": "Persisting Objects with Voyage",
+        "attribution": "Johan Fabry and Esteban Lorenzano with Damien Cassou and Norbert Hartl"
+    },
     "headingLevelOffset":2
 }
 @cha:voyage

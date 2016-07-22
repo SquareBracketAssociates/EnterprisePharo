@@ -1,6 +1,8 @@
 {
-    "title": "Cascading Style Sheets with RenoirSt",
-    "attribution": "Gabriel Omar Cotelli with Damien Cassou",
+    "metadata" : {
+        "title": "Cascading Style Sheets with RenoirSt",
+        "attribution": "Gabriel Omar Cotelli with Damien Cassou"
+    },
     "headingLevelOffset":2
 }
 @cha:renoirst

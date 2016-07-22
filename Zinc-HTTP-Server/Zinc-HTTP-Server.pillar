@@ -1,6 +1,8 @@
 {
-    "title": "Zinc HTTP: The Server Side",
-    "attribution": "Sven Van Caekenberghe with Luc Fabresse and Johan Fabry",
+    "metadata" : {
+        "title": "Zinc HTTP: The Server Side",
+        "attribution": "Sven Van Caekenberghe with Luc Fabresse and Johan Fabry"
+    },
     "headingLevelOffset":2
 }
 @cha:zinc-server
