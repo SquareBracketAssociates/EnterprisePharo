@@ -1,0 +1,205 @@
+% -*- mode: latex; -*- mustache tags: {{=« »=}} «! the '&' below prevents HTML escaping. »
+\documentclass[10pt,twoside,english]{support/latex/sbabook/sbabook}
+\let\wholebook=\relax
+
+\usepackage{import}
+\subimport{root/support/latex/}{common.tex}
+
+%=================================================================
+% Debug packages for page layout and overfull lines
+% Remove the showtrims document option before printing
+\ifshowtrims
+  \usepackage{showframe}
+  \usepackage[color=magenta,width=5mm]{root/support/latex/overcolored}
+\fi
+
+
+\title{Enterprise Pharo\titlebreak{:} a Web Perspective}
+\author{
+    Damien Cassou \and
+    Stéphane Ducasse \and
+    Luc Fabresse \and
+    Johan Fabry \and
+    Sven Van Caekenberghe}
+\date{\gitdate\titlebreak[\smallskip]{ -- }\protect\gitCommitInfo}
+
+\hypersetup{pdfinfo = {
+    Title = {«& title»},
+    Author = {«& attribution»},
+    Keywords = {pharo, smalltalk}}}
+% =================================================================
+\begin{document}
+
+% Title page and colophon on verso
+\maketitle
+\pagestyle{titlingpage}
+\thispagestyle{titlingpage} % \pagestyle does not work on the first one…
+
+\cleartoverso
+{\small
+
+  Copyright 2015 by Damien Cassou, Stéphane Ducasse, Luc Fabresse, Johan Fabry,
+  and Sven Van Caekenberghe.
+
+  The contents of this book are protected under the Creative Commons
+  Attribution-ShareAlike 3.0 Unported license.
+
+  You are \textbf{free}:
+  \begin{itemize}
+  \item to \textbf{Share}: to copy, distribute and transmit the work,
+  \item to \textbf{Remix}: to adapt the work,
+  \end{itemize}
+
+  Under the following conditions:
+  \begin{description}
+  \item[Attribution.] You must attribute the work in the manner specified by the
+    author or licensor (but not in any way that suggests that they endorse you
+    or your use of the work).
+  \item[Share Alike.] If you alter, transform, or build upon this work, you may
+    distribute the resulting work only under the same, similar or a compatible
+    license.
+  \end{description}
+
+  For any reuse or distribution, you must make clear to others the
+  license terms of this work. The best way to do this is with a link to
+  this web page: \\
+  \url{http://creativecommons.org/licenses/by-sa/3.0/}
+
+  Any of the above conditions can be waived if you get permission from
+  the copyright holder. Nothing in this license impairs or restricts the
+  author's moral rights.
+
+  \begin{center}
+    \includegraphics[width=0.2\textwidth]{root/figures/CreativeCommons-BY-SA.pdf}
+  \end{center}
+
+  Your fair dealing and other rights are in no way affected by the
+  above. This is a human-readable summary of the Legal Code (the full
+  license): \\
+  \url{http://creativecommons.org/licenses/by-sa/3.0/legalcode}
+
+  \vfill
+
+  \begin{tabular}{@{}c@{\quad}l}
+    \multirow{2}{*}{\includegraphics[width=2em]{root/support/latex/sbabook/sba-logo.pdf}}
+    & Published by Square Bracket Associates, Switzerland. \\
+    & \url{http://squarebracketassociates.org} \\[\smallskipamount]
+    & ISBN 978-1-326-65097-1 \\
+    & First Edition, April 2016. \\
+  \end{tabular}
+  \medskip
+
+  This book has been sponsored by ESUG. \includegraphics[width=2cm]{root/figures/esug-logo}
+
+  Cover design by Liudmyla Dolia. Layout and typography based on the
+  \textcode{sbabook} \LaTeX{} class by Damien Pollet. The source code
+  of the book itself lives at
+  \url{https://github.com/SquareBracketAssociates/EnterprisePharo} }
+
+
+\frontmatter
+\pagestyle{plain}
+
+
+\chapter*{About this book}
+
+\emph{Enterprise Pharo} is the third volume of the series, following
+\emph{Pharo by Example} and \emph{Deep into Pharo}. It covers
+enterprise libraries and frameworks, and in particular those useful for
+doing web development.
+
+The book is structured in five parts.\\
+\textbf{The first part} talks about simple web applications, starting
+with a minimal web application in chapter~1 on Teapot and then a
+tutorial on building a more complete web application in chapter~2.\\
+\textbf{Part two} deals with HTTP support in Pharo,
+talking about character encoding in chapter~3, about using Pharo as an
+HTTP Client (chapter~4) and server (chapter 5), and about using
+WebSockets (chapter~6).\\
+\textbf{In the third part} we discuss the handling of data for the application.
+Firstly we treat data that is in the form of comma-separated values (CSV) in
+chapter~7. Secondly and thirdly, we treat JSON (chapter~8) and its Smalltalk
+counterpart STON (chapter~9). Fourthly, serialization and deserialization of
+object graphs with Fuel is treated in chapter~10. Lastly, we discuss the Voyage
+persistence framework and persisting to MongoDB databases in chapter~11.\\
+\textbf{Part four} deals with the presentation layer. Chapter~12 shows how to
+use Mustache templates in Pharo, and chapter~13 talks about programmatic
+generation of CSS files. The documentation of applications could be written in
+Pillar, which is presented in chapter 14. How to generate PDF files from the
+application with Artefact is shown in chapter~15.\\
+\textbf{The fifth part} deals with deploying the web application. This is
+explained in chapter~16 that talks not only about how to build and run the
+application, but also other important topics like monitoring.
+
+
+\paragraph{This book is a collective work}
+The editors have curated and reformatted the chapters from blog posts
+and tutorials written by many people. Here is the complete list of contributors
+to the book, in alphabetical order:
+
+\begin{multicols}{3}
+Olivier Auverlot\\
+Sven Van Caekenberghe\\
+Damien Cassou\\
+Gabriel Omar Cotelli\\
+Christophe Demarey\\
+Martín Dias\\
+Liudmyla Dolia\\
+Stéphane Ducasse\\
+Luc Fabresse\\
+Johan Fabry\\
+Cyril Ferlicot Delbecque\\
+Norbert Hartl\\
+Guillaume Larchevêque\\
+Max Leske\\
+Esteban Lorenzano\\
+Attila Magyar\\
+Mariano Martinez-Peck\\
+Damien Pollet\\
+\end{multicols}
+
+\tableofcontents*
+\clearpage\listoffigures
+
+\mainmatter
+
+«& content»
+
+% lulu requires an empty page at the end. That's why I'm using
+% \backmatter here.
+\backmatter
+
+% \chapter*{Pages to print in color}
+% % ch1 Teapot
+% Page numbers: \pageref{TeapotWelcome}, %
+% \pageref{plainText}, %
+% % ch2 WebApp
+% \pageref{imageweb}, %
+% \pageref{pharo-in-action}, %
+% \pageref{helloWebApp-in-action}, %
+% \pageref{InspectingIncomingRequest}, %
+% \pageref{htmlResponse}, %
+% \pageref{servingPharoLogo}, %
+% \pageref{ChangingDisplayedImage}, %
+% \pageref{dnu}, %
+% \pageref{live}, %
+% \pageref{CreateTestClass}, %
+% \pageref{RunningTestCase}, %
+% \pageref{OpenMC}, %
+% \pageref{MCOpened}, %
+% \pageref{WebAppStHubRepo}, %
+% \pageref{AddRepoInMC}, %
+% \pageref{StHubRepoInMc}, %
+% \pageref{runningOnCloud9}
+
+
+\end{document}
+
+%=================================================================
+%%% Local Variables:
+%%% coding: utf-8
+%%% mode: latex
+%%% TeX-master: t
+%%% TeX-PDF-mode: t
+%%% ispell-local-dictionary: "english"
+%%% End:
