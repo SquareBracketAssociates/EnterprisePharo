@@ -9,6 +9,7 @@
 /vm-ui.sh
 /pharo
 /pillar
+/mustache
 files/
 /package-cache
 stderr
