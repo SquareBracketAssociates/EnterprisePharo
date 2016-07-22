@@ -1,6 +1,7 @@
 {
     "title" : "Teapot",
-    "attribution" : "Attila Magyar with Johan Fabry"
+    "attribution" : "Attila Magyar with Johan Fabry",
+    "headingLevelOffset":2
 }
 @cha:teapot
 
@@ -9,7 +10,7 @@ We begin the book in this first chapter by showing how basic web applications ca
 Teapot is a ''micro'' web framework on top of the Zinc HTTP web server described in Chapter  *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pillar@cha:zinc-server*. It focuses on simplicity and ease of use and is itself small: around 600 lines of code, not counting unit tests. Teapot is developed by Attila Magyar and this chapter is heavily inspired from the original documentation.
 
 
-!!Getting Started
+!Getting Started
 To get started,  execute the following code snippet, it will load the latest stable version of Teapot.
 
 [[[
@@ -30,7 +31,7 @@ Opening a browser on *http://localhost:1701/welcome* results in the following:
 +The Teapot welcome at *http://localhost:1701/welcome*>file://figures/TeapotWelcome.png|width=70|label=TeapotWelcome+
 
 
-!!!Differences between Teapot and other Web Frameworks
+!!Differences between Teapot and other Web Frameworks
 
 Teapot is not a singleton and doesn't hold any global state. You can run multiple Teapot servers inside the same image with their state being isolated from each other.
 
@@ -40,7 +41,7 @@ Teapot is not a singleton and doesn't hold any global state. You can run multipl
 
 
 
-!!A REST Example, Showing some CRUD Operations
+!A REST Example, Showing some CRUD Operations
 
 Before getting into the details of Teapot. Here is a simple example for managing books. With the following code, we can list books, add a book and delete a book.
 
@@ -75,7 +76,7 @@ For a more complete example, study the ==Teapot-Library-Example== package.
 
 Now that you get the general feel of Teapot, let us see the key concepts.
 
-!!Route
+!Route
 
 The most important concept of Teapot is the Route. The template for route definitions is as follows:
 
@@ -109,7 +110,7 @@ It is also possible to use the Zinc client (see  Chapter *Zinc Client Side>../Zi
    --> "Hello user1"
 ]]]
 
-!!!Parameters in URLs
+!!Parameters in URLs
 %%HERE
 The URL pattern may contain named parameters (e.g., ==<user>== above), whose values are accessible via the request object. The request is an extension of ==ZnRequest== with some extra methods.
 
@@ -127,7 +128,7 @@ Teapot on
 
 See also the, ==IsInteger== and ==IsNumber== classes for information about introducing user defined conversions.
 
-!!!Using Regular Expressions
+!!Using Regular Expressions
 
 Instead of ==<== and ==>== surrounded named parameters, the regexp pattern may contain subexpressions between parentheses whose values are accessible via the
 request object.
@@ -145,7 +146,7 @@ ZnEasy get: 'http://localhost:1701/hi/user'
    --> not found
 ]]]
 
-!!!How are Routes Matched?
+!!How are Routes Matched?
 
 The routes are matched in the order in which they are defined.
 
@@ -156,7 +157,7 @@ The first route that matches the request method and the URL is invoked.
 - If a route returns a ==ZnResponse==, no transformation will be performed.
 - If a route has a response transformer defined (see below), the specified transformation will be performed.
 
-!!!Aborting
+!!Aborting
 
 An ==abort:== message sent to the request object immediately stops a request (by signaling an exception) within a route. For example:
 
@@ -166,7 +167,7 @@ Teapot on
    GET: '/unauthorized' -> [ :req | req abort: 'go away' ]; start.
 ]]]
 
-!!Transforming Output from Actions
+!Transforming Output from Actions
 
 The default output for Teapot is HTML: the output of an action is interpreted as a string and the content-type of the HTML response is set to ==text/html==. The output of an action may actually undergo any kind of transformations by a response transformer. Response Transformers heve the ultimate responsibility for constructing the outgoing HTTP response (an instance of the class ==ZnResponse==). To clarify, HTTP requests take the following path through Teapot:
 
@@ -190,7 +191,7 @@ GET: '/greet' -> [:req |
       entity: (ZnEntity html: 'Hello World!'); yourself ]
 ]]]
 
-!!!Response Transformers
+!!Response Transformers
 
 The responsibility of a response transformer is to convert the output of the action block to HTML and to set the content-type of the response.
 Some response transformers require external packages (e.g., NeoJSON, STON, Mustache). See the ==TeaOutput== class for more information, for example the HTML transformer is  ==TeaOutput html==.
@@ -232,7 +233,7 @@ Teapot on
    output: (TeaOutput mustacheHtml: '<b>{{phrase}}</b> <i>{{name}}</i>!'); start.
 ]]]
 
-!!Before and After Filters
+!Before and After Filters
 
 Teapot also offers before and after filters.
 Before filters are evaluated before each request that matches the given URL pattern. Requests can also be aborted (by sending the ==abort:== message) in before and after filters.
@@ -257,7 +258,7 @@ Teapot on
    start.
 ]]]
 
-!!Error Handlers
+!Error Handlers
 Teapot also handles exceptions of a configured type(s) for all routes and before filters.
 The following example illustrates how the errors raised in actions can be captured by exception handlers.
 
@@ -289,7 +290,7 @@ exception: ZeroDivide, DomainError -> handler
 The same rules apply for the return values of the exception handler as were used for the Routes.
 
 
-!!Serving Static Files
+!Serving Static Files
 
 Teapot can straightforwardly serve static files. The following example serves the files located on the file system at ==/var/www/htdocs== at the ==/static== URL.
 
@@ -298,7 +299,7 @@ Teapot on
    serveStatic: '/static' from: '/var/www/htdocs'; start.
 ]]]
 
-!!Conclusion
+!Conclusion
 Teapot is a powerful and simple web framework. It is based on the notion of routes and request transformations. It supports the definition of REST application.
 
 Now an important point: Where does the name come from? ''418 I'm a teapot (RFC 2324)'' is an HTTP status code.
