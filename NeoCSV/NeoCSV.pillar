@@ -1,6 +1,7 @@
 {
     "title": "NeoCSV",
-    "attribution": "Sven Van Caekenberghe with Damien Cassou and Stéphane Ducasse"
+    "attribution": "Sven Van Caekenberghe with Damien Cassou and Stéphane Ducasse",
+    "headingLevelOffset":2
 }
 @cha:neoCSV
 
@@ -8,11 +9,11 @@
 CSV (Comma-Separated Values) is a popular data-interchange format. This chapter presents NeoCSV, a library to parse and export CSV files.
 This chapter has originally been written by Sven Van Caekenberghe the author of NeoCSV and many other nicely designed Pharo libraries.
 
-!!NeoCSV
+!NeoCSV
 
 NeoCSV is an elegant and efficient standalone Pharo library to read (resp. write) CSV files converting to (resp. from) Pharo objects.
 
-!!!An Introduction to CSV
+!!An Introduction to CSV
 
 CSV is a lightweight text-based ''de facto'' standard for human-readable tabular data interchange. Essentially, the key characteristics are that CSV (or more generally, delimiter-separated text data):
 
@@ -26,7 +27,7 @@ CSV is a lightweight text-based ''de facto'' standard for human-readable tabular
 
 Note that there is not one single official standard specification.
 
-!!!Hands On NeoCSV
+!!Hands On NeoCSV
 
 NeoCSV contains a reader (==NeoCSVReader==) and a writer (==NeoCSVWriter==) to parse and generate delimiter-separated text data to and
 from Smalltalk objects. The goals of NeoCSV are:
@@ -68,7 +69,7 @@ String streamContents: [ :stream |
 '
 ]]]
 
-!!Generic Mode
+!Generic Mode
 
 NeoCSV can operate in generic mode without any further customization. While writing,
 
@@ -87,7 +88,7 @@ The standard delimiter is a comma character. Quoting is always done using a doub
 repeating it. Field separators and line endings are allowed inside a quoted field. Any whitespace is significant.
 
 
-!!Customizing NeoCSVWriter
+!Customizing NeoCSVWriter
 
 Any character can be used as field separator, for example:
 
@@ -125,7 +126,7 @@ neoCSVWriter
 
 The ==fieldWriter== option applies to all fields.
 
-!!!Writing Objects
+!!Writing Objects
 
 If your data is in the form of regular domain-level objects it would be wasteful to convert them to arrays just for writing them as CSV. NeoCSV has a non-intrusive option to map your domain object's fields: You add field specifications based on accessors. This is how you would write an array of ==Point==s.
 
@@ -161,7 +162,7 @@ String streamContents: [ :stream |
 '
 ]]]
 
-!!Customizing NeoCSVReader
+!Customizing NeoCSVReader
 
 The parser is flexible and forgiving. Any line ending will do, quoted and non-quoted fields are allowed.
 
@@ -194,7 +195,7 @@ Here we specify 4 fields: an integer, a float, a string and a date field. Field 
 ==Array==.
 
 
-!!!Ignoring Fields
+!!Ignoring Fields
 
 While reading from a CSV file, you can ignore fields using ==addIgnoredField==. In the following example, the third field of each record is ignored:
 
@@ -211,7 +212,7 @@ While reading from a CSV file, you can ignore fields using ==addIgnoredField==. 
 
 Adding ignored field(s) requires adding field types on all other fields.
 
-!!!Creating Objects
+!!Creating Objects
 
 In many cases you will probably want your data to be returned as one of your domain objects. It would be wasteful to first create arrays and then convert all those. NeoCSV has non-intrusive options to create instances of your own classes and to convert and set fields on them directly. This is done by specifying accessors and converters. Here is an example for reading ==Association==s of ==Float==s.
 
@@ -226,7 +227,7 @@ In many cases you will probably want your data to be returned as one of your dom
 
 For each field you have to give the mutating accessor to use. You might also want to pass a conversion block using ==addField:converter:==.
 
-!!!Reading many Objects
+!!Reading many Objects
 
 Handling large CSV files is possible with NeoCVS. In the following, we first create a large CSV file then read it partly (this takes a bit of time, be patient).
 

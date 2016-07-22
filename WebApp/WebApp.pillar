@@ -1,6 +1,7 @@
 {
     "title": "Building and Deploying a Small Web application",
-    "attribution": "Sven Van Caekenberghe with Luc Fabresse and Johan Fabry"
+    "attribution": "Sven Van Caekenberghe with Luc Fabresse and Johan Fabry",
+    "headingLevelOffset":2
 }
 @cha:webApp
 
@@ -25,7 +26,7 @@ In our implementation, the route ==/image== will serve an HTML page containing t
 ==/image?raw=true==. These will be GET HTTP requests. The form will submit its data to ==/image== as a POST request.
 
 
-!!Saying Hello World
+!Saying Hello World
 
 Let's lay the groundwork for our new Web application by making a version that only says 'Hello World!'. We'll be extending the Web app gradually until we reach
 our functional goal.
@@ -85,7 +86,7 @@ Note how we are not even serving HTML, just plain text.
 +Your first hello world Web app in action>file://figures/9-RunTheWebApp.jpg|width=100|label=helloWebApp-in-action+
 
 
-!!!Debugging our Web App
+!!Debugging our Web App
 
 Try putting a breakpoint in ==MyFirstWebApp>>handleRequest:== (by inserting ==self halt== in the method source code).
 Then, if you refresh the page from the web browser, a debugger will open in Pharo allowing you to inspect things.
@@ -100,7 +101,7 @@ You can leave the server running.
 If you want you can enable logging, or switch to debug mode and inspect the server instance as explained in Chapter *Zinc Server>../Zinc-HTTP-Server/Zinc-HTTP-Server.pillar@cha:zinc-server*.
 Don't forget to remove any breakpoints you set before continuing.
 
-!!Serving an HTML Page With an Image
+!Serving an HTML Page With an Image
 
 HTML generation can be done with some of existing high-level Pharo frameworks such as Mustache (see Chapter *Mustache>../Mustache/Mustache.pillar@cha:mustache*).
 In the following, we manually compose the HTML to focus on app building and deployment.
@@ -132,7 +133,7 @@ This is an indication that we have no class comment, which is not good: document
 Click the ==Comments== button and write some documentation.
 You can also use the class comment as a notepad for yourself, saving useful expressions that you can later execute in place such as the two expressions above to start the server.
 
-!!!Serving an Image
+!!Serving an Image
 
 For the purpose of our Web app, images can be any of three types: GIF, JPEG and PNG. The application will store them in memory as an object wrapping the actual bytes together with a MIME type.
 
@@ -188,7 +189,7 @@ When you refresh the page in the web browser, you should now see an image as in 
 
 +Serving the Pharo logo>file://figures/13-servingPharoLogo.jpg|width=100|label=servingPharoLogo+
 
-!!Allowing Users to Upload an Image
+!Allowing Users to Upload an Image
 
 Interaction is what differentiates a Web site from a Web application.
 We will now add the ability for users to upload a new image to change the one on the server.
@@ -275,7 +276,7 @@ Finally, the code makes sure the file part is actually an image by matching with
 If you are curious, set a breakpoint in the ==handlePostRequest:== method and inspect the ==request== object of an actual request.
 You will learn a lot from inspecting and manipulating live objects.
 
-!!Live Debugging
+!Live Debugging
 
 Let's make a deliberate error in our code.
 Change ==handlePostRequest:== so that the last line reads like:
@@ -323,7 +324,7 @@ image entity. Select the whole contents and replace it with ==self downloadPharo
 uploaded image is gone, replaced again by the default Pharo logo. We just changed an object in the middle of the execution. Imagine doing all your development
 like that, having a real conversation with your application, while you are developing it. Be warned though: once you get used to this, it will be hard to go back.
 
-!!Image Magic
+!Image Magic
 
 The abilities to look at the requests and responses coming in and going out of the server, to set breakpoints, to debug live request without redoing the user
 interaction or to modify data structure live are already great and quite unique. But there is more.
@@ -386,7 +387,7 @@ the result, but we do want to reply with a bad request when the parsing has fail
 
 Once we have a form object, the possibilities are almost endless. You can query a form for its size, depth and other elements. You can manipulate the form in various ways: scaling, resizing, rotating, flipping, cropping, compositing. And you can do all this in an interactive and dynamic environment.
 
-!!Adding Tests
+!Adding Tests
 
 We all know that testing is good, but how do we actually test a Web app?
 Writing some basic tests is actually not difficult, since Zinc HTTP Components covers both the client and the server side with the same objects.
@@ -478,7 +479,7 @@ MyFirstWebAppTest>>testUpload
 The HTTP client object is pretty powerful. It can do a correct multi-part form-data POST, just like a browser. Furthermore, once configured, it can be reused,
 like for the second GET request.
 
-!!Saving Code to a Repository
+!Saving Code to a Repository
 
 If all is well, you now have a package called ==MyFirstWebApp== containing two classes, ==MyFirstWebApp== and ==MyFirstWebAppTest==. The first one should have
 9 methods, the second 5. If you are unsure about your code, you can double check with the full listing at the end of this document. Our Web app should now work
@@ -487,7 +488,7 @@ as expected, and we have some tests to prove it.
 But our code currently only lives in our development image.
 Let's change that and move our code to a source code repository.
 
-!!!The Monticello Browser
+!!The Monticello Browser
 
 For this we first have to use the Monticello Browser tool.
 In the first pane of the Nautilus Browser, click on the icon in front of your package named  ==MyFirstWebApp== as shown in Figure *@OpenMC*.
@@ -539,7 +540,7 @@ indicating the package is dirty: i.e., it has uncommitted changes.
 By clicking on the 'Changes' button, Monticello will list everything that has changed or will tell you nothing has changed (this happens sometimes when Monticello gets out of sync). If Monticello finds actual changes, you will get a browser showing all the changes you made.
 Since this is the first version, all your changes are additions.
 
-!!!Committing to SmalltalkHub
+!!Committing to SmalltalkHub
 
 Go back to the Monticello Browser and click the 'Save' button (with your package and repository selected). Leave the version name,
 something like MyFirstWebApp-SvenVanCaekenberghe.1 alone, write a nice
@@ -555,7 +556,7 @@ You can now browse back to Smalltalkhub.com to confirm that your code arrived th
 After a successful commit, it is a good idea to save your image.
 In any case, your package should now no longer be dirty, and there should be no more differences between the local version and the one on SmalltalkHub.
 
-!!!Defining a Project Configuration
+!!Defining a Project Configuration
 
 Real software consists of several packages and will depend on extra external libraries and frameworks. In practice, software configuration management, including
 the management of dependencies and versions, is thus a necessity.
@@ -619,7 +620,7 @@ For some feedback, make sure the Transcript is open and inspect the above expres
 
 Now add your SmalltalkHub repository to the ==ConfigurationOfMyFirstWebApp== Monticello package. Double-check the changes in the Monticello Browser, remember we  copied a whole class. Now commit by saving to your SmalltalkHub repository. Use the Web interface to verify that all went well.
 
-!!Running a Real Cloud Server
+!Running a Real Cloud Server
 
 So we created our first Web app and tested it locally.
 We stored our source code in the SmalltalkHub repository and created a Metacello configuration for it.
@@ -635,7 +636,7 @@ The entry level server there, which is more than powerful enough for our experim
 If you stop and remove the server after a couple of days, you will only pay cents.
 Go ahead and make yourself an account and register a credit card.
 
-!!!Create a Droplet
+!!Create a Droplet
 
 A server instance is called a Droplet. Click the ‘Create Droplet’ button and fill in the form. Pick a hostname, select the smallest size, pick a region close
 to you. As operating system image, we’ll be using a 32-bit Ubuntu Linux, version 13.04 x32. You can optionally use an SSH key pair to log in - it is a good idea,
@@ -675,7 +676,7 @@ Let's quickly test the stock HTTP server that comes with Pharo, like we did in t
 This command will block. Now access your new HTTP server. You should see the Zinc
 HTTP Components welcome page. If this works, you can press ctrl-C in the terminal to end our test.
 
-!!!Deploy for Production
+!!Deploy for Production
 
 We now have a running server. It can run Pharo too, but it is currently using a generic image. How do we get our code deployed? To do this we use the Metacello
 configuration. But first, we are going to make a copy of the stock ==Pharo.image== that we downloaded. We want to keep the original clean while we make changes to the copy.
@@ -745,7 +746,7 @@ You can surf to the correct IP address and port to test you application. Note th
 Figure *@runningOnCloud9* shows how the deployment looks like on cloud9.
 +Our Web app, running in the cloud>file://figures/24-runningOnCloud9.jpg|width=90|label=runningOnCloud9+
 
-!!Have Fun Extending this Web App
+!Have Fun Extending this Web App
 
 Did you like the example so far? Would you like to take one more step?
 Here is a little extension left as an exercise.
@@ -754,7 +755,7 @@ Initially, you can show an empty image.
 Here are a couple of hints.
 Read only as far as you need, try to figure it out by yourself.
 
-!!!Hint 1
+!!Hint 1
 You can scale a form object into another one using just one message taking a single argument.
 You can use the same classes that we used for parsing as a tool to generate PNG, JPEG or GIF images given a form.
 
@@ -762,14 +763,14 @@ When you are done, save your code as a new version.
 Then update your configuration with a new, stable version.
 Finally, go to the server, update your image based on the configuration and restart the running vm\+image.
 
-!!!Hint 2
+!!Hint 2
 
 Change the ==html== method referring to a new variant, ==/image?previous=true==, for the second image. Adjust ==handleGetRequest:== to look for that attribute.
 Add a helper method ==pngImageEntityForForm:== and a ==previousImage== accessor.
 It is easy to create an empty, blank form as default.
 Call a ==updatePreviousImage== at the right spot in ==handlePostRequest:== and implement the necessary functionality there.
 
-!!!Hint 3
+!!Hint 3
 If you found it difficult to find the right methods, have a look at the following ones:
 
 -==Form>>scaledIntoFormOfSize:==
@@ -778,7 +779,7 @@ If you found it difficult to find the right methods, have a look at the followin
 -==ByteArray class>>streamContents:==
 -==ZnByteArrayEntity class>>with:type:==
 
-!!!Solution, Part 1, New Methods
+!!Solution, Part 1, New Methods
 
 Here are 3 new methods that are part of the solution.
 
@@ -802,7 +803,7 @@ updatePreviousImage
     previousImage := self pngImageEntityForForm: scaled
 ]]]
 
-!!!Solution, Part 2, Changed Methods
+!!Solution, Part 2, Changed Methods
 
 Here are the changes to 3 existing methods for the complete solution.
 [[[
@@ -849,7 +850,7 @@ handlePostRequest: request
    ^ ZnResponse redirect: #image
 ]]]
 
-!!!Solution, Part 3, Updated Configuration
+!!Solution, Part 3, Updated Configuration
 
 To update our configuration, add 1 method and change 1 method.
 
@@ -868,7 +869,7 @@ stable: spec
 
 Of course, you will have to substitute your name for the concrete version.
 
-!!Conclusion
+!Conclusion
 
 Congratulations: you have now built and deployed your first Web app with Pharo. Hopefully you are interested in learning more. From the Pharo website you should
 be able to find all the information you need. Don’t forget about the Pharo by Example book and the mailing lists.

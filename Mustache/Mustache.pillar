@@ -1,6 +1,7 @@
 {
     "title": "Mustache Templates for Pharo",
-    "attribution": "Stéphane Ducasse and Norbert Hartl with Johan Fabry"
+    "attribution": "Stéphane Ducasse and Norbert Hartl with Johan Fabry",
+    "headingLevelOffset":2
 }
 @cha:mustache
 
@@ -13,7 +14,7 @@ engine for HTML pages it is useful in different areas.
 
 Norbert Hartl developed a Mustache package for Pharo. This chapter is an introduction to this package and a mini tutorial to get started with Mustache. This text is based on the original blog entries written by Norbert and extended to offer a larger covering of the Mustache features.
 
-!!Getting Started
+!Getting Started
 
 To install Mustache, execute the following expression in a workspace:
 
@@ -75,7 +76,7 @@ Well, $6000.0, after taxes.
 As context object we can use Dictionaries and Objects. Dictionaries need to have a key that is used in the template and Objects need a selector with the same
 name. In this chapter we use Dictionaries for brevity.
 
-!! Tags as Variables
+! Tags as Variables
 Tags can be of different types: The first and simplest type is ''variable''.
 We explain its working with an example: a =={{age}}== tag in a basic template tries to find the
 ==age== key in the current context. If there is no ==age== key, the parent contexts are looked up recursively. If the top context is reached and the ==age==
@@ -122,7 +123,7 @@ The template below shows the different ways in which ==company== is escaped in t
 * <b>GitHub</b>'
 ]]]
 
-!! Sections
+! Sections
 
 Sections render blocks of text a number of times if their key is present in the context. A section is delimited by a hash sign and a slash. For example, =={{#number}}== begins a section for the ''number'' variable while =={{/number}}== ends it.
 
@@ -145,7 +146,7 @@ context := { 'foo' -> 'true' } asDictionary.
 
 When the variable is set, the output depends on the contents of the variable and there are three distinct cases, as we discuss next.
 
-!!! With the Variable Value being a 'simple' Object
+!! With the Variable Value being a 'simple' Object
 
 For values that are not collections nor blocks, the output will be present once.
 For example, below ==number== is bound to ==true== which renders the text =='Shown too'==. The same will happen when ==number== is bound to another value, e.g. ==42==.
@@ -183,7 +184,7 @@ context := { 'number' -> false } asDictionary.
 ]]]
 
 
-!!! With the Variable Value being a Collection
+!! With the Variable Value being a Collection
 
 We can use collections to create loop constructs in templates. If a
 section key is present in the context and it has a collection as a
@@ -319,7 +320,7 @@ With such behavior we can easily generate menus and lists in html, for example:
 
 
 
-!!! With the Variable Value being a Block
+!! With the Variable Value being a Block
 
 We can use Pharo blocks in context objects as well. They are evaluated at the time the template is filled out. For example,
 
@@ -345,7 +346,7 @@ the value of this argument will be the section with subsituted variables.
 '<b> Willy is awesome </b>'.
 ]]]
 
-!!! Inverted Sections
+!! Inverted Sections
 
 A last use of sections is inverted sections. An inverted section begins with a caret
 and ends with a slash: for example,  =={{^list}}== begins a an inverted section and =={{/list}}== ends it. While
@@ -397,7 +398,7 @@ That is, they will be rendered if the key doesn't exist, is false, or is an empt
 % 'This is a test for &.'
 % ]]]
 
-!! Partial templates
+! Partial templates
 
 Mustache templates have a notion of sub-templates that are called partials. Partial templates are useful for reusing and
 composing templates out of simpler ones. Partials begin with a greater than sign, such as =={{> user}}==.
@@ -454,7 +455,7 @@ template
 
 
 
-!! Miscellaneous
+! Miscellaneous
 
 When you want to use Mustache to generate LaTeX you face the problem
 that LaTeX may need to contain =={{== and ==}}==, which conflicts
@@ -507,7 +508,7 @@ After that it is just as simple as in the following example:
 %       ]]
 % ]]]
 
-!! Templates made Easy
+! Templates made Easy
 
 Mustache can make template dependent tasks very easy from a simple token replacement up to nested structures to create HTML pages. We use them e.g., for
 generating SOAP templates. The strength of Mustache lays in the syntax and the combination of context objects. So, there is more for you to find what can be

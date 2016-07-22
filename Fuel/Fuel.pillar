@@ -1,6 +1,7 @@
 {
     "title": "Serializing Complex Objects with Fuel",
-    "attribution": "Martín Dias, Stéphane Ducasse, Mariano Martinez Peck and Max Leske with Johan Fabry"
+    "attribution": "Martín Dias, Stéphane Ducasse, Mariano Martinez Peck and Max Leske with Johan Fabry",
+    "headingLevelOffset":2
 }
 @cha:fuel
 
@@ -27,7 +28,7 @@ The main features of Fuel are as follows:
 - It supports class renaming and class reshaping.
 - It has good test coverage and a large suite of benchmarks.
 
-!! General Information
+! General Information
 
 Fuel has been developed and maintained over the years by the following people: Martin Dias, Mariano Martinez Peck, Max Leske, Pavel Krivanek, Tristan Bourgois
 and Stéphane Ducasse (as PhD advisor and financer).
@@ -38,7 +39,7 @@ alternative to textual storage and that grouping of objects makes a lot of sense
 
 Before going into details we present the ideas behind Fuel and it's main features and give basic usage examples.
 
-!!!Goals
+!!Goals
 
 ; Concrete
 : Fuel doesn't aspire to have a dialect-interchange format. This makes it possible to serialize special objects like contexts, block closures, exceptions, compiled methods and classes. Although there are ports to other dialects, most notably Squeak, Fuel development is Pharo-centric.
@@ -50,7 +51,7 @@ Before going into details we present the ideas behind Fuel and it's main feature
 : A requirement from the onset was to have a good object-oriented design and to avoid special support from the virtual machine.
 ; Maintainable
 : Fuel has a complete test suite (over 600 unit tests), with a high degree of code coverage. Fuel also has well-commented classes and methods.
-!!! Installation and Demo
+!! Installation and Demo
 
 Fuel 1.9 is available by default in Pharo since version 2.0 of Pharo. Therefore you do not need to install it.
 The ""default packages"" work out of the box in Pharo 1.1.1, 1.1.2, 1.2, 1.3, 1.4, 2.0, 3.0 and 4.0 and Squeak 4.1, 4.2, 4.3, 4.4, 4.5.
@@ -91,7 +92,7 @@ materializedArray third
    value: 'The materialized block closure can be properly evaluated.'.
 ]]]
 
-!!! Some Links
+!! Some Links
 
 - The home page is *http://rmod.inria.fr/web/software/Fuel*.
 - The source code is at *http://smalltalkhub.com/#!/~Pharo/Fuel*.
@@ -102,10 +103,10 @@ materializedArray third
 %=========================================================================%
 
 
-!! Getting Started
+! Getting Started
 @GettingStarted
 
-!!!Basic Examples
+!!Basic Examples
 Fuel offers some class-side messages to ease more common uses of
 serialization  (the ==serialize:toFileNamed:== message )
 and materialization (the message ==materializeFromFileNamed:==). The next example writes to and reads from a file:
@@ -125,7 +126,7 @@ anArray := FLSerializer serializeToByteArray: 'stringToSerialize'.
 materializedString := FLMaterializer materializeFromByteArray: anArray.
 ]]]
 
-!!!FileStream
+!!FileStream
 
 In the following example we work with file streams. Note that the stream needs to be set to binary mode:
 
@@ -146,7 +147,7 @@ instances by sending the
 ==newDefault== message and then perform the desired operations. As we will see in the next example, creating the instances allows for more flexibility on serialization
 and materialization.
 
-!!!Compression
+!!Compression
 
 Fuel does not care to what kind of stream it writes its data. This makes it easy to use stream compressors. An example of use is as follows:
 
@@ -167,7 +168,7 @@ Fuel does not care to what kind of stream it writes its data. This makes it easy
    gzip close ].
 ]]]
 
-!!!Showing a Progress Bar
+!!Showing a Progress Bar
 
 Sometimes it is nice to see progress updates on screen. Use the message ==showProgress== in this case. The progress bar functionality is available from the
 ==FuelProgressUpdate== package, so load that first:
@@ -201,13 +202,13 @@ The following example uses the message ==showProgress== to display a progress ba
 
 
 %=========================================================================%
-!! Managing Globals
+! Managing Globals
 @ManagingGlobals
 
 Sometimes we may be interested in storing just the name of a reference,
 because we know it will be present when materializing the graph. For example when the current processor scheduler ==Processor== is referenced from the graph we do not want to serialize it as it does not make sense to materialize it. Hence Fuel considers some objects as globals that may not be serialized. It also allows for you to add to this set and lastly to use a different environment when materializing globals.
 
-!!!Default Globals
+!!Default Globals
 
 By default, Fuel considers the following objects as globals, i.e., it will store just their name:
 
@@ -217,7 +218,7 @@ By default, Fuel considers the following objects as globals, i.e., it will store
 - Some well-known global variables: ==Smalltalk==, ==SourceFiles==, ==Transcript==, ==Undeclared==, ==Display==, ==TextConstants==, ==ActiveWorld==, ==ActiveHand==, ==ActiveEvent==, ==Sensor==, ==Processor==, ==ImageImports==, ==SystemOrganization== and ==World==.
 
 
-!!!Duplication of Custom Globals
+!!Duplication of Custom Globals
 
 With this following code snippet, we show that by default a Smalltalk global value is not serialized as a global. In such a case it is duplicated on materialization.
 
@@ -256,7 +257,7 @@ aSerializer
 [ (FLMaterializer materializeFromFileNamed: 'g.fuel') == SomeGlobal ] assert.
 ]]]
 
-!!!Changing the Environment
+!!Changing the Environment
 @sec:ManagingGlobals
 
 The default lookup location for globals is ==Smalltalk globals==. This can be changed by using the message ==globalEnvironment:== during serialization and
@@ -301,12 +302,12 @@ anEnvironment at: #SomeGlobal put: {42}.
 
 %=========================================================================%
 
-!! Customizing the Graph
+! Customizing the Graph
 
 When serializing an object you often want to select which part of the object's state should be serialized. To achieve this with Fuel you can selectively ignore
 instance variables.
 
-!!!Ignoring Instance Variables
+!!Ignoring Instance Variables
 
 Under certain conditions it may be desirable to prevent serialization of certain instance variables for a given class. A straightforward way to do this is to
 override the hook method ==fuelIgnoredInstanceVariableNames==, at class side of the given class. It returns an array of instance variable names (as symbols) and
@@ -320,7 +321,7 @@ User class>>fuelIgnoredInstanceVariableNames
    ^ #('accumulatedLogins' 'applications')
 ]]]
 
-!!!Post-Materialization Action
+!!Post-Materialization Action
 
 When materialized, ignored instance variables will be ==nil==. To re-initialize and set values to those instance variables, send the
 ==fuelAfterMaterialization== message.
@@ -333,12 +334,12 @@ User>>fuelAfterMaterialization
    accumulatedLogins := 0.
 ]]]
 
-!!!Substitution on Serialization
+!!Substitution on Serialization
 
 Sometimes it is useful to serialize something different than the original object, without altering the object itself. Fuel proposes two different ways to do
 this: dynamically and statically.
 
-!!!!Dynamically
+!!!Dynamically
 
 You can establish a specific substitution for a particular serialization. Let's illustrate with an example, where the graph includes a ==Stream== and you want
 to serialize ==nil== instead.
@@ -362,7 +363,7 @@ objectToSerialize := { 'hello' . '' writeStream}.
 
 After executing this code, ==materializedObject== will contain ==#('hello' nil)==, i.e. without the instance of a ==Stream==.
 
-!!!! Statically
+!!! Statically
 You can also do substitution for each serialization of an object by overriding its ==fuelAccept:== method. Fuel visits each object in the graph by sending this
 message to determine how to trace and serialize it. The argument of the message is an instance of a ==FLMapper== subclass.
 
@@ -415,11 +416,11 @@ User>>fuelAccept: aGeneralMapper
 
 In this case, the substituted user (i.e., the one with the empty history) will be visited via its super implementation.
 
-!!! Substitution on Materialization
+!! Substitution on Materialization
 In the same way that we may want to customize object serialization, we may want to customize object materialization. This can be done either by treating an
 object as a globally obtained reference, or by hooking into instance creation.
 
-!!!! Global References
+!!! Global References
 
 Suppose we have a special instance of ==User== that represents the admin user, and it is a unique instance in the image. In the case that the admin user is
 referenced in our graph, we want to get that object from a global when the graph is materialized. This can be achieved by modifying the ""serialization""
@@ -439,7 +440,7 @@ User>>fuelAccept: aGeneralMapper
 During serialization the admin user won't be serialized but instead its global name and selector are stored. Then, at materialization time, Fuel will send the
 message ==admin== to the class ==User==, and use the returned value as the admin user of the materialized graph.
 
-!!!! Hooking into Instance Creation
+!!! Hooking into Instance Creation
 
 Fuel provides two hook methods to customise how instances are created: ==fuelNew== and ==fuelNew:==.
 
@@ -459,7 +460,7 @@ fuelNew
 
 This similarly applies to variable sized objects through the method ==fuelNew:== which by default sends ==basicNew:==.
 
-!!!Not Serializable Objects
+!!Not Serializable Objects
 
 You may want to make sure that some objects are not part of the graph during serialization. Fuel provides the hook method named ==visitNotSerializable:== which
 signals an ==FLNotSerializable== exception if such an object is found in the graph that is to be serialized.
@@ -472,7 +473,7 @@ MyNotSerializableObject>>fuelAccept: aGeneralMapper
 
 %=========================================================================%
 
-!! Errors
+! Errors
 
 We provide a hierarchy of errors which allows one to clearly identify the problem when something went wrong:
 
@@ -530,7 +531,7 @@ As most classes of Fuel, they have class comments that explain their purpose:
 
 %=========================================================================%
 
-!! Object Migration
+! Object Migration
 We often need to load objects whose class has changed since it was saved. For example, figure *@figClassChanges* illustrates typical changes that can happen to
 the class shape. Now imagine we previously serialized an instance of ==Point== and we need to materialize it after ==Point== class has changed.
 
@@ -569,7 +570,7 @@ Additionally, the method ==globalEnvironment:==, shown in Section *@sec:Managing
 
 %=========================================================================%
 
-!! Fuel Format Migration
+! Fuel Format Migration
 
 Until now, each Fuel version has used its own stream format, which is ""not"" compatible with the format of other versions. This means that when upgrading Fuel, we
 will need to convert our serialized streams. This is done by using the old version of Fuel to materialize a stream, keeping a reference to this object graph, and then loading the new version of Fuel and serializing the object graph back to a file.
@@ -727,7 +728,7 @@ We assume in this example that the number of objects to migrate can be materiali
 
 %=========================================================================%
 
-!! Built-in Header Support
+! Built-in Header Support
 
 It can be useful to store additional information with the serialized graph or perform pre and post materialization actions. To achieve this, Fuel supports the possibility to customize the header, an instance of ==FLHeader==.
 
@@ -782,7 +783,7 @@ Serialized at 2015-05-24T22:39:18-03:00
 Materialized at 2015-05-24T22:39:37-03:00
 ]]]
 
-!! Conclusion
+! Conclusion
 
 Fuel is a fast and stable binary object serializer for Pharo and is available by default in Pharo since 2.0. It can serialize to and materialize from any stream and the graph of objects to be serialized can be customized in multiple ways. It can serialize nearly any object in the system. For example, cases are known of an error occurring in a deployed application, the full stack being serialized and later materialized on a development machine for debugging.
 
