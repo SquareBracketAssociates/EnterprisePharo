@@ -1,6 +1,9 @@
 {
-    "title": "Zinc HTTP: The Client Side",
-    "attribution": "Sven Van Caekenberghe with Luc Fabresse and Johan Fabry"
+    "metadata" : {
+        "title": "Zinc HTTP: The Client Side",
+        "attribution": "Sven Van Caekenberghe with Luc Fabresse and Johan Fabry"
+    },
+    "headingLevelOffset":2
 }
 @cha:zinc-client
 
@@ -10,7 +13,7 @@ web servers to communicate. It is also becoming the most popular protocol for im
 
 With Zinc, Pharo has out of the box support for HTTP. Zinc is a robust, fast and elegant HTTP client and server library written and maintained by Sven van Caekenberghe.
 
-!!HTTP and Zinc
+!HTTP and Zinc
 
 HTTP, short for Hypertext Transfer Protocol, functions as a request-response protocol in the client-server computing model. As an application level protocol it
 is layered on top of a reliable transport such as a TCP socket stream. The most important standard specification document describing HTTP version 1.1 is
@@ -45,12 +48,12 @@ The reference Zn implementation lives in several places:
 
 Installation or updating instructions can be found on *its web site>http://zn.stfx.eu/*.
 
-!!Doing a Simple Request
+!Doing a Simple Request
 
 The key object to programmatically execute HTTP requests is called ==ZnClient==. You instantiate it, use its rich API to configure and execute an HTTP request
 and access the response. ==ZnClient== is a stateful object that acts as a builder.
 
-!!! Basic Usage
+!! Basic Usage
 
 Let's get started with the simplest possible usage.
 
@@ -176,7 +179,7 @@ This will print out some information on the Transcript, as shown below.
 
 In a later subsection about server logging, which uses the same mechanism, you will learn how to interpret and customize logging.
 
-!!! Simplified HTTP Requests
+!! Simplified HTTP Requests
 
 Although ==ZnClient== is absolutely the preferred object to deal with all the intricacies of HTTP, you sometimes wish you could to a quick HTTP request with an
 absolute minimum amount of typing, especially during debugging. For these occasions there is ==ZnEasy==, a class side only API for quick HTTP requests.
@@ -201,7 +204,7 @@ ZnEasy getPng: 'http://pharo.org/files/pharo.png'.
 
 When you explore the implementation, you will notice that ==ZnEasy== uses a ==ZnClient== object internally.
 
-!!HTTP Success ?
+!HTTP Success ?
 
 A simple view of HTTP is: you request a resource and get a response back containing the resource. But even if the mechanics of HTTP did work, and even that is
 not guaranteed (see the next section), the response could not be what you expected.
@@ -245,7 +248,7 @@ ZnClient new
 Maybe it doesn't look like a big difference, but combined with some other options and features of ==ZnClient== that we'll see later on, the code does become more
 elegant and more reliable at the same time.
 
-!!Dealing with Networking Reality
+!Dealing with Networking Reality
 
 As a network protocol, HTTP is much more complicated than an ordinary message send. The famous
 *Fallacies of Distributed Computing>http://en.wikipedia.org/wiki/Fallacies_of_Distributed_Computing* paper by Deutsch et. al. eloquently lists the issues involved:
@@ -307,7 +310,7 @@ ZnClient new
 In the above example, the request will be tried up to 3 times, with a 2 second delay between attempts. Note that the definition of failure/success is broad: it
 includes for example the option to enforce HTTP success.
 
-!! Building URL's
+! Building URL's
 
 Zn uses ==ZnUrl== objects to deal with URLs. ==ZnClient== also contains an API to build URLs. Let us revisit our initial example, using explicit URL construction with the ==ZnClient== API.
 
@@ -361,7 +364,7 @@ will take place. Please consult the class comment of ==ZnUrl== for a more detail
 
 
 
-!!Submitting HTML Forms
+!Submitting HTML Forms
 
 In many web applications HTML forms are used. Examples are forms to enter a search string, a form with a username and password to log in or complex registration
 forms. In the classic and most common way, this is implemented by sending the data entered in the fields of a form to the server when a submit button is clicked.
@@ -435,7 +438,7 @@ ZnClient new
 Sometimes, the form's submit method is GET instead of POST, just send ==get== instead of ==post== to the client. Note that this technique of sending form data to
 a server is different than what happens with raw POST or PUT requests using a REST API. In a later subsection we will come back to this.
 
-!!Basic Authentication, Cookies and Sessions
+!Basic Authentication, Cookies and Sessions
 
 There are various techniques to add authentication, a mechanism to control who accesses which resources, to HTTP. This is orthogonal to HTTP itself. The simplest
 and most common form of authentication is called 'Basic Authentication'.
@@ -483,13 +486,13 @@ After the ==post==, the server will presumably set a cookie to acknowledge a suc
 client presents the cookie to prove the login. The server knows it can send back the file because it recognizes the cookie as valid. By sending ==session== to
 the client object, you can access the session object and then the remembered cookies.
 
-!!PUT, POST, DELETE and other HTTP Methods
+!PUT, POST, DELETE and other HTTP Methods
 
 A regular request for a resource is done using a GET request. A GET request does not send an entity to the server. The only way for a GET request to transfer
 information to the server is by encoding it in the URL, either in the path or in query variables. (To be 100% correct we should add that data can be sent as
 custom headers as well.)
 
-!!! PUT and POST Methods
+!! PUT and POST Methods
 
 HTTP provides for two methods (or verbs) to send information to a server. These are called PUT and POST. They both send an entity to the server in order to transfer data.
 
@@ -522,7 +525,7 @@ contains this URL both in the ==Location== header accessible via the message ==l
 When a POST successfully created the resource, its HTTP response will be 201 Created. PUT is generally used to update an existing resource of which you know the
 exact URL (or URI). When a PUT is successful, its HTTP response will be just 200 OK and nothing else will be returned. When we will discuss REST Web Service APIs, we will come back to this.
 
-!!! DELETE and other Methods
+!! DELETE and other Methods
 
 The fourth member of the common set of HTTP methods is DELETE. It is very similar to both GET and PUT: you just specify an URL of the resource that you want to
 delete or remove. When successful, the server will just reply with a 200 OK. That is all there is to it.
@@ -540,9 +543,9 @@ ZnClient new
 An OPTIONS request does not return an entity, but only meta data that are included in the header of the response. In this example, the response header contains
 an extra meta data named ==Allow== which specifies the list of HTTP methods that may be used on the resource.
 
-!! Reusing Network Connections, Redirect Following and Checking for Newer Data
+! Reusing Network Connections, Redirect Following and Checking for Newer Data
 
-!!! ZnClient Lifecycle
+!! ZnClient Lifecycle
 
 HTTP 1.1 defaults to keeping the client connection to a server open, and the server will do the same. This is useful and faster if you need to issue more than
 one request. ==ZnClient== implements this behavior by default.
@@ -577,7 +580,7 @@ ZnClient new
 With the beOneShot option, the client notifies the server that it will do just one request and both parties will consequently close the connection after use,
 automatically. In this case, an explicit close of the ==ZnClient== object is no longer needed.
 
-!!! Redirects
+!! Redirects
 
 Sometimes when requesting a URL, an HTTP server will not answer immediately but redirect you to another location. For example, Seaside actually does this on each
 request. This is done with a 301 or 302 response code. You can ask a ==ZnResponse== whether it's a redirect with ==isRedirect==. In case of a redirect response,
@@ -589,7 +592,7 @@ want to disable this feature, send a ==followRedirects: false== to your client. 
 Following redirects can be tricky when PUT or POST are involved. Zn implements the common behavior of changing a redirected PUT or POST into a GET while dropping
 the body entity. Cookies will be resubmitted. Zn also handles relative redirect URLs, although these are not strictly part of the standard.
 
-!!!  If-Modified-Since
+!!  If-Modified-Since
 
 A client that already requested a resource in the past can also ask a server if that resource has been modified, i.e. is newer, since he last requested it. If so,
 the server will give a quick 304 Not Modified response without sending the resource over again. This is done by setting the If-Modified-Since header using ==ifModifiedSince:==.
@@ -610,7 +613,7 @@ ZnClient new
 
 For this to work, the server has to honor this particular protocol interaction, of course.
 
-!!Content-Types, Mime-Types and the Accept Header
+!Content-Types, Mime-Types and the Accept Header
 
 Asking for a resource with a certain mime-type does not mean that the server will return something of this type. The extension at the end of a URL has no real
 significance, and the server might have been reconfigured since last you asked for this resource. For example, asking for ==http://example.com/foo==,
@@ -655,7 +658,7 @@ ZnClient new
 The above code indicates to the server that we want a ==text/plain== type resource by means of the ==Accept== header. When the response comes back and it is not
 of that type, the client will raise a ==ZnUnexpectedContentType== exception. Again, this will be handled by the ==ifFail:== block, when specified.
 
-!!Headers
+!Headers
 
 HTTP meta data, both for requests and for responses, is specified using headers. These are key/value pairs, both strings. A large number of predefined headers
 exists, see this *List of HTTP header fields>http://en.wikipedia.org/wiki/HTTP_header*. The exact semantics of each header, especially their value, can be very
@@ -695,7 +698,7 @@ client response isConnectionClose.
 ]]]
 
 
-!!Entities, Content Readers and Writers
+!Entities, Content Readers and Writers
 
 As mentioned before, ==ZnMessages== (==ZnRequests== and ==ZnResponses==) can hold an optional ==ZnEntity== as body. By now we used almost all concrete
 subclasses of ==ZnEntity==:
@@ -758,7 +761,7 @@ ZnClient new
 Assuming there is a web service at ==http://internet-calculator.com== where you can send numbers to, we send a whitespace separated list of numbers to its sum URI
 and expect a number back. Exceptions occuring in the content writer can be caught with the ==ifFail:== block.
 
-!!Downloading, Uploading and Signalling Progress
+!Downloading, Uploading and Signalling Progress
 
 Often, you want to download a resource from some internet server and store its contents in a file. The well known curl and wget Unix utilities are often used to
 do this in scripts. There is a handy convenience method in ==ZnClient== to do just that.
@@ -805,7 +808,7 @@ UIManager default informUserDuring: [ :bar |
          progress resume ] ]
 ]]]
 
-!!Client Options, Policies and Proxies
+!Client Options, Policies and Proxies
 
 To handle its large set of options, ==ZnClient== implements a uniform, generic option mechanism using the ==optionAt:put:== and ==optionAt:ifAbsent:== methods
 (this last one always defines an explicit default), storing them lazily in a dictionary. The method category ==options== includes all accessors to actual settings.
@@ -837,7 +840,7 @@ Zn client functionality will automatically use the proxy settings defined in you
 found in the Settings browser under the Network category. Accessing localhost will bypass the proxy. To find out more about Zn's usage of the proxy settings,
 start by browsing the ==proxy== method category of ==ZnNetworkingUtils==.
 
-!!Conclusion
+!Conclusion
 
 Zinc is a solid and very flexible HTTP library. This chapter only presented the client-side of Zinc i.e. how to use it to send HTTP requests and receive
 responses back. Through several code examples, we demonstrated some of the possibilities of Zinc and also its simplicity. Zinc relies on a very good

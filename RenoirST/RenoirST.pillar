@@ -1,6 +1,9 @@
 {
-    "title": "Cascading Style Sheets with RenoirSt",
-    "attribution": "Gabriel Omar Cotelli with Damien Cassou"
+    "metadata" : {
+        "title": "Cascading Style Sheets with RenoirSt",
+        "attribution": "Gabriel Omar Cotelli with Damien Cassou"
+    },
+    "headingLevelOffset":2
 }
 @cha:renoirst
 
@@ -13,7 +16,7 @@ In this tutorial we will present the key features of RenoirSt with a large set o
 This tutorial assumes some knowledge of CSS and Pharo. For a little introduction about CSS you can read the
 *Seaside's book CSS chapter>http://book.seaside.st/book/fundamentals/css*.
 
-!!Getting Started
+!Getting Started
 
 To load the library in your image, evaluate:
 
@@ -63,13 +66,13 @@ The properties API is mostly defined following this rules:
 - Properties without dashes in the name are directly mapped: the margin CSS property is mapped to a ==margin:== message send.
 - Properties with one or more dashes are mapped using camel case: the margin-top CSS property is mapped to the ==marginTop:== message send.
 
-!!Defining the Rules
+!Defining the Rules
 
 We now present how the various CSS rules can be expressed with RenoirSt. RenoirSt supports many CSS types, comments, and even functional notation.
 
-!!!Basic CSS Types
+!!Basic CSS Types
 
-!!!!Lengths, Angles, Times and Frequencies
+!!!Lengths, Angles, Times and Frequencies
 
 The library provides out-of-the-box support for the length, angle, time and frequency units in the CSS spec. There are extensions for ==Integer== and ==Float== classes allowing to obtain lengths.
 
@@ -114,7 +117,7 @@ CascadingStyleSheetBuilder new
    build
 ]]]
 
-!!!!Colors
+!!!Colors
 
 The library supports abstractions for properties requiring color values. The shared pool ==CssSVGColors== provides easy access to colors in the SVG 1.0 list,
 and the abstractions ==CssRGBColor== and ==CssHSLColor== allow the creation of colors in the RGB and HSL spaces including alpha support.
@@ -165,7 +168,7 @@ div
 
 Notice the difference in the used message because there is no alpha channel specification.
 
-!!!!Constants
+!!!Constants
 
 A lot of values for CSS properties are just keyword constants. This support is provided by the classes ==CssConstants== and ==CssFontConstants==.
 
@@ -185,7 +188,7 @@ div
 }
 ]]]
 
-!!!!Several Property Values
+!!!Several Property Values
 
 Some properties support a wide range of values. For example the ==margin== property can have 1, 2 , 3 or 4 values specified. If you only need one value, just
 pass it as a parameter. For more than one value, use an array:
@@ -206,7 +209,7 @@ div
 }
 ]]]
 
-!!!!URLs
+!!!URLs
 
 ==ZnUrl== instances can be used as the value for properties requiring an URI. Both relative and absolute URLs are accepted. A relative URL is considered by default relative to the site root.
 
@@ -247,7 +250,7 @@ div.logo
 }
 ]]]
 
-!!!Comments
+!!Comments
 
 When declaring rule sets, the library supports attaching comments to them with the ==declareRuleSetFor:with:andComment:== message:
 
@@ -283,12 +286,12 @@ evaluates to:
 /*A general comment*/
 ]]]
 
-!!!Functional Notation
+!!Functional Notation
 
 A functional notation is a type of CSS component value that can represent complex types or invoke special processing. Mathematical expressions, toggling
 between values, attribute references, and gradients are all supported in RenoirST.
 
-!!!!Mathematical Expressions
+!!!Mathematical Expressions
 
 The library provides support for math expressions using the  ==CssMathExpression== abstraction:
 
@@ -308,7 +311,7 @@ div
 }
 ]]]
 
-!!!!Toggling Between Values
+!!!Toggling Between Values
 
 To let descendant elements cycle over a list of values instead of inheriting the same value, one can use the ==CssToggle== abstraction:
 
@@ -328,7 +331,7 @@ ul ul
 }
 ]]]
 
-!!!!Attribute References
+!!!Attribute References
 
 The ==attr()== function is allowed as a component value in properties applied to an element or pseudo-element. The function returns the value of an attribute on
 the element. If used on a pseudo-element, it returns the value of the attribute on the pseudo-element's originating element. This function is supported using
@@ -391,7 +394,7 @@ div::before
 }
 ]]]
 
-!!!!Gradients
+!!!Gradients
 
 A gradient is an image that smoothly fades from one color to another. Gradients are commonly used for subtle shading in background images, buttons, and many
 other places. The gradient notations described in this section allow an author to specify such an image in a terse syntax. This notation is supported using
@@ -532,7 +535,7 @@ renders as:
 repeating-radial-gradient(yellow, green);
 ]]]
 
-!!!!Box Shadows
+!!!Box Shadows
 
 Box Shadows are supported with ==CssBoxShadow== abstraction. This abstraction simplifies the use of the ==box-shadow== property.
 
@@ -560,11 +563,11 @@ Evaluates to:
 64px 64px 12px 40px rgba(0,0,0,0.4), inset 12px 11px 0px 8px rgba(0,0,0,0.4)
 ]]]
 
-!!Defining the selectors
+!Defining the selectors
 
 So far our focus was on the ''style'' part of the rule. Let's focus now on the available ''selectors''. Remember that a CSS selector represents a structure used to match elements in the document tree. This chapter asume some familiarity with the CSS selectors and will not go in detail about the exact meaning of each one. For more details you can take a look at *CSS3 selector documentation>http://www.w3.org/TR/css3-selectors*.
 
-!!! Type Selectors
+!! Type Selectors
 
 These selectors match a specific element type in the DOM. The library provides out-of-the-box support for HTML elements. One example is the ==div== selector used in the previous chapter:
 
@@ -594,7 +597,7 @@ ol
 
 To get a list of the supported type selectors evaluate ==CssSelector selectorsInProtocol: '*RenoirSt-HTML'==.
 
-!!! Combinators
+!! Combinators
 
 Selectors can be combined to represent complex queries. One of the most common use cases is the ''descendant combinator'':
 
@@ -679,7 +682,7 @@ p, div
 }
 ]]]
 
-!!! Attribute Selectors
+!! Attribute Selectors
 
 Attribute selectors are useful to match an element based on its attributes and their values.
 
@@ -789,7 +792,7 @@ p[title*="hello"]
 }
 ]]]
 
-!!! Pseudo-Classes
+!! Pseudo-Classes
 
 The pseudo-class concept is introduced to allow selection based on information that lies outside of the document tree or that cannot be expressed using the simpler selectors. Most pseudo-classes are supported just by sending one of the following messages ==link==, ==visited==, ==active==, ==hover==, ==focus==, ==target==, ==enabled==, ==disabled== or ==checked==.
 
@@ -838,7 +841,7 @@ input:checked
 }
 ]]]
 
-!!!! Language Pseudo-Class:
+!!! Language Pseudo-Class:
 
 The ==:lang(C)== pseudo-class can be used by sending the message ==lang:==:
 
@@ -858,7 +861,7 @@ evaluates to:
 }
 ]]]
 
-!!!! Negation Pseudo-Class:
+!!! Negation Pseudo-Class:
 
 The negation pseudo-class, ==:not(X)==, is a functional notation taking a simple selector (excluding the negation pseudo-class itself) as an argument. It represents an element that is not represented by its argument. For more information take a look at the CSS spec.
 
@@ -877,7 +880,7 @@ button:not([DISABLED])
 }
 ]]]
 
-!!!! Structural Pseudo-Classes
+!!! Structural Pseudo-Classes
 These selectors allow selection based on extra information that lies in the document tree but cannot be represented by other simpler selectors nor combinators.
 
 The ==:root== pseudo-class represents an element that is the root of the document. To build this kind of selector just send the message ==root== to another selector:
@@ -948,7 +951,7 @@ All structural pseudo-classes can be generated using the following messages:
 | ==only-of-type==       | ==onlyOfType==
 | ==empty==              | ==empty==
 
-!!! Pseudo-Elements
+!! Pseudo-Elements
 
 Pseudo-elements create abstractions about the document tree beyond those specified by the document language. For instance, document languages do not offer
 mechanisms to access the first letter or first line of an element's content. Pseudo-elements allow authors to refer to this otherwise inaccessible information.
@@ -1015,7 +1018,7 @@ p.note::after
 }
 ]]]
 
-!! Important Rules
+! Important Rules
 
 CSS attempts to create a balance of power between author and user style sheets. By default, rules in an author's style sheet override those in a user's style sheet.
 However, for balance, an ==!important== declaration takes precedence over a normal declaration. Both author and user style sheets may contain ==!important==
@@ -1048,7 +1051,7 @@ p
 ]]]
 Note that the important properties must be created by sending the messages to the inner argument ==importantStyle== instead of the outer argument ==style==.
 
-!! Media Queries
+! Media Queries
 
 A ==@media== rule specifies the target media types of a set of statements. The ==@media== construct allows style sheet rules that apply to various media in the
 same style sheet. Style rules outside of ==@media== rules apply to all media types that the style sheet applies to. At-rules inside ==@media== are invalid in
@@ -1122,7 +1125,7 @@ evaluates to:
 }
 ]]]
 
-!! Vendor-Specific Extensions
+! Vendor-Specific Extensions
 
 The library doesn't provide out of the box support for non standard properties. Nevertheless, the message ==vendorPropertyAt:put:== is available to ease the creation of this kind of properties by the end user:
 
@@ -1148,7 +1151,7 @@ div
 
 @@note If you really want to use a vendor specific extension, It's better to create an extension method sending the ==vendorPropertyAt:put:== message.
 
-!! Font Face Rules
+! Font Face Rules
 
 The ==@font-face== rule allows for linking to fonts that are automatically fetched and activated when needed. This allows authors to select a font that closely matches the design goals for a given page rather than limiting the font choice to a set of fonts available on a given platform. A set of font descriptors define the location of a font resource, either locally or externally, along with the style characteristics of an individual face.
 
@@ -1197,14 +1200,14 @@ CascadingStyleSheetBuilder new
 }
 ]]]
 
-!! Interaction with other Frameworks and Libraries
+! Interaction with other Frameworks and Libraries
 
-!!! Units
+!! Units
 
 The ==Units== package (available using the ConfigurationBrowser in Pharo) includes some extensions colliding with RenoirSt.  RenoirST can automatically load a compatibility package if it's loaded after the ==Units== package. To test this integration there's a
 *specific continuous integration job>https://ci.inria.fr/pharo-contribution/job/RenoirSt-UnitsCompatibility*, that loads ==Units== first and then ==RenoirSt==.
 
-!!! Seaside
+!! Seaside
 
 RenoirSt includes an optional group including some useful extensions. The *Seaside>http://www.seaside.st* framework includes its own class modeling URLs: when this group is loaded the instances of ==WAUrl== can be used in the properties requiring an URI:
 

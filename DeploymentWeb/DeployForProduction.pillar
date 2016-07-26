@@ -1,12 +1,15 @@
 {
-    "title": "Deploying a Pharo Web Application in Production",
-    "attribution": "Christophe Demarey with Johan Fabry"
+    "metadata" : {
+        "title": "Deploying a Pharo Web Application in Production",
+        "attribution": "Christophe Demarey with Johan Fabry"
+    },
+    "headingLevelOffset":2
 }
 @cha:deploy
 
 In the previous chapters we discussed several frameworks and libraries for facilitating the development of web applications. In this chapter, we focus on deploying such a web application. While doing so, we will try to answer some questions such as: which operating system should I use, how do I run my application, how do I ensure my application will be restarted after a reboot or a crash, and how do I log data.
 
-!!Where to Host your Application?
+!Where to Host your Application?
 
 The easiest and fastest way to host your application is to host it in the cloud.
 
@@ -20,13 +23,13 @@ There are many other cloud providers including *Amazon AWS>https://aws.amazon.co
 
 In the rest of this chapter, we detail how to setup a server to host a Pharo web application.
 
-!!Which Operating System?
+!Which Operating System?
 
 Many Pharo developers use Mac OS X to develop their applications but it is not a popular solution for a production deployment due to a lack of dedicated Apple server hardware. A popular deployment OS is GNU/Linux. Deploying on Windows is a bit more complex and less supported by cloud providers.
 
 There are many Linux distributions to choose from. If you restrict your choice to well-known free open-source distributions, competitors are *Centos>http://www.centos.org*, *Debian>http://www.debian.org* and *Ubuntu>http://www.ubuntu.com*. Most distributions will do the job, choose the most appropriate for you. A long-term support (''aka.'', LTS) version is a good option if you do not want to update your operating system too often. The Pharo Virtual Machine (VM) comes pre-packaged for some distributions. For other distributions, you will have to compile the VM sources yourself. Pay attention that the Pharo VM is still 32bits as of early 2016 and you will have to install 32-bit libraries on your 64-bit Operating System.
 
-!!Build your Image
+!Build your Image
 
 The best option to obtain a clean image to deploy is to start from a fresh *stable pharo image>http://files.pharo.org/image/stable/latest.zip* and to install the required packages through your application's Metacello configuration (read more in the ''Deep into Pharo'' book) and the command line handler. The configuration has to explicitely describe all dependencies used in your application.
 
@@ -51,7 +54,7 @@ After loading all necessary code, the ==config== option will also save the image
 
 To make sure that your deployment image is reproducible, the best approach is to create a Continuous Integration job that automatically produces clean deployment-ready images of your application.
 
-!!Run your Application
+!Run your Application
 
 When you have a Pharo image with your application inside, the next step is to start the application. To make this process reproducible, it is recommended to create a dedicated file (''e.g.'', named ==myapp.st==) with the instructions needed to start your application. Here is an example of a script used to start a web application using Zinc.
 
@@ -108,7 +111,7 @@ You should end with a file hierarchy like this one:
 When the file hierarchy is ready, you can start your application by executing the ==./myapp== script or by using the init script at the command line by executing ==service myapp start==.
 
 
-!!Dealing with Crashes
+!Dealing with Crashes
 
 When the Pharo image crashes (which ''will'' happen), there must be a way to automatically recover from this crash. For this to work, the application data must be backed up, there must be a way to know when the application has crashed, and there must be a way to automatically restart the application.
 
@@ -118,7 +121,7 @@ To automatically restart your application when it crashes, there must be a way t
 
 A simple solution to both monitor your application and take appropriate actions (''e.g.'', restart) is to use the *monit utility>https://mmonit.com/monit*. In the remainder of this section we will show how to configure monit.
 
-!!!Monit Dashboard
+!!Monit Dashboard
 
 You can first activate the embedded HTTP dashboard of monit. This monit configuration, only allows local connections with a dedicated username and password pair.
 
@@ -143,7 +146,7 @@ $ ssh -L 2812:localhost:2812 myserver.com
 
 Keep the SSH connection open, and browse *http://localhost:2812>http://localhost:2812* to display the monit dashboard.
 
-!!!Email Settings
+!!Email Settings
 
 If you want notifications from monit, you need to configure email settings so that monit can send emails. Edit the monit configuration file again and add a line to set the mail server:
 
@@ -153,7 +156,7 @@ set mailserver <smtp.domain>
 
 For more monit configuration options, refer to the monit documentation.
 
-!!!Monitor System Services
+!!Monitor System Services
 Configuration files related to an application (or a service) should be put into the ==/etc/monit/monitrc.d== directory (which is more modular than putting everything in the core configuration file). To enable a configuration just symlink it to ==conf.d==.
 We will first enable a pre-defined configuration for SSH.
 [[[language=shellCommands­
@@ -171,7 +174,7 @@ $ sudo monit -v
 
 and check the monit error log, by default in ==/var/log/monit.log==.
 
-!!!Monit Configuration to Control a Pharo Application
+!!Monit Configuration to Control a Pharo Application
 
 Application-specific configuration files must be added to the ==/etc/monit/monitrc.d== directory. Create a new ==myapp== file in this directory:
 
@@ -194,7 +197,7 @@ $ sudo monit reload
 
 At this point, you have ensured you have a running Pharo image at any time.
 
-!!!Monit Configuration for a Pharo Web Application
+!!Monit Configuration for a Pharo Web Application
 
 A Pharo image may be running, i.e. the process is alive, but not responding to HTTP requests. In such cases, your application is unusable. This unresponsive state can be verified by sending a simple HTTP request and checking for the response. We can ask monit to monitor your web server by doing regular checks to a predifined URL and validating the HTTP response content:
 
@@ -229,11 +232,11 @@ $ sudo monit reload
 
 You are done! Your Pharo aplication is now monitored.
 
-!! Put an HTTP server in front of your web application
+! Put an HTTP server in front of your web application
 
 It is a good idea to put a web server like Apache or Nginx in front of a Pharo web application. Mature web servers fully implement standards and commoditized functionalities, e.g. virtual host handling (multiple domains on the same IP address), URL rewriting, etc. They are also more stable, have built-in mechanisms for binding to privileged ports below 1024 as root and then executing as a non-privileged user, and are more robust to attacks. They can also be used to serve static content and to display a maintenance page.
 
-!!!Apache
+!!Apache
 Here is a simple Apache configuration that can be used to redirect the incoming internet traffic on the default HTTP port (80) to your Pharo web application running on the local interface on the port 8080.
 [[[language=apache
 <VirtualHost *:80>
@@ -255,7 +258,7 @@ Here is a simple Apache configuration that can be used to redirect the incoming 
 ]]]
 The first section declares the full server name (including the domain), the second one activates the proxy to forward the traffic to your Pharo web application, and the last one creates dedicated log files.
 
-!!!Nginx
+!!Nginx
 The following configuration also redirects the incoming traffic to the default HTTP port (80) of your Pharo web application running on the local interface on the port 8080.
 [[[language=nginx
 server {
@@ -274,7 +277,7 @@ server {
 
 With this simple configuration, you will get a more secure and flexible configuration of your web application.
 
-!! Conclusion
+! Conclusion
 
 In this chapter we have seen how to deploy a Pharo web application. We presented places where to deploy and gave insights as to which operating system to use. We then talked about how to deploy and run a Pharo web application. Lastly we discussed how to monitor Pharo with monit and putting a HTTP server in front of the web application.
 

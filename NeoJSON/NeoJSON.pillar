@@ -1,6 +1,9 @@
 {
-    "title": "NeoJSON",
-    "attribution": "Sven Van Caekenberghe with Damien Cassou and Stéphane Ducasse"
+    "metadata" : {
+        "title": "NeoJSON",
+        "attribution": "Sven Van Caekenberghe with Damien Cassou and Stéphane Ducasse"
+    },
+    "headingLevelOffset":2
 }
 @cha:JSON
 
@@ -8,7 +11,7 @@
 JSON (JavaScript Object Notation) is a popular data-interchange format. NeoJSON is an elegant and efficient standalone Smalltalk library to read and write
 JSON converting to and from Smalltalk objects. The library is developed and actively maintained by Sven Van Caekenberghe.
 
-!!An Introduction to JSON
+!An Introduction to JSON
 
 JSON is a lightweight text-based open standard designed for human-readable data interchange. It was derived from the JavaScript scripting language for
 representing simple data structures and associative arrays, called objects. Despite its relationship to JavaScript, it is language independent, with parsers
@@ -30,7 +33,7 @@ Only two composite types exist:
 
 That is really all there is to it. No options or additions are defined in the standard.
 
-!! NeoJSON
+! NeoJSON
 
 To load NeoJSON, evaluate the following:
 
@@ -55,7 +58,7 @@ Compared to other Smalltalk JSON libraries, NeoJSON
 -can be more efficient (be faster and use less memory);
 -allows for the use of schemas and mappings.
 
-!!Primitives
+!Primitives
 
 Obviously, the primitive types are mapped to corresponding Pharo classes. While reading:
 
@@ -72,11 +75,11 @@ While writing:
 - Pharo ==nil== becomes JSON ==null==
 
 
-!! Generic Mode
+! Generic Mode
 
 NeoJSON can operate in a generic mode that requires no further configuration.
 
-!!! Reading from JSON
+!! Reading from JSON
 
 While reading:
 
@@ -116,7 +119,7 @@ To automatically convert keys to symbols, pass ==true== to ==propertyNamesAsSymb
 
 The result of this expression is a dictionary with ==#x== and ==#y== as keys.
 
-!!!Writing to JSON
+!!Writing to JSON
 
 While writing:
 
@@ -141,7 +144,7 @@ NeoJSONWriter toStringPretty: #(1 2 3).
 In order to use the generic mode, you have to convert your domain objects to and from ==Dictionary== and ==SequenceableCollection==. This is relatively easy but not very efficient, depending on the use case.
 
 
-!! Schemas and Mappings
+! Schemas and Mappings
 
 NeoJSON allows for the optional specification of schemas and mappings to be used when writing or reading.
 
@@ -241,7 +244,7 @@ The above expression returns a string representing the current date and time.
 NeoJSON deals efficiently with mappings: the minimal amount of intermediary structures are created.
 On modern hardware, NeoJSON can write or read tens of thousands of small objects per second. Several benchmarks are included in the unit tests package.
 
-!!Emitting null Values
+!Emitting null Values
 
 For efficiency reasons, by default, ==NeoJSONWriter== does not write ==nil== values:
 
@@ -264,7 +267,7 @@ String streamContents: [ :stream |
 
 The above expression returns the =='{"x":null,"y":null}'== string.
 
-!! Conclusion
+! Conclusion
 
 NeoJSON is a powerful library to convert objects. Sven, the author of NeoJSON, also developed STON (Smalltalk object notation) which is closer to Pharo syntax and handles cycles and references between serialized objects.
 

@@ -1,6 +1,9 @@
 {
-    "title": "WebSockets",
-    "attribution": "Sven Van Caekenberghe with Luc Fabresse"
+    "metadata" : {
+        "title": "WebSockets",
+        "attribution": "Sven Van Caekenberghe with Luc Fabresse"
+    },
+    "headingLevelOffset":2
 }
 @cha:webSockets
 
@@ -9,7 +12,7 @@ The WebSocket protocol defines a full-duplex single socket connection over which
 WebSocket represents the next evolutionary step in Web communication compared to Comet and Ajax.
 And of course, Zinc HTTP Components supports Web sockets as you will discover throughout this chapter.
 
-!!An Introduction to WebSockets
+!An Introduction to WebSockets
 
 HTTP, one of the main technologies of the internet, defines a communication protocol between a client and a server where the initiative of the communication
 lies with the client and each interaction consists of a client request and a server response. When correctly implemented and used, HTTP is enormously scaleable
@@ -26,7 +29,7 @@ Messages can be any String or ByteArray. Overhead is just a couple of bytes. The
 
 Using WebSockets, a server can notify a client instantly of interesting events, and clients can quickly send small notifications to a server, possibly multiplexing many virtual communications channels over a single network socket.
 
-!!The WebSocket Protocol
+!The WebSocket Protocol
 
 Zinc WebSockets implements *RFC 6455>http://tools.ietf.org/html/rfc6455*, not any of the previous development versions.
 For an introduction, both *the WebSocket Wikipedia article>http://en.wikipedia.org/wiki/WebSocket* and *websocket.org>http://www.websocket.org* are good starting points.
@@ -39,7 +42,7 @@ contains a couple of special HTTP headers. From that point on, the HTTP conversa
 WebSocket messages consist of one or more frames with minimal encoding. Behind the scenes, a number of control frames are used to properly close the WebSocket
 and to manage keeping alive the connection using ping and pong frames.
 
-!!Source Code
+!Source Code
 
 The code implementing Zinc WebSockets resides in a single package called 'Zinc-WebSocket-Core' in the Zinc HTTP Components repository.
 There is also an accompanying 'Zinc-WebSocket-Tests' package containing the unit tests.
@@ -54,7 +57,7 @@ Gofer new
 (Smalltalk globals at: #ConfigurationOfZincHTTPComponents) project latestVersion load: 'WebSocket'.
 ]]]
 
-!!Using Client Side WebSockets
+!Using Client Side WebSockets
 
 An endpoint for a WebSocket is specified using an URL:
 
@@ -99,7 +102,7 @@ webSocket := ZnWebSocket to: 'wss://echo.websocket.org'.
 
 Of course, your image has to contain Zodiac and your VM needs access to the proper plugin. That should not be a problem with the latest Pharo releases.
 
-!!Using Server-Side WebSockets
+!Using Server-Side WebSockets
 
 Since the WebSocket protocol starts off as HTTP, it is logical that a ZnServer with a special delegate is the starting point. ==ZnWebSocketDelegate== implements the standard ==handleRequest:== to check if the incoming request is a valid WebSocket connection upgrade request. If so, the matching 101 switching protocols response is constructed and sent. From that moment on, the network socket stream is handed over to a new, server side ==ZnWebSocket== object.
 
@@ -221,7 +224,7 @@ Now, you can try the following URLs in your Web browser:
 
 The first one will connect to ==ws://echo.websocket.org== as a reference, the second one will connect to our implementation at ==ws://localhost:1701/ws-echo==.
 
-!!Building a Pharo Statistics Web Page
+!Building a Pharo Statistics Web Page
 
 Another simple example is available in ==ZnWebSocketStatusHandler== where a couple of Smalltalk image statistics are emitted every second for an efficient live view in your browser.
 In this scenario, the server accepts each incoming web socket connection and starts streaming to it, not interested in any incoming messages.
@@ -261,7 +264,7 @@ the URL *http://localhost:1701/ws-status-client* and got back the HTML and Javas
 The execution of this Javascript code by the Web browser sent an HTTP request to the Zinc server on *http://localhost:1701/ws-status* asking for an upgrade to up a Web socket connection. Then, the ==ZnWebSocketStatusHandler== object can send status updates through this Web socket connection directly to the Javascript code that refreshes the HTML page content.
 
 
-!!Building a Web Chat
+!Building a Web Chat
 
 Another available example is ==ZnWebSocketChatroomHandler==.
 It implements the core logic of a chatroom: clients can send messages to the server which distributes them to all connected clients.
@@ -314,7 +317,7 @@ You can also send chat messages directly from Pharo, much like a moderator:
 ]]]
 
 
-!!A Quick Tour of Zinc WebSocket Implementation
+!A Quick Tour of Zinc WebSocket Implementation
 
 All code resides in the =='Zinc-WebSocket-Core'== package.
 The wire level protocol, the encoding and decoding of frames is in ==ZnWebSocketFrame==.
@@ -325,7 +328,7 @@ Client-side setup can be found on the class side of ==ZnWebSocket==.
 Server-side handling of the setup is implemented in the class ==ZnWebSocketDelegate==.
 Two kinds of exceptions, ==ZnWebSocketFailed== and ==ZnWebSocketClosed== and a shared ==ZnWebSocketUtils== class round out the core code.
 
-!!Live Demo
+!Live Demo
 
 There is a live demo available at *http://websocket.stfx.eu* with the basic Zinc-WebSocket demos: echo, status & chatroom.
 A starting point to learn how these demos were set up is
@@ -333,7 +336,7 @@ the method ==installExamplesInServer:== in the ==ZnWebSocketDelegate class==.
 Setting up a production demo is complicated by the fact that most proxies and load balancers, most notably the market leader Apache, do not (yet) deal correctly with the WebSocket protocol. It is thus easier to organize things such that your client directly talks to your Smalltalk image.
 
 
-!!Conclusion
+!Conclusion
 
 WebSockets integrate smoothly with Zinc HTTP Components to form another part of the Pharo Web stack.
 It provides support for building modern single page Web applications in Pharo.

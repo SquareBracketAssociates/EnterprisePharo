@@ -1,42 +1,19 @@
-%!TEX TS-program = lualatex
-% -*- mode: LaTeX; -*-
+% -*- mode: latex; -*- mustache tags: {{=« »=}} «! the '&' below prevents HTML escaping. »
 \documentclass[10pt,twoside,english]{support/latex/sbabook/sbabook}
 \let\wholebook=\relax
 
 \usepackage{import}
-\subimport{support/latex/}{common.tex}
+\subimport{root/support/latex/}{common.tex}
 
 %=================================================================
 % Debug packages for page layout and overfull lines
 % Remove the showtrims document option before printing
 \ifshowtrims
   \usepackage{showframe}
-  \usepackage[color=magenta,width=5mm]{support/latex/overcolored}
+  \usepackage[color=magenta,width=5mm]{root/support/latex/overcolored}
 \fi
 
-%=================================================================
-% Add the path for the figures of each chapter here:
-\graphicspath{
-        {../figures/}
-        {../Copyright/}
-        {../PillarChap/}
-        {../Artefact/}
-        {../Zinc-HTTP-Client/}
-        {../Zinc-HTTP-Server/}
-        {../Zinc-Encoding-Meta/}
-        {../Zinc-REST/}
-        {../Fuel/}
-        {../STON/}
-        {../Voyage/}
-        {../WebApp/}
-        {../WebSockets/}
-        {../NeoJSON/}
-        {../RenoirST/}
-        {../NeoCSV/}
-        {../Teapot/}
-        {../Mustache/}
-}
-%=================================================================
+
 \title{Enterprise Pharo\titlebreak{:} a Web Perspective}
 \author{
     Damien Cassou \and
@@ -47,8 +24,8 @@
 \date{\gitdate\titlebreak[\smallskip]{ -- }\protect\gitCommitInfo}
 
 \hypersetup{pdfinfo = {
-    Title = {Enterprise Pharo: a Web Perspective},
-    Author = {Damien Cassou, Stéphane Ducasse, Luc Fabresse, Johan Fabry, Sven Van Caekenberghe},
+    Title = {«& title»},
+    Author = {«& attribution»},
     Keywords = {pharo, smalltalk}}}
 % =================================================================
 \begin{document}
@@ -93,7 +70,7 @@
   author's moral rights.
 
   \begin{center}
-    \includegraphics[width=0.2\textwidth]{CreativeCommons-BY-SA.pdf}
+    \includegraphics[width=0.2\textwidth]{root/figures/CreativeCommons-BY-SA.pdf}
   \end{center}
 
   Your fair dealing and other rights are in no way affected by the
@@ -104,7 +81,7 @@
   \vfill
 
   \begin{tabular}{@{}c@{\quad}l}
-    \multirow{2}{*}{\includegraphics[width=2em]{support/latex/sbabook/sba-logo.pdf}}
+    \multirow{2}{*}{\includegraphics[width=2em]{root/support/latex/sbabook/sba-logo.pdf}}
     & Published by Square Bracket Associates, Switzerland. \\
     & \url{http://squarebracketassociates.org} \\[\smallskipamount]
     & ISBN 978-1-326-65097-1 \\
@@ -112,11 +89,12 @@
   \end{tabular}
   \medskip
 
-  Cover design by Liudmyla Dolia. \\
-  Layout and typography based on the \textcode{sbabook} \LaTeX{} class by Damien Pollet.
-  The source code of the book itself lives at
-  \url{https://github.com/SquareBracketAssociates/EnterprisePharo}
-}
+  This book has been sponsored by ESUG. \includegraphics[width=2cm]{root/figures/esug-logo}
+
+  Cover design by Liudmyla Dolia. Layout and typography based on the
+  \textcode{sbabook} \LaTeX{} class by Damien Pollet. The source code
+  of the book itself lives at
+  \url{https://github.com/SquareBracketAssociates/EnterprisePharo} }
 
 
 \frontmatter
@@ -185,31 +163,7 @@ Damien Pollet\\
 
 \mainmatter
 
-\part{Simple Web applications}
-\input{Teapot/Teapot}
-\input{WebApp/WebApp}
-
-\part{HTTP}
-\input{Zinc-Encoding-Meta/Zinc-Encoding-Meta}
-\input{Zinc-HTTP-Client/Zinc-HTTP-Client}
-\input{Zinc-HTTP-Server/Zinc-HTTP-Server}
-\input{WebSockets/WebSockets}
-
-\part{Data}
-\input{NeoCSV/NeoCSV}
-\input{NeoJSON/NeoJSON}
-\input{STON/STON}
-\input{Fuel/Fuel}
-\input{Voyage/Voyage}
-
-\part{Presentation}
-\input{Mustache/Mustache}
-\input{RenoirST/RenoirST}
-\input{PillarChap/Pillar}
-\input{Artefact/Artefact}
-
-\part{Deployment}
-\input{DeploymentWeb/DeployForProduction}
+«& content»
 
 % lulu requires an empty page at the end. That's why I'm using
 % \backmatter here.

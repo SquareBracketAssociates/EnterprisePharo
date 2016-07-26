@@ -1,6 +1,9 @@
 {
-    "title": "Persisting Objects with Voyage",
-    "attribution": "Johan Fabry and Esteban Lorenzano with Damien Cassou and Norbert Hartl"
+    "metadata" : {
+        "title": "Persisting Objects with Voyage",
+        "attribution": "Johan Fabry and Esteban Lorenzano with Damien Cassou and Norbert Hartl"
+    },
+    "headingLevelOffset":2
 }
 @cha:voyage
 
@@ -24,9 +27,9 @@ Voyage also includes a query API, which allows specific objects to be retrieved 
 This text started as a number of blog posts by Esteban Lorenzano, which have been extensively reworked by Johan Fabry, and including additional information
 shared by Sabine Manaa and Norbert Hartl.
 
-!! Setup
+! Setup
 
-!!! Load Voyage
+!! Load Voyage
 
 To install Voyage, including support for the MongoDB database, go to the Configurations Browser (in the World Menu/Tools) and load ConfigurationOfVoyageMongo.
 Or alternatively execute in a workspace:
@@ -40,12 +43,12 @@ Gofer it
 
 This will load all that is needed to persist objects into a Mongo database.
 
-!!! Install MongoDB
+!! Install MongoDB
 
 Next is to install the MongoDB database. How to do this depends on the operating system, and is outside of the scope of this text. We refer to the
 *MongoDB website>http://www.mongodb.org/downloads* for more information.
 
-!!! Create A repository
+!! Create A repository
 
 In Voyage, all persistent objects are stored in a repository. The kind of repository that is used determines the storage backend for the objects.
 
@@ -70,7 +73,7 @@ specify the port to connect to. Lastly, if authentication is required,
 this can be done using the message
 ==host:database:username:password:== or the message ==host:port:database:username:password:==.
 
-!!! Singleton Mode and Instance Mode
+!! Singleton Mode and Instance Mode
 
 Voyage can work in two different modes:
 
@@ -88,7 +91,7 @@ repository enableSingleton.
 
 @@note Only one repository can be the singleton, hence executing this line will remove any other existing repositories from Singleton mode! In this document, we cover Voyage in Singleton mode, but using it in Instance mode is straightforward as well. See the protocol ==persistence== of ==VORepository== for more information.
 
-!!! Voyage API
+!! Voyage API
 
 The following two tables show a representative subset of the API of Voyage. These methods are defined on ==Object== and ==Class==, but will only truly perform
 work if (instances of) the receiver of the message is a Voyage root. See the ==voyage-model-core-extensions== persistence protocol on both classes for the full
@@ -111,7 +114,7 @@ Second is Instance mode. In Instance mode, the first argument is always the repo
 | ==selectOne:where:==  | retrieves first object that matches the where clause
 | ==selectMany:where:== | retrieves all objects that matches the where clause
 
-!!! Resetting or Dropping the Database Connection
+!! Resetting or Dropping the Database Connection
 
 In a deployed application, there should be no need to close or reset the connection to the database. Also, Voyage re-establishes the connection when the image
 is closed and later reopened.
@@ -129,7 +132,7 @@ In case the connection to the database needs to be dropped, this is performed as
 VORepository setRepository: nil.
 ]]]
 
-!!Storing Objects
+!Storing Objects
 
 To store objects, the class of the object needs to be declared as being a ''root of the repository''. All repository roots are points of entry to the database.
 Voyage stores more than just objects that contain literals. Complete trees of objects can be stored with Voyage as well, and this is done transparently. In
@@ -137,7 +140,7 @@ other words, there is no need for a special treatment to store trees of objects.
 In this section we discuss such basic storage of objects, and in section *@enhancing* on Enhancing Storage we show how to enhance and/or modify the way objects
 are persisted.
 
-!!!Basic Storage
+!!Basic Storage
 
 Let's say we want to store an Association (i.e. a pair of objects). To do this, we need to declare that the class ==Association== is storable as a root of our
 repository.  To express this we define the class method ==isVoyageRoot== to return true.
@@ -186,7 +189,7 @@ for MongoDB are to
 use the ==mongo== command line interface  or a GUI tool
 such as *RoboMongo>http://robomongo.org* (Multi-Platform) or *MongoHub>http://mongohub.todayclose.com/* (for Mac).
 
-!!!Embedding Objects
+!!Embedding Objects
 
 Objects can be as simple as associations of literals or more complex: objects can contain other objects, leading to a tree of objects. Saving such objects is as
 simple as sending the ==save== message to them. For example, let's say that we want to store rectangles and that each rectangle contains two points. To achieve
@@ -226,7 +229,7 @@ This will add a document to the ==rectangle== collection of the database with th
 
 
 
-!!!Referencing other Roots
+!!Referencing other Roots
 @referencing
 
 Sometimes the objects are trees that contain other root objects. For instance, you could want to keep users and roles as roots, i.e. in different collections,
@@ -276,7 +279,7 @@ In addition to this, in the collection ==point== we also get the two following e
 }
 ]]]
 
-!!! Breaking Cycles in Graphs
+!! Breaking Cycles in Graphs
 
 When the objects to be stored contain a graph of embedded objects instead of a tree, i.e. when there are cycles in the references that the embedded objects have
 between them, the cycles between these embedded objects must be broken. If not, storing the objects will cause an infinite loop. The most straightforward solution
@@ -289,19 +292,19 @@ rectangle. To do this, either the label or the text must be declared as a Voyage
 An alternative solution to break cycles, avoiding the declaration of new voyage roots, is to declare some fields of objects as transient and define how the
 graph must be reconstructed at load time. This will be discussed in the following section.
 
-!!!Storing Instances of Date in Mongo
+!!Storing Instances of Date in Mongo
 
 A known issue of mongo is that it does not make a difference between ==Date== and ==DateAndTime==, so even if you store a ==Date== instance, you will retrieve a ==DateAndTime== instance. You will have to transform it back to ==Date== manually when materializing the object.
 
 
-!! Enhancing Storage
+! Enhancing Storage
 @enhancing
 
 How objects are stored can be changed by adding Magritte descriptions to their classes. In this section, we first talk about configuration options for the
 storage format of the objects. Then we treat more advanced concepts such as loading and saving of attributes, which can be used, for example, to break cycles in
 embedded objects.
 
-!!!Configuring Storage
+!!Configuring Storage
 
 Consider that, continuing with the rectangle example but using embedded points, we add the following storage requirements:
 
@@ -388,7 +391,7 @@ configuration options remain valid, and the ==kind:== configuration option is us
 - ==kindCollection:== specifies the class of the collection that is contained in the attribute.
 - ==convertNullToEmpty== when retrieving a collection whose value is Null (==nil==), it returns an empty collection.
 
-!!!Custom Loading and Saving of Attributes
+!!Custom Loading and Saving of Attributes
 
 It is possible to write specific logic for transforming attributes of an object when written to the database, as well as when read from the database. This can
  be used, e.g., to break cycles in the object graph without needing to declare extra Voyage roots. To declare such custom logic, a ==MAPluggableAccessor== needs
@@ -423,7 +426,7 @@ database. This may also be used to break cycles in the stored object graph. It h
 contain these objects will be set to ==nil==. To address this, a post-load action can be specified for the attribute descriptor or the container descriptor, to
 set these attributes to the correct values.
 
-!!! A few Words Concerning the OID
+!! A few Words Concerning the OID
 
 The mongo ObjectId (OID) is a unique field acting as a primary key. It is a 12-byte BSON type, constructed using:
 
@@ -453,14 +456,14 @@ ordered by creation date and time and as a result you have an indexed
 "creationDateAndTime" attribute for free (since there is a non deletable
 index on the field of the OID ==_id==).
 
-!! Querying in Voyage
+! Querying in Voyage
 
 Voyage allows to selectively retrieve object instances though queries on the database. When using the in-memory layer, queries are standard Smalltalk blocks.
 When using the MongoDB back-end, the MongoDB query language is used to perform the searches. To specify these queries, MongoDB uses JSON structures, and when
 using Voyage there are two ways in which these can be constructed. MongoDB queries can be written either as blocks or as dictionaries, depending on their
 complexity. In this section, we first discuss both ways in which queries can be created, and we end the section by talking about how to execute these queries.
 
-!!! Basic Object Retrieval using Blocks or MongoQueries
+!! Basic Object Retrieval using Blocks or MongoQueries
 
 The most straightforward way to query the database is by using blocks when using the in-memory layer or MongoQueries when using the MongoDB back-end. In this
 discussion we will focus on the use of MongoQueries, as the use of blocks is standard Smalltalk.
@@ -497,7 +500,7 @@ A slightly more complicated query is to find all elements in the database whose 
 Note that this way of querying only works for querying values of the object but not values of references to other objects.
 For such case you should build your query using ids, as traditionally done in relational database, which we talk about next. However the best solution in the Mongo spirit of things is to revisit the object model to avoid relationships that are expressed with foreign keys.
 
-!!!!Quering with Elements from another Root Document
+!!!Quering with Elements from another Root Document
 
 With No-SQL databases, it is impossible to query on multiple collections (the equivalent of a JOIN statement in SQL). You have two options: alter your schema, as suggested above, or write application-level code to reproduce the JOIN behavior. The latter option can be done by sending the ==voyageId== message to an object already
 returned by a previous query and using that id to match another object. An example where we match colors ==color== to a reference color ==refCol== is as follows:
@@ -506,7 +509,7 @@ returned by a previous query and using that id to match another object. An examp
 [ :each | (each at: 'color.__id') = refCol voyageId ]
 ]]]
 
-!!!!Using the at: Message to Access Embedded Documents
+!!!Using the at: Message to Access Embedded Documents
 
 Since MongoDB stores documents of any complexity, it is common that one document is composed of several embedded documents, for example:
 
@@ -530,7 +533,7 @@ example, to select all the rectangles whose origin x value is equal to 42, the q
 [ :each | (each at: 'origin.x') = 42 ]
 ]]]
 
-!!!!Using the where: Message to Perform Javascript Comparisons
+!!!Using the where: Message to Perform Javascript Comparisons
 
 To perform queries which are outside the capabilities of MongoQueries or even the MongoDB query language, MongoDB provides a way to write queries directly in
 Javascript using the ==$where== operand. This is also possible in MongoQueries by sending the ==where:== message:
@@ -546,7 +549,7 @@ More complete documentation about the use of ==$where== is in the
 
 
 
-!!!Using JSON Queries
+!!Using JSON Queries
 
 When MongoQueries is not powerful enough to express your query, you can use a JSON query instead. JSON queries are the MongoDB query internal representation, and
 can be created straightforwardly in Voyage. In a nutshell: a JSON structure is mapped to a dictionary with pairs. In these pairs the key is a string and the
@@ -575,7 +578,7 @@ To construct the "greater than" statement, a new dictionary needs to be created 
 relation. For the list of available query selectors we refer to the
 *MongoDB Query Selectors documentation>http://docs.mongodb.org/manual/reference/operator/query/#query-selectors*.
 
-!!!! Querying for an Object by OID
+!!! Querying for an Object by OID
 
 If you know the ObjectId for a document, you can create an OID instance with this value
 and query for it.
@@ -591,7 +594,7 @@ OID value: 16r55CDD2B6E9A87A520F000001. "hex"
 
 @@note If you have an instance which is in a root collection, then you can ask it for its ==voyageId== and use that ObjectId in your query.
 
-!!!!Using dot Notation to Access Embedded Documents
+!!!Using dot Notation to Access Embedded Documents
 
 To access values embedded in documents with JSON queries, the dot notation is used. For example, the query representing rectangles whose origin have 42 as their
 ==x== values can be expressed this way:
@@ -603,7 +606,7 @@ To access values embedded in documents with JSON queries, the dot notation is us
 ]]]
 
 
-!!!!Expressing OR Conditions in the Query
+!!!Expressing OR Conditions in the Query
 
 To express an OR condition, a dictionary whose key is =='$or'== and whose values are the expression of the condition is needed. The following example shows how
 to select all objects whose name is ==John== that have more than ten orders OR objects whose name is not ==John== and has ten or less orders:
@@ -624,7 +627,7 @@ to select all objects whose name is ==John== that have more than ten orders OR o
 ]]]
 
 
-!!!!Going Beyond MongoQueries Features
+!!!Going Beyond MongoQueries Features
 
 Using JSON queries allows to use features that are not present in MongoQueries, for example the use of regular expressions. Below is a query that searches for
 all documents with a ==fullname.lastName== that starts with the letter ==D==:
@@ -645,12 +648,12 @@ This example only briefly illustrates the power of JSON queries. Many more diffe
 is in the *MongoDB operator documentation>http://docs.mongodb.org/manual/reference/operator*
 
 
-!!!Executing a Query
+!!Executing a Query
 
 Voyage has a group of methods to perform searches. To illustrate the use of these methods we will use the stored Point example we have presented before. Note
 that all queries in this section can be written either as MongoQueries or as JSON queries, unless otherwise specified.
 
-!!!!Basic Object Retrieval
+!!!Basic Object Retrieval
 
 The following methods provide basic object retrieval.
 
@@ -658,7 +661,7 @@ The following methods provide basic object retrieval.
 - ""==selectOne:=="" Retrieves one document matching the query. This maps to a ==detect:== method and takes as argument a query specification (either a MongoQuery or a JSON Query). For example, ==Point selectOne: [:each | each x = 42] == or alternatively ==Point selectOne: { 'x' -> 42 } asDictionary==.
 - ""==selectMany:=="" Retrieves all the documents matching the query. This maps to a ==select:== method and takes as argument a query specification, like above.
 
-!!!!Limiting Object Retrieval and Sorting
+!!!Limiting Object Retrieval and Sorting
 
 The methods that query the database look similar to their equivalent in the Collection hierarchy. However unlike regular collections which can operate fully on
 memory, often Voyage collection queries need to be customized in order to optimize memory consumption and/or access speed. This is because there can be
@@ -679,7 +682,7 @@ The second customization that can be performed is to sort the results. To use th
 - ==selectMany:sortBy:== Retrieves all the documents matching the query and sorts them. For example to return the points where ==x== is 42, in descending ==y== order: ==Point selectMany: { 'x' -> 42 } asDictionary sortBy: { #y -> VOOrder descending } asDictionary==.
 - ==selectMany:sortBy:limit:offset:== Provides for specifying a limit and offset to the above query.
 
-!!!! A Simple Paginator Example
+!!! A Simple Paginator Example
 
 Often you want to display just a range of objects that belong to the collection, e.g. the first 25, or from 25 to 50, and so on. Here we present a simple paginator that implements this behavior, using the ==selectMany:limit:offset:== method.
 
@@ -729,11 +732,11 @@ Paginator>>page: aNumber
       offset: (aNumber - 1) * self pageSize
 ]]]
 
-!! Creating and Removing Indexes
+! Creating and Removing Indexes
 
 There are a number of useful features in MongoDB that are not present in Voyage but still can be performed from within Pharo, the most important one being the management of indexes.
 
-!!!Creating Indexes by using OSProcess
+!!Creating Indexes by using OSProcess
 It is not yet possible to create and remove indexes from Voyage, but this can nonetheless be done by using OSProcess.
 
 For example, assume there is a database named ==myDB== with a collection named ==Trips==.
@@ -753,7 +756,7 @@ OSProcess command:
    '"db.getSiblingDB(''myDB'').Trips.dropIndexes()"'
 ]]]
 
-!!!Verifying the use of an Index
+!!Verifying the use of an Index
 
 To ensure that a query indeed uses the index, ==".explain()"== can be used in the mongo console. For example, if we add the index on ==description== as above, run a query and add ==.explain()== we see, that only a subset of documents were scanned.
 
@@ -792,7 +795,7 @@ After removing the index, all documents are scanned (in this example there are 2
 ]]]
 
 
-!! Conclusion
+! Conclusion
 
 In this chapter we presented Voyage, a persistence programming framework. The strength of Voyage lies in the presence of the object-document mapper and MongoDB back-end. We have shown how to store objects in, and remove object from the database, and how to optimise the storage format. This was followed by a discussion
 of querying the database; showing the two ways in which queries can be constructed and detailing how queries are ran. We ended this chapter by presenting how we can construct indexes in MongoDB databases, even though Voyage does not provide direct support for it.

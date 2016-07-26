@@ -9,6 +9,7 @@
 /vm-ui.sh
 /pharo
 /pillar
+/mustache
 files/
 /package-cache
 stderr
@@ -28,3 +29,5 @@ cover/cover-text.synctex.gz
 cover/cover-text*.png
 cover/cover.png
 cover/isbn-barcode.png
+*.fdb_latexmk
+*.fls

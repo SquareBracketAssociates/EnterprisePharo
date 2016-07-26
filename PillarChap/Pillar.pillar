@@ -1,16 +1,19 @@
 {
-    "title": "Documenting and Presenting with Pillar",
-    "attribution": "Damien Cassou and Cyril Ferlicot Delbecque"
+    "metadata" : {
+        "title": "Documenting and Presenting with Pillar",
+        "attribution": "Damien Cassou and Cyril Ferlicot Delbecque"
+    },
+    "headingLevelOffset":2
 }
 @cha:pillar
 
 
 This chapter describes Pillar version 2.
-The original author of Pillar and current maintainer is Damien Cassou. Many people have also contributed: Ben Coman, Stéphane Ducasse, Guillermo Polito, Lukas Renggli (original author of Pier from which Pillar has been extracted), Benjamin van Ryseghem and Cyril Ferlicot-Delbecque.
+The original author of Pillar and current maintainer is Damien Cassou. Many people have also contributed: Ben Coman, Stéphane Ducasse, Guillermo Polito, Lukas Renggli (original author of Pier from which Pillar has been extracted), Benjamin van Ryseghem, Cyril Ferlicot-Delbecque, Thibault Arloing and Yann Dubois.
 Pillar is sponsored by *ESUG>http://www.esug.org*.
 
 
-!!Introduction
+!Introduction
 
 *Pillar>http://www.smalltalkhub.com/#!/~Pier/Pillar* is a markup syntax and associated tools to write and generate documentation, books (such as this one) and slide-based presentations. The Pillar
 screenshot in Figure *@voyageDocExample* shows the HTML version of chapter *@cha:voyage*.
@@ -28,7 +31,7 @@ Pillar has many features, helpful tools, and documentation:
 
 
 
-!!!Pillar Users
+!!Pillar Users
 @pillarUSERS
 
 This book was written in Pillar. If you want to see how Pillar is used, have a look at *its source code>http://books.pharo.org/enterprise-pharo/*, or check the following other real-world projects:
@@ -37,7 +40,7 @@ This book was written in Pillar. If you want to see how Pillar is used, have a l
 - *the PillarHub open-access shared blog>http://pillarhub.pharocloud.com*
 
 
-!!5 Minutes Tutorial
+!5 Minutes Tutorial
 
 In this section we give the basic steps to get you started with your first Pillar document and exports. You first need to create a ''base directory'' inside
 which we will put all your text, configuration files, and Pillar itself.
@@ -47,7 +50,7 @@ mkdir mydocument
 cd mydocument
 ]]]
 
-!!!Installing and Exporting your First Document
+!!Installing and Exporting your First Document
 
 You first need to get Pillar. For that, I recommend
 *downloading and executing this script>https://raw.githubusercontent.com/pillar-markup/book-skeleton/master/download.sh* in the base directory if you are on an Unix environment.
@@ -91,7 +94,7 @@ This should generate an ''output.html'' file you can open in a web browser. The 
 </html>
 ]]]
 
-!!!Configuring a Document
+!!Configuring a Document
 
 As you can see, there is no document title in the generated ''output.html'' file. This is because we did not specify any. To specify a title, we have to add it with a configuration
 at the beginning of the ''first.pillar'' file:
@@ -138,7 +141,7 @@ first ==pillar.conf== file:
 
 Meta-information specified in Pillar files take precedence over configuration in the ==pillar.conf== file. To see the new title, you thus have to remove the one in ==first.pillar==.
 
-!!!Output and Multi Files
+!!Output and Multi Files
 
 You have the possibility to export all your files into a specific directory.
 To do that you have to add a parameter to ==pillar.conf==:
@@ -198,7 +201,7 @@ If you want separate files you can add a parameter:
 
 You will get a file ''result/first.html'' and a file ''result/second.html''.
 
-!!!Exporting a Different Content Using a Template
+!!Exporting a Different Content Using a Template
 
 If you want to tweak the content of the exported file, for example to reference your CSS or to add a footer, you need to create your own template (see Section
 *@templating* for more information about templating). You must write such template in its own file, e.g., ==myhtml.template==:
@@ -275,14 +278,14 @@ best: the differences being that the ==pillar.conf== file applies to all Pillar 
 
 This concludes our 5 minutes tutorial.
 
-!!Writing Pillar Documents
+!Writing Pillar Documents
 
 @writing
 
 In this section we show how to write Pillar documents by presenting the Pillar syntax. You might want to have a look at the
 *cheat sheet>http://pillarhub.pharocloud.com/hub/pillarhub/pillarcheatsheet* and even download and print it.
 
-!!!Meta-Information
+!!Meta-Information
 
 Meta-information of a particular file is written at the start of the file between curly braces using the STON syntax (see chapter *@cha:ston*).
 A meta-information starts with a word between quotation marks acting as a key, is followed by a colon ==:==, and finishes with a value.
@@ -300,7 +303,7 @@ For example, the following Pillar file,
 represents a Pillar document with the title and author set. You can use whatever keys you like. Use them by referencing them in templates (see section
 *@templating* for more information about templating).
 
-!!!Chapters & Sections
+!!Chapters & Sections
 
 A line starting with ==!== represents a heading. Use multiple ==!== to create sections and subsections.
 
@@ -310,7 +313,7 @@ To refer to a section or chapter, put an anchor (equivalent to \\label{chapterAn
 ''separate line''. Then, when you want to link to it (equivalent to \\ref{chapterAndSections} in Latex), use the ==\*@chapterAndSections\*== syntax. Anchors are
 invisible and links will be rendered as: *@chapterAndSections*.
 
-!!!Paragraphs and Framed Paragraphs
+!!Paragraphs and Framed Paragraphs
 
 An empty line starts a new paragraph.
 
@@ -385,9 +388,9 @@ Above code will prepend the titles "Note" and "To do" to the ==@\@note== and ==@
 }
 ]]]
 
-!!!Lists
+!!Lists
 
-!!!!Unordered Lists
+!!!Unordered Lists
 
 [[[language=pillar
 -A block of lines,
@@ -401,7 +404,7 @@ generates
 -where each line starts with ==-==
 -is transformed to a bulleted list
 
-!!!!Ordered Lists
+!!!Ordered Lists
 
 [[[language=pillar
 #A block of lines,
@@ -415,7 +418,7 @@ generates
 #where each line starts with ==#==
 #is transformed to an ordered list
 
-!!!!Definition Lists
+!!!Definition Lists
 
 Definition lists (''aka.'' description lists) are lists with labels:
 
@@ -433,7 +436,7 @@ generates
 ;red
 :color of the fire
 
-!!!!List Nesting
+!!!List Nesting
 
 [[[language=pillar
 -Lists can also be nested.
@@ -447,7 +450,7 @@ generates
 -#Thus, a line starting with ==-#==
 -#is an element of a bulleted list that is part of an ordered list.
 
-!!!Formatting
+!!Formatting
 There is some syntax for text formatting:
 
 -To make something ""bold"", write ==\""bold\""== (with 2 double quotes)
@@ -458,7 +461,7 @@ There is some syntax for text formatting:
 -To make something ^^superscript^^, write ==\^^superscript\^^==
 -To make something __underlined__, write ==\__underlined\__==
 
-!!!Tables
+!!Tables
 To create a table, start the lines with ==|== and separate the elements with ==|==. Each new line represents a new row of the table. Add a single ==!== to
 let the cell become a table heading.
 
@@ -485,9 +488,9 @@ generates
 ||centered||!centered header||centered
 |{ left |} right || center
 
-!!!Links
+!!Links
 
-!!!!Internal Links and Anchors
+!!!Internal Links and Anchors
 @anchorName
 
 To put an anchor (equivalent to \\label in Latex), use the ==@anchorName== syntax on a ''separate line''. Then, when you want to link to it (equivalent to
@@ -496,10 +499,11 @@ To put an anchor (equivalent to \\label in Latex), use the ==@anchorName== synta
 To create a link to an other pillar file, use the ==\*Alias>path.pillar@anchorName\*==. The Alias and the anchor are optional but you will need them in some
 cases (for example if you have an inter-file link and you export in LaTeX, or if you have an inter-file link and you export all your file in the same html file).
 
-!!!!External Links
+!!!External Links
 
 To create links to external resources, use the ==\*Pharo>http://pharo.org/\*== syntax which is rendered as *Pharo>http://pharo.org/*. The same syntax can also represent email addresses: write ==\*damien@cassou.me\*== to get *damien@cassou.me*.
 
+<<<<<<< HEAD
 !!!!Semantic Links
 
 To create semantic links ressources, use the ==\*Wikipedia Pharo>wikipedia:Pharo\*== syntax which is rendered as *Wikipedia Pharo>wikipedia:Pharo*.
@@ -508,6 +512,9 @@ To specify a language, you can use the ==\*Wikipedia Pharo>wikipedia:Pharo|lang=
 Same for Youtube links : ==\*Youtube Pharo>youtube:KDvNuOjdjY4\*==, the result is : *Youtube Pharo>youtube:KDvNuOjdjY4*.
 
 !!!Pictures
+=======
+!!Pictures
+>>>>>>> 749b6cd6b8cbe8fb022149a4c749b40ee185f68f
 
 To include a picture, use the syntax ==\+caption>file://filename|parameters+==:
 
@@ -519,7 +526,7 @@ generates Figure *@pharoLogo* (this reference has been generated using ==\*@phar
 
 +This is the caption of the picture>file://figures/pharo-logo.png|width=50|label=pharoLogo+
 
-!!!Scripts
+!!Scripts
 
 Use scripts when you want to add code blocks to your document.
 
@@ -533,7 +540,7 @@ generates
 foo bar
 ]]]
 
-!!!! Script with a Label or Caption
+!!! Script with a Label or Caption
 
 If you want either a label (to reference the script later) or a caption (to give a nice title to the script), write the following:
 
@@ -547,7 +554,7 @@ which produces script *@script1* (this reference is produced with ==\*@script1\*
 self foo bar
 ]]]
 
-!!!! Syntax Highlighting
+!!! Syntax Highlighting
 @sec:syntaxHighlighting
 
 To specify the syntax a script is written in, you need to use the ==language== parameter.
@@ -562,7 +569,7 @@ languages asStringOn: stream delimiter: ', ' last: ' and '
 
 If you don't want syntax highlighting for a particular script, specify ==no language== as value to the ==language== parameter.
 
-!!!! Script with Line Numbers
+!!! Script with Line Numbers
 
 If you need to explain a long piece of code, you may want a script to have line numbers:
 
@@ -578,7 +585,7 @@ self foo bar.
 self bar foo.
 ]]]
 
-!!!! Script from an External File
+!!! Script from an External File
 
 If you want you can also include a script from a external file. For example if you have a file `myProject.html` and you want to take the code from line 15 to
 line 45, instead of copy/pasting the code you can use:
@@ -588,7 +595,7 @@ line 45, instead of copy/pasting the code you can use:
 
 The ==firstLine== and ==lastLine== parameters are optional.
 
-!!!! Generate a Part of your Document with a Script
+!!! Generate a Part of your Document with a Script
 
 If you want you can also evaluate a script to generate a part of your document.
 For example if you write a project's documentation and want to give some metrics about its code, you can write something like this:
@@ -630,7 +637,7 @@ stream
 
 For example section *@configParameters* of this chapter is generated.
 
-!!!Raw
+!!Raw
 
 If you want to include raw text into a page you must enclose it between =={\{{== and ==}\}}==, otherwise Pillar ensures that text appears as you type it which might require transformations.
 
@@ -649,7 +656,7 @@ A good practice is to always specify for which kind of export the raw text must 
 ""Take care:"" avoid terminating the verbatim text with a ==}== as
 this will confuse the parser. So, don't write --==\{{{\\begin{scriptsize}}}}==-- but ==\{{{\\begin{scriptsize} }}}== instead.
 
-!!!Annotations
+!!Annotations
 
 Annotations are the Pillar way to have extensible syntax. An annotation has this syntax:
 
@@ -657,7 +664,7 @@ Annotations are the Pillar way to have extensible syntax. An annotation has this
 ${tag:parameter=value|parameter2=value2}$
 ]]]
 
-!!!! InputFile Annotation
+!!! InputFile Annotation
 
 You can include a file into another pillar file. The ==inputFile== annotation takes as parameter the path of the file relative to ==baseDirectory== (if you don't change the base directory, it is your working directory). In this example, 2 files are included:
 
@@ -667,6 +674,7 @@ ${inputFile:test.pillar}$
 ${inputFile:chapter2/chapter2.pillar}$
 ]]]
 
+<<<<<<< HEAD
 !!!! Footnotes Annotation
 
 You can add footnotes to explain or annotate words. The ==footnotes== annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
@@ -676,6 +684,9 @@ Foo$(footnote:Some Explanation for Foo)$
 ]]]
 
 !!!! Slide Annotation
+=======
+!!! Slide Annotation
+>>>>>>> 749b6cd6b8cbe8fb022149a4c749b40ee185f68f
 @sec:slide
 
 This annotation is used to create slides structure for a ==beamer== or a ==deck.js== export.
@@ -686,7 +697,7 @@ The ""label"" parameter can be used to reference this slide in another slide:
 ${slide:title=My slide|label=sld:mySlide}$
 ]]]
 
-!!!! Columns
+!!! Columns
 
 
 With Pillar you can put text and other contents in columns.
@@ -705,19 +716,23 @@ ${endColumns}$
 
 @@note The column annotations currently works only for the beamer, HTML and Deck.js export.
 
+<<<<<<< HEAD
 
 !!!Preformatted (less used)
+=======
+!!Preformatted (less used)
+>>>>>>> 749b6cd6b8cbe8fb022149a4c749b40ee185f68f
 
 To create a preformatted block, begin each line with ==\===. A preformatted block uses equally spaced text so that spacing is preserved. In general you should prefer scripts over preformatted blocks.
 
 = = this is preformatted text
 = = this line as well
 
-!!!Commented Lines
+!!Commented Lines
 
 Lines that start with a ==%== are considered comments and will not be rendered in the resulting document.
 
-!!!Escaping Characters
+!!Escaping Characters
 
 Special characters (e.g., ==\+== and ==\*==) must be escaped with a backslash: to get a ==\+==, you actually have to write ==\\\+==. The list of characters to escape is:
 
@@ -729,24 +744,24 @@ characters do: [:char | stream nextPut: char] separatedBy: [ stream nextPutAll: 
 stream cr; nextPutAll: ']]]'; cr.
 ]]]
 
-!! Configuring your Output
+! Configuring your Output
 @configuring
 
 In this section we show how to configure the export.
 
-!!! Configuration File
+!! Configuration File
 
 Pillar exporting mechanism can be configured using *STON>http://smalltalkhub.com/#!/~SvenVanCaekenberghe/STON* (see chapter @ston), a lightweight, text-based, human-readable data
 interchange format (similar to the popular *JSON>http://www.json.org*). Configuration is done either in ==pillar.conf== or at the beginning of Pillar files.
 
-!!! Configuration Parameters
+!! Configuration Parameters
 @configParameters
 
 [[[eval=true
 CCDocumentationGeneration of: PRPillarConfiguration on: stream.
 ]]]
 
-!! Templating
+! Templating
 @templating
 
 Pillar comes with the Mustache templating engine (see chapter *@cha:mustache*). This means you can specify a preamble and postamble for
@@ -770,7 +785,7 @@ In this example, we can see the use of ==\{\{\{title\}\}\}== and ==\{\{\{content
 exported from Pillar). You have to put such a template in a dedicated file (named ==chapter.html.template== for example) and reference this file from the
 ==template== configuration parameter.
 
-!! Command-Line Interface
+! Command-Line Interface
 @commandLineInterface
 
 In this section we show how to use the Pillar command-line interface.
@@ -804,7 +819,7 @@ For this book, we use:
    fi"
 ]]]
 
-!!! Multiple Exports
+!! Multiple Exports
 
 Pillar can take care of several exports in parallel thanks to the ==defaultExporters== parameter.
 For example, you can add this to your ''pillar.conf'':
@@ -822,12 +837,12 @@ $ ./pillar export
 
 to get three files: ==doc.html==, ==doc.tex== and ==doc.txt== (and you will also get a ==pillarPostExport.sh== script to generate a PDF).
 
-!! Pillar from Pharo
+! Pillar from Pharo
 
 Pillar has a document model (the root of which being ==PRDocument==), a parser (==PRPillarParser==) and several export types (subclasses of ==PRDocumentWriter==) implemented as visitors over the document model.
 Pillar also has transformers (subclasses of ==PRTransformer==) that take a document model as input and produce a modified document model as output.
 
-!!! How to Create a Pillar Document
+!! How to Create a Pillar Document
 
 It is possible to create a Pillar document by parsing a string or by instantiating the document model.
 
@@ -860,7 +875,7 @@ figure := PRFigure new
 document add: title; add: figure.
 ]]]
 
-!!! How to Export a Document
+!! How to Export a Document
 
 Once you have your document, you may want to export it. But exporting, there's an optional step: transforming your document.
 A transformer is an abstraction that visits a document and changes it. For instance, ==PRScriptEvaluator== replaces a script with ==eval=true==
@@ -879,7 +894,7 @@ configuration outputType: PRHTMLWriter.
 PRExportPhase executeOn: { document } with: configuration.
 ]]]
 
-!! Conclusion
+! Conclusion
 
 Pillar is still in active development because authors keep writing new documents. Because Pillar's source code is of great quality (mainly due to Lukas Renggli), features can be added easily by new developers. Pillar is different from competition thanks to its notion of project that allows managing multiple files coherently.
 
