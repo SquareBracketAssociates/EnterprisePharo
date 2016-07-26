@@ -1,14 +1,14 @@
 {
     "metadata" : {
         "title": "Documenting and Presenting with Pillar",
-        "attribution": "Damien Cassou and Cyril Ferlicot Delbecque"
+        "attribution": "Damien Cassou, Cyril Ferlicot Delbecque, Yann Dubois and Thibault Arloing"
     },
     "headingLevelOffset":2
 }
 @cha:pillar
 
 
-This chapter describes Pillar version 2.
+This chapter describes Pillar version 4.
 The original author of Pillar and current maintainer is Damien Cassou. Many people have also contributed: Ben Coman, Stéphane Ducasse, Guillermo Polito, Lukas Renggli (original author of Pier from which Pillar has been extracted), Benjamin van Ryseghem, Cyril Ferlicot-Delbecque, Thibault Arloing and Yann Dubois.
 Pillar is sponsored by *ESUG>http://www.esug.org*.
 
@@ -22,7 +22,7 @@ screenshot in Figure *@voyageDocExample* shows the HTML version of chapter *@cha
 
 Pillar has many features, helpful tools, and documentation:
 - simple markup syntax with references, tables, pictures, captions, syntax-highlighted code blocks;
-- export documents to HTML, LaTeX, Markdown, AsciiDoc and Pillar itself, and presentations to Beamer and Deck.js;
+- export documents to HTML, LaTeX, Markdown, AsciiDoc, ePuB and Pillar itself, and presentations to Beamer and Deck.js;
 - customization of the export through a dedicated STON configuration file (see chapter *@cha:ston*) and Mustache templates (see chapter *@cha:mustache*).
 - many tests with good coverage (94% with more than a 2100 executed tests), which are regularly run by a *continuous integration job>https://ci.inria.fr/pharo-contribution/job/Pillar*
 - a command-line interface and dedicated plugins for several text editors: *Emacs>https://github.com/pillar-markup/pillar-mode*, *Vim>https://github.com/cdlm/vim-pillar*, *TextMate>https://github.com/Uko/Pillar.tmbundle*, and *Atom>https://github.com/Uko/language-pillar*
@@ -503,18 +503,14 @@ cases (for example if you have an inter-file link and you export in LaTeX, or if
 
 To create links to external resources, use the ==\*Pharo>http://pharo.org/\*== syntax which is rendered as *Pharo>http://pharo.org/*. The same syntax can also represent email addresses: write ==\*damien@cassou.me\*== to get *damien@cassou.me*.
 
-<<<<<<< HEAD
-!!!!Semantic Links
+!!Semantic Links
 
 To create semantic links ressources, use the ==\*Wikipedia Pharo>wikipedia:Pharo\*== syntax which is rendered as *Wikipedia Pharo>wikipedia:Pharo*.
 To specify a language, you can use the ==\*Wikipedia Pharo>wikipedia:Pharo|lang=en\*== syntax which is rendered as *Wikipedia Pharo>wikipedia:Pharo|lang=en*
 
 Same for Youtube links : ==\*Youtube Pharo>youtube:KDvNuOjdjY4\*==, the result is : *Youtube Pharo>youtube:KDvNuOjdjY4*.
 
-!!!Pictures
-=======
 !!Pictures
->>>>>>> 749b6cd6b8cbe8fb022149a4c749b40ee185f68f
 
 To include a picture, use the syntax ==\+caption>file://filename|parameters+==:
 
@@ -674,8 +670,7 @@ ${inputFile:test.pillar}$
 ${inputFile:chapter2/chapter2.pillar}$
 ]]]
 
-<<<<<<< HEAD
-!!!! Footnotes Annotation
+!!! Footnotes Annotation
 
 You can add footnotes to explain or annotate words. The ==footnotes== annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
 
@@ -683,10 +678,7 @@ You can add footnotes to explain or annotate words. The ==footnotes== annotation
 Foo$(footnote:Some Explanation for Foo)$
 ]]]
 
-!!!! Slide Annotation
-=======
 !!! Slide Annotation
->>>>>>> 749b6cd6b8cbe8fb022149a4c749b40ee185f68f
 @sec:slide
 
 This annotation is used to create slides structure for a ==beamer== or a ==deck.js== export.
@@ -716,12 +708,7 @@ ${endColumns}$
 
 @@note The column annotations currently works only for the beamer, HTML and Deck.js export.
 
-<<<<<<< HEAD
-
-!!!Preformatted (less used)
-=======
 !!Preformatted (less used)
->>>>>>> 749b6cd6b8cbe8fb022149a4c749b40ee185f68f
 
 To create a preformatted block, begin each line with ==\===. A preformatted block uses equally spaced text so that spacing is preserved. In general you should prefer scripts over preformatted blocks.
 
