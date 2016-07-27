@@ -29,7 +29,7 @@ initDir:
 
 book: sbabook ./book-result/EnterprisePharo.pdf
 
-chapters: $(PDFCHAPTERS)
+chapters: sbabook $(PDFCHAPTERS)
 
 .SECONDARY:
 
