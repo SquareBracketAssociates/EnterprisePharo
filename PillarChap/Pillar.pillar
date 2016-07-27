@@ -61,6 +61,13 @@ Then, you can load an archetype (see Section *@archetypes*) with command:
 ./pillar archetype welcome
 ]]]
 
+You have the possibility to rename the directory in which your files will be exported.
+To do that you have to change the ==OUTPUTDIRECTORY== variable in the ==Makefile==:
+
+[[[language=bash
+OUTPUTDIRECTORY = result
+]]]
+
 Then, you can check everything is working fine by creating a ==first.pillar== file with this content:
 
 [[[language=pillar
@@ -70,14 +77,25 @@ Then, you can check everything is working fine by creating a ==first.pillar== fi
 And finally compiling it from a terminal (see Section *@commandLineInterface* for more information about the command-line interface):
 
 [[[language=bash
-make first.html
+make result/first.html
 ]]]
 
 This should generate an ''first.html'' file you can open in a web browser. The content of this file will be something like:
 
-@@todo compile the file and insert the result here
 [[[language=json
-
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <div class="container">
+      <section>
+        <h1>1. Hello World</h1>
+      </section>
+    </div>
+  </body>
+</html>
 ]]]
 
 !!Configuring a Document
@@ -124,17 +142,6 @@ first ==pillar.conf== file:
 ]]]
 
 Meta-information specified in Pillar files take precedence over configuration in the ==pillar.conf== file. To see the new title, you thus have to remove the one in ==first.pillar==.
-
-!!Output and Multi Files
-
-You have the possibility to export all your files into a specific directory.
-To do that you have to change the ==OUTPUTDIRECCTORY== variable in the ==Makefile==:
-
-[[[language=bash
-OUTPUTDIRECTORY = result
-]]]
-
-If you export you will have a file ''result/first.html''.
 
 !!Exporting a Different Content Using a Template
 
