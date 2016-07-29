@@ -100,7 +100,7 @@ This should generate an ''first.html'' file you can open in a web browser. The c
 
 !!Configuring a Document
 
-As you can see, there is no document title in the generated ''output.html.json'' file. This is because we did not specify any. To specify a title, we have to add it with a configuration
+As you can see, there is no document title in the generated ''first.html'' file. This is because we did not specify any. To specify a title, we have to add it with a configuration
 at the beginning of the ''first.pillar'' file:
 
 [[[language=pillar
@@ -116,7 +116,7 @@ at the beginning of the ''first.pillar'' file:
 When you compile using the same command line,
 
 [[[language=bash
-make first.html
+make result/first.html
 ]]]
 
 you should now get a web page with a title:
