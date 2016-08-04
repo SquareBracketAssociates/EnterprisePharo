@@ -53,10 +53,20 @@ cd mydocument
 !!Installing and Exporting your First Document
 
 You first need to get Pillar. For that, I recommend
-*downloading and executing this script>https://raw.githubusercontent.com/pillar-markup/book-skeleton/master/download.sh* in the base directory if you are on an Unix environment.
+*downloading and executing this script>https://raw.githubusercontent.com/pillar-markup/pillar/master/download.sh* in the base directory if you are on an Unix environment.
 
-If you are on Windows you can get a new Pillar image by extracting *an archive>https://ci.inria.fr/pharo-contribution/job/Pillar/PHARO=40,VERSION=stable,VM=vm/lastSuccessfulBuild/artifact/Pillar.zip*.
-Then you need a Pharo *Virtual Machine for Windows>http://files.pharo.org/get-files/40/pharo-win-stable.zip*.
+Then, you can load an archetype (see Section *@archetypes*) with command:
+
+[[[language=bash
+./pillar archetype welcome
+]]]
+
+You have the possibility to rename the directory in which your files will be exported.
+To do that you have to change the ==OUTPUTDIRECTORY== variable in the ==Makefile==:
+
+[[[language=bash
+OUTPUTDIRECTORY = result
+]]]
 
 Then, you can check everything is working fine by creating a ==first.pillar== file with this content:
 
@@ -67,41 +77,37 @@ Then, you can check everything is working fine by creating a ==first.pillar== fi
 And finally compiling it from a terminal (see Section *@commandLineInterface* for more information about the command-line interface):
 
 [[[language=bash
-./pillar export --to=html first.pillar
+make result/first.html
 ]]]
 
-Or in windows open a new shell (==Windows key + r== then type ==cmd==) then run:
+This should generate an ''first.html'' file you can open in a web browser. The content of this file will be something like:
 
-[[[language=bash
-Pharo.exe Pillar.image pillar export --to=html first.pillar
-]]]
-
-This should generate an ''output.html'' file you can open in a web browser. The content of this file will be something like:
-
-[[[language=html
+[[[language=json
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <title></title>
-      [...]
-   </head>
-   <body>
-      <div class="container"> [...]
-         <h1>I. Hello World</h1>
-      </div>
-     [...]
-   </body>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <div class="container">
+      <section>
+        <h1>1. Hello World</h1>
+      </section>
+    </div>
+  </body>
 </html>
 ]]]
 
 !!Configuring a Document
 
-As you can see, there is no document title in the generated ''output.html'' file. This is because we did not specify any. To specify a title, we have to add it with a configuration
+As you can see, there is no document title in the generated ''first.html'' file. This is because we did not specify any. To specify a title, we have to add it with a configuration
 at the beginning of the ''first.pillar'' file:
 
 [[[language=pillar
 {
-   "title": "My first document while reading the 5 minutes Pillar tutorial"
+   "metadata": {
+     "title": "My first document while reading the 5 minutes Pillar tutorial"
+    }
 }
 
 !Hello World
@@ -110,13 +116,7 @@ at the beginning of the ''first.pillar'' file:
 When you compile using the same command line,
 
 [[[language=bash
-./pillar export --to=html first.pillar
-]]]
-
-or
-
-[[[language=bash
-Pharo.exe Pillar.image pillar export --to=html first.pillar
+make result/first.html
 ]]]
 
 you should now get a web page with a title:
@@ -135,71 +135,13 @@ first ==pillar.conf== file:
 
 [[[language=ston
 {
-   "title" : "My first document from pillar.conf"
+   "metadata": {
+     "title" : "My first document from pillar.conf"
+    }
 }
 ]]]
 
 Meta-information specified in Pillar files take precedence over configuration in the ==pillar.conf== file. To see the new title, you thus have to remove the one in ==first.pillar==.
-
-!!Output and Multi Files
-
-You have the possibility to export all your files into a specific directory.
-To do that you have to add a parameter to ==pillar.conf==:
-
-[[[language=ston
-{
-   "title" : "My first document from pillar.conf",
-   "outputDirectory" : "result"
-}
-]]]
-
-If you export you will have a file ''result/output.html''.
-
-You have two ways to export files:
-# separate output files
-# as one output file
-
-By default Pillar exports all the input files as one.
-If you create a file ''second.pillar'' that contains ==I am a second file== you can add a parameter ''inputFiles'' to your configuration.
-
-[[[language=ston
-{
-   "title" : "My first document from pillar.conf",
-   "outputDirectory" : "result",
-   "inputFiles" : [ "first.pillar", "second.pillar" ]
-}
-]]]
-
-If you export this with the command:
-
-
-[[[language=bash
-./pillar export --to=html
-]]]
-
-You will get a file ''result/output.html'' that contains:
-
-[[[language=html
-<h1>I. Hello World</h1>
-<p>
-I am a second file
-</p>
-]]]
-
-If you want to change the name of the output file you can use the parameter ''outputFile''.
-
-If you want separate files you can add a parameter:
-
-[[[language=ston
-{
-   "title" : "My first document from pillar.conf",
-   "outputDirectory" : "result",
-   "inputFiles" : [ "first.pillar", "second.pillar" ],
-   "separateOutputFiles" : true
-}
-]]]
-
-You will get a file ''result/first.html'' and a file ''result/second.html''.
 
 !!Exporting a Different Content Using a Template
 
@@ -223,34 +165,39 @@ If you want to tweak the content of the exported file, for example to reference 
 </html>
 ]]]
 
-Then, you need to reference this template from your configuration file. So, edit your ==pillar.conf== configuration file:
+Then, to use this template, you need to replace the ==HTMLTEMPLATE== variable in the ==Makefile==. So, edit your ==Makefile==:
 
-[[[language=ston
-{  [...]
-   "year" : 2016,
-   "configurations" : {
-      "html": {
-         "outputType" : #html,
-         "template" : "myhtml.template"
-      }
-   }
-}
+[[[language=bash
+HTMLTEMPLATE = myhtml.template
 ]]]
 
 Now, write your name in ==first.pillar== :
 
 [[[language=pillar
 {
-   "author": "Damien Cassou"
+   "metadata":{
+     "author": "Damien Cassou"
+    }
 }
 
 !Hello World
 ]]]
 
+You can also write the year in the ==pillar.conf== file:
+
+[[[language=ston
+{
+  "metadata":{
+    "title":"My first document from pillar.conf",
+    "year":"2016"
+  }
+}
+]]]
+
 Finally, compile ==first.pillar== one last time
 
 [[[language=bash
-./pillar export --to=html first.pillar
+make first.html
 ]]]
 
 to generate a file containing:
@@ -293,15 +240,17 @@ For example, the following Pillar file,
 
 [[[language=pillar
 {
-   "title": "My first document from pillar.conf",
-   "author": "Damien Cassou"
+   "metadata":{
+     "title": "My first document from pillar.conf",
+     "author": "Damien Cassou"
+    }
 }
 
 !Hello World
 ]]]
 
 represents a Pillar document with the title and author set. You can use whatever keys you like. Use them by referencing them in templates (see section
-*@templating* for more information about templating).
+*@templating* for more information about templating). Only keys in the ==metadata== field can be referenced in the template.
 
 !!Chapters & Sections
 
@@ -503,7 +452,9 @@ cases (for example if you have an inter-file link and you export in LaTeX, or if
 
 To create links to external resources, use the ==\*Pharo>http://pharo.org/\*== syntax which is rendered as *Pharo>http://pharo.org/*. The same syntax can also represent email addresses: write ==\*damien@cassou.me\*== to get *damien@cassou.me*.
 
-!!Semantic Links
+!!!Semantic Links
+
+Semantic links are a way to simplify links to standard websites such as Wikipedia and Youtube.
 
 To create semantic links ressources, use the ==\*Wikipedia Pharo>wikipedia:Pharo\*== syntax which is rendered as *Wikipedia Pharo>wikipedia:Pharo*.
 To specify a language, you can use the ==\*Wikipedia Pharo>wikipedia:Pharo|lang=en\*== syntax which is rendered as *Wikipedia Pharo>wikipedia:Pharo|lang=en*
@@ -523,6 +474,7 @@ generates Figure *@pharoLogo* (this reference has been generated using ==\*@phar
 +This is the caption of the picture>file://figures/pharo-logo.png|width=50|label=pharoLogo+
 
 !!Scripts
+@scripts
 
 Use scripts when you want to add code blocks to your document.
 
@@ -633,6 +585,23 @@ stream
 
 For example section *@configParameters* of this chapter is generated.
 
+!!Structures
+
+You can create structures to render all structures with the same name as the same object.
+Structures use the scripts syntax (see *@scripts*) with a particular parameter ==structure==
+
+= [[[structure=exercise
+= {
+=   "question":"What is the answer to life, the universe and everything ?",
+=   "answer":"42"
+= }
+= ]]]
+
+There is two kind of structures for the moment:
+-exercise, rendered as a definition list
+-city, rendered as a table
+-country, rendered as a table
+
 !!Raw
 
 If you want to include raw text into a page you must enclose it between =={\{{== and ==}\}}==, otherwise Pillar ensures that text appears as you type it which might require transformations.
@@ -675,8 +644,24 @@ ${inputFile:chapter2/chapter2.pillar}$
 You can add footnotes to explain or annotate words. The ==footnotes== annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
 
 [[[
-Foo$(footnote:Some Explanation for Foo)$
+Foo${footnote:Some Explanation for Foo}$
 ]]]
+
+!!!Citations
+
+Citations are only available for LaTeX.
+You can add citations to your document to reference an element in a LaTeX bibliography. The ==cite== annotationtakes as parameter the key of the reference in the bibliography.
+
+[[[
+${cite:reference}$
+]]]
+
+The exemple above wil render as ==\cite{reference}==
+
+If you want to use other type of citations like ==citep== or ==citet==, please overwrite the command in your LaTeX template:
+==\renewcommand{\cite}{\citep}==
+
+@@todo á vérifier
 
 !!! Slide Annotation
 @sec:slide
@@ -751,8 +736,8 @@ CCDocumentationGeneration of: PRPillarConfiguration on: stream.
 ! Templating
 @templating
 
-Pillar comes with the Mustache templating engine (see chapter *@cha:mustache*). This means you can specify a preamble and postamble for
-your document. Here is an example HTML template using Mustache:
+Pillar generates json as output so you can use a templating engine to tweak Pillar output. Pillar comes with the Mustache templating engine (see chapter *@cha:mustache*).
+This means you can specify a preamble and postamble for your document. Here is an example HTML template using Mustache:
 
 [[[language=html
 <!DOCTYPE html>
@@ -770,7 +755,13 @@ your document. Here is an example HTML template using Mustache:
 
 In this example, we can see the use of ==\{\{\{title\}\}\}== and ==\{\{\{content\}\}\}== to refer to the title of the document and its actual content (the one
 exported from Pillar). You have to put such a template in a dedicated file (named ==chapter.html.template== for example) and reference this file from the
-==template== configuration parameter.
+==HTMLTEMPLATE== variable in the ==Makefile==. Then when you will compile in HTML, the ==Makefile== will use this template.
+
+You can also use ==mustache== alone with command:
+
+[[[language=bash
+./mustache --data=file.html.json --template=myhtml.template > file.html
+]]]
 
 ! Command-Line Interface
 @commandLineInterface
@@ -780,9 +771,7 @@ In this section we show how to use the Pillar command-line interface.
 One of the basic uses of the command line is:
 
 [[[language=bash
-$ ./pillar export --to=latex PharoSound.pier
-# or in Windows
-$ Pharo.exe Pillar.image pillar export --to=latex
+$ ./pillar export --to=latex PharoSound.pillar
 ]]]
 
 [[[eval=true
@@ -791,43 +780,13 @@ stream nextPutAll: 'You can select an export type with the parameter ==-\-to==. 
 stream nextPutAll: '.'
 ]]]
 
-In the case of a LaTeX or Beamer export Pillar will generate a script named ==pillarPostExport.sh== to generate PDF files from the TeX files. This script will create a symbolic link named ==root== referencing the output directory into each directory containing TeX files.
+The ==Makefile== will create a symbolic link named ==root== referencing the output directory into each directory containing output files.
 You can use this symbolic link to reference files in specified in the ==support== collection.
-You can customize the LaTeX command with the ==latexCommand== parameter of the configuration.
-For this book, we use:
-
-[[[language=ston
-"latexCommand" : "lualatex --file-line-error --interaction=batchmode {fileName} 2>&1 1>/dev/null
-   ret=$?
-   if [[ $ret -ne 0 ]]; then
-      cat {fileNameWithoutExtension}.log
-      echo \"Can't generate the PDF!\"
-      exit 1
-   fi"
-]]]
-
-!! Multiple Exports
-
-Pillar can take care of several exports in parallel thanks to the ==defaultExporters== parameter.
-For example, you can add this to your ''pillar.conf'':
-
-[[[language=ston
-"defaultExporters" : [ "html", "latex", "text" ],
-"inputFiles" : [ "doc.pillar" ]
-]]]
-
-and launch:
-
-[[[language=shellCommands
-$ ./pillar export
-]]]
-
-to get three files: ==doc.html==, ==doc.tex== and ==doc.txt== (and you will also get a ==pillarPostExport.sh== script to generate a PDF).
 
 ! Pillar from Pharo
 
 Pillar has a document model (the root of which being ==PRDocument==), a parser (==PRPillarParser==) and several export types (subclasses of ==PRDocumentWriter==) implemented as visitors over the document model.
-Pillar also has transformers (subclasses of ==PRTransformer==) that take a document model as input and produce a modified document model as output.
+Pillar also has phases (subclasses of ==PRPhase==) that take a document model as input and produce a modified document model as output.
 
 !! How to Create a Pillar Document
 
