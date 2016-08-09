@@ -1,21 +1,21 @@
 OUTPUTDIRECTORY = ./book-result
 
-PDFCHAPTERS =           book-result/Teapot/Teapot.pdf \
-			book-result/WebApp/WebApp.pdf \
-			book-result/Zinc-Encoding-Meta/Zinc-Encoding-Meta.pdf \
-			book-result/Zinc-HTTP-Client/Zinc-HTTP-Client.pdf \
-			book-result/Zinc-HTTP-Server/Zinc-HTTP-Server.pdf \
-			book-result/WebSockets/WebSockets.pdf \
-			book-result/NeoCSV/NeoCSV.pdf \
-			book-result/NeoJSON/NeoJSON.pdf \
-			book-result/STON/STON.pdf \
-			book-result/Fuel/Fuel.pdf \
-			book-result/Voyage/Voyage.pdf \
-			book-result/Mustache/Mustache.pdf \
-			book-result/RenoirST/RenoirST.pdf \
-			book-result/PillarChap/Pillar.pdf \
-			book-result/Artefact/Artefact.pdf \
-			book-result/DeploymentWeb/DeployForProduction.pdf
+CHAPTERS =           book-result/Teapot/Teapot \
+			book-result/WebApp/WebApp \
+			book-result/Zinc-Encoding-Meta/Zinc-Encoding-Meta \
+			book-result/Zinc-HTTP-Client/Zinc-HTTP-Client \
+			book-result/Zinc-HTTP-Server/Zinc-HTTP-Server \
+			book-result/WebSockets/WebSockets \
+			book-result/NeoCSV/NeoCSV \
+			book-result/NeoJSON/NeoJSON \
+			book-result/STON/STON \
+			book-result/Fuel/Fuel \
+			book-result/Voyage/Voyage \
+			book-result/Mustache/Mustache \
+			book-result/RenoirST/RenoirST \
+			book-result/PillarChap/Pillar \
+			book-result/Artefact/Artefact \
+			book-result/DeploymentWeb/DeployForProduction
 
 CHAPTERLATEXTEMPLATE = ./support/templates/chapter.latex.template
 HTMLTEMPLATE = ./support/templates/chapter.html.template
@@ -29,7 +29,11 @@ initDir:
 
 book: sbabook ./book-result/EnterprisePharo.pdf
 
-chapters: sbabook $(PDFCHAPTERS)
+chapters: chapters-pdf chapters-html
+
+chapters-pdf: sbabook $(CHAPTERS:=.pdf)
+
+chapters-html: sbabook $(CHAPTERS:=.html)
 
 .SECONDARY:
 
@@ -47,7 +51,7 @@ $(OUTPUTDIRECTORY)/EnterprisePharo.tex.json: EnterprisePharo.pillar copySupport
 	./pillar export --to="latex:sbabook" --outputFile=EnterprisePharo $<
 
 $(OUTPUTDIRECTORY)/%.tex.json: %.pillar copySupport
-	./pillar export --to="latex:sbabook" --outputFile=$< $<
+	./pillar export --to="LaTeX by chapter" --outputFile=$< $<
 
 $(OUTPUTDIRECTORY)/EnterprisePharo.tex: $(OUTPUTDIRECTORY)/EnterprisePharo.tex.json
 	./mustache --data=$< --template=${BOOKLATEXTEMPLATE} > $@
@@ -61,7 +65,7 @@ $(OUTPUTDIRECTORY)/%.pdf: $(OUTPUTDIRECTORY)/%.tex
 
 #HTML compilation
 $(OUTPUTDIRECTORY)/%.html.json: %.pillar copySupport
-	./pillar export --to="html" --outputFile=$< $<
+	./pillar export --to="HTML by chapter" --outputFile=$< $<
 
 $(OUTPUTDIRECTORY)/%.html: $(OUTPUTDIRECTORY)/%.html.json
 	./mustache --data=$< --template=${HTMLTEMPLATE} > $@
