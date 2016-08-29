@@ -225,6 +225,24 @@ best: the differences being that the ==pillar.conf== file applies to all Pillar 
 
 This concludes our 5 minutes tutorial.
 
+@archetypes
+
+!!Generate project skeleton with Pillar Archetypes
+
+To download a new archetype, launch this command :
+
+[[[language=bash
+./pillar archetype <archetypeName>
+]]]
+
+Here is the list of the current archetypes :
+
+- book
+- presentation
+- welcome
+
+More are comming soon, and you can help us to create your own archetype on this *Github Project>https://github.com/pillar-markup/Pillar-Archetype*.
+
 !Writing Pillar Documents
 
 @writing
