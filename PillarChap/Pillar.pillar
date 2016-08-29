@@ -227,7 +227,16 @@ This concludes our 5 minutes tutorial.
 
 @archetypes
 
-!!Generate project skeleton with Pillar Archetypes
+!!Archetype - A Pillar skeleton maker
+
+An archetype is a project skeleton to well begin a pillar project.
+In an archetype you have all the files you will need and an example.
+
+Basically you have:
+-Makefile
+-pillar.conf
+-templates
+-... with some differences between archetypes
 
 To download a new archetype, launch this command :
 
@@ -241,7 +250,9 @@ Here is the list of the current archetypes :
 - presentation
 - welcome
 
-More are comming soon, and you can help us to create your own archetype on this *Github Project>https://github.com/pillar-markup/Pillar-Archetype*.
+More are comming soon, and you can help us by creating your own archetype on the *Github Project>https://github.com/pillar-markup/Pillar-Archetype*.
+
+To add an archetype, just create the file tree and put an empty file ".keep" in empty folders.
 
 !Writing Pillar Documents
 
