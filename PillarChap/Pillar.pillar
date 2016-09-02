@@ -250,7 +250,7 @@ Here is the list of the current archetypes :
 - presentation
 - welcome
 
-More are comming soon, and you can help us by creating your own archetype on the *Github Project>https://github.com/pillar-markup/Pillar-Archetype*.
+You can help us by creating your own archetype on the *Github Project>https://github.com/pillar-markup/Pillar-Archetype*.
 
 To add an archetype, just create the file tree and put an empty file ".keep" in empty folders.
 
