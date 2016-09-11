@@ -531,11 +531,11 @@ They are divided in three areas: management of text, drawing arrows and reportin
 
 So far you have used the class ==PDFTextElement== to place text on a page.
 This component is limited in terms of functionality since it only handles the position on the page. In addition to this, Artefact offers three high-level
-components that support advanced features: ==PDFFormatedTextElement==, ==PDFCellElement==
+components that support advanced features: ==PDFFormattedTextElement==, ==PDFCellElement==
 and ==PDFParagrapElement==.
 
-The component ==PDFFormatedTextElement== is similar to ==PDFTextElement== but includes managing the alignment (left, center, right). A ==PDFCellElement== is
-a ==PDFFormatedTextElement== with a border. Finally, a ==PDFParagraphElement==
+The component ==PDFFormattedTextElement== is similar to ==PDFTextElement== but includes managing the alignment (left, center, right). A ==PDFCellElement== is
+a ==PDFFormattedTextElement== with a border. Finally, a ==PDFParagraphElement==
 allows the insertion of a paragraph of text and automatically manages the breaks at the end of lines.
 
 
