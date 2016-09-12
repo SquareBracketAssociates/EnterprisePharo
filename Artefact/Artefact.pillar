@@ -631,7 +631,7 @@ defined in their own stylesheet.
 Artefact also includes a dictionary of styles that allows every ==PDFElement== to be given a specific, named style. For example the code below is given the ==#title== style.
 
 [[[
-PDFText from: 10mm@15mm text: 'My title' style: #title
+PDFTextElement from: 10mm@15mm text: 'My title' style: #title
 ]]]
 
 At any upper level (document, page, etc), you can define the named style using the message ==>==, e.g. as follows:
@@ -657,7 +657,7 @@ These fonts are available in any PDF viewer. A ==PDFFont== instance supports the
 As said above, fonts can be set directly for a piece of text, which is shown below:
 
 [[[
-PDFText
+PDFTextElement
    from: 10mm@15mm
    text: 'My title'
    font: ((PDFTimesFont size: 24 pt) bold).
