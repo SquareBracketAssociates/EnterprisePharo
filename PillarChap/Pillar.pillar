@@ -15,7 +15,7 @@ Pillar is sponsored by *ESUG>http://www.esug.org*.
 
 !Introduction
 
-*Pillar>http://www.smalltalkhub.com/#!/~Pier/Pillar* is a markup syntax and associated tools to write and generate documentation, books (such as this one) and slide-based presentations. The Pillar
+Pillar (hosted at *http://www.smalltalkhub.com/#!/~Pier/Pillar*) is a markup syntax and associated tools to write and generate documentation, books (such as this one) and slide-based presentations. The Pillar
 screenshot in Figure *@voyageDocExample* shows the HTML version of chapter *@cha:voyage*.
 
 +An example Pillar output>file://figures/voyageDocExample-small.png|label=voyageDocExample|width=60+
@@ -32,10 +32,10 @@ Pillar has many features, helpful tools, and documentation:
 !!Pillar Users
 @pillarUSERS
 
-This book was written in Pillar. If you want to see how Pillar is used, have a look at *its source code>http://books.pharo.org/enterprise-pharo/*, or check the following other real-world projects:
-- *the Updated Pharo by Example book>https://github.com/SquareBracketAssociates/UpdatedPharoByExample*
-- *the Pharo MOOC>https://github.com/SquareBracketAssociates/PharoMooc* (Massive open online course)
-- *the PillarHub open-access shared blog>http://pillarhub.pharocloud.com*
+This book was written in Pillar. If you want to see how Pillar is used, have a look at its source code (*http://books.pharo.org/enterprise-pharo/*), or check the following other real-world projects:
+- the Updated Pharo by Example book (*https://github.com/SquareBracketAssociates/UpdatedPharoByExample*),
+- the Pharo MOOC - Massive open online course (*https://github.com/SquareBracketAssociates/PharoMooc* ,
+- the PillarHub open-access shared blog (*http://pillarhub.pharocloud.com*).
 
 
 !5 Minutes Tutorial
