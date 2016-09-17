@@ -67,6 +67,32 @@ Then, you can load an archetype (see Section *@archetypes*) with command:
 ./pillar archetype welcome
 ]]]
 
+Now you can just compile the welcome file
+
+[[[
+make book-result/welcome.html
+]]]
+
+You can see the result of the compilation as follow: 
+[[[
+more welcome.html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>My first document while reading the 5 minutes Pillar tutorial</title>
+  </head>
+  <body>
+    <div class="container">
+    <section>
+<h1>1. Hello World</h1>
+</section>
+    </div>
+  </body>
+</html>
+]]]
+
+!!! Changing the output folder
+
 You have the possibility to rename the directory in which your files will be exported.
 To do that you have to change the ==OUTPUTDIRECTORY== variable in the ==Makefile==:
 
