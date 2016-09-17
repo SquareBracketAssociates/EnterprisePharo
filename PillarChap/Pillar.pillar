@@ -106,13 +106,19 @@ Then, you can check everything is working fine by creating a ==first.pillar== fi
 !Hello World
 ]]]
 
-And finally compiling it from a terminal (see Section *@commandLineInterface* for more information about the command-line interface):
+And finally compiling it from a terminal (see Section *@commandLineInterface* for more information about the command-line interface). 
 
 [[[language=bash
 make result/first.html
 ]]]
 
-This should generate an ''first.html'' file you can open in a web browser. The content of this file will be something like:
+Pay attention if you did not change the output directory you should use:
+
+[[[language=bash
+make book-result/first.html
+]]]
+
+This should generate a ''first.html'' file you can open in a web browser. The content of this file will be something like:
 
 [[[language=json
 <!DOCTYPE html>
@@ -229,7 +235,7 @@ You can also write the year in the ==pillar.conf== file:
 Finally, compile ==first.pillar== one last time
 
 [[[language=bash
-make first.html
+make book-result/first.html
 ]]]
 
 to generate a file containing:
@@ -281,6 +287,8 @@ Here is the list of the current archetypes :
 - book
 - presentation
 - welcome
+
+Pay attention that you may have to restart from a fresh folder when you change project style. 
 
 You can help us by creating your own archetype on the *Github Project>https://github.com/pillar-markup/Pillar-Archetype*.
 
