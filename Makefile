@@ -1,21 +1,22 @@
 OUTPUTDIRECTORY = ./book-result
 
-CHAPTERS =           book-result/Teapot/Teapot \
-			book-result/WebApp/WebApp \
-			book-result/Zinc-Encoding-Meta/Zinc-Encoding-Meta \
-			book-result/Zinc-HTTP-Client/Zinc-HTTP-Client \
-			book-result/Zinc-HTTP-Server/Zinc-HTTP-Server \
-			book-result/WebSockets/WebSockets \
-			book-result/NeoCSV/NeoCSV \
-			book-result/NeoJSON/NeoJSON \
-			book-result/STON/STON \
-			book-result/Fuel/Fuel \
-			book-result/Voyage/Voyage \
-			book-result/Mustache/Mustache \
-			book-result/RenoirST/RenoirST \
-			book-result/PillarChap/Pillar \
-			book-result/Artefact/Artefact \
-			book-result/DeploymentWeb/DeployForProduction
+CHAPTERS = \
+	book-result/Teapot/Teapot \
+	book-result/WebApp/WebApp \
+	book-result/Zinc-Encoding-Meta/Zinc-Encoding-Meta \
+	book-result/Zinc-HTTP-Client/Zinc-HTTP-Client \
+	book-result/Zinc-HTTP-Server/Zinc-HTTP-Server \
+	book-result/WebSockets/WebSockets \
+	book-result/NeoCSV/NeoCSV \
+	book-result/NeoJSON/NeoJSON \
+	book-result/STON/STON \
+	book-result/Fuel/Fuel \
+	book-result/Voyage/Voyage \
+	book-result/Mustache/Mustache \
+	book-result/RenoirST/RenoirST \
+	book-result/PillarChap/Pillar \
+	book-result/Artefact/Artefact \
+	book-result/DeploymentWeb/DeployForProduction
 
 CHAPTERLATEXTEMPLATE = ./support/templates/chapter.latex.template
 HTMLTEMPLATE = ./support/templates/chapter.html.template
