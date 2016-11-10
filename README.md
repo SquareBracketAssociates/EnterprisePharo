@@ -11,6 +11,7 @@ This book is written in Pillar markup. If you are not familiar with it please re
 ####Install LaTeX
 
 The book requires [TeX Live 2015](http://tug.org/texlive/) to generate the PDFs.
+Linux distributions often require to install several packages, please refer to the [SBAbook description](https://github.com/cdlm/sbabook#requirements).
 
 Mac OS X users: download and install [MacTeX](http://tug.org/mactex/)
 (the 2.4Gb `MacTeX.pkg` file), and add its binaries to your system path
