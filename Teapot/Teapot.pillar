@@ -64,7 +64,7 @@ teapot
    start.
 ]]]
 
-Now you can create a book with ZNClient or your web client as follows:
+Now you can create a book with ZnClient or your web client as follows:
 
 [[[
 ZnClient new
