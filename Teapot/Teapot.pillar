@@ -187,7 +187,7 @@ Teapot on
 
 !Transforming Output from Actions
 
-The default output for Teapot is HTML: the output of an action is interpreted as a string and the content-type of the HTML response is set to ==text/html==. The output of an action may actually undergo any kind of transformations by a response transformer. Response Transformers heve the ultimate responsibility for constructing the outgoing HTTP response (an instance of the class ==ZnResponse==). To clarify, HTTP requests take the following path through Teapot:
+The default output for Teapot is HTML: the output of an action is interpreted as a string and the content-type of the HTML response is set to ==text/html==. The output of an action may actually undergo any kind of transformations by a response transformer. Response Transformers have the ultimate responsibility for constructing the outgoing HTTP response (an instance of the class ==ZnResponse==). To clarify, HTTP requests take the following path through Teapot:
 
 [[[
 ZnRequest -> [Router] -> TeaRequest -> [Route] -> response -> [Resp.Transformer] -> ZnResponse
