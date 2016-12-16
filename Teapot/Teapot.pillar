@@ -91,6 +91,22 @@ A route has three parts:
 - an URL pattern (i.e. ==/hi==, ==/users/<name>==, ==/foo/\*/bar/\*==, or a regular expression),
 - an action (a block, message send or any object).
 
+In the expression below, the three rules are equivalent: 
+The first one returns directly the value of an instance value; the second the value returned by the message; the third will send the message ==books:== with as parameter the request as show below; the fourth will take a request as argument and execute the block. 
+
+[[[
+	GET: '/books' -> books;
+	GET: '/books2' -> self books;
+	GET: '/books3' -> (Send message: #books: to: self);
+	GET: '/books4'-> [:req | self books ]
+]]]
+
+[[[
+books: aRequest
+    ^ books
+]]]
+
+
 Here is another example:
 
 [[[
