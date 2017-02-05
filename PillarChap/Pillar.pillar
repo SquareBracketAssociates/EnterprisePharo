@@ -50,6 +50,134 @@ cd mydocument
 
 !!Installing and Exporting your First Document
 
+The use of pillar is possible on all platform supported by Pharo. In fact Pillar is executed on top of Pharo 
+
+so you can use Pillar on Linux, MacOSX, Windows.
+
+
+!!!Pillar installation on Windows
+
+Windows is not able to deals with .sh and makefile script natively, so we have to install Pillar manually or install *https://www.cygwin.com/* which provides functionality similar to a Linux distribution.
+
+If you decide to install cygwin you should be able to follow the Mac OS X / Linux installation section otherwise you can follow the next steps.
+
+
+If you don't have Pharo you can get it here : *http://files.pharo.org/platform/Pharo5.0-win.zip*
+
+Then download and extract the content of Pillar-deployment.zip in the Pharo directory.
+
+*https://ci.inria.fr/pharo-contribution/job/Pillar/PHARO=50,VERSION=stable,VM=vm/lastSuccessfulBuild/artifact/Pillar-deployment.zip*
+
+
+-Let's create an html document example :
+
+Create for instance welcome.pillar file. You can place it in your Pharo directory and fill in this code example
+[[[
+{
+	"metadata": {
+			"title":"My first document while reading the 5 minutes Pillar tutorial"
+	},
+	"outputDirectory" : "book-result"
+}
+!Hello World
+]]]
+
+We would like pillar to generate a json file which will be used by a generation template.
+Maj + right click in the Pharo directory and open a terminal and paste this command to generate the json file.
+
+[[[
+Pharo.exe Pillar.image pillar export --to=html --outputFile=welcome welcome.pillar
+]]]
+
+This command starts Pharo with Pillar image and trigger the pillar handler. Then it specifies the exportation as html and the output file as welcome. The .html.json will be appended automatically to the end of the filename so welcome.pillar.json will be created and placed in book-result folder (you can specify the outputDirectory in the command or in the .pillar file and this is the same for other attributes like outputFile).
+The last argument is the path of the input file.
+
+Then we have to create a template, for instance let's create welcome.html.template in the Pharo directory and fill in this template example :
+[[[
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>{{{title}}}</title>
+	</head>
+
+	<body>
+		<div class="container">
+			{{{content}}}
+		</div>
+	</body>
+</html>
+]]]
+
+This latest command let us make the html document thanks by the json and template files.
+Each attribute in the template will be replaced by its value in the json file.
+
+[[[
+Pharo.exe Pillar.image mustache --data=book-result/welcome.html.json --template=welcome.html.template
+]]]
+
+You can check the result in the stdout file which is placed in the Pharo directory
+
+-Exportation in latex
+The procedure is the same with other kind of document. This is an another example with latex
+
+In this example we show how to add a bibliography and how to export the result as pdf with pdflatex provided by (MiKTeX distribution)
+
+Let's set some attributes (title, content) in testLatex.pillar for instance
+
+[[[
+{
+    "metadata": {
+      "title":"My latex bibliography test with Pillar !"
+    }
+}
+
+my bibliography test
+{{{latex: \bibliographystyle{abbrv}
+\bibliography{rmod}
+}}}
+]]]
+
+We create testLatex.tex.json with the following command
+
+[[[
+Pharo.exe Pillar.image pillar export --to=latex --outputFile=testLatex testLatex.pillar
+]]]
+
+Then, let's create the template in testLatex.latex.template file for instance
+
+[[[
+\documentclass{article}
+
+\begin{document}
+
+Cite : first \cite{ref}, second \cite{ref2}, third \cite{ref3}.
+
+{{{content}}}
+
+\end{document}
+]]]
+
+We generate the document in the stdout file with the following command
+
+[[[
+Pharo.exe Pillar.image mustache --data=testLatex.tex.json --template=testLatex.latex.template
+]]]
+
+Create a bibliography if it doesn't exists and place it in the Pharo directory. In our example this is rmod.bib file
+
+Then, link the bibliography with the latex document
+[[[
+bibtex stdout
+]]]
+
+Create your pdf
+[[[
+pdflatex stdout
+]]]
+
+
+!!!Pillar installation on Mac OS X / Linux
+
 You first need to get Pillar. For that, we recommend
 downloading and executing the script available at *https://raw.githubusercontent.com/pillar-markup/pillar/master/download.sh* in 
 the base directory if you are on an Unix environment.
