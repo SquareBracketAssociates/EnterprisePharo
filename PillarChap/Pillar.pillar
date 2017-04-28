@@ -189,6 +189,18 @@ chmod +x download.sh
 ./download.sh
 ]]]
 
+
+[[[language=bash
+wget https://raw.githubusercontent.com/pillar-markup/pillar/master/download.sh
+bash download.sh
+]]]
+
+[[[language=bash
+curl https://raw.githubusercontent.com/pillar-markup/pillar/master/download.sh | bash
+]]]
+
+
+
 Then, you can load an archetype (see Section *@archetypes*) with command:
 
 [[[language=bash
