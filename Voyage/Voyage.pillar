@@ -794,6 +794,31 @@ After removing the index, all documents are scanned (in this example there are 2
 }
 ]]]
 
+! Miscellanous
+
+In this section we present some questions that occured on the Pharo mailing-list and may help you.
+
+!! Mongo collection 
+One question is if it Is  possible to retrieve data from Mongo collection if it was not created via Voyage.
+The answer is yes but you need to customize a bit.
+
+# Make sure you refer to the right collection.
+[[[
+descriptionContainer
+	<mongoContainer>
+	^ VOMongoContainer new
+		collectionName: 'yo'
+		yourself
+]]]
+#  For materializationyou should at least have some fields such ==\_id==.
+
+You can ask the serializer for the fields:
+[[[
+VOMongoSerializer fieldVersion (#version)
+VOMongoSerializer fieldType (#instanceOf)
+]]]
+
+You can probably add ==#version== and ==#instanceOf== to your existing objects.
 
 ! Conclusion
 
