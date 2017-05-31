@@ -210,12 +210,13 @@ Then, you can load an archetype (see Section *@archetypes*) with command:
 Now you can just compile the welcome file
 
 [[[
-make book-result/welcome.html
+make build/welcome.html
 ]]]
 
 You can see the result of the compilation as follow: 
 [[[
-more welcome.html
+> more welcome.html
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -231,16 +232,9 @@ more welcome.html
 </html>
 ]]]
 
-!!! Changing the output folder
 
-You have the possibility to rename the directory in which your files will be exported.
-To do that you have to change the ==OUTPUTDIRECTORY== variable in the ==Makefile==:
-
-[[[language=bash
-OUTPUTDIRECTORY = result
-]]]
-
-Then, you can check everything is working fine by creating a ==first.pillar== file with this content:
+!!! Creating a first page
+You can create a first page naemd ==first.pillar== file with this content:
 
 [[[language=pillar
 !Hello World
@@ -249,16 +243,10 @@ Then, you can check everything is working fine by creating a ==first.pillar== fi
 And finally compiling it from a terminal (see Section *@commandLineInterface* for more information about the command-line interface). 
 
 [[[language=bash
-make result/first.html
+make build/first.html
 ]]]
 
-Pay attention if you did not change the output directory you should use:
-
-[[[language=bash
-make book-result/first.html
-]]]
-
-This should generate a ''first.html'' file you can open in a web browser. The content of this file will be something like:
+This will generate a ''first.html'' file you can open in a web browser. The content of this file will be something like:
 
 [[[language=json
 <!DOCTYPE html>
@@ -294,7 +282,7 @@ at the beginning of the ''first.pillar'' file:
 When you compile using the same command line,
 
 [[[language=bash
-make result/first.html
+make build/first.html
 ]]]
 
 you should now get a web page with a title:
