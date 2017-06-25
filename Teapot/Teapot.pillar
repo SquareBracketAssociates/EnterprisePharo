@@ -307,6 +307,29 @@ exception: ZeroDivide, DomainError -> handler
 
 The same rules apply for the return values of the exception handler as were used for the Routes.
 
+!HTML form processing
+
+The POST method is commonly used for HTML form submission. When a POST request comes in the form data will be accessible via the request parameter. The request object has a generic ==at:== method that can be used to access the path, query or form parameters in a uniform way.
+
+The following example shows how to create a simple login form.
+
+[[[
+Teapot on
+   GET: '/login' ->
+      '<html>
+         <form method="POST">
+            User name:<br><input type="text" name="user"><br>
+            Password:<br><input type="password" name="pwd"><br>
+            <input type="submit" value="Submit">
+         </form>
+      </html>';
+   POST: '/login'-> [ :req | (req at: #pwd) = 'secret' ifTrue: [ 'Welcome ', (req at: #user) ] ifFalse: [ 'Go away!' ] ];
+   start.
+]]]
+
+The /login URL is linked to two actions, one for GET requests and another for POST requests. The first one displays a HTML login form to the user. The second action is invoked on a form submission and checks the given login credentials.
+
+The request body can be accessed directly using ==req entity contents==. This is useful when interacting with JSON or XML request body contents instead of HTML forms.
 
 !Serving Static Files
 
