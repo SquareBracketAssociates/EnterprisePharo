@@ -31,14 +31,13 @@ shared by Sabine Manaa and Norbert Hartl.
 
 !! Load Voyage
 
-To install Voyage, including support for the MongoDB database, go to the Configurations Browser (in the World Menu/Tools) and load ConfigurationOfVoyageMongo.
-Or alternatively execute in a workspace:
+To install Voyage, including support for the MongoDB database, open a playground and execute:
 
 [[[
-Gofer it
-   url: 'http://smalltalkhub.com/mc/estebanlm/Voyage/main';
-   configurationOf: 'VoyageMongo';
-   loadStable.
+Metacello new
+    repository: 'github://pharo-nosql/voyage:1.5/mc';
+    baseline: 'Voyage';
+    load: #( mongo ).
 ]]]
 
 This will load all that is needed to persist objects into a Mongo database.
