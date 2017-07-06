@@ -218,6 +218,65 @@ To specify how values in a map should be instantiated, use the ==mapWithValueSch
 
 The above expression returns a ==Dictionary== with 1 key-value pair =='point1' -> (1@2)==.
 
+Working with nested types is easy when generating JSON but a bit more work when parsing. 
+A Rectangle contains Points in its instance variables. 
+Here is how to generate JSON for a Rectangle.
+
+[[[
+String streamContents: [ :stream | 
+   (NeoJSONWriter on: stream)
+      prettyPrint: true;
+      mapInstVarsFor: Point;
+      mapInstVarsFor: Rectangle;
+      nextPut: (Rectangle origin: 3 @ 4 extent: 5 @ 6)
+]]]
+
+Which gives the following output.
+
+[[[
+{
+   "origin" : {
+      "x" : 3,
+      "y" : 4
+   },
+   "corner" : {
+      "x" : 8,
+      "y" : 10
+   }
+}
+]]]
+
+In most cases, you just map all instance variables for each class that you encounter.
+
+As you can see all typing information is gone from the JSON expression.
+There is no way to know we are looking at a Rectangle with 2 embedded Points.
+Hence we have to provide this information when parsing, using mappings.
+We assume ==rectangleJson== contains the JSON output generated above as a String.
+
+[[[
+(NeoJSONReader on: rectangleJson readStream)
+   mapInstVarsFor: Point;
+   for: Rectangle do: [ :mapping | 
+      (mapping mapInstVar: #origin) valueSchema: Point.
+      (mapping mapInstVar: #corner) valueSchema: Point ];
+   nextAs: Rectangle
+]]]
+
+Again we map all instances variables for both Point and Rectangle, but with a twist.
+We have to specify the ==valueSchema== or type of the instance variables
+==origin== and ==corner== of Rectangle to be Points.
+Another way to do the same thing is as follows.
+
+[[[
+(NeoJSONReader on: rectangleJson readStream)
+   mapInstVarsFor: Point;
+   for: Rectangle do: [ :mapping | 
+      mapping mapInstVars do: [ :each | each valueSchema: Point ] ];
+   nextAs: Rectangle
+]]]
+
+Here we take advantage of the fact that all of Rectangle's instance variables are of the same type.
+
 You can go beyond pre-defined messages and specify a decoding block:
 
 [[[
