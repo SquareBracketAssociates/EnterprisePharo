@@ -71,6 +71,29 @@ String streamContents: [ :stream |
 '
 ]]]
 
+!! More features
+
+You can also configure the reader to give you the data but with the name of their column using the message ==namedColumnsConfigurations== as shown in the example below:
+
+[[[
+(NeoCSVReader on: 'foo bar baz
+1 2 3
+11 22 33' readStream)
+        separator: $ ;
+        namedColumnsConfiguration;
+	upToEnd.
+	
+-> an Array(a Dictionary(#bar->'2' #baz->'3' #foo->'1' ) 
+a Dictionary(#bar->'22' #baz->'33' #foo->'11' ))
+]]]
+
+You obtain an array of dictionary.
+
+Note here that the input what not separated by ==$,== but space so we set using ==separator:== that 
+the reader should split input at space. ==namedColumnsConfiguration== uses the header as keys and reads dictionaries instead of arrays.
+
+Note also that instead of ==upToEnd== you can also iterate with ==do:== to get over the treated input. 
+
 !Generic Mode
 
 NeoCSV can operate in generic mode without any further customization. While writing,
