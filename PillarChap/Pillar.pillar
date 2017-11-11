@@ -8,8 +8,7 @@
 @cha:pillar
 
 
-This chapter describes Pillar version 4.0. The current version of Pillar is Pillar 7.0. An up to date documentation is available at *http://books.pharo.org*.
-The original author of Pillar and current maintainer is Damien Cassou. Many people have also contributed: Ben Coman, Stéphane Ducasse, Guillermo Polito, Lukas Renggli (original author of Pier from which Pillar has been extracted), Benjamin van Ryseghem, Cyril Ferlicot-Delbecque, Thibault Arloing and Yann Dubois.
+This chapter describes Pillar version 4.0. It may be work with Pillar 5.0 and 6.0. The current version of Pillar is Pillar 7.0. An up to date documentation is available at *http://books.pharo.org*.The original author of Pillar and current maintainer is Damien Cassou. Many people have also contributed: Ben Coman, Stéphane Ducasse, Guillermo Polito, Lukas Renggli (original author of Pier from which Pillar has been extracted), Benjamin van Ryseghem, Cyril Ferlicot-Delbecque, Thibault Arloing and Yann Dubois.
 Pillar is sponsored by *ESUG>http://www.esug.org*.
 
 
