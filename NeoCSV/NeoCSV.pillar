@@ -283,7 +283,7 @@ The following code selectively collects every record with a third field lower th
 
 [[[
 Array streamContents: [ :out |
-  'paul.csv' asFileReference readStreamDo: [ :input |
+  'paul.csv' asFileReference readStreamDo: [ :in |
       (NeoCSVReader on: (ZnBufferedReadStream on: in))
          skipHeader;
          addIntegerField;
