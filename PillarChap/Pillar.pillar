@@ -800,18 +800,13 @@ There is two kind of structures for the moment:
 
 !!Raw
 
-If you want to include raw text into a page you must enclose it between =={\{{== and ==}\}}==, otherwise Pillar ensures that text appears as you type it which might require transformations.
+If you want to include raw text into a page you must enclose it between =={\{{== and ==}\}}==, otherwise Pillar ensures that text appears as you type it which might require transformations. Here is an example of hpw you can add a LaTeX equation to your Pillar document:
 
-A good practice is to always specify for which kind of export the raw text must be outputted by starting the block with ==\{{{latex:== or ==\{{{html:==. For example, the following shows a formula, either using LaTeX or plain text depending on the kind of export.
-
-= {{{latex:
+= {{{
 = \begin{equation}
 =    \label{eq:1}
 =    \frac{1+\sqrt{2}}{2}
 = \end{equation}
-= }}}
-= {{{html:
-= (1+sqrt(2)) / 2
 = }}}
 
 ""Take care:"" avoid terminating the verbatim text with a ==}== as
