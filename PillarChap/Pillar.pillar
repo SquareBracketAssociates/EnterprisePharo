@@ -800,7 +800,7 @@ There is two kind of structures for the moment:
 
 !!Raw
 
-If you want to include raw text into a page you must enclose it between =={\{{== and ==}\}}==, otherwise Pillar ensures that text appears as you type it which might require transformations. Here is an example of hpw you can add a LaTeX equation to your Pillar document:
+If you want to include raw text into a page you must enclose it between =={\{{== and ==}\}}==, otherwise Pillar ensures that text appears as you type it which might require transformations. Here is an example of how you can add a LaTeX equation to your Pillar document:
 
 = {{{
 = \begin{equation}
