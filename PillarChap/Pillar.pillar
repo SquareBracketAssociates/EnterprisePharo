@@ -835,10 +835,13 @@ ${inputFile:chapter2/chapter2.pillar}$
 You can add footnotes to explain or annotate words. The ==footnotes== annotation takes as parameter the note which will appear at the end of the document. In this example, one footnote is added.
 
 [[[
-Foo${footnote:Some Explanation for Foo}$
+Foo${footnote:note=Some Explanation for Foo}$
 ]]]
 
+@@note Support for footnotes is not activated by default. You must add a ''"PRFootnoteTransformer"'' plugin to your ==pillar.conf== file. See Section *@sec:Citations* for example.
+
 !!!Citations
+@sec:Citations
 
 Citations are only available for LaTeX.
 You can add citations to your document to reference an element in a LaTeX bibliography. The ==cite== annotationtakes as parameter the key of the reference in the bibliography.
@@ -851,6 +854,24 @@ The exemple above wil render as ==\cite{reference}==
 
 If you want to use other type of citations like ==citep== or ==citet==, please overwrite the command in your LaTeX template:
 ==\renewcommand{\cite}{\citep}==
+
+@@note Support for citations is not activated by default. You must add a ''"PRCitationTransformer"'' plugin to your ==pillar.conf== file:
+
+[[[
+{
+    "title": "Your Awesome Title",
+    "attribution": "John Doe and Jane Doe",
+    "series": "Square Bracket tutorials",
+    "keywords": "Nice Keyword, Catchy Keyword",
+    "newLine": #unix,
+    "latexWriter": #'latex:sbabook',
+    "plugins": [
+      "PRCitationTransformer",
+      "PRFootnoteTransformer"],
+    "bibFile": "others.bib",
+    "htmlWriter": #html 
+}
+]]]
 
 @@todo á vérifier
 
