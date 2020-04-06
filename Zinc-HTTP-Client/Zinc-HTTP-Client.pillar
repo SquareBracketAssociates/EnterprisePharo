@@ -509,6 +509,7 @@ ZnClient new
    post: 'http://zn.stfx.eu/echo' contents: #[0 1 2 3 4 5 6 7 8 9].
 
 ZnClient new
+   url: 'http://zn.stfx.eu/echo';
    entity: (ZnEntity
                with: '<xml><object><id>42</id></object></xml>'
                type: ZnMimeType applicationXml);
