@@ -113,11 +113,11 @@ When the file hierarchy is ready, you can start your application by executing th
 
 !Dealing with Crashes
 
-When the Pharo image crashes (which ''will'' happen), there must be a way to automatically recover from this crash. For this to work, the application data must be backed up, there must be a way to know when the application has crashed, and there must be a way to automatically restart the application.
+If the Pharo image crashes there must be a way to automatically recover. For this to work, the application data must be backed up, there must be a way to know when the application has crashed, and there must be a way to automatically restart the application.
 
-To avoid data loss, the simplest solution is to make your image stateless: if your image crashes, no data should be lost because no data is in the image. If your application requires persistent data (''e.g.'', user accounts), the best is to use a database (''e.g.'', PostgreSQL, MongoDB). You must then make sure that your database is backed up properly.
+To avoid data loss, the simplest solution is to make your image stateless: if your image crashes, no data should be lost because no data is in the image. If your application requires persistent data (''e.g.'', user accounts), the best solution is to use a database (''e.g.'', PostgreSQL, MongoDB). You must then make sure that your database is backed up properly.
 
-To automatically restart your application when it crashes, there must be a way to detect that it has crashed. With a standard operating system's init script such as the one described above, you can use the ==status== command to detect if Pharo is running or not. We will later discuss how to handle a frozen Pharo.
+To automatically restart your application after it crashes, there must be a way to detect that it has crashed. With a standard operating system's init script such as the one described above, you can use the ==status== command to detect if Pharo is running or not. We will later discuss how to handle a frozen Pharo.
 
 A simple solution to both monitor your application and take appropriate actions (''e.g.'', restart) is to use the *monit utility>https://mmonit.com/monit*. In the remainder of this section we will show how to configure monit.
 
